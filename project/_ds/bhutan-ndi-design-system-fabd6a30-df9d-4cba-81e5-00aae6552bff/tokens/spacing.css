@@ -1,0 +1,39 @@
+/* ============================================================
+   Bhutan NDI — Spacing & Layout
+   8px base grid.
+   ============================================================ */
+
+:root {
+  --sp-0:   0; /* @kind spacing */
+  --sp-1:   4px;
+  --sp-2:   8px;
+  --sp-3:   12px;
+  --sp-4:   16px;
+  --sp-5:   20px;
+  --sp-6:   24px;
+  --sp-8:   32px;
+  --sp-10:  40px;
+  --sp-12:  48px;
+  --sp-16:  64px;
+  --sp-20:  80px;
+  --sp-24:  96px;
+  --sp-32:  128px;
+
+  /* Layout */
+  --container-max: 1200px; /* @kind spacing */
+  --container-wide: 1440px; /* @kind spacing */
+  --gutter:        24px; /* @kind spacing */
+  --section-y:     clamp(64px, 9vw, 128px); /* @kind spacing */
+
+  /* ---- Corner radii -------------------------------------- */
+  --radius-xs:   6px;
+  --radius-sm:   8px;
+  --radius-md:   12px;   /* default control / chip            */
+  --radius-lg:   16px;   /* cards                             */
+  --radius-xl:   24px;   /* hero panels                      */
+  --radius-pill: 999px;
+
+  /* ---- Border widths ------------------------------------- */
+  --bw-hair: 1px; /* @kind spacing */
+  --bw:      1.5px; /* @kind spacing */
+}

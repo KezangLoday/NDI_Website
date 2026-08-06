@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/colors.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/typography.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/effects.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/base.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<script src="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/_ds_bundle.js"></script>
+<link rel="stylesheet" href="ndi-site.css">
+<script src="./image-slot.js"></script>
+</helmet>
+
+<div style="position:relative; min-height:100vh; isolation:isolate;">
+  <dc-import name="NDI-Atmosphere" hint-size="100%,100%" style="position:absolute; inset:0; z-index:0; pointer-events:none;"></dc-import>
+
+  <div style="position:relative; z-index:1;">
+    <dc-import name="NDI-Nav" hint-size="100%,64px"></dc-import>
+
+    <!-- ============ HERO ============ -->
+    <section data-screen-label="Resources hero" data-ndi-section="1" style="max-width:1200px; margin:0 auto; padding:176px 32px 32px;">
+      <div data-reveal="" style="opacity:0; transform:translateY(26px); transition:opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); max-width:820px;">
+        <div style="font-family:var(--font-mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-accent);">— Resources</div>
+        <h1 style="margin:20px 0 0; font-family:var(--font-display); font-weight:600; font-size:clamp(38px, 5vw, 58px); line-height:1.04; letter-spacing:-0.03em; color:var(--text-strong); text-wrap:pretty;">Announcements, sessions and <span class="ndi-wave-text">research</span></h1>
+        <p style="margin:24px 0 0; max-width:620px; font-size:17px; line-height:1.62; color:var(--text-muted); text-wrap:pretty;">Everything the ecosystem publishes — updates from the platform, recorded webinars, and the thinking behind self-sovereign identity in Bhutan.</p>
+      </div>
+    </section>
+
+    <!-- ============ TABS: NEWS / WEBINARS / INSIGHTS ============ -->
+    <section id="news" data-screen-label="News, webinars, insights" data-ndi-section="1" style="max-width:1200px; margin:0 auto; padding:32px 32px 104px; scroll-margin-top:110px;">
+      <div data-reveal="" style="opacity:0; transform:translateY(26px); transition:opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); display:flex; gap:8px; padding:6px; border-radius:14px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); width:fit-content; flex-wrap:wrap;">
+        <button data-tabbtn="news" data-active="true" style="padding:11px 20px; border-radius:10px; border:1px solid transparent; background:transparent; cursor:pointer; font-family:var(--font-display); font-weight:500; font-size:14px; color:var(--text-muted); transition:all var(--dur);">News &amp; updates</button>
+        <button data-tabbtn="webinars" style="padding:11px 20px; border-radius:10px; border:1px solid transparent; background:transparent; cursor:pointer; font-family:var(--font-display); font-weight:500; font-size:14px; color:var(--text-muted); transition:all var(--dur);">Webinars</button>
+        <button data-tabbtn="insights" style="padding:11px 20px; border-radius:10px; border:1px solid transparent; background:transparent; cursor:pointer; font-family:var(--font-display); font-weight:500; font-size:14px; color:var(--text-muted); transition:all var(--dur);">Insights &amp; publications</button>
+      </div>
+
+      <!-- NEWS PANEL -->
+      <div data-tabpanel="news" data-active="true" style="margin-top:32px;">
+        <div data-reveal="" style="opacity:0; transform:translateY(26px); transition:opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); display:grid; grid-template-columns:1.15fr 0.85fr; gap:20px;" data-ndi-2col="1">
+          <a class="ndi-spot" href="#" style="position:relative; display:flex; flex-direction:column; border-radius:16px; overflow:hidden; border:1px solid var(--border-grid); background:var(--grad-card); backdrop-filter:blur(18px); box-shadow:var(--inset-top), 0 18px 44px rgba(0,0,0,0.28); text-decoration:none; transition:transform var(--dur), border-color var(--dur), box-shadow var(--dur);" style-hover="transform:translateY(-4px); border-color:var(--border-strong); box-shadow:var(--inset-top), var(--glow-sm), 0 24px 56px rgba(0,0,0,0.34)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+            <div style="position:relative; height:300px; background:#0c111b;">
+              <image-slot id="ndi-res-feat" placeholder="Featured story image" style="width:100%; height:100%;"></image-slot>
+            </div>
+            <div style="padding:26px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="padding:5px 10px; border-radius:999px; border:1px solid rgba(90,201,148,0.3); font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-accent);">Announcement</span>
+                <span style="font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.14em; color:var(--text-faint);">2026-07-14</span>
+              </div>
+              <div style="margin-top:16px; font-family:var(--font-display); font-weight:600; font-size:24px; line-height:1.18; letter-spacing:-0.02em; color:var(--text-strong);">Bhutan NDI crosses 120 connected services</div>
+              <p style="margin:12px 0 0; font-size:14.5px; line-height:1.62; color:var(--text-muted);">Banks, universities and government agencies now issue or verify credentials through the national wallet.</p>
+              <span style="margin-top:18px; display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent);">Read story<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></span>
+            </div>
+          </a>
+
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <a class="ndi-spot" href="#" style="display:flex; flex-direction:column; gap:10px; padding:22px; border-radius:16px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:border-color var(--dur), background var(--dur), transform var(--dur);" style-hover="border-color:var(--border-strong); background:rgba(90,201,148,0.04); transform:translateX(4px)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+              <div style="display:flex; align-items:center; gap:12px;"><span style="padding:5px 10px; border-radius:999px; border:1px solid var(--border-grid); font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted);">Integration</span><span style="font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint);">2026-06-29</span></div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:17px; line-height:1.28; letter-spacing:-0.02em; color:var(--text-strong);">Bank of Bhutan enables remote account opening with NDI</div>
+            </a>
+            <a class="ndi-spot" href="#" style="display:flex; flex-direction:column; gap:10px; padding:22px; border-radius:16px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:border-color var(--dur), background var(--dur), transform var(--dur);" style-hover="border-color:var(--border-strong); background:rgba(90,201,148,0.04); transform:translateX(4px)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+              <div style="display:flex; align-items:center; gap:12px;"><span style="padding:5px 10px; border-radius:999px; border:1px solid var(--border-grid); font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted);">Product</span><span style="font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint);">2026-06-02</span></div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:17px; line-height:1.28; letter-spacing:-0.02em; color:var(--text-strong);">Wallet backup &amp; recovery arrives for all users</div>
+            </a>
+            <a class="ndi-spot" href="#" style="display:flex; flex-direction:column; gap:10px; padding:22px; border-radius:16px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:border-color var(--dur), background var(--dur), transform var(--dur);" style-hover="border-color:var(--border-strong); background:rgba(90,201,148,0.04); transform:translateX(4px)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+              <div style="display:flex; align-items:center; gap:12px;"><span style="padding:5px 10px; border-radius:999px; border:1px solid var(--border-grid); font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted);">Partnership</span><span style="font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint);">2026-05-18</span></div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:17px; line-height:1.28; letter-spacing:-0.02em; color:var(--text-strong);">Bhutan NDI joins global SSI interoperability working group</div>
+            </a>
+            <a class="ndi-spot" href="#" style="display:flex; flex-direction:column; gap:10px; padding:22px; border-radius:16px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:border-color var(--dur), background var(--dur), transform var(--dur);" style-hover="border-color:var(--border-strong); background:rgba(90,201,148,0.04); transform:translateX(4px)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+              <div style="display:flex; align-items:center; gap:12px;"><span style="padding:5px 10px; border-radius:999px; border:1px solid var(--border-grid); font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted);">Public notice</span><span style="font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint);">2026-04-30</span></div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:17px; line-height:1.28; letter-spacing:-0.02em; color:var(--text-strong);">Scheduled maintenance window — credential issuance</div>
+            </a>
+            <a href="#" style="display:inline-flex; align-items:center; justify-content:space-between; gap:12px; margin-top:4px; padding:18px 22px; border-radius:16px; border:1px dashed var(--border-grid); text-decoration:none; font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted); transition:border-color var(--dur), color var(--dur);" style-hover="border-color:var(--accent); color:var(--accent)">All news &amp; updates<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEBINARS PANEL -->
+      <div data-tabpanel="webinars" id="webinars" style="margin-top:32px; scroll-margin-top:110px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;" data-ndi-3col="1">
+          <div style="grid-column:span 3; display:flex; gap:32px; align-items:center; padding:28px; border-radius:16px; border:1px solid rgba(90,201,148,0.28); background:radial-gradient(120% 140% at 12% 0%, rgba(90,201,148,0.14), rgba(18,65,67,0.10) 46%, transparent 72%); flex-wrap:wrap;">
+            <div style="flex:1 1 340px;">
+              <div style="display:inline-flex; align-items:center; gap:9px; font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-accent);"><span style="width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:var(--glow-sm); animation:ndiPulse 2.4s ease-in-out infinite;"></span>Upcoming session</div>
+              <div style="margin-top:14px; font-family:var(--font-display); font-weight:600; font-size:24px; line-height:1.18; letter-spacing:-0.02em; color:var(--text-strong);">Credential design for national ecosystems</div>
+              <p style="margin:10px 0 0; max-width:560px; font-size:14.5px; line-height:1.6; color:var(--text-muted);">A working session on schema design, selective disclosure and revocation, with the Bhutan NDI engineering team.</p>
+            </div>
+            <div style="flex:0 0 auto; display:flex; flex-direction:column; gap:12px;">
+              <div style="font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; color:var(--text-body);">2026-08-21 · 14:00 BTT</div>
+              <a href="#" style="display:inline-flex; align-items:center; justify-content:center; gap:10px; height:46px; padding:0 22px; border-radius:12px; border:1px solid transparent; background:linear-gradient(150deg, #6FE0A9, #5AC994 55%, #3DA876); color:#08130f; font-family:var(--font-display); font-weight:600; font-size:14px; text-decoration:none; box-shadow:var(--glow-sm); transition:box-shadow var(--dur), transform var(--dur);" style-hover="box-shadow:var(--glow-md); transform:translateY(-2px)">Register to attend</a>
+            </div>
+          </div>
+
+          <a class="ndi-spot" href="#" style="display:flex; flex-direction:column; border-radius:16px; overflow:hidden; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:transform var(--dur), border-color var(--dur), box-shadow var(--dur);" style-hover="transform:translateY(-4px); border-color:var(--border-strong); box-shadow:var(--glow-sm)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+            <div style="position:relative; height:170px; background:#0c111b;">
+              <image-slot id="ndi-res-web-1" placeholder="Webinar thumbnail" style="width:100%; height:100%;"></image-slot>
+              <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;"><span style="width:54px; height:54px; border-radius:50%; border:1px solid rgba(90,201,148,0.4); background:rgba(12,17,27,0.6); backdrop-filter:blur(6px); color:var(--accent); display:inline-flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"></path></svg></span></span>
+            </div>
+            <div style="padding:22px;">
+              <div style="font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.14em; color:var(--text-faint);">Recording · 48 min</div>
+              <div style="margin-top:12px; font-family:var(--font-display); font-weight:600; font-size:17px; line-height:1.26; letter-spacing:-0.02em; color:var(--text-strong);">How Bhutan built an SSI-first national identity</div>
+            </div>
+          </a>
+          <a class="ndi-spot" href="#" style="display:flex; flex-direction:column; border-radius:16px; overflow:hidden; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:transform var(--dur), border-color var(--dur), box-shadow var(--dur);" style-hover="transform:translateY(-4px); border-color:var(--border-strong); box-shadow:var(--glow-sm)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+            <div style="position:relative; height:170px; background:#0c111b;">
+              <image-slot id="ndi-res-web-2" placeholder="Webinar thumbnail" style="width:100%; height:100%;"></image-slot>
+              <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;"><span style="width:54px; height:54px; border-radius:50%; border:1px solid rgba(90,201,148,0.4); background:rgba(12,17,27,0.6); backdrop-filter:blur(6px); color:var(--accent); display:inline-flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"></path></svg></span></span>
+            </div>
+            <div style="padding:22px;">
+              <div style="font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.14em; color:var(--text-faint);">Recording · 36 min</div>
+              <div style="margin-top:12px; font-family:var(--font-display); font-weight:600; font-size:17px; line-height:1.26; letter-spacing:-0.02em; color:var(--text-strong);">eKYC in practice: lessons from Bhutanese banks</div>
+            </div>
+          </a>
+          <a class="ndi-spot" href="#" style="display:flex; flex-direction:column; border-radius:16px; overflow:hidden; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:transform var(--dur), border-color var(--dur), box-shadow var(--dur);" style-hover="transform:translateY(-4px); border-color:var(--border-strong); box-shadow:var(--glow-sm)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+            <div style="position:relative; height:170px; background:#0c111b;">
+              <image-slot id="ndi-res-web-3" placeholder="Conference talk thumbnail" style="width:100%; height:100%;"></image-slot>
+              <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;"><span style="width:54px; height:54px; border-radius:50%; border:1px solid rgba(90,201,148,0.4); background:rgba(12,17,27,0.6); backdrop-filter:blur(6px); color:var(--accent); display:inline-flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"></path></svg></span></span>
+            </div>
+            <div style="padding:22px;">
+              <div style="font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.14em; color:var(--text-faint);">Conference · Keynote</div>
+              <div style="margin-top:12px; font-family:var(--font-display); font-weight:600; font-size:17px; line-height:1.26; letter-spacing:-0.02em; color:var(--text-strong);">Sovereign identity as public infrastructure</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- INSIGHTS PANEL -->
+      <div data-tabpanel="insights" id="insights" style="margin-top:32px; scroll-margin-top:110px;">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a class="ndi-spot" href="#" style="display:grid; grid-template-columns:150px minmax(0,1fr) 40px; gap:24px; align-items:center; padding:24px; border-radius:16px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:border-color var(--dur), background var(--dur), transform var(--dur);" style-hover="border-color:var(--border-strong); background:rgba(90,201,148,0.04); transform:translateX(4px)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+            <span style="font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-accent);">Research paper</span>
+            <div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:18px; letter-spacing:-0.02em; color:var(--text-strong);">Measuring trust in decentralized national identity</div>
+              <p style="margin:6px 0 0; font-size:14px; line-height:1.6; color:var(--text-muted);">A framework for evaluating citizen trust in credential-based service delivery.</p>
+            </div>
+            <span style="justify-self:end; color:var(--accent);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg></span>
+          </a>
+          <a class="ndi-spot" href="#" style="display:grid; grid-template-columns:150px minmax(0,1fr) 40px; gap:24px; align-items:center; padding:24px; border-radius:16px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:border-color var(--dur), background var(--dur), transform var(--dur);" style-hover="border-color:var(--border-strong); background:rgba(90,201,148,0.04); transform:translateX(4px)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+            <span style="font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-accent);">Case study</span>
+            <div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:18px; letter-spacing:-0.02em; color:var(--text-strong);">Remote account opening at a national bank</div>
+              <p style="margin:6px 0 0; font-size:14px; line-height:1.6; color:var(--text-muted);">From branch queues to a five-minute digital flow — what changed operationally.</p>
+            </div>
+            <span style="justify-self:end; color:var(--accent);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg></span>
+          </a>
+          <a class="ndi-spot" href="#" style="display:grid; grid-template-columns:150px minmax(0,1fr) 40px; gap:24px; align-items:center; padding:24px; border-radius:16px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:border-color var(--dur), background var(--dur), transform var(--dur);" style-hover="border-color:var(--border-strong); background:rgba(90,201,148,0.04); transform:translateX(4px)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+            <span style="font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-accent);">Blog</span>
+            <div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:18px; letter-spacing:-0.02em; color:var(--text-strong);">Why we chose self-sovereign identity</div>
+              <p style="margin:6px 0 0; font-size:14px; line-height:1.6; color:var(--text-muted);">The architectural decision that shaped every service on the platform.</p>
+            </div>
+            <span style="justify-self:end; color:var(--accent);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg></span>
+          </a>
+          <a class="ndi-spot" href="#" style="display:grid; grid-template-columns:150px minmax(0,1fr) 40px; gap:24px; align-items:center; padding:24px; border-radius:16px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:border-color var(--dur), background var(--dur), transform var(--dur);" style-hover="border-color:var(--border-strong); background:rgba(90,201,148,0.04); transform:translateX(4px)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+            <span style="font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-accent);">Event summary</span>
+            <div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:18px; letter-spacing:-0.02em; color:var(--text-strong);">Notes from the regional digital identity forum</div>
+              <p style="margin:6px 0 0; font-size:14px; line-height:1.6; color:var(--text-muted);">Interoperability, cross-border credentials and what comes next for the region.</p>
+            </div>
+            <span style="justify-self:end; color:var(--accent);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg></span>
+          </a>
+          <a class="ndi-spot" href="#" style="display:grid; grid-template-columns:150px minmax(0,1fr) 40px; gap:24px; align-items:center; padding:24px; border-radius:16px; border:1px solid var(--border-grid); background:rgba(255,255,255,0.02); text-decoration:none; transition:border-color var(--dur), background var(--dur), transform var(--dur);" style-hover="border-color:var(--border-strong); background:rgba(90,201,148,0.04); transform:translateX(4px)"><div class="ndi-spot-halo"></div><div class="ndi-spot-fill"></div>
+            <span style="font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-accent);">Success story</span>
+            <div>
+              <div style="font-family:var(--font-display); font-weight:600; font-size:18px; letter-spacing:-0.02em; color:var(--text-strong);">A university issues digital transcripts</div>
+              <p style="margin:6px 0 0; font-size:14px; line-height:1.6; color:var(--text-muted);">Graduates carry verifiable records that employers can check in seconds.</p>
+            </div>
+            <span style="justify-self:end; color:var(--accent);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <dc-import name="NDI-Footer" hint-size="100%,430px" data-ndi-footer-mount="1"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  activate(key) {
+    document.querySelectorAll('[data-tabbtn]').forEach((b) => {
+      b.setAttribute('data-active', b.getAttribute('data-tabbtn') === key ? 'true' : 'false');
+    });
+    document.querySelectorAll('[data-tabpanel]').forEach((p) => {
+      p.setAttribute('data-active', p.getAttribute('data-tabpanel') === key ? 'true' : 'false');
+    });
+  }
+  componentDidMount() {
+    document.querySelectorAll('[data-tabbtn]').forEach((b) => {
+      b.addEventListener('click', () => this.activate(b.getAttribute('data-tabbtn')));
+    });
+    const fromHash = () => {
+      const h = (window.location.hash || '').replace('#', '');
+      if (h === 'webinars' || h === 'insights' || h === 'news') this.activate(h);
+    };
+    fromHash();
+    this._onHash = fromHash;
+    window.addEventListener('hashchange', fromHash);
+  }
+  componentWillUnmount() {
+    if (this._onHash) window.removeEventListener('hashchange', this._onHash);
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+/* ============================================================
+   Bhutan NDI — Color Architecture (Dark-Mode Dominant)
+   Source of truth: rebrand brief + confirmed Figma values.
+   ============================================================ */
+
+:root {
+  /* ---- Brand primitives ---------------------------------- */
+  --ndi-mint:        #5ac994;   /* vibrant mint — primary accent      */
+  --ndi-mint-bright: #6fe0a9;   /* hover / glow lift                  */
+  --ndi-mint-deep:   #3da876;   /* pressed / active                   */
+  --ndi-teal:        #124143;   /* deep brand teal — structural depth */
+  --ndi-teal-soft:   #1a585b;   /* lifted teal panels                 */
+  --ndi-obsidian:    #141b29;   /* base canvas — rich near-black      */
+
+  /* ---- Neutral ramp (cool, obsidian-derived) ------------- */
+  --ndi-ink-900: #0c111b;   /* deepest — below-canvas wells          */
+  --ndi-ink-800: #141b29;   /* canvas                                */
+  --ndi-ink-700: #1b2433;   /* raised surface                        */
+  --ndi-ink-600: #232e40;   /* card / panel                          */
+  --ndi-ink-500: #2e3a4f;   /* hover surface                         */
+  --ndi-ink-400: #3b495f;   /* hairline / divider strong             */
+  --ndi-300:     #62676d;   /* muted icon                            */
+  --ndi-200:     #8b95a5;   /* secondary text                        */
+  --ndi-100:     #c5ccd8;   /* primary-dim text                      */
+  --ndi-000:     #ffffff;   /* pure white text                       */
+
+  /* ---- Mint alpha set (wireframe grid + glow) ------------ */
+  --ndi-mint-04: rgba(90, 201, 148, 0.04);
+  --ndi-mint-08: rgba(90, 201, 148, 0.08);
+  --ndi-mint-12: rgba(90, 201, 148, 0.12);
+  --ndi-mint-15: rgba(90, 201, 148, 0.15);  /* canonical border       */
+  --ndi-mint-25: rgba(90, 201, 148, 0.25);
+  --ndi-mint-40: rgba(90, 201, 148, 0.40);
+
+  /* ---- Semantic status ----------------------------------- */
+  --ndi-success: #5ac994;
+  --ndi-info:    #4aa3ff;
+  --ndi-warning: #f5b740;
+  --ndi-danger:  #e1493e;   /* from Figma red rgb(225,73,66)         */
+  --ndi-danger-soft: rgba(225, 73, 66, 0.14);
+
+  /* ===========================================================
+     SEMANTIC ALIASES — reference these in components
+     =========================================================== */
+
+  /* Surfaces */
+  --surface-canvas:   var(--ndi-ink-800);
+  --surface-sunken:   var(--ndi-ink-900);
+  --surface-raised:   var(--ndi-ink-700);
+  --surface-card:     var(--ndi-ink-600);
+  --surface-hover:    var(--ndi-ink-500);
+  --surface-glass:    rgba(18, 65, 67, 0.35);   /* teal glassmorphism */
+  --surface-glass-strong: rgba(18, 65, 67, 0.55);
+
+  /* Text */
+  --text-strong:   var(--ndi-000);
+  --text-body:     var(--ndi-100);
+  --text-muted:    var(--ndi-200);
+  --text-faint:    var(--ndi-300);
+  --text-accent:   var(--ndi-mint);
+  --text-on-mint:  #06241a;   /* dark text on mint button             */
+
+  /* Borders */
+  --border-grid:   var(--ndi-mint-15);   /* canonical tech-wireframe   */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: var(--ndi-mint-25);
+  --border-divider: var(--ndi-ink-400);
+
+  /* Accent / interactive */
+  --accent:        var(--ndi-mint);
+  --accent-hover:  var(--ndi-mint-bright);
+  --accent-press:  var(--ndi-mint-deep);
+  --focus-ring:    var(--ndi-mint-40);
+}

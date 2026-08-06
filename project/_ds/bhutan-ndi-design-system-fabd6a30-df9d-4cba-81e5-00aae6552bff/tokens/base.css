@@ -1,0 +1,44 @@
+/* ============================================================
+   Bhutan NDI — base resets & primitive element styling.
+   Lightweight; components own their own look.
+   ============================================================ */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--surface-canvas);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--ndi-mint-25);
+  color: var(--text-strong);
+}
+
+a { color: var(--accent); text-decoration: none; }
+
+/* Custom scrollbar — engineered feel */
+* { scrollbar-width: thin; scrollbar-color: var(--ndi-ink-500) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--ndi-ink-500);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--ndi-ink-400); background-clip: padding-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/colors.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/typography.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/effects.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/base.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<script src="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/_ds_bundle.js"></script>
+<link rel="stylesheet" href="ndi-site.css">
+<script src="./image-slot.js"></script>
+</helmet>
+  <!-- ============ NAV (floating glass pill) ============ -->
+  <header style="position:fixed; top:24px; left:50%; transform:translateX(-50%); z-index:60; display:flex; align-items:center; gap:0; width:calc(100% - 64px); max-width:1136px; padding:10px 12px 10px 26px; height:64px;">
+      <div aria-hidden="true" style="position:absolute; inset:0; z-index:0; border-radius:16px; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)), rgba(18,24,37,0.80); backdrop-filter:blur(20px) saturate(140%); -webkit-backdrop-filter:blur(20px) saturate(140%); box-shadow:inset 0 1px 0 rgba(255,255,255,0.08), 0 10px 34px -12px rgba(0,0,0,0.5); pointer-events:none;"></div>
+      <a href="Bhutan%20NDI%20Home.dc.html" style="position:relative; z-index:1; display:inline-flex; align-items:center; margin-right:16px; flex:none;"><img src="assets/logos/ndi-horizontal-white.png" alt="Bhutan NDI" style="height:26px; display:block;"></a>
+      <nav class="ndi-desktop-nav" style="position:relative; z-index:1; flex:1 1 0%; min-width:0; display:flex; gap:2px; align-items:center; justify-content:center; flex-wrap:nowrap;">
+
+        <!-- For Users (plain link) -->
+        <a href="Bhutan%20NDI%20Users.dc.html" class="ndi-navlink" data-navkey="users" style="display:inline-flex; align-items:center; padding:8px 10px; border-radius:9px; font-family:var(--font-display); font-weight:500; color:var(--text-strong); text-decoration:none; white-space:nowrap; font-size:13.5px;"><span class="ndi-rollup"><span class="ndi-rollup-col"><span>For Users</span><span>For Users</span></span></span></a>
+
+        <!-- For Organizations (plain link) -->
+        <a href="Bhutan%20NDI%20Organizations.dc.html" class="ndi-navlink" data-navkey="orgs" style="display:inline-flex; align-items:center; padding:8px 10px; border-radius:9px; font-family:var(--font-display); font-weight:500; color:var(--text-strong); text-decoration:none; white-space:nowrap; font-size:13.5px;"><span class="ndi-rollup"><span class="ndi-rollup-col"><span>For Organizations</span><span>For Organizations</span></span></span></a>
+
+        <!-- Governance (plain link) -->
+        <a href="Bhutan%20NDI%20Governance.dc.html" class="ndi-navlink" data-navkey="governance" style="display:inline-flex; align-items:center; padding:8px 10px; border-radius:9px; font-family:var(--font-display); font-weight:500; color:var(--text-strong); text-decoration:none; white-space:nowrap; font-size:13.5px;"><span class="ndi-rollup"><span class="ndi-rollup-col"><span>Governance</span><span>Governance</span></span></span></a>
+
+        <!-- Resources (mega dropdown) -->
+        <div style="position:static;" onMouseEnter="{{ openResources }}" onMouseLeave="{{ closeMenu }}">
+          <button class="ndi-navlink" data-navkey="resources" style="display:inline-flex; align-items:center; gap:5px; padding:8px 10px; border-radius:9px; background:transparent; border:none; cursor:pointer; font-family:var(--font-display); font-weight:500; color:var(--text-strong); white-space:nowrap; font-size:13.5px;">
+            <span class="ndi-rollup"><span class="ndi-rollup-col"><span>Resources</span><span>Resources</span></span></span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.22s var(--ease-out); transform:{{ chevResources }};"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div style="{{ panelResources }}">
+            <div style="width:900px; padding:0; border-radius:16px; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.006)), rgba(15,20,31,0.85); backdrop-filter:blur(15px) saturate(140%); -webkit-backdrop-filter:blur(15px) saturate(140%); box-shadow:inset 0 1px 0 rgba(255,255,255,0.08), 0 26px 64px -12px rgba(0,0,0,0.72), 0 6px 18px -8px rgba(0,0,0,0.5); display:grid; grid-template-columns:1fr 260px; gap:0;">
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:16px; border-right:1px solid rgba(255,255,255,0.14);">
+                <a href="Bhutan%20NDI%20Resources.dc.html#news" class="ndi-gc" style="position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; gap:32px; min-height:170px; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; transition:background var(--dur), border-color var(--dur), box-shadow var(--dur), transform var(--dur);">
+                  <div style="position:absolute; inset:0; overflow:hidden; pointer-events:none; -webkit-mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%); mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%);"><div style="position:absolute; inset:-30%; transform:skewY(-12deg);"><div class="ndi-gc-pattern" style="position:absolute; inset:0; background-image:var(--grid-bg); background-size:30px 30px;"><span style="position:absolute; left:210px; top:60px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:270px; top:120px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:240px; top:30px; width:29px; height:29px; background:rgba(90,201,148,0.10);"></span><span style="position:absolute; left:300px; top:90px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:180px; top:150px; width:29px; height:29px; background:var(--border-grid);"></span></div></div></div>
+                  <span style="position:relative; color:var(--accent);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"></path><path d="M18 14h-8 M15 18h-5 M10 6h8v4h-8Z"></path></svg></span>
+                  <div style="position:relative;"><div style="font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--text-strong);">News &amp; Updates</div><div style="font-size:12.5px; line-height:1.45; color:var(--text-muted); margin-top:3px;">Announcements, launches &amp; press releases.</div></div>
+                </a>
+                <a href="Bhutan%20NDI%20Resources.dc.html#webinars" class="ndi-gc" style="position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; gap:32px; min-height:170px; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; transition:background var(--dur), border-color var(--dur), box-shadow var(--dur), transform var(--dur);">
+                  <div style="position:absolute; inset:0; overflow:hidden; pointer-events:none; -webkit-mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%); mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%);"><div style="position:absolute; inset:-30%; transform:skewY(-12deg);"><div class="ndi-gc-pattern" style="position:absolute; inset:0; background-image:var(--grid-bg); background-size:30px 30px;"><span style="position:absolute; left:210px; top:60px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:270px; top:120px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:240px; top:30px; width:29px; height:29px; background:rgba(90,201,148,0.10);"></span><span style="position:absolute; left:300px; top:90px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:180px; top:150px; width:29px; height:29px; background:var(--border-grid);"></span></div></div></div>
+                  <span style="position:relative; color:var(--accent);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg></span>
+                  <div style="position:relative;"><div style="font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--text-strong);">Webinars</div><div style="font-size:12.5px; line-height:1.45; color:var(--text-muted); margin-top:3px;">Recordings, upcoming sessions &amp; talks.</div></div>
+                </a>
+                <a href="Bhutan%20NDI%20Resources.dc.html#insights" class="ndi-gc" style="position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; gap:32px; min-height:170px; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; transition:background var(--dur), border-color var(--dur), box-shadow var(--dur), transform var(--dur);">
+                  <div style="position:absolute; inset:0; overflow:hidden; pointer-events:none; -webkit-mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%); mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%);"><div style="position:absolute; inset:-30%; transform:skewY(-12deg);"><div class="ndi-gc-pattern" style="position:absolute; inset:0; background-image:var(--grid-bg); background-size:30px 30px;"><span style="position:absolute; left:210px; top:60px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:270px; top:120px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:240px; top:30px; width:29px; height:29px; background:rgba(90,201,148,0.10);"></span><span style="position:absolute; left:300px; top:90px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:180px; top:150px; width:29px; height:29px; background:var(--border-grid);"></span></div></div></div>
+                  <span style="position:relative; color:var(--accent);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3Z"></path></svg></span>
+                  <div style="position:relative;"><div style="font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--text-strong);">Insights &amp; Publications</div><div style="font-size:12.5px; line-height:1.45; color:var(--text-muted); margin-top:3px;">Research, case studies &amp; blogs.</div></div>
+                </a>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; padding:16px;">
+                <a href="Bhutan%20NDI%20FAQs.dc.html" class="ndi-fill" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; color:var(--text-body); transition:background var(--dur), border-color var(--dur);">
+                  <div style="min-width:0;"><div style="font-family:var(--font-display); font-weight:600; font-size:14px; color:var(--text-strong);">FAQs</div><div style="font-size:12px; color:var(--text-body); margin-top:2px;">Answers to common questions</div></div>
+                  <span style="flex:none; color:var(--accent);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg></span>
+                </a>
+                <a href="Bhutan%20NDI%20Glossary.dc.html" class="ndi-fill" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; color:var(--text-body); transition:background var(--dur), border-color var(--dur);">
+                  <div style="min-width:0;"><div style="font-family:var(--font-display); font-weight:600; font-size:14px; color:var(--text-strong);">Glossary</div><div style="font-size:12px; color:var(--text-body); margin-top:2px;">Key terms explained</div></div>
+                  <span style="flex:none; color:var(--accent);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Company (mega dropdown) -->
+        <div style="position:static;" onMouseEnter="{{ openCompany }}" onMouseLeave="{{ closeMenu }}">
+          <button class="ndi-navlink" data-navkey="company" style="display:inline-flex; align-items:center; gap:5px; padding:8px 10px; border-radius:9px; background:transparent; border:none; cursor:pointer; font-family:var(--font-display); font-weight:500; color:var(--text-strong); white-space:nowrap; font-size:13.5px;">
+            <span class="ndi-rollup"><span class="ndi-rollup-col"><span>Company</span><span>Company</span></span></span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.22s var(--ease-out); transform:{{ chevCompany }};"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div style="{{ panelCompany }}">
+            <div style="width:760px; padding:0; border-radius:16px; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.006)), rgba(15,20,31,0.85); backdrop-filter:blur(15px) saturate(140%); -webkit-backdrop-filter:blur(15px) saturate(140%); box-shadow:inset 0 1px 0 rgba(255,255,255,0.08), 0 26px 64px -12px rgba(0,0,0,0.72), 0 6px 18px -8px rgba(0,0,0,0.5); display:grid; grid-template-columns:1fr 320px; gap:0;">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:16px; border-right:1px solid rgba(255,255,255,0.14);">
+                <a href="Bhutan%20NDI%20Company.dc.html#about" class="ndi-gc" style="position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; gap:36px; min-height:176px; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; transition:background var(--dur), border-color var(--dur), box-shadow var(--dur), transform var(--dur);">
+                  <div style="position:absolute; inset:0; overflow:hidden; pointer-events:none; -webkit-mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%); mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%);"><div style="position:absolute; inset:-30%; transform:skewY(-12deg);"><div class="ndi-gc-pattern" style="position:absolute; inset:0; background-image:var(--grid-bg); background-size:30px 30px;"><span style="position:absolute; left:210px; top:60px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:270px; top:120px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:240px; top:30px; width:29px; height:29px; background:rgba(90,201,148,0.10);"></span><span style="position:absolute; left:300px; top:90px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:180px; top:150px; width:29px; height:29px; background:var(--border-grid);"></span></div></div></div>
+                  <span style="position:relative; color:var(--accent);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+                  <div style="position:relative;"><div style="font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--text-strong);">About Us</div><div style="font-size:12.5px; line-height:1.45; color:var(--text-muted); margin-top:3px;">Our story, mission and team.</div></div>
+                </a>
+                <a href="Bhutan%20NDI%20Careers.dc.html" class="ndi-gc" style="position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; gap:36px; min-height:176px; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; transition:background var(--dur), border-color var(--dur), box-shadow var(--dur), transform var(--dur);">
+                  <div style="position:absolute; inset:0; overflow:hidden; pointer-events:none; -webkit-mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%); mask-image:radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%);"><div style="position:absolute; inset:-30%; transform:skewY(-12deg);"><div class="ndi-gc-pattern" style="position:absolute; inset:0; background-image:var(--grid-bg); background-size:30px 30px;"><span style="position:absolute; left:210px; top:60px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:270px; top:120px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:240px; top:30px; width:29px; height:29px; background:rgba(90,201,148,0.10);"></span><span style="position:absolute; left:300px; top:90px; width:29px; height:29px; background:var(--border-grid);"></span><span style="position:absolute; left:180px; top:150px; width:29px; height:29px; background:var(--border-grid);"></span></div></div></div>
+                  <span style="position:relative; color:var(--accent);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></span>
+                  <div style="position:relative;"><div style="font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--text-strong);">Careers</div><div style="font-size:12.5px; line-height:1.45; color:var(--text-muted); margin-top:3px;">Join the team building trust.</div></div>
+                </a>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; padding:16px;">
+                <a href="Bhutan%20NDI%20Media%20Coverage.dc.html" class="ndi-fill" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; color:var(--text-body); transition:background var(--dur), border-color var(--dur);">
+                  <div style="min-width:0;"><div style="font-family:var(--font-display); font-weight:600; font-size:14px; color:var(--text-strong);">Media Coverage</div><div style="font-size:12px; color:var(--text-body); margin-top:2px;">Bhutan NDI in the press</div></div>
+                  <span style="flex:none; color:var(--accent);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3Z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg></span>
+                </a>
+                <a href="#" class="ndi-fill" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; color:var(--text-body); transition:background var(--dur), border-color var(--dur);">
+                  <div style="min-width:0;"><div style="font-family:var(--font-display); font-weight:600; font-size:14px; color:var(--text-strong);">Dashboard</div><div style="font-size:12px; color:var(--text-body); margin-top:2px;">Live view of national ID usage</div></div>
+                  <span style="flex:none; color:var(--accent);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg></span>
+                </a>
+                <a href="#" class="ndi-fill" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.02); text-decoration:none; color:var(--text-body); transition:background var(--dur), border-color var(--dur);">
+                  <div style="min-width:0;"><div style="font-family:var(--font-display); font-weight:600; font-size:14px; color:var(--text-strong);">Admin Login</div><div style="font-size:12px; color:var(--text-body); margin-top:2px;">Sign in to the CMS admin console</div></div>
+                  <span style="flex:none; color:var(--accent);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"></path><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle></svg></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </nav>
+      <div class="ndi-desktop-cta" style="position:relative; z-index:1; margin-left:16px; flex:none;">
+        <button onClick="{{ scrollToContact }}" class="ndi-shiny-cta" style="height:44px; padding:0; display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:600; font-size:14px; letter-spacing:-0.01em;">
+          <span class="ndi-gb-content">
+            Contact Us
+          </span>
+        </button>
+      </div>
+      <button class="ndi-burger" onClick="{{ toggleMobile }}" aria-label="Menu" style="position:relative; z-index:1; display:none; width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); color:var(--text-strong); align-items:center; justify-content:center; cursor:pointer;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ burgerPath }}"></path></svg>
+      </button>
+  </header>
+
+  <div class="ndi-sheet-overlay" style="{{ overlayStyle }}" onClick="{{ closeMobile }}"></div>
+  <aside class="ndi-sheet" style="{{ sheetStyle }}">
+    <div style="flex:none; margin:14px 14px 0; padding:12px 12px 12px 16px; display:flex; align-items:center; justify-content:space-between; gap:16px; border:1px solid var(--border-grid); border-radius:16px; background:radial-gradient(115% 78% at 26% -6%, rgba(111,224,169,0.20) 0%, rgba(90,201,148,0.06) 42%, rgba(90,201,148,0) 68%), linear-gradient(162deg, #103440 0%, #101827 64%);">
+      <img src="assets/logos/ndi-horizontal-white.png" alt="Bhutan NDI" style="height:26px;">
+      <button onClick="{{ closeMobile }}" aria-label="Close" style="flex:none; width:44px; height:44px; border-radius:12px; background:transparent; border:1px solid var(--border-grid); color:var(--text-strong); display:inline-flex; align-items:center; justify-content:center; cursor:pointer;" style-hover="border-color:var(--border-strong); color:var(--accent)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18 M6 6l12 12"></path></svg></button>
+    </div>
+    <div style="flex:1 1 auto; overflow-y:auto; padding:26px 22px 32px; display:flex; flex-direction:column;">
+      <a href="Bhutan%20NDI%20Users.dc.html" onClick="{{ closeMobile }}" style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:22px 4px; border-bottom:1px solid var(--border-subtle); font-family:var(--font-display); font-weight:600; font-size:30px; letter-spacing:-0.02em; color:var(--text-strong); text-decoration:none;" style-hover="color:var(--accent)">
+        For Users
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none; opacity:0.55;"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+      </a>
+      <a href="Bhutan%20NDI%20Organizations.dc.html" onClick="{{ closeMobile }}" style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:22px 4px; border-bottom:1px solid var(--border-subtle); font-family:var(--font-display); font-weight:600; font-size:30px; letter-spacing:-0.02em; color:var(--text-strong); text-decoration:none;" style-hover="color:var(--accent)">
+        For Organizations
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none; opacity:0.55;"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+      </a>
+      <a href="Bhutan%20NDI%20Governance.dc.html" onClick="{{ closeMobile }}" style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:22px 4px; border-bottom:1px solid var(--border-subtle); font-family:var(--font-display); font-weight:600; font-size:30px; letter-spacing:-0.02em; color:var(--text-strong); text-decoration:none;" style-hover="color:var(--accent)">
+        Governance
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none; opacity:0.55;"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+      </a>
+      <button onClick="{{ toggleAccResources }}" style="display:flex; align-items:center; justify-content:space-between; gap:16px; width:100%; padding:22px 4px; border:none; border-bottom:1px solid var(--border-subtle); background:transparent; cursor:pointer; font-family:var(--font-display); font-weight:600; font-size:30px; letter-spacing:-0.02em; color:var(--text-strong); text-align:left;">
+        Resources
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none; opacity:0.55; transition:transform 0.28s var(--ease-out); transform:{{ accResChev }};"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <div class="ndi-acc-panel" style="height:{{ accResHeight }};">
+        <div style="display:flex; flex-direction:column; padding:6px 0 14px;">
+          <a href="Bhutan%20NDI%20Resources.dc.html#news" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">News &amp; Updates</a>
+          <a href="Bhutan%20NDI%20Resources.dc.html#webinars" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">Webinars</a>
+          <a href="Bhutan%20NDI%20Resources.dc.html#insights" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">Insights &amp; Publications</a>
+          <a href="Bhutan%20NDI%20FAQs.dc.html" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">FAQs</a>
+          <a href="Bhutan%20NDI%20Glossary.dc.html" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">Glossary</a>
+        </div>
+      </div>
+      <button onClick="{{ toggleAccCompany }}" style="display:flex; align-items:center; justify-content:space-between; gap:16px; width:100%; padding:22px 4px; border:none; border-bottom:1px solid var(--border-subtle); background:transparent; cursor:pointer; font-family:var(--font-display); font-weight:600; font-size:30px; letter-spacing:-0.02em; color:var(--text-strong); text-align:left;">
+        Company
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none; opacity:0.55; transition:transform 0.28s var(--ease-out); transform:{{ accCoChev }};"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <div class="ndi-acc-panel" style="height:{{ accCoHeight }};">
+        <div style="display:flex; flex-direction:column; padding:6px 0 14px;">
+          <a href="Bhutan%20NDI%20Company.dc.html#about" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">About Us</a>
+          <a href="Bhutan%20NDI%20Careers.dc.html" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">Careers</a>
+          <a href="Bhutan%20NDI%20Media%20Coverage.dc.html" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">Media Coverage</a>
+          <a href="#" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">Dashboard</a>
+          <a href="#" onClick="{{ closeMobile }}" style="padding:12px 4px; font-size:15px; color:var(--text-body); text-decoration:none;" style-hover="color:var(--accent)">Admin Login</a>
+        </div>
+      </div>
+      <a href="Bhutan%20NDI%20Home.dc.html#contact" onClick="{{ contactFromMobile }}" style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:22px 4px; border-bottom:1px solid var(--border-subtle); font-family:var(--font-display); font-weight:600; font-size:30px; letter-spacing:-0.02em; color:var(--accent); text-decoration:none;" style-hover="color:var(--accent-hover)">
+        Contact Us
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+      </a>
+      <div style="margin-top:40px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted);">Bhutan NDI · Thimphu, Bhutan</div>
+      <div style="margin-top:16px; display:flex; gap:10px;">
+        <a href="#" aria-label="WhatsApp" style="width:44px; height:44px; border-radius:12px; background:transparent; border:1px solid var(--border-grid); display:inline-flex; align-items:center; justify-content:center; color:var(--text-muted); transition:all var(--dur);" style-hover="background:linear-gradient(150deg, #5ac994, #124143); color:var(--ndi-000); border-color:transparent; box-shadow:var(--glow-sm)"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.8-.6-3-1.3-5-4.4-5.2-4.6-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.5-.3.3c-.2.2-.3.3-.1.6.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l.8-1c.2-.3.4-.2.6-.1l2 .9c.3.1.4.2.5.3 0 .2 0 .8-.3 1.5Z"></path></svg></a>
+        <a href="#" aria-label="LinkedIn" style="width:44px; height:44px; border-radius:12px; background:transparent; border:1px solid var(--border-grid); display:inline-flex; align-items:center; justify-content:center; color:var(--text-muted); transition:all var(--dur);" style-hover="background:linear-gradient(150deg, #5ac994, #124143); color:var(--ndi-000); border-color:transparent; box-shadow:var(--glow-sm)"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0 0-5ZM3 9h4v12H3zM10 9h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"></path></svg></a>
+        <a href="#" aria-label="X" style="width:44px; height:44px; border-radius:12px; background:transparent; border:1px solid var(--border-grid); display:inline-flex; align-items:center; justify-content:center; color:var(--text-muted); transition:all var(--dur);" style-hover="background:linear-gradient(150deg, #5ac994, #124143); color:var(--ndi-000); border-color:transparent; box-shadow:var(--glow-sm)"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 2H21l-6.5 7.4L22 22h-6l-4.7-6.1L5.9 22H3l7-8L2 2h6.2l4.2 5.6Zm-1 18h1.6L7 3.7H5.3z"></path></svg></a>
+        <a href="#" aria-label="YouTube" style="width:44px; height:44px; border-radius:12px; background:transparent; border:1px solid var(--border-grid); display:inline-flex; align-items:center; justify-content:center; color:var(--text-muted); transition:all var(--dur);" style-hover="background:linear-gradient(150deg, #5ac994, #124143); color:var(--ndi-000); border-color:transparent; box-shadow:var(--glow-sm)"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.2-.4-4.7a2.5 2.5 0 0 0-1.8-1.8C19.3 5 12 5 12 5s-7.3 0-8.8.5A2.5 2.5 0 0 0 1.4 7.3C1 8.8 1 12 1 12s0 3.2.4 4.7a2.5 2.5 0 0 0 1.8 1.8C4.7 19 12 19 12 19s7.3 0 8.8-.5a2.5 2.5 0 0 0 1.8-1.8C23 15.2 23 12 23 12ZM9.8 15.3V8.7l5.7 3.3-5.7 3.3Z"></path></svg></a>
+      </div>
+    </div>
+  </aside>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { openMenu: null, mobileOpen: false, accRes: false, accCo: false };
+  componentDidMount() {
+    document.querySelectorAll('.ndi-gc-pattern').forEach((p) => {
+      p.querySelectorAll('span').forEach((s) => s.remove());
+      const n = 4 + Math.floor(Math.random() * 3);
+      const used = new Set(), rowCount = {}, colCount = {};
+      for (let i = 0; i < n; i++) {
+        let gx, gy, key, guard = 0;
+        do {
+          gx = 4 + Math.floor(Math.random() * 5);
+          gy = 1 + Math.floor(Math.random() * 4);
+          key = gx + ':' + gy;
+        } while ((used.has(key) || (rowCount[gy] || 0) >= 2 || (colCount[gx] || 0) >= 2) && guard++ < 30);
+        used.add(key); rowCount[gy] = (rowCount[gy] || 0) + 1; colCount[gx] = (colCount[gx] || 0) + 1;
+        const s = document.createElement('span');
+        const op = (0.14 + Math.random() * 0.16).toFixed(2);
+        s.style.cssText = 'position:absolute; width:29px; height:29px; left:' + (gx * 30) + 'px; top:' + (gy * 30) + 'px; background:rgba(90,201,148,' + op + ');';
+        p.appendChild(s);
+      }
+    });
+    this.markActivePage();
+    const hdr = document.querySelector('header');
+    if (hdr && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const items = [hdr.querySelector('img'), ...hdr.querySelectorAll('nav a'), ...hdr.querySelectorAll('button')].filter(Boolean);
+      items.forEach((el, i) => {
+        el.style.transform = 'translateY(-16px)';
+        el.style.transition = 'transform 0.55s var(--ease-out)';
+        setTimeout(() => { el.style.transform = 'none'; }, 60 + i * 75);
+      });
+    }
+  }
+  markActivePage() {
+    const file = decodeURIComponent((location.pathname.split('/').pop() || '')).toLowerCase();
+    const groups = {
+      users: ['bhutan ndi users.dc.html'],
+      orgs: ['bhutan ndi organizations.dc.html'],
+      governance: ['bhutan ndi governance.dc.html'],
+      resources: ['bhutan ndi resources.dc.html', 'bhutan ndi faqs.dc.html', 'bhutan ndi glossary.dc.html'],
+      company: ['bhutan ndi company.dc.html', 'bhutan ndi careers.dc.html', 'bhutan ndi media coverage.dc.html']
+    };
+    let hit = null;
+    Object.keys(groups).forEach((k) => { if (groups[k].indexOf(file) >= 0) hit = k; });
+    document.querySelectorAll('.ndi-navlink').forEach((el) => {
+      const on = el.getAttribute('data-navkey') === hit;
+      el.setAttribute('data-active', on ? '1' : '0');
+      if (on) el.setAttribute('aria-current', 'page');
+    });
+  }
+  componentWillUnmount() { clearTimeout(this._menuT); }
+  renderVals() {
+    const om = this.state.openMenu;
+    const panel = (key) => {
+      const open = om === key;
+      return {
+        position: 'absolute', top: '100%', left: '50%', paddingTop: '20px', zIndex: 70,
+        transform: 'translateX(-50%) translateY(' + (open ? '0' : '-6px') + ')',
+        opacity: open ? 1 : 0, visibility: open ? 'visible' : 'hidden', pointerEvents: open ? 'auto' : 'none',
+        transition: open ? 'transform 0.18s var(--ease-out)' : 'opacity 0.24s var(--ease-out), transform 0.24s var(--ease-out), visibility 0s 0.24s',
+      };
+    };
+    const chev = (key) => 'rotate(' + (om === key ? '180deg' : '0deg') + ')';
+    const goContact = () => { window.location.href = 'Bhutan%20NDI%20Home.dc.html#contact'; };
+    return {
+      panelResources: panel('resources'), panelCompany: panel('company'),
+      chevResources: chev('resources'), chevCompany: chev('company'),
+      openResources: () => { clearTimeout(this._menuT); this.setState({ openMenu: 'resources' }); },
+      openCompany: () => { clearTimeout(this._menuT); this.setState({ openMenu: 'company' }); },
+      closeMenu: () => { clearTimeout(this._menuT); this._menuT = setTimeout(() => this.setState({ openMenu: null }), 70); },
+      scrollToContact: goContact,
+      contactFromMobile: goContact,
+      burgerPath: this.state.mobileOpen ? 'M18 6 6 18 M6 6l12 12' : 'M4 6h16 M4 12h16 M4 18h16',
+      overlayStyle: this.state.mobileOpen ? 'opacity:1; visibility:visible; pointer-events:auto;' : 'opacity:0; visibility:hidden; pointer-events:none;',
+      sheetStyle: 'transform:' + (this.state.mobileOpen ? 'translateX(0)' : 'translateX(100%)'),
+      accResChev: this.state.accRes ? 'rotate(180deg)' : 'rotate(0deg)',
+      accCoChev: this.state.accCo ? 'rotate(180deg)' : 'rotate(0deg)',
+      accResHeight: this.state.accRes ? '272px' : '0px',
+      accCoHeight: this.state.accCo ? '272px' : '0px',
+      toggleAccResources: () => this.setState((s) => ({ accRes: !s.accRes })),
+      toggleAccCompany: () => this.setState((s) => ({ accCo: !s.accCo })),
+      toggleMobile: () => this.setState((s) => ({ mobileOpen: !s.mobileOpen })),
+      closeMobile: () => this.setState({ mobileOpen: false, accRes: false, accCo: false }),
+    };
+  }
+}
+</script>
+</body>
+</html>
