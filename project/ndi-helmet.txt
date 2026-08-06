@@ -1,0 +1,15 @@
+<helmet>
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/colors.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/typography.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/effects.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/base.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<script src="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/_ds_bundle.js"></script>
+<link rel="stylesheet" href="ndi-site.css">
+<script src="./image-slot.js"></script>
+</helmet>

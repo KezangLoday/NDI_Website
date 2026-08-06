@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/colors.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/typography.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/effects.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/tokens/base.css">
+<link rel="stylesheet" href="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<script src="_ds/bhutan-ndi-design-system-fabd6a30-df9d-4cba-81e5-00aae6552bff/_ds_bundle.js"></script>
+<link rel="stylesheet" href="ndi-site.css">
+<script src="./image-slot.js"></script>
+</helmet>
+  <!-- ============ FIXED ATMOSPHERE BACKGROUND ============ -->
+  <div style="position:fixed; inset:0; z-index:0; pointer-events:none; background:var(--grad-depth);"></div>
+  <!-- circuit traces defined once, reused by the dim base + the cursor-reveal glow layer -->
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute;">
+    <defs>
+      <linearGradient id="ndiTube" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="#ffffff"></stop><stop offset="0.3" stop-color="#b9ffe0"></stop><stop offset="0.62" stop-color="#5ac994"></stop><stop offset="1" stop-color="#1d7d5c"></stop></linearGradient>
+      <filter id="ndiTubeSoft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="1.1"></feGaussianBlur></filter>
+      <filter id="cglow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.2"></feGaussianBlur></filter>
+      <g id="ndiTA">
+        <g stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M0,120 H160 L200,160 H360 V90"></path><path d="M0,300 H90 V220 H240 L280,180 H430"></path>
+          <path d="M0,480 H140 L180,440 H320 V520 H460"></path><path d="M0,660 H100 V600 H260 L300,640 H440"></path>
+          <path d="M0,820 H180 V760 H300 L340,800 H520"></path><path d="M120,0 V90 H260"></path>
+          <path d="M520,0 V140 H660 V320 L700,360 H860"></path><path d="M430,180 V300 H560 V420"></path>
+          <path d="M460,520 H620 V640 H780 L820,600 H960"></path><path d="M520,820 H700 V700 H840"></path>
+          <path d="M840,0 V120 L880,160 V300 H1020"></path><path d="M960,600 V740 H1100 V860"></path>
+          <path d="M1440,180 H1280 L1240,220 H1080 V360"></path><path d="M1440,400 H1300 V500 H1140 L1100,540 H980"></path>
+          <path d="M1440,620 H1320 L1280,660 H1140"></path><path d="M1440,800 H1280 V720 H1120"></path>
+          <path d="M1120,360 V480 H1240"></path><path d="M700,360 V500 H620"></path><path d="M1020,300 H1160 V180"></path>
+        </g>
+        <g fill="#0c111b" stroke="currentColor" stroke-width="1.6">
+          <circle cx="360" cy="160" r="7"></circle><circle cx="430" cy="300" r="7"></circle><circle cx="560" cy="420" r="7"></circle>
+          <circle cx="620" cy="640" r="7"></circle><circle cx="860" cy="360" r="7"></circle><circle cx="1080" cy="360" r="7"></circle>
+          <circle cx="1140" cy="620" r="7"></circle><circle cx="260" cy="600" r="7"></circle><circle cx="700" cy="700" r="7"></circle>
+          <circle cx="1020" cy="300" r="7"></circle><circle cx="1240" cy="220" r="7"></circle><circle cx="1300" cy="500" r="7"></circle>
+        </g>
+        <g fill="currentColor">
+          <circle cx="200" cy="160" r="3.6"></circle><circle cx="280" cy="180" r="3.6"></circle><circle cx="180" cy="440" r="3.6"></circle>
+          <circle cx="300" cy="640" r="3.6"></circle><circle cx="820" cy="600" r="3.6"></circle><circle cx="1100" cy="540" r="3.6"></circle>
+          <circle cx="1280" cy="660" r="3.6"></circle><circle cx="880" cy="160" r="3.6"></circle><circle cx="1100" cy="860" r="3.6"></circle>
+          <rect x="116" y="86" width="8" height="8"></rect><rect x="636" y="316" width="8" height="8"></rect><rect x="1236" y="476" width="8" height="8"></rect>
+        </g>
+      </g>
+      <g id="ndiTB">
+        <g stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M0,220 H120 L180,160 H340 L400,220 H520"></path><path d="M0,440 H200 L260,500 H420"></path>
+          <path d="M0,640 H160 L220,580 H380 V440"></path><path d="M0,80 H80 V180"></path>
+          <path d="M260,0 V80 L320,140 V280 H460"></path><path d="M520,220 V380 L580,440 H760"></path>
+          <path d="M420,500 V680 H600 L660,740 H820"></path><path d="M380,900 V760 H540"></path>
+          <path d="M760,0 V120 H900 V260 L960,320 H1120"></path><path d="M760,440 V620 H920 V800"></path>
+          <path d="M1120,320 V480 L1180,540 H1360"></path><path d="M900,900 V740 H1060 L1120,680 H1280"></path>
+          <path d="M1440,120 H1300 L1240,180 H1100"></path><path d="M1440,340 H1320 V240"></path>
+          <path d="M1440,560 H1280 L1220,620 H1060"></path><path d="M1440,760 H1300 V860"></path>
+          <path d="M580,440 V600"></path><path d="M960,320 V460 H1120"></path><path d="M320,280 H460 V420"></path>
+        </g>
+        <g fill="#0c111b" stroke="currentColor" stroke-width="1.6">
+          <circle cx="340" cy="160" r="7"></circle><circle cx="520" cy="220" r="7"></circle><circle cx="460" cy="280" r="7"></circle>
+          <circle cx="580" cy="440" r="7"></circle><circle cx="600" cy="680" r="7"></circle><circle cx="900" cy="260" r="7"></circle>
+          <circle cx="1120" cy="320" r="7"></circle><circle cx="1180" cy="540" r="7"></circle><circle cx="920" cy="620" r="7"></circle>
+          <circle cx="1240" cy="180" r="7"></circle><circle cx="220" cy="580" r="7"></circle><circle cx="1060" cy="740" r="7"></circle>
+        </g>
+        <g fill="currentColor">
+          <circle cx="180" cy="160" r="3.6"></circle><circle cx="400" cy="220" r="3.6"></circle><circle cx="260" cy="500" r="3.6"></circle>
+          <circle cx="660" cy="740" r="3.6"></circle><circle cx="960" cy="320" r="3.6"></circle><circle cx="1220" cy="620" r="3.6"></circle>
+          <circle cx="1120" cy="680" r="3.6"></circle><circle cx="320" cy="140" r="3.6"></circle><circle cx="1320" cy="240" r="3.6"></circle>
+          <rect x="76" y="176" width="8" height="8"></rect><rect x="456" y="416" width="8" height="8"></rect><rect x="916" y="796" width="8" height="8"></rect>
+        </g>
+      </g>
+      <g id="ndiTC">
+        <g stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M0,160 H100 V260 H240 L300,320 H460 V200"></path><path d="M0,360 H180 L240,300 H400"></path>
+          <path d="M0,560 H120 V680 H280 L340,620 H500"></path><path d="M0,760 H200 L260,820 H420"></path>
+          <path d="M160,0 V80 H320 L380,140 V300"></path><path d="M460,200 H620 L680,140 V0"></path>
+          <path d="M460,320 V480 H640 V620 H800"></path><path d="M500,620 V780 H680 V900"></path>
+          <path d="M840,0 V140 H980 L1040,200 H1200"></path><path d="M800,480 H960 V340 H1100"></path>
+          <path d="M1040,620 H1220 V760 H1400"></path><path d="M680,900 V760 H860 L920,700 H1080"></path>
+          <path d="M1440,240 H1300 V380 H1160 L1100,440 V560"></path><path d="M1440,460 H1360 V560"></path>
+          <path d="M1440,680 H1300 L1240,620 H1100"></path><path d="M1440,860 H1320 V760"></path>
+          <path d="M640,480 V340 H760"></path><path d="M1200,200 V340"></path><path d="M320,80 V200 H440"></path>
+        </g>
+        <g fill="#0c111b" stroke="currentColor" stroke-width="1.6">
+          <circle cx="460" cy="320" r="7"></circle><circle cx="400" cy="300" r="7"></circle><circle cx="640" cy="480" r="7"></circle>
+          <circle cx="640" cy="620" r="7"></circle><circle cx="980" cy="140" r="7"></circle><circle cx="1200" cy="200" r="7"></circle>
+          <circle cx="960" cy="480" r="7"></circle><circle cx="1220" cy="620" r="7"></circle><circle cx="1100" cy="440" r="7"></circle>
+          <circle cx="320" cy="260" r="7"></circle><circle cx="280" cy="680" r="7"></circle><circle cx="860" cy="760" r="7"></circle>
+        </g>
+        <g fill="currentColor">
+          <circle cx="300" cy="320" r="3.6"></circle><circle cx="240" cy="300" r="3.6"></circle><circle cx="340" cy="620" r="3.6"></circle>
+          <circle cx="260" cy="820" r="3.6"></circle><circle cx="1040" cy="200" r="3.6"></circle><circle cx="1240" cy="620" r="3.6"></circle>
+          <circle cx="920" cy="700" r="3.6"></circle><circle cx="680" cy="140" r="3.6"></circle><circle cx="1100" cy="560" r="3.6"></circle>
+          <rect x="156" y="76" width="8" height="8"></rect><rect x="636" y="616" width="8" height="8"></rect><rect x="1196" y="196" width="8" height="8"></rect>
+        </g>
+      </g>
+    </defs>
+  </svg>
+
+  <div id="ndiCircuitBase" style="position:absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; z-index:0; pointer-events:none; color:rgba(90,201,148,0.36); -webkit-mask-image:linear-gradient(to bottom, transparent 0, transparent 280px, #000 460px, #000 1020px, transparent 1440px), radial-gradient(ellipse 540px 260px at 235px 505px, transparent 0%, transparent 44%, rgba(0,0,0,0.35) 66%, rgba(0,0,0,0.72) 84%, #000 100%); -webkit-mask-composite:source-in; -webkit-mask-repeat:no-repeat; -webkit-mask-size:100% 100%; mask-image:linear-gradient(to bottom, transparent 0, transparent 280px, #000 460px, #000 1020px, transparent 1440px), radial-gradient(ellipse 540px 260px at 235px 505px, transparent 0%, transparent 44%, rgba(0,0,0,0.35) 66%, rgba(0,0,0,0.72) 84%, #000 100%); mask-composite:intersect; mask-repeat:no-repeat; mask-size:100% 100%;">
+    <sc-for list="{{ bands }}" as="b" hint-placeholder-count="6">
+      <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" style="position:absolute; left:0; width:100%; height:{{ b.h }}px; top:{{ b.top }}px; -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%); mask-image:linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);"><use href="{{ b.ref }}"></use></svg>
+    </sc-for>
+  </div>
+
+  <div id="ndiCircuitGlow" style="position:absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; z-index:0; pointer-events:none; color:#7fe6b3; opacity:0; transition:opacity 0.45s var(--ease-out); -webkit-mask-image:radial-gradient(300px circle at -999px -999px, #000 0%, transparent 72%), linear-gradient(to bottom, transparent 0, transparent 300px, #000 520px); -webkit-mask-composite:source-in; -webkit-mask-repeat:no-repeat; -webkit-mask-size:100% 100%; mask-image:radial-gradient(300px circle at -999px -999px, #000 0%, transparent 72%), linear-gradient(to bottom, transparent 0, transparent 300px, #000 520px); mask-composite:intersect; mask-repeat:no-repeat; mask-size:100% 100%;">
+    <sc-for list="{{ bands }}" as="b" hint-placeholder-count="6">
+      <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" style="position:absolute; left:0; width:100%; height:{{ b.h }}px; top:{{ b.top }}px; -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%); mask-image:linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);"><g filter="url(#cglow)"><use href="{{ b.ref }}"></use></g></svg>
+    </sc-for>
+  </div>
+  <!-- ambient lighting: one continuous set of edge pools, no tiling (no seams) -->
+  <div style="position:absolute; top:0; left:0; right:0; bottom:0; z-index:0; pointer-events:none; background-image:radial-gradient(ellipse 62% 13% at -4% 1%, rgba(90,201,148,0.15) 0%, rgba(90,201,148,0.055) 36%, transparent 74%), radial-gradient(ellipse 58% 12% at 104% 15%, rgba(18,65,67,0.4) 0%, rgba(18,65,67,0.13) 38%, transparent 76%), radial-gradient(ellipse 60% 12% at -6% 36%, rgba(90,201,148,0.1) 0%, rgba(90,201,148,0.04) 36%, transparent 74%), radial-gradient(ellipse 58% 11% at 106% 56%, rgba(18,65,67,0.32) 0%, rgba(18,65,67,0.11) 38%, transparent 76%), radial-gradient(ellipse 60% 12% at -4% 76%, rgba(90,201,148,0.09) 0%, rgba(90,201,148,0.035) 36%, transparent 74%), radial-gradient(ellipse 58% 11% at 104% 95%, rgba(18,65,67,0.28) 0%, rgba(18,65,67,0.09) 38%, transparent 76%); background-repeat:no-repeat; background-size:100% 100%;"></div>
+
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { bands: [] };
+  _topFade = 'linear-gradient(to bottom, transparent 0, transparent 480px, #000 780px, #000 100%)';
+  ndiRandomString(n) {
+    const cs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let out = '';
+    for (let i = 0; i < n; i++) out += cs.charAt(Math.floor(Math.random() * cs.length));
+    return out;
+  }
+  setupEvervaultCards = () => {
+    document.querySelectorAll('.ndi-ev').forEach((card) => {
+      if (card.dataset.evReady) return;
+      card.dataset.evReady = '1';
+      const noise = card.querySelector('.ndi-ev-noise p');
+      if (noise) noise.textContent = this.ndiRandomString(1400);
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        if (noise) noise.textContent = this.ndiRandomString(1400);
+      });
+    });
+  };
+  applyMasks() {
+    const bl = document.getElementById('ndiCircuitBase');
+    if (bl) {
+      // circuits stay dark; only the cursor-tracked glow layer reveals them
+      bl.style.opacity = '0';
+      bl.style.webkitMaskImage = this._topFade;
+      bl.style.maskImage = this._topFade;
+      bl.style.webkitMaskComposite = 'source-over';
+      bl.style.maskComposite = 'add';
+    }
+  }
+  computeBands = () => {
+    // measure the page WITHOUT these layers, else each pass grows the document
+    const bl0 = document.getElementById('ndiCircuitBase');
+    const gl0 = document.getElementById('ndiCircuitGlow');
+    const prevH = [bl0 && bl0.style.height, gl0 && gl0.style.height];
+    if (bl0) bl0.style.height = '0px';
+    if (gl0) gl0.style.height = '0px';
+    const h = Math.max(document.documentElement.scrollHeight, window.innerHeight);
+    if (bl0) bl0.style.height = prevH[0] || '0px';
+    if (gl0) gl0.style.height = prevH[1] || '0px';
+    const bandH = Math.round(900 * (Math.min(window.innerWidth, 1920) / 1440));
+    const variants = ['#ndiTA', '#ndiTB', '#ndiTC'];
+    const n = Math.ceil(h / bandH);
+    const bands = [];
+    for (let i = 0; i < n; i++) bands.push({ top: i * bandH, h: bandH, ref: variants[i % variants.length] });
+    const bl = document.getElementById('ndiCircuitBase');
+    const gl = document.getElementById('ndiCircuitGlow');
+    if (bl) bl.style.height = h + 'px';
+    if (gl) gl.style.height = h + 'px';
+    const prev = this.state.bands || [];
+    if (prev.length !== bands.length || (prev[0] && prev[0].h !== bandH)) this.setState({ bands });
+  };
+  setupReveals = () => {
+    this._seen = this._seen || new WeakSet();
+    const motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = Array.from(document.querySelectorAll('[data-reveal]')).filter((el) => !this._seen.has(el));
+    els.forEach((el) => {
+      this._seen.add(el);
+      el.style.transition = 'none';
+      el.style.opacity = '1';
+      void el.offsetWidth;
+      el.style.transition = 'transform 0.7s var(--ease-out)';
+      if (!motion) { el.style.transform = 'none'; return; }
+      if (!this._io) {
+        this._io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { e.target.style.transform = 'none'; this._io.unobserve(e.target); } });
+        }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+      }
+      this._io.observe(el);
+    });
+  };
+  componentDidMount() {
+    this.applyMasks();
+    this.computeBands();
+    this.setupReveals();
+    this.setupEvervaultCards();
+    this._timers = [120, 400, 900, 1800, 3200, 5000, 8000].map((t) => setTimeout(() => { this.computeBands(); this.setupReveals(); this.setupEvervaultCards(); }, t));
+    if (window.MutationObserver) {
+      this._mo = new MutationObserver(() => { clearTimeout(this._moT); this._moT = setTimeout(() => { this.computeBands(); this.setupReveals(); this.setupEvervaultCards(); }, 160); });
+      this._mo.observe(document.body, { childList: true, subtree: true });
+    }
+    this._onResize = () => { clearTimeout(this._rzT); this._rzT = setTimeout(this.computeBands, 200); };
+    window.addEventListener('resize', this._onResize);
+    // circuit glow under the cursor, with an idle roaming spotlight
+    const cg = document.getElementById('ndiCircuitGlow');
+    if (cg) {
+      const apply = (px, py, r, strong) => {
+        const spot = 'radial-gradient(' + r + 'px circle at ' + px + 'px ' + py + 'px, #000 0%, transparent 72%)';
+        cg.style.webkitMaskImage = spot + ', ' + this._topFade;
+        cg.style.webkitMaskComposite = 'source-in';
+        cg.style.maskImage = spot + ', ' + this._topFade;
+        cg.style.maskComposite = 'intersect';
+        cg.style.opacity = strong ? '1' : '0.85';
+      };
+      let lastMove = -9999;
+      this._onMove = (e) => { lastMove = performance.now(); apply(e.pageX, e.pageY, 300, true); };
+      window.addEventListener('mousemove', this._onMove, { passive: true });
+      cg.style.opacity = '0';
+      this._onLeave = () => { cg.style.opacity = '0'; };
+      document.addEventListener('mouseleave', this._onLeave);
+    }
+    // spotlight coords for glass cards
+    this._spot = (e) => {
+      const root = document.documentElement;
+      root.style.setProperty('--gx', e.clientX.toFixed(2));
+      root.style.setProperty('--gy', e.clientY.toFixed(2));
+    };
+    document.addEventListener('pointermove', this._spot);
+  }
+  componentWillUnmount() {
+    (this._timers || []).forEach(clearTimeout);
+    if (this._mo) this._mo.disconnect();
+    clearTimeout(this._moT);
+    if (this._io) this._io.disconnect();
+    if (this._onResize) window.removeEventListener('resize', this._onResize);
+    if (this._onMove) window.removeEventListener('mousemove', this._onMove);
+    if (this._spot) document.removeEventListener('pointermove', this._spot);
+    if (this._onLeave) document.removeEventListener('mouseleave', this._onLeave);
+  }
+  renderVals() { return { bands: this.state.bands || [] }; }
+}
+</script>
+</body>
+</html>
