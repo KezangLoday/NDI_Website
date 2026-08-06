@@ -1,22 +1,86 @@
-# CODING AGENTS: READ THIS FIRST
+# Bhutan NDI — website
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Next.js implementation of the Bhutan NDI website redesign.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+**Phase 1 (current): the Home page**, built to match the design at full fidelity, using
+local media in `/public` and mock data in `src/content`. Payload CMS v3, PostgreSQL and
+S3 come in Phase 2 — the content layer is already built behind a seam so that is a swap,
+not a rewrite.
 
-## What you should do — IMPORTANT
+```bash
+npm install
+npm run dev     # http://localhost:3000
+npm run build
+npm run lint
+```
 
-**Read `project/Bhutan NDI Home.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+## Layout
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+```
+public/media/          hero phones, org and partner logos, news images
+src/app/               routes — / is the built Home page, the rest are stubs
+src/components/
+  layout/              Atmosphere (circuit background), SiteHeader, SiteFooter
+  home/                the eight Home sections
+  ui/                  Reveal, cards, icons, form controls
+src/content/           mock data, shaped like Payload documents
+src/hooks/             motion hooks (carousels, circuit glow, reduced motion)
+src/lib/               media URL resolution, date formatting, scroll helpers
+src/styles/            ndi-effects.css — the effects Tailwind can't express
+project/               the original Claude Design handoff bundle (reference only)
+```
 
-## About the design files
+## Styling
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+Design tokens are ported into `src/app/globals.css` as CSS variables and bridged into
+Tailwind's theme, so `bg-canvas`, `text-muted`, `border-grid`, `font-display` etc. all
+resolve to the design system's values.
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+The signature effects — `@property`-animated conic-gradient borders, `mask-composite`
+lens rims, cursor-tracked spotlights, the glass pass — live in `src/styles/ndi-effects.css`
+as hand-written CSS. They have no Tailwind utility equivalent. Everything else is
+Tailwind utilities.
 
-## Bundle contents
+Fonts are **Host Grotesk** (display), **Inter** (body) and **DM Mono** (mono). Note the
+design-system token files name Space Grotesk and JetBrains Mono, but `ndi-site.css`
+overrides both and the prototypes load the three above — those overrides are what
+actually rendered, so those are what the build uses.
 
-- `README.md` — this file
-- `project/` — the `Bhutan NDI Website Redesign` project files (HTML prototypes, assets, components)
+## The Phase 2 seam
+
+Components never import mock data directly. They read through the async accessors in
+`src/content/index.ts`:
+
+```ts
+const news = await getNews();
+```
+
+In Phase 2 those function bodies become Payload Local API calls and no component
+changes. Mock records already carry `id`/`slug`, media uses Payload's upload shape
+(`{ url, alt, width, height }`) resolved through `src/lib/media.ts`, and dates are ISO
+strings formatted at render time.
+
+Collections the content implies: `news`, `organizations`, `collaborators`,
+`capabilities`, `useCases`, `services`, plus a `siteSettings` global for nav, footer,
+contact details and social links.
+
+---
+
+# The design handoff bundle
+
+`project/` is the original export from Claude Design (claude.ai/design) — HTML/CSS/JS
+prototypes, not production code. `project/Bhutan NDI Home.dc.html` is the design this
+build implements; `NDI-Nav.dc.html`, `NDI-Footer.dc.html` and `ndi-site.css` are its
+shared pieces.
+
+`Bhutan NDI Home v1–v5.dc.html` are superseded drafts — every section in them survives
+into the final `Bhutan NDI Home.dc.html`. Don't diff against them.
+
+`support.js` and `image-slot.js` are the design tool's own runtime (a template engine and
+an image-placeholder picker). Nothing in them needs porting; the real behaviour lives in
+the `class Component extends DCLogic` block at the bottom of each prototype.
+
+The other nine prototypes — Users, Organizations, Company, Governance, Resources, Media
+Coverage, FAQs, Glossary, Careers — are designed but not yet built. `/users`,
+`/organizations` and friends currently render a placeholder so every nav and footer link
+resolves.

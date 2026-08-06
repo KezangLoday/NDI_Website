@@ -1,0 +1,212 @@
+@import "tailwindcss";
+@import "../styles/ndi-effects.css";
+
+/* ============================================================
+   Bhutan NDI — design tokens.
+   Ported from project/_ds/.../tokens/{colors,spacing,effects}.css.
+
+   Font families intentionally differ from the token file: the design
+   system declares Space Grotesk / JetBrains Mono, but ndi-site.css
+   overrides --font-display / --font-mono and every prototype page loads
+   Host Grotesk + Inter + DM Mono. The overrides are what actually
+   renders, so those are the three families wired up here.
+   ============================================================ */
+
+:root {
+  /* ---- Brand primitives ---------------------------------- */
+  --ndi-mint: #5ac994;
+  --ndi-mint-bright: #6fe0a9;
+  --ndi-mint-deep: #3da876;
+  --ndi-teal: #124143;
+  --ndi-teal-soft: #1a585b;
+  --ndi-obsidian: #141b29;
+
+  /* ---- Neutral ramp -------------------------------------- */
+  --ndi-ink-900: #0c111b;
+  --ndi-ink-800: #141b29;
+  --ndi-ink-700: #1b2433;
+  --ndi-ink-600: #232e40;
+  --ndi-ink-500: #2e3a4f;
+  --ndi-ink-400: #3b495f;
+  --ndi-300: #62676d;
+  --ndi-200: #8b95a5;
+  --ndi-100: #c5ccd8;
+  --ndi-000: #ffffff;
+
+  /* ---- Mint alpha set ------------------------------------ */
+  --ndi-mint-04: rgba(90, 201, 148, 0.04);
+  --ndi-mint-08: rgba(90, 201, 148, 0.08);
+  --ndi-mint-12: rgba(90, 201, 148, 0.12);
+  --ndi-mint-15: rgba(90, 201, 148, 0.15);
+  --ndi-mint-25: rgba(90, 201, 148, 0.25);
+  --ndi-mint-40: rgba(90, 201, 148, 0.4);
+
+  /* ---- Semantic status ----------------------------------- */
+  --ndi-success: #5ac994;
+  --ndi-info: #4aa3ff;
+  --ndi-warning: #f5b740;
+  --ndi-danger: #e1493e;
+
+  /* ---- Surfaces ------------------------------------------ */
+  --surface-canvas: var(--ndi-ink-800);
+  --surface-sunken: var(--ndi-ink-900);
+  --surface-raised: var(--ndi-ink-700);
+  --surface-card: var(--ndi-ink-600);
+  --surface-hover: var(--ndi-ink-500);
+  --surface-glass: rgba(18, 65, 67, 0.35);
+  --surface-glass-strong: rgba(18, 65, 67, 0.55);
+
+  /* ---- Text ---------------------------------------------- */
+  --text-strong: var(--ndi-000);
+  --text-body: var(--ndi-100);
+  --text-muted: var(--ndi-200);
+  --text-faint: var(--ndi-300);
+  --text-accent: var(--ndi-mint);
+  --text-on-mint: #06241a;
+
+  /* ---- Borders ------------------------------------------- */
+  --border-grid: var(--ndi-mint-15);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: var(--ndi-mint-25);
+  --border-divider: var(--ndi-ink-400);
+
+  /* ---- Accent -------------------------------------------- */
+  --accent: var(--ndi-mint);
+  --accent-hover: var(--ndi-mint-bright);
+  --accent-press: var(--ndi-mint-deep);
+  --focus-ring: var(--ndi-mint-40);
+
+  /* ---- Elevation & glow ---------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
+  --glow-sm: 0 0 0 1px var(--ndi-mint-25), 0 0 16px rgba(90, 201, 148, 0.25);
+  --glow-md: 0 0 24px rgba(90, 201, 148, 0.35);
+  --glow-lg: 0 0 48px rgba(90, 201, 148, 0.4);
+  --glow-text: 0 0 24px rgba(90, 201, 148, 0.45);
+  --ring: 0 0 0 3px var(--focus-ring);
+  --inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --blur-glass: 18px;
+
+  /* ---- Signature gradients ------------------------------- */
+  --grad-depth: radial-gradient(120% 120% at 50% -10%, #163a3c 0%, #141b29 46%, #0c111b 100%);
+  --grad-card: linear-gradient(160deg, rgba(26, 88, 91, 0.28) 0%, rgba(35, 46, 64, 0.5) 60%);
+  --grad-mint: linear-gradient(135deg, #6fe0a9 0%, #5ac994 55%, #3da876 100%);
+  --grad-text: linear-gradient(92deg, #6fe0a9 0%, #5ac994 60%, #2e8d8f 100%);
+
+  /* ---- Wireframe grid ------------------------------------ */
+  --grid-line: var(--ndi-mint-08);
+  --grid-bg:
+    linear-gradient(var(--ndi-mint-08) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ndi-mint-08) 1px, transparent 1px);
+  --grid-size: 48px 48px;
+
+  /* ---- Motion -------------------------------------------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 140ms;
+  --dur: 220ms;
+  --dur-slow: 400ms;
+}
+
+/* ============================================================
+   Tailwind theme bridge — exposes the tokens above as utilities
+   (bg-canvas, text-muted, border-grid, font-display, …).
+   `inline` keeps the CSS variables above as the single source of truth.
+   ============================================================ */
+
+@theme inline {
+  --color-canvas: var(--surface-canvas);
+  --color-sunken: var(--surface-sunken);
+  --color-raised: var(--surface-raised);
+  --color-card: var(--surface-card);
+  --color-hover: var(--surface-hover);
+
+  --color-strong: var(--text-strong);
+  --color-body: var(--text-body);
+  --color-muted: var(--text-muted);
+  --color-faint: var(--text-faint);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-press: var(--accent-press);
+  --color-teal: var(--ndi-teal);
+
+  --color-grid: var(--border-grid);
+  --color-subtle: var(--border-subtle);
+  --color-divider: var(--border-divider);
+
+  --radius-card: 16px;
+
+  --ease-ndi: var(--ease-out);
+}
+
+@theme {
+  --font-display: var(--font-host-grotesk), "Inter", system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, "SFMono-Regular", monospace;
+}
+
+/* ============================================================
+   Base — from tokens/base.css + ndi-site.css
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-sunken);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+*::selection {
+  background: rgba(90, 201, 148, 0.28);
+  color: #fff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Custom scrollbar — engineered feel */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ndi-ink-500) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--ndi-ink-500);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--ndi-ink-400);
+  background-clip: padding-box;
+}
+
+/* The fixed nav pill overlays content — anchored sections need clearance */
+[id] {
+  scroll-margin-top: 108px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
