@@ -13,21 +13,39 @@
  */
 
 import { capabilities, useCases, walletBenefits } from "./capabilities";
+import { careerValues, jobs } from "./careers";
+import {
+  missionStatements,
+  storyBullets,
+  storyImage,
+  storyImagePosition,
+  storyStats,
+  team,
+  visionPillars,
+} from "./company";
 import { collaboratorGroups, collaborators } from "./collaborators";
 import { news } from "./news";
+import { press } from "./press";
 import { organizationColumnDurations, organizations } from "./organizations";
 import { services } from "./services";
 import { siteSettings } from "./siteSettings";
 
 import type {
   Capability,
+  CareerValue,
   Collaborator,
   CollaboratorGroup,
+  Job,
+  MissionStatement,
   NewsItem,
   Organization,
+  PressItem,
   ServiceOption,
   SiteSettings,
+  StoryStat,
+  TeamMember,
   UseCase,
+  VisionPillar,
   WalletBenefit,
 } from "./types";
 
@@ -65,6 +83,44 @@ export async function getServices(): Promise<ServiceOption[]> {
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   return siteSettings;
+}
+
+export async function getPress(): Promise<PressItem[]> {
+  return press;
+}
+
+export async function getJobs(): Promise<Job[]> {
+  return jobs;
+}
+
+export async function getCareerValues(): Promise<CareerValue[]> {
+  return careerValues;
+}
+
+export async function getTeam(): Promise<TeamMember[]> {
+  return team;
+}
+
+export async function getVisionPillars(): Promise<VisionPillar[]> {
+  return visionPillars;
+}
+
+export async function getMissionStatements(): Promise<MissionStatement[]> {
+  return missionStatements;
+}
+
+export async function getStory(): Promise<{
+  bullets: string[];
+  stats: StoryStat[];
+  image: typeof storyImage;
+  imagePosition: string;
+}> {
+  return {
+    bullets: storyBullets,
+    stats: storyStats,
+    image: storyImage,
+    imagePosition: storyImagePosition,
+  };
 }
 
 export { organizationColumnDurations };

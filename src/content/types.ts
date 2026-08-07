@@ -95,6 +95,112 @@ export interface ServiceOption {
   label: string;
 }
 
+/* ---- Governance ------------------------------------------------
+   Statutory section references (§5–§10) render as inline mono chips, so
+   they are a field rather than punctuation inside the prose. */
+
+export interface GovernanceBullet {
+  text: string;
+  ref?: string;
+}
+
+export interface TocEntry {
+  href: string;
+  label: string;
+}
+
+export interface InstitutionalBody {
+  id: string;
+  label: string;
+  subtitle: string;
+  paragraphs: string[];
+  ref: string;
+}
+
+export interface GovernanceSpec {
+  id: string;
+  title: string;
+  description: string;
+  ref?: string;
+}
+
+export interface GovernanceOffence {
+  id: string;
+  offence: string;
+  grade: string;
+}
+
+export interface GovernanceChapter {
+  number: string;
+  title: string;
+}
+
+/** Collection: `team` — the people on the Company page. */
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  /** Leadership renders larger and in its own grid. */
+  tier: "leadership" | "team";
+  /** Absent until the client supplies a portrait; a monogram stands in. */
+  photo?: Media;
+  /** CSS object-position, carried over from the design tool's crop. */
+  photoPosition?: string;
+}
+
+export interface VisionPillar {
+  id: string;
+  label: string;
+  icon: Media;
+}
+
+/** One run of text in a mission statement; `emphasis` renders it in mint. */
+export interface TextSegment {
+  text: string;
+  emphasis?: boolean;
+}
+
+export interface MissionStatement {
+  id: string;
+  icon: Media;
+  segments: TextSegment[];
+}
+
+export interface StoryStat {
+  id: string;
+  value: string;
+  label: string;
+}
+
+/** Collection: `press` — Media Coverage entries. */
+export interface PressItem {
+  id: string;
+  category: string;
+  title: string;
+  publishedAt: string;
+  href: string;
+  /** Not present in the design, but a real press page needs it. */
+  outlet?: string;
+}
+
+/** Collection: `jobs` — Careers listings. HR-editable in Phase 2. */
+export interface Job {
+  id: string;
+  slug: string;
+  department: string;
+  title: string;
+  summary: string;
+  location: string;
+  href: string;
+}
+
+/** Global: the "why work here" cards. */
+export interface CareerValue {
+  id: string;
+  title: string;
+  description: string;
+}
+
 export interface NavLink {
   label: string;
   href: string;

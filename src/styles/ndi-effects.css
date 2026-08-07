@@ -750,3 +750,178 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   box-shadow: var(--glow-md);
   transform: translateY(-2px);
 }
+
+/* ============================================================
+   Subpage effects — ported from project/ndi-site.css.
+   Layout helpers from that file are deliberately not carried over;
+   layout is expressed in Tailwind, as on the home page.
+   ============================================================ */
+
+/* ---- Bento use-case cards: cursor-tracked conic glow border ---- */
+.ndi-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  --start: 0;
+  --active: 0;
+  --spread: 40;
+  --bw: 2px;
+}
+.ndi-glow::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--bw));
+  border-radius: inherit;
+  border: var(--bw) solid transparent;
+  background:
+    radial-gradient(circle, rgba(158, 247, 204, 0.9) 10%, rgba(158, 247, 204, 0) 20%),
+    radial-gradient(circle at 40% 40%, rgba(90, 201, 148, 0.9) 5%, rgba(90, 201, 148, 0) 15%),
+    radial-gradient(circle at 60% 60%, rgba(18, 65, 67, 0.9) 10%, rgba(18, 65, 67, 0) 20%),
+    repeating-conic-gradient(from 236.84deg at 50% 50%, #5ac994 0%, #9ef7cc 5%, #124143 10%, #6fe0a9 15%, #5ac994 20%);
+  background-attachment: fixed;
+  opacity: var(--active);
+  transition: opacity 0.3s var(--ease-out);
+  -webkit-mask-image: linear-gradient(#0000, #0000),
+    conic-gradient(from calc((var(--start) - var(--spread)) * 1deg), #00000000 0deg, #fff, #00000000 calc(var(--spread) * 2deg));
+  mask-image: linear-gradient(#0000, #0000),
+    conic-gradient(from calc((var(--start) - var(--spread)) * 1deg), #00000000 0deg, #fff, #00000000 calc(var(--spread) * 2deg));
+  -webkit-mask-clip: padding-box, border-box;
+  mask-clip: padding-box, border-box;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-glow::after { transition: none; }
+}
+
+/* ---- CTA buttons: cursor-tracked hover glow + click ripple ----
+   --bx/--by are element-local pointer coords set by useHoverGlow(). */
+.ndi-hglow { position: relative; overflow: hidden; isolation: isolate; --bx: 50%; --by: 50%; }
+.ndi-hglow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+  background: radial-gradient(120px 120px at var(--bx) var(--by), rgba(255, 255, 255, 0.95), rgba(214, 255, 236, 0.45) 34%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.6);
+  transform-origin: var(--bx) var(--by);
+  transition: opacity 0.3s var(--ease-out), transform 0.4s var(--ease-out);
+}
+.ndi-hglow:hover::before { opacity: 1; transform: scale(1); }
+/* Idle sheen drifting across the button, fading out on hover */
+.ndi-hglow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.42) 48%, rgba(214, 255, 236, 0.2) 56%, rgba(255, 255, 255, 0) 74%);
+  background-size: 260% 100%;
+  animation: ndiSheen 5.6s var(--ease-out) infinite;
+  opacity: 1;
+  transition: opacity 0.28s var(--ease-out);
+}
+.ndi-hglow:hover::after { opacity: 0; }
+.ndi-hglow > * { position: relative; z-index: 2; }
+.ndi-hglow-ghost::before {
+  background: radial-gradient(130px 130px at var(--bx) var(--by), rgba(111, 224, 169, 0.26), rgba(90, 201, 148, 0.1) 40%, transparent 72%);
+}
+.ndi-hglow-ghost::after {
+  background: linear-gradient(105deg, rgba(111, 224, 169, 0) 32%, rgba(111, 224, 169, 0.16) 50%, rgba(90, 201, 148, 0.06) 58%, rgba(111, 224, 169, 0) 76%);
+  background-size: 260% 100%;
+}
+@keyframes ndiSheen {
+  0%, 12% { background-position: 130% 0; }
+  55%, 100% { background-position: -30% 0; }
+}
+.ndi-ripple {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  transform: translate(-50%, -50%) scale(0);
+  background: rgba(8, 19, 15, 0.22);
+  animation: ndiRippleOut 620ms var(--ease-out) forwards;
+}
+.ndi-hglow-ghost .ndi-ripple { background: rgba(111, 224, 169, 0.28); }
+@keyframes ndiRippleOut {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-hglow::before { transition: none; }
+  .ndi-hglow::after { animation: none; opacity: 0.35; }
+  .ndi-ripple { display: none; }
+}
+
+/* ---- FAQ accordion (native <details>) ---------------------- */
+.ndi-faq { transition: border-color var(--dur), background var(--dur); }
+.ndi-faq:hover { border-color: var(--border-strong) !important; }
+.ndi-faq summary::-webkit-details-marker { display: none; }
+.ndi-faq summary { list-style: none; }
+.ndi-faq .ndi-faq-mark { transition: transform 0.24s var(--ease-out); }
+.ndi-faq[open] { border-color: rgba(90, 201, 148, 0.28) !important; background: rgba(90, 201, 148, 0.04) !important; }
+.ndi-faq[open] .ndi-faq-mark { transform: rotate(45deg); }
+
+/* ---- Tabs (Resources) -------------------------------------- */
+[data-tabpanel] { display: none; }
+[data-tabpanel][data-active="true"] { display: block; }
+[data-tabbtn][data-active="true"] {
+  background: rgba(90, 201, 148, 0.12) !important;
+  border-color: rgba(90, 201, 148, 0.32) !important;
+  color: var(--text-strong) !important;
+}
+[data-tabbtn]:hover { color: var(--text-strong); }
+
+/* ---- Integration pipeline (Organizations) ------------------ */
+@keyframes ndiTraceFlow {
+  from { left: -190px; }
+  to { left: 100%; }
+}
+.ndi-pipe-pulse {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  width: 190px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(111, 224, 169, 0.9) 55%, transparent);
+  animation: ndiTraceFlow 2.8s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-pipe-pulse { display: none; }
+}
+.ndi-pipe-trace {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  overflow: hidden;
+  background: var(--border-grid);
+  transition: background 0.3s var(--ease-out);
+}
+.ndi-pipe-trace[data-on="1"], .ndi-pipe-trace[data-on="2"] { background: rgba(90, 201, 148, 0.32); }
+
+/* ---- "Watch tutorial" arrow nudge -------------------------- */
+.ndi-tut svg { transition: transform 0.28s var(--ease-out); }
+.ndi-tut:hover svg { transform: translateX(5px); }
+
+/* ---- Native control colours -------------------------------- */
+select option { background: #101827; color: #e9eef6; }
+
+/* Cards that are whole-card links lift on hover. */
+.ndi-lift { transition: transform var(--dur), box-shadow var(--dur); }
+.ndi-lift:hover { transform: translateY(-3px); }
+
+/* Careers role cards: lift with a mint rim on hover. */
+.ndi-role-card { transition: transform var(--dur), box-shadow var(--dur); }
+.ndi-role-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 10px 26px -8px rgba(90, 201, 148, 0.4),
+    0 0 0 1px rgba(90, 201, 148, 0.18);
+}

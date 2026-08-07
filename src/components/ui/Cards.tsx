@@ -89,10 +89,30 @@ export function EvervaultCard({ children }: { children: ReactNode }) {
  * per frame by PointerSpotlightProvider, so every card on the page reads the
  * same value and no card needs its own listener.
  */
-export function SpotlightCard({ children }: { children: ReactNode }) {
+interface SpotlightCardProps {
+  children: ReactNode;
+  /** Render as a link when the whole card is clickable. */
+  as?: "div" | "a";
+  href?: string;
+  className?: string;
+  /** Cards that are links lift slightly on hover. */
+  hoverLift?: boolean;
+}
+
+export function SpotlightCard({
+  children,
+  as = "div",
+  href,
+  className = "",
+  hoverLift = false,
+}: SpotlightCardProps) {
+  const Tag = as;
   return (
-    <div
-      className="ndi-spot flex flex-col items-start gap-[14px] rounded-2xl p-[26px]"
+    <Tag
+      href={href}
+      className={`ndi-spot flex flex-col items-start gap-[14px] rounded-2xl p-[26px] ${
+        hoverLift ? "ndi-lift" : ""
+      } ${className}`.trim()}
       style={{
         background: CARD_BACKGROUND,
         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07), 0 18px 40px -26px rgba(0,0,0,0.9)",
@@ -101,6 +121,6 @@ export function SpotlightCard({ children }: { children: ReactNode }) {
       <div className="ndi-spot-halo" />
       <div className="ndi-spot-fill" />
       {children}
-    </div>
+    </Tag>
   );
 }
