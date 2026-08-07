@@ -19,44 +19,78 @@ export function PageHero({
   eyebrow,
   title,
   lead,
+  size = "clamp(38px,5vw,58px)",
+  leadWidth = 620,
+  leadSize = 17,
+  children,
 }: {
-  eyebrow: string;
+  /** Omitted on Glossary, which opens straight on the headline. */
+  eyebrow?: string;
   title: ReactNode;
   lead: string;
+  size?: string;
+  leadWidth?: number;
+  leadSize?: number;
+  children?: ReactNode;
 }) {
   return (
     <Reveal className="max-w-[820px]">
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h1 className="mt-5 font-display text-[clamp(38px,5vw,58px)] font-semibold leading-[1.04] tracking-[-0.03em] text-strong [text-wrap:pretty]">
+      {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+      {/* The design keeps the headline's 20px top margin even on Glossary,
+          where there is no eyebrow above it. */}
+      <h1
+        className="mt-5 font-display font-semibold leading-[1.04] tracking-[-0.03em] text-strong [text-wrap:pretty]"
+        style={{ fontSize: size }}
+      >
         {title}
       </h1>
-      <p className="mt-6 max-w-[600px] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
+      <p
+        className="mt-6 leading-[1.62] text-muted [text-wrap:pretty]"
+        style={{ maxWidth: leadWidth, fontSize: leadSize }}
+      >
         {lead}
       </p>
+      {children}
     </Reveal>
   );
 }
 
-/** Section heading used across the subpages — smaller and tighter than Home's. */
+/**
+ * Section heading used across the subpages.
+ *
+ * The design does not run one scale for these: it picks a clamp per section,
+ * from 30px flat on Governance up to `clamp(30px, 3.6vw, 44px)` on the Users
+ * and Organizations service sections. `size` carries that per-section value, so
+ * each call site states the design's own figure.
+ */
 export function SubSectionHeader({
   eyebrow,
   title,
   lead,
   maxWidth = 600,
+  size = "clamp(28px,3.4vw,40px)",
+  leadSize = 15.5,
 }: {
   eyebrow: string;
   title: ReactNode;
   lead?: string;
   maxWidth?: number;
+  size?: string;
+  leadSize?: number;
 }) {
   return (
     <div style={{ maxWidth }}>
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-4 font-display text-[clamp(28px,3.4vw,40px)] font-semibold leading-[1.1] tracking-[-0.03em] text-strong">
+      <h2
+        className="mt-4 font-display font-semibold leading-[1.1] tracking-[-0.03em] text-strong"
+        style={{ fontSize: size }}
+      >
         {title}
       </h2>
       {lead ? (
-        <p className="mt-4 text-[15.5px] leading-[1.62] text-muted">{lead}</p>
+        <p className="mt-4 leading-[1.62] text-muted" style={{ fontSize: leadSize }}>
+          {lead}
+        </p>
       ) : null}
     </div>
   );

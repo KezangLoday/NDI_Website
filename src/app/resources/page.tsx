@@ -20,7 +20,7 @@ export default async function ResourcesPage() {
 
   return (
     <>
-      <PageSection className="pb-4 pt-44">
+      <PageSection className="pb-8 pt-44">
         <PageHero
           eyebrow="— Resources"
           title={
@@ -33,7 +33,7 @@ export default async function ResourcesPage() {
       </PageSection>
 
       {/* The tab ids double as the deep-link targets used by the nav. */}
-      <PageSection id="news" className="pb-[104px] pt-10">
+      <PageSection id="news" className="pb-[104px] pt-8">
         <span id="webinars" className="sr-only" />
         <span id="insights" className="sr-only" />
         <Reveal>

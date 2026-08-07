@@ -42,13 +42,13 @@ function RollUp({ label }: { label: string }) {
   );
 }
 
-function MegaCard({ card }: { card: MegaMenuCard }) {
+function MegaCard({ card, reroll }: { card: MegaMenuCard; reroll: number }) {
   return (
     <Link
       href={card.href}
       className="ndi-gc relative flex min-h-[170px] flex-col justify-between gap-8 overflow-hidden rounded-xl border border-white/[0.14] bg-white/[0.02] p-[18px] transition-[background,border-color,box-shadow,transform] duration-[220ms]"
     >
-      <GridPattern seed={card.href + card.label} />
+      <GridPattern reroll={reroll} />
       <span className="relative text-accent">
         <Icon name={card.icon} size={22} />
       </span>
@@ -82,6 +82,7 @@ export function SiteHeader() {
   const router = useRouter();
 
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [reroll, setReroll] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -111,6 +112,9 @@ export function SiteHeader() {
 
   const open = (key: string) => {
     clearTimeout(closeTimer.current);
+    // Each opening re-scatters the cards' wireframe grids, the way a fresh page
+    // load does in the prototype.
+    if (openMenu !== key) setReroll((n) => n + 1);
     setOpenMenu(key);
   };
 
@@ -159,7 +163,7 @@ export function SiteHeader() {
         className="ndi-nav-in ndi-navlink inline-flex cursor-pointer items-center gap-[5px] whitespace-nowrap rounded-[9px] border-none bg-transparent px-2.5 py-2 font-display text-[13.5px] font-medium text-strong"
         data-active={activeKey === menu.key ? "1" : "0"}
         aria-expanded={openMenu === menu.key}
-        onClick={() => setOpenMenu((current) => (current === menu.key ? null : menu.key))}
+        onClick={() => (openMenu === menu.key ? setOpenMenu(null) : open(menu.key))}
         style={entrance(triggerIndex)}
       >
         <RollUp label={menu.label} />
@@ -191,7 +195,7 @@ export function SiteHeader() {
             style={{ gridTemplateColumns: `repeat(${menu.cards.length}, 1fr)` }}
           >
             {menu.cards.map((card) => (
-              <MegaCard key={card.href + card.label} card={card} />
+              <MegaCard key={card.href + card.label} card={card} reroll={reroll} />
             ))}
           </div>
           <div className="flex flex-col gap-2 p-4">

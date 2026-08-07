@@ -49,7 +49,7 @@ export function ResourceTabs({ news, webinars, insights }: ResourceTabsProps) {
       <div
         role="tablist"
         aria-label="Resource type"
-        className="inline-flex flex-wrap items-center gap-1 rounded-xl border border-grid bg-white/[0.02] p-1"
+        className="flex w-fit flex-wrap gap-2 rounded-[14px] border border-grid bg-white/[0.02] p-1.5"
       >
         {resourceTabs.map((entry) => (
           <button
@@ -64,7 +64,7 @@ export function ResourceTabs({ news, webinars, insights }: ResourceTabsProps) {
               setTab(entry.id);
               history.replaceState(null, "", `#${entry.id}`);
             }}
-            className="inline-flex h-11 cursor-pointer items-center rounded-[9px] border border-transparent bg-transparent px-5 font-display text-[14.5px] font-semibold text-muted transition-[background,color,border-color] duration-[220ms]"
+            className="cursor-pointer rounded-[10px] border border-transparent bg-transparent px-5 py-[11px] font-display text-[14px] font-medium text-muted transition-[background,color,border-color] duration-[220ms]"
           >
             {entry.label}
           </button>
@@ -77,84 +77,85 @@ export function ResourceTabs({ news, webinars, insights }: ResourceTabsProps) {
         role="tabpanel"
         data-tabpanel=""
         data-active={tab === "news" ? "true" : "false"}
-        className="mt-9"
+        className="mt-8"
       >
-        {featured ? (
-          <a
-            href={featured.href}
-            className="ndi-role-card block overflow-hidden rounded-2xl border border-grid bg-white/[0.02]"
-          >
-            <div
-              className="flex aspect-[16/7] items-center justify-center bg-sunken"
+        {/* Featured story on the left, the rest as their own cards on the right. */}
+        <div
+          data-ndi-2col="1"
+          className="grid grid-cols-1 gap-5 min-[901px]:grid-cols-[1.15fr_0.85fr]"
+        >
+          {featured ? (
+            <a
+              href={featured.href}
+              className="ndi-spot ndi-res-feat relative flex flex-col overflow-hidden rounded-2xl border border-grid"
               style={{
-                background:
-                  "radial-gradient(115% 78% at 26% -6%, rgba(111,224,169,0.20) 0%, rgba(90,201,148,0.06) 42%, rgba(90,201,148,0) 68%), linear-gradient(162deg, #103440 0%, #101827 64%)",
+                background: "var(--grad-card)",
+                backdropFilter: "blur(18px)",
+                WebkitBackdropFilter: "blur(18px)",
+                boxShadow: "var(--inset-top), 0 18px 44px rgba(0,0,0,0.28)",
               }}
             >
-              <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
-                — Artwork to come
-              </span>
-            </div>
-            <div className="p-7">
-              <div className="flex items-center gap-3">
-                <span className="rounded-full border border-grid bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-accent">
-                  {featured.category}
-                </span>
-                <span className="font-mono text-[10.5px] tracking-[0.14em] text-faint">
-                  {featured.publishedAt}
+              <div className="ndi-spot-halo" />
+              <div className="ndi-spot-fill" />
+              <div
+                className="relative flex h-[300px] items-center justify-center"
+                style={{ background: "#0c111b" }}
+              >
+                <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
+                  — Artwork to come
                 </span>
               </div>
-              <h3 className="mt-4 font-display text-[24px] font-semibold leading-[1.2] tracking-[-0.02em] text-strong">
-                {featured.title}
-              </h3>
-              <p className="mt-3 max-w-[640px] text-[15px] leading-[1.6] text-muted">
-                {featured.excerpt}
-              </p>
-              <span className="ndi-news-read mt-5 inline-flex items-center gap-[7px] font-display text-sm font-semibold text-accent">
-                Read story
-                <Icon name="arrowRight" size={15} strokeWidth={1.9} />
-              </span>
-            </div>
-          </a>
-        ) : null}
+              <div className="p-[26px]">
+                <div className="flex items-center gap-3">
+                  <span className="rounded-full border border-[rgba(90,201,148,0.3)] px-2.5 py-[5px] font-mono text-[9.5px] uppercase tracking-[0.16em] text-accent">
+                    {featured.category}
+                  </span>
+                  <span className="font-mono text-[10.5px] tracking-[0.14em] text-faint">
+                    {featured.publishedAt}
+                  </span>
+                </div>
+                <h3 className="mt-4 font-display text-[24px] font-semibold leading-[1.18] tracking-[-0.02em] text-strong">
+                  {featured.title}
+                </h3>
+                <p className="mt-3 text-[14.5px] leading-[1.62] text-muted">{featured.excerpt}</p>
+                <span className="ndi-tut mt-[18px] inline-flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
+                  Read story
+                  <Icon name="arrowRight" size={14} strokeWidth={2} />
+                </span>
+              </div>
+            </a>
+          ) : null}
 
-        <div className="mt-4">
-          {rest.map((item) => (
-            <a
-              key={item.id}
-              href={item.href}
-              className="ndi-news-row grid grid-cols-[1fr_auto] items-center gap-5 border-t border-subtle py-5"
-            >
-              <span className="flex min-w-0 flex-col gap-2">
-                <span className="flex flex-wrap items-center gap-3">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-accent">
+          <div className="flex flex-col gap-3">
+            {rest.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                className="ndi-spot ndi-res-row flex flex-col gap-2.5 rounded-2xl border border-grid bg-white/[0.02] p-[22px]"
+              >
+                <div className="ndi-spot-halo" />
+                <div className="ndi-spot-fill" />
+                <div className="flex items-center gap-3">
+                  <span className="rounded-full border border-grid px-2.5 py-[5px] font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted">
                     {item.category}
                   </span>
-                  <span className="font-mono text-[10px] tracking-[0.14em] text-faint">
-                    {item.publishedAt}
-                  </span>
-                </span>
-                <span className="ndi-news-title font-display text-[17px] font-semibold leading-[1.3] text-body">
+                  <span className="font-mono text-[10.5px] text-faint">{item.publishedAt}</span>
+                </div>
+                <div className="font-display text-[17px] font-semibold leading-[1.28] tracking-[-0.02em] text-strong">
                   {item.title}
-                </span>
-              </span>
-              <Icon
-                name="arrowRight"
-                size={17}
-                strokeWidth={1.9}
-                className="ndi-news-arrow flex-none text-faint"
-              />
-            </a>
-          ))}
-        </div>
+                </div>
+              </a>
+            ))}
 
-        <a
-          href="#"
-          className="ndi-news-read mt-6 inline-flex items-center gap-[7px] font-display text-sm font-semibold text-accent"
-        >
-          All news &amp; updates
-          <Icon name="arrowRight" size={15} strokeWidth={1.9} />
-        </a>
+            <a
+              href="#"
+              className="ndi-res-row mt-1 flex items-center justify-between gap-4 rounded-2xl border border-grid bg-white/[0.02] px-[22px] py-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted"
+            >
+              All news &amp; updates
+              <Icon name="arrowRight" size={15} strokeWidth={1.9} className="text-accent" />
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* WEBINARS */}

@@ -74,23 +74,30 @@
    if scripting is slow or unavailable — `backwards` holds the from-state
    through the delay, and the reduced-motion rule collapses them to a snap. */
 @keyframes ndiHeroIn {
-  from { transform: translateY(20px); }
-  to { transform: none; }
+  from { transform: translateY(20px); filter: blur(14px); opacity: 0; }
+  to { transform: none; filter: blur(0); opacity: 1; }
 }
 @keyframes ndiClipIn {
-  from { transform: translateY(112%); }
-  to { transform: none; }
+  from { transform: translateY(112%); filter: blur(12px); }
+  to { transform: none; filter: blur(0); }
 }
 @keyframes ndiPhonesIn {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: none; opacity: 1; }
+  from { transform: translateY(-20px); filter: blur(16px); opacity: 0; }
+  to { transform: none; filter: blur(0); opacity: 1; }
 }
 .ndi-hero-in {
-  will-change: transform;
-  animation: ndiHeroIn 0.7s var(--ease-out) backwards;
+  will-change: transform, filter, opacity;
+  animation: ndiHeroIn 0.95s var(--ease-out) backwards;
 }
 .ndi-clip {
-  animation: ndiClipIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.22s backwards;
+  animation: ndiClipIn 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.22s backwards;
+}
+/* Reduced motion keeps the stagger's timing but drops the blur and the slide,
+   so the hero still arrives in order without anything moving. */
+@media (prefers-reduced-motion: reduce) {
+  .ndi-hero-in,
+  .ndi-clip,
+  #ndiHeroPhones { animation: none; }
 }
 
 /* ---- Hero layout ------------------------------------------------
@@ -245,6 +252,11 @@
      ~60px-tall default; at nav size the inset glow floods the pill and the
      shine is lost, so compact instances dial it back. */
   --shiny-cta-glow: 1;
+  /* How far the hover glow overhangs the label. Upstream adds 1rem on both
+     axes, which at its size lands the glow well inside the pill; at nav size
+     the box is barely wider than the words, so it needs more horizontally. */
+  --shiny-cta-glow-x: 3.4rem;
+  --shiny-cta-glow-y: 1.6rem;
   --animation: gradient-angle linear infinite;
   --duration: 3s;
   --shadow-size: 2px;
@@ -318,11 +330,18 @@
   justify-content: center;
   gap: 8px;
 }
+/* The hover glow.
+   Upstream draws it as a square-cornered box with a heavily spread inset
+   shadow. An inset shadow is clipped to its own box, so the box edge is always
+   a hard cut — harmless when the box is much smaller than the surrounding
+   pill, but at nav size it sat as a visible green slab with square corners
+   inside the rounded button. Rounding it to the pill and dropping the spread
+   turns it back into a glow at any size. */
 .shiny-cta span::before {
-  --size: calc(100% + 1rem);
-  width: var(--size);
-  height: var(--size);
-  box-shadow: inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
+  width: calc(100% + var(--shiny-cta-glow-x));
+  height: calc(100% + var(--shiny-cta-glow-y));
+  border-radius: 360px;
+  box-shadow: inset 0 -1ex 1.2rem -2px var(--shiny-cta-highlight);
   opacity: 0;
   transition: opacity var(--transition);
   animation: calc(var(--duration) * 1.5) breathe linear infinite;
@@ -602,6 +621,34 @@
 .ndi-contact-row { transition: border-color var(--dur), background var(--dur); }
 .ndi-contact-row:hover { border-color: var(--border-strong); background: rgba(255, 255, 255, 0.045); }
 
+/* Muted link that brightens on hover */
+.ndi-plainlink { transition: color var(--dur); }
+.ndi-plainlink:hover { color: var(--text-strong); }
+
+/* Organizations service cards */
+.ndi-svc-card { transition: transform var(--dur), border-color var(--dur), box-shadow var(--dur); }
+.ndi-svc-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  box-shadow: var(--inset-top), var(--glow-sm), 0 24px 56px rgba(0, 0, 0, 0.34);
+}
+.ndi-adv-card { transition: border-color var(--dur), background var(--dur); }
+.ndi-adv-card:hover { border-color: var(--border-strong); background: rgba(90, 201, 148, 0.04); }
+
+/* Resources: featured story lifts, side rows nudge right */
+.ndi-res-feat { transition: transform var(--dur), border-color var(--dur), box-shadow var(--dur); }
+.ndi-res-feat:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: var(--inset-top), var(--glow-sm), 0 24px 56px rgba(0, 0, 0, 0.34);
+}
+.ndi-res-row { transition: border-color var(--dur), background var(--dur), transform var(--dur); }
+.ndi-res-row:hover {
+  border-color: var(--border-strong);
+  background: rgba(90, 201, 148, 0.04);
+  transform: translateX(4px);
+}
+
 /* Bordered secondary link, e.g. the two chips under the Get started steps */
 .ndi-outline-link { transition: border-color var(--dur), color var(--dur); }
 .ndi-outline-link:hover,
@@ -733,7 +780,23 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
    layout is expressed in Tailwind, as on the home page.
    ============================================================ */
 
-/* ---- Bento use-case cards: cursor-tracked conic glow border ---- */
+/* ---- Bento use-case cards ------------------------------------
+   The 12-column grid and its 232px minimum row are the design's. At 900px it
+   drops every card to a half-width span; the stack below 640px is ours, since
+   the design leaves that width unspecified and two columns of this card become
+   unreadable there. */
+[data-uc-grid] {
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(232px, auto);
+}
+@media (max-width: 900px) {
+  [data-uc-grid] > a { grid-area: auto !important; grid-column: span 6 !important; }
+}
+@media (max-width: 640px) {
+  [data-uc-grid] > a { grid-column: span 12 !important; }
+}
+
+/* Cursor-tracked conic glow border */
 .ndi-glow {
   position: absolute;
   inset: 0;
@@ -928,4 +991,20 @@ select option { background: #101827; color: #e9eef6; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ndi-credential:hover { transform: rotate(var(--card-rotate)) translateX(var(--card-shift)); }
+}
+
+/* Organizations: the "not sure which fits?" prompt in the advanced grid */
+.ndi-advcta { transition: border-color var(--dur), box-shadow var(--dur); }
+.ndi-advcta:hover { border-color: var(--accent); box-shadow: var(--glow-sm); }
+
+/* Organizations: why-partner rows tint on hover */
+.ndi-why-row { transition: background var(--dur); }
+.ndi-why-row:hover { background: rgba(90, 201, 148, 0.04); }
+
+/* Media coverage cards */
+.ndi-press-card { transition: transform var(--dur), border-color var(--dur), box-shadow var(--dur); }
+.ndi-press-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  box-shadow: var(--inset-top), var(--glow-sm);
 }
