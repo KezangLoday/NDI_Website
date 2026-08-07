@@ -56,12 +56,15 @@ export default async function UsersPage() {
           {credentialCards.map((card) => (
             <div
               key={card.id}
-              className="relative"
-              style={{
-                zIndex: card.z,
-                opacity: card.opacity,
-                transform: `rotate(${card.rotate}deg) translateX(${card.translateX})`,
-              }}
+              className="ndi-credential"
+              style={
+                {
+                  "--card-rotate": `${card.rotate}deg`,
+                  "--card-shift": card.translateX,
+                  "--card-opacity": card.opacity,
+                  "--card-z": card.z,
+                } as React.CSSProperties
+              }
             >
               <Image
                 src={mediaUrl(card.image)}
