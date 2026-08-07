@@ -156,13 +156,57 @@ function setMask(element: HTMLElement, layers: string) {
  * has been still for a moment a softer spotlight drifts on its own, so the
  * effect is discoverable without hovering.
  */
+/**
+ * Subpages use a plainer treatment than the home page: the dim base layer is
+ * hidden entirely so only the cursor-revealed traces show, the fade is a fixed
+ * gradient rather than one measured off the hero, and there is no ambient
+ * roaming — the glow returns to nothing when the pointer leaves the document.
+ */
+const SUBPAGE_FADE =
+  "linear-gradient(to bottom, transparent 0, transparent 480px, #000 780px, #000 100%)";
+
 export function useCircuitGlow(
   baseRef: RefObject<HTMLDivElement | null>,
   glowRef: RefObject<HTMLDivElement | null>,
+  variant: "home" | "subpage" = "home",
 ) {
   const reduced = useReducedMotion();
 
   useEffect(() => {
+    if (variant === "subpage") {
+      const base = baseRef.current;
+      if (base) {
+        base.style.opacity = "0";
+        base.style.webkitMaskImage = SUBPAGE_FADE;
+        base.style.maskImage = SUBPAGE_FADE;
+      }
+
+      const applySpot = (x: number, y: number) => {
+        const glow = glowRef.current;
+        if (!glow) return;
+        const spot = `radial-gradient(300px circle at ${x}px ${y}px, #000 0%, transparent 72%)`;
+        setMask(glow, `${spot}, ${SUBPAGE_FADE}`);
+        glow.style.opacity = "1";
+      };
+
+      const onMove = (event: MouseEvent) => applySpot(event.pageX, event.pageY);
+      const onLeave = () => {
+        if (glowRef.current) glowRef.current.style.opacity = "0";
+      };
+
+      if (reduced) {
+        applySpot(window.innerWidth / 2, window.scrollY + window.innerHeight * 0.55);
+        return;
+      }
+
+      window.addEventListener("mousemove", onMove, { passive: true });
+      document.addEventListener("mouseleave", onLeave);
+      return () => {
+        window.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseleave", onLeave);
+      };
+    }
+
     let mask: CircuitMask | null = null;
 
     const remeasure = () => {
@@ -226,5 +270,5 @@ export function useCircuitGlow(
       window.removeEventListener("mousemove", onMove);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, [baseRef, glowRef, reduced]);
+  }, [baseRef, glowRef, reduced, variant]);
 }

@@ -24,9 +24,12 @@ import {
   visionPillars,
 } from "./company";
 import { collaboratorGroups, collaborators } from "./collaborators";
+import { faqs } from "./faqs";
+import { glossary } from "./glossary";
 import { news } from "./news";
 import { press } from "./press";
 import { organizationColumnDurations, organizations } from "./organizations";
+import { insights, resourceNews, webinars } from "./resources";
 import { services } from "./services";
 import { siteSettings } from "./siteSettings";
 
@@ -35,17 +38,22 @@ import type {
   CareerValue,
   Collaborator,
   CollaboratorGroup,
+  FaqItem,
+  GlossaryTerm,
+  Insight,
   Job,
   MissionStatement,
   NewsItem,
   Organization,
   PressItem,
+  ResourceNews,
   ServiceOption,
   SiteSettings,
   StoryStat,
   TeamMember,
   UseCase,
   VisionPillar,
+  Webinar,
   WalletBenefit,
 } from "./types";
 
@@ -83,6 +91,26 @@ export async function getServices(): Promise<ServiceOption[]> {
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   return siteSettings;
+}
+
+export async function getFaqs(): Promise<FaqItem[]> {
+  return faqs;
+}
+
+export async function getGlossary(): Promise<GlossaryTerm[]> {
+  return glossary;
+}
+
+export async function getResourceNews(): Promise<ResourceNews[]> {
+  return resourceNews;
+}
+
+export async function getWebinars(): Promise<Webinar[]> {
+  return webinars;
+}
+
+export async function getInsights(): Promise<Insight[]> {
+  return insights;
 }
 
 export async function getPress(): Promise<PressItem[]> {

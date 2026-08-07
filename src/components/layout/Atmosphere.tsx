@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useRef } from "react";
 
 import { useCircuitBands, useCircuitGlow } from "@/hooks/useCircuit";
@@ -22,8 +23,12 @@ export function Atmosphere() {
   const baseRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const { bands, documentHeight } = useCircuitBands();
+  const pathname = usePathname();
 
-  useCircuitGlow(baseRef, glowRef);
+  // Only the home page shows the dim base traces and the ambient roaming glow.
+  const variant = pathname === "/" ? "home" : "subpage";
+
+  useCircuitGlow(baseRef, glowRef, variant);
 
   const layerHeight = documentHeight ? `${documentHeight}px` : "100%";
 

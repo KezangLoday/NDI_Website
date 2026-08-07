@@ -95,6 +95,60 @@ export interface ServiceOption {
   label: string;
 }
 
+/** Collection: `faqs`. */
+export interface FaqItem {
+  id: string;
+  audience: "users" | "orgs";
+  question: string;
+  answer: string;
+}
+
+/* ---- Resources -------------------------------------------------
+   Modelled as three arrays now, but shaped to collapse into one `posts`
+   collection with a category facet in Phase 2 — the requirement docs
+   explicitly merged Publications and Blogs because the types overlap. */
+
+export interface ResourceNews {
+  id: string;
+  category: string;
+  title: string;
+  publishedAt: string;
+  href: string;
+  excerpt?: string;
+  featured?: boolean;
+  /** The design leaves the featured artwork unfilled; client to supply. */
+  image?: Media;
+}
+
+export interface Webinar {
+  id: string;
+  status: "upcoming" | "recorded";
+  title: string;
+  href: string;
+  description?: string;
+  /** Upcoming sessions only. */
+  when?: string;
+  ctaLabel?: string;
+  /** Recorded sessions only, e.g. "Recording · 48 min". */
+  kind?: string;
+  thumbnail?: Media;
+}
+
+export interface Insight {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  href: string;
+}
+
+/** Collection: `glossary`. */
+export interface GlossaryTerm {
+  id: string;
+  term: string;
+  definition: string;
+}
+
 /* ---- Governance ------------------------------------------------
    Statutory section references (§5–§10) render as inline mono chips, so
    they are a field rather than punctuation inside the prose. */
