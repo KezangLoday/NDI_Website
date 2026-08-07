@@ -103,6 +103,45 @@ export interface FaqItem {
   answer: string;
 }
 
+/* ---- Users page ------------------------------------------------ */
+
+export interface HeroStat {
+  id: string;
+  value: string;
+  label: string;
+}
+
+export interface UserUseCase {
+  id: string;
+  title: string;
+  description: string;
+  icon: IconName;
+  /** Bento placement, e.g. "1 / 1 / 2 / 5" — layout travels with the record. */
+  gridArea: string;
+  tutorialHref?: string;
+}
+
+export interface JourneyChapter {
+  id: string;
+  step: string;
+  title: string;
+  /** Position along the strip, 0-1, that this chapter settles on. */
+  anchor: number;
+  caption: string;
+}
+
+export interface UserBenefit {
+  id: string;
+  title: string;
+  description: string;
+  icon: IconName;
+}
+
+export interface StartStep {
+  number: string;
+  text: string;
+}
+
 /* ---- Organizations page ---------------------------------------- */
 
 export interface HeroPill {
