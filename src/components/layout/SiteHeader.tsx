@@ -11,6 +11,7 @@ import { scrollToContact } from "@/lib/scroll";
 
 import { GridPattern } from "./GridPattern";
 import { Icon } from "../ui/icons";
+import { ShinyButton } from "../ui/shiny-button";
 
 const { nav, contact, mobileSocial } = siteSettings;
 
@@ -250,15 +251,27 @@ export function SiteHeader() {
           {nav.menus.map((menu, index) => renderMenu(menu, nav.primary.length + 1 + index))}
         </nav>
 
-        <div className="relative z-[1] ml-4 hidden flex-none min-[901px]:block">
-          <button
-            type="button"
+        {/* The entrance animation sits on this wrapper, not on the button:
+            both would set `animation` on the same element, and the later rule
+            would replace the shine's rotation outright. */}
+        <div
+          className="ndi-nav-in relative z-[1] ml-4 hidden flex-none min-[901px]:block"
+          style={entrance(nav.primary.length + nav.menus.length + 1)}
+        >
+          <ShinyButton
             onClick={goToContact}
-            className="ndi-nav-in ndi-shiny-cta inline-flex h-11 items-center justify-center p-0 font-display text-sm font-semibold tracking-[-0.01em]"
-            style={entrance(nav.primary.length + nav.menus.length + 1)}
+            className="h-11 tracking-[-0.01em]"
+            style={
+              {
+                "--shiny-cta-px": "26px",
+                "--shiny-cta-py": "0",
+                "--shiny-cta-fs": "14px",
+                "--shiny-cta-glow": "0.55",
+              } as CSSProperties
+            }
           >
-            <span className="ndi-gb-content">Contact Us</span>
-          </button>
+            Contact Us
+          </ShinyButton>
         </div>
 
         <button

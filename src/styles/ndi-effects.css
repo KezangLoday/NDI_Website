@@ -212,20 +212,41 @@
 .ndi-sweepbtn:hover .ndi-store-sweep { transform: translateX(100%); }
 .ndi-sweepbtn:hover .ndi-store-glow { opacity: 1; }
 
-/* ---- Shiny CTA (nav "Contact Us") -------------------------- */
+/* ---- ShinyButton — see components/ui/shiny-button.tsx --------
+   The shadcn ShinyButton, themed to NDI mint.
+
+   These rules are global rather than a <style jsx> block inside the
+   component for two reasons: @property is a global at-rule that styled-jsx
+   cannot scope, and registering --gradient-angle as an <angle> is precisely
+   what makes it animatable — an unregistered custom property would jump
+   rather than interpolate, which is the difference between a shine that
+   glides and one that stutters. Keeping it here also means the four
+   registrations happen once, not once per mounted button.
+
+   Palette, size and typography are all custom properties, so a caller
+   restyles the button from the outside without touching this file. */
 @property --gradient-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
 @property --gradient-angle-offset { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
 @property --gradient-percent { syntax: "<percentage>"; initial-value: 5%; inherits: false; }
 @property --gradient-shine { syntax: "<color>"; initial-value: #cffce6; inherits: false; }
 
-.ndi-shiny-cta {
+.shiny-cta {
   --shiny-cta-bg: #0e1622;
   --shiny-cta-bg-subtle: #16202e;
   --shiny-cta-fg: var(--text-strong);
   --shiny-cta-highlight: #5ac994;
   --shiny-cta-highlight-subtle: #8be3b8;
+  /* Size and type — overridden per call site. */
+  --shiny-cta-px: 2.5rem;
+  --shiny-cta-py: 1.25rem;
+  --shiny-cta-fs: 1.125rem;
+  --shiny-cta-fw: 600;
+  /* Hover glow strength. The upstream component uses 1, which suits its
+     ~60px-tall default; at nav size the inset glow floods the pill and the
+     shine is lost, so compact instances dial it back. */
+  --shiny-cta-glow: 1;
   --animation: gradient-angle linear infinite;
-  --duration: 7s;
+  --duration: 3s;
   --shadow-size: 2px;
   --transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
   isolation: isolate;
@@ -233,6 +254,11 @@
   overflow: hidden;
   cursor: pointer;
   outline-offset: 4px;
+  padding: var(--shiny-cta-py) var(--shiny-cta-px);
+  font-family: var(--font-display);
+  font-size: var(--shiny-cta-fs);
+  font-weight: var(--shiny-cta-fw);
+  line-height: 1.2;
   border: 1px solid transparent;
   border-radius: 360px;
   color: var(--shiny-cta-fg);
@@ -250,9 +276,9 @@
   transition: var(--transition);
   transition-property: --gradient-angle-offset, --gradient-percent, --gradient-shine;
 }
-.ndi-shiny-cta::before,
-.ndi-shiny-cta::after,
-.ndi-shiny-cta span::before {
+.shiny-cta::before,
+.shiny-cta::after,
+.shiny-cta span::before {
   content: "";
   pointer-events: none;
   position: absolute;
@@ -261,8 +287,8 @@
   translate: -50% -50%;
   z-index: -1;
 }
-.ndi-shiny-cta:active { translate: 0 1px; }
-.ndi-shiny-cta::before {
+.shiny-cta:active { translate: 0 1px; }
+.shiny-cta::before {
   --size: calc(100% - var(--shadow-size) * 3);
   --position: 2px;
   --space: calc(var(--position) * 2);
@@ -276,7 +302,7 @@
   opacity: 0.4;
   z-index: -1;
 }
-.ndi-shiny-cta::after {
+.shiny-cta::after {
   --animation: shimmer linear infinite;
   width: 100%;
   aspect-ratio: 1;
@@ -284,18 +310,15 @@
   mask-image: radial-gradient(circle at bottom, transparent 40%, black);
   opacity: 0.6;
 }
-.ndi-shiny-cta span {
+.shiny-cta span {
   z-index: 1;
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 0 26px;
-  box-sizing: border-box;
+  gap: 8px;
 }
-.ndi-shiny-cta span::before {
+.shiny-cta span::before {
   --size: calc(100% + 1rem);
   width: var(--size);
   height: var(--size);
@@ -304,21 +327,21 @@
   transition: opacity var(--transition);
   animation: calc(var(--duration) * 1.5) breathe linear infinite;
 }
-.ndi-shiny-cta,
-.ndi-shiny-cta::before,
-.ndi-shiny-cta::after {
+.shiny-cta,
+.shiny-cta::before,
+.shiny-cta::after {
   animation: var(--animation) var(--duration), var(--animation) calc(var(--duration) / 0.4) reverse paused;
   animation-composition: add;
 }
-.ndi-shiny-cta:is(:hover, :focus-visible) {
+.shiny-cta:is(:hover, :focus-visible) {
   --gradient-percent: 20%;
   --gradient-angle-offset: 95deg;
   --gradient-shine: var(--shiny-cta-highlight-subtle);
 }
-.ndi-shiny-cta:is(:hover, :focus-visible),
-.ndi-shiny-cta:is(:hover, :focus-visible)::before,
-.ndi-shiny-cta:is(:hover, :focus-visible)::after { animation-play-state: running; }
-.ndi-shiny-cta:is(:hover, :focus-visible) span::before { opacity: 0.7; }
+.shiny-cta:is(:hover, :focus-visible),
+.shiny-cta:is(:hover, :focus-visible)::before,
+.shiny-cta:is(:hover, :focus-visible)::after { animation-play-state: running; }
+.shiny-cta:is(:hover, :focus-visible) span::before { opacity: var(--shiny-cta-glow); }
 
 /* ---- "View all" pill link ---------------------------------- */
 .ndi-va { position: relative; }
