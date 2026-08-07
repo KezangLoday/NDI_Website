@@ -67,7 +67,7 @@ export function EvervaultCard({ children }: { children: ReactNode }) {
   return (
     <div
       ref={cardRef}
-      className="ndi-ev relative overflow-hidden rounded-2xl p-[26px]"
+      className="ndi-ev relative h-full overflow-hidden rounded-2xl p-[26px]"
       style={{
         background: CARD_BACKGROUND,
         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07), 0 18px 40px -26px rgba(0,0,0,0.9)",

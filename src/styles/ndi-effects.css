@@ -451,8 +451,8 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s var(--ease-out);
-  -webkit-mask-image: radial-gradient(220px at var(--mx) var(--my), #fff, transparent);
-  mask-image: radial-gradient(220px at var(--mx) var(--my), #fff, transparent);
+  -webkit-mask-image: radial-gradient(320px at var(--mx) var(--my), #fff, transparent);
+  mask-image: radial-gradient(320px at var(--mx) var(--my), #fff, transparent);
 }
 .ndi-ev-grad {
   background: linear-gradient(105deg, rgba(90, 201, 148, 0.3) 0%, rgba(18, 65, 67, 0.3) 55%, rgba(30, 111, 168, 0.3) 100%);
@@ -467,13 +467,13 @@
   font-weight: 700;
   font-size: 11px;
   line-height: 1.15;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.32);
   word-break: break-all;
   white-space: pre-wrap;
   overflow: hidden;
 }
-.ndi-ev:hover .ndi-ev-grad { opacity: 0.88; }
-.ndi-ev:hover .ndi-ev-noise { opacity: 0.5; }
+.ndi-ev:hover .ndi-ev-grad { opacity: 0.5; }
+.ndi-ev:hover .ndi-ev-noise { opacity: 0.32; }
 .ndi-ev > *:not(.ndi-ev-layer) { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) {
   .ndi-ev-layer { transition: none; }
