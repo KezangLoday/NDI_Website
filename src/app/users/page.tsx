@@ -39,49 +39,56 @@ export default async function UsersPage() {
     <>
       {/* ============ HERO ============ */}
       <PageSection className="pb-10 pt-44 text-center">
-        <Reveal className="mx-auto max-w-[820px]">
+        {/* This hero runs a larger, heavier headline than the other subpages. */}
+        <Reveal className="flex flex-col items-center">
           <Eyebrow>— For citizens</Eyebrow>
-          <h1 className="mt-5 font-display text-[clamp(38px,5vw,58px)] font-semibold leading-[1.04] tracking-[-0.03em] text-strong [text-wrap:pretty]">
+          <h1 className="mt-[26px] max-w-[15ch] font-display text-[clamp(42px,6vw,72px)] font-bold leading-none tracking-[-0.035em] text-strong [text-wrap:balance]">
             Bhutan NDI <Emphasis>for users</Emphasis>
           </h1>
-          <p className="mx-auto mt-6 max-w-[620px] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
+          <p className="mt-[22px] max-w-[600px] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
             Your citizenship, your degree, your license — issued straight to your phone and shared
             only when you tap to consent.
           </p>
         </Reveal>
 
-        {/* Credential fan */}
-        <Reveal delay={0.05} className="mt-12 flex items-center justify-center">
-          <div className="flex items-center justify-center gap-[-24px]">
-            {credentialCards.map((card) => (
-              <div
-                key={card.id}
-                className="-mx-3 transition-transform duration-500 ease-ndi hover:-translate-y-2"
-                style={{ transform: `rotate(${card.rotate}deg)` }}
-              >
-                <Image
-                  src={mediaUrl(card.image)}
-                  alt={card.image.alt}
-                  width={card.image.width}
-                  height={card.image.height}
-                  className="h-auto w-[clamp(150px,20vw,230px)] rounded-xl"
-                  style={{ filter: "drop-shadow(0 18px 40px rgba(0,0,0,0.55))" }}
-                />
-              </div>
-            ))}
-          </div>
+        {/* Credential fan — the real wallet cards */}
+        <Reveal delay={0.05} className="relative mt-16 flex items-center justify-center">
+          {credentialCards.map((card) => (
+            <div
+              key={card.id}
+              className="relative"
+              style={{
+                zIndex: card.z,
+                opacity: card.opacity,
+                transform: `rotate(${card.rotate}deg) translateX(${card.translateX})`,
+              }}
+            >
+              <Image
+                src={mediaUrl(card.image)}
+                alt={card.image.alt}
+                width={card.image.width}
+                height={card.image.height}
+                priority
+                className="block h-auto rounded-xl"
+                style={{
+                  width: card.width,
+                  boxShadow: "0 26px 54px -22px rgba(0,0,0,0.85)",
+                }}
+              />
+            </div>
+          ))}
         </Reveal>
 
         <Reveal
           delay={0.1}
-          className="mx-auto mt-14 grid max-w-[760px] grid-cols-1 gap-6 min-[641px]:grid-cols-3"
+          className="mt-[100px] flex flex-wrap justify-center gap-x-[150px] gap-y-10 text-left"
         >
           {stats.map((stat) => (
             <div key={stat.id}>
-              <div className="font-display text-[26px] font-semibold tracking-[-0.02em] text-strong">
+              <div className="font-display text-[34px] font-semibold tracking-[-0.02em] text-strong">
                 {stat.value}
               </div>
-              <div className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+              <div className="mt-2 font-mono text-[11.5px] uppercase tracking-[0.16em] text-faint">
                 {stat.label}
               </div>
             </div>
