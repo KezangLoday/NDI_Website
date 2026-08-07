@@ -8,11 +8,41 @@ export const userHeroStats: HeroStat[] = [
   { id: "passwords", value: "0 passwords", label: "To remember" },
 ];
 
-/** The credential fan behind the hero. */
+/**
+ * The credential fan in the hero.
+ *
+ * Fan geometry is per-card data straight from the design: the middle card is
+ * wider, sits fully opaque and stacks above the two flanking cards, which are
+ * rotated outward, pulled inward to overlap, and held slightly back at 0.85.
+ */
 export const credentialCards = [
-  { id: "drivers-license", image: media("/media/cards/drivers-license.png", "Driver's licence credential", 300, 180), rotate: -9 },
-  { id: "foundational-id", image: media("/media/cards/foundational-id.png", "Foundational ID credential", 300, 180), rotate: 0 },
-  { id: "bank-account", image: media("/media/cards/bank-account.png", "Bank account credential", 300, 180), rotate: 9 },
+  {
+    id: "drivers-license",
+    image: media("/media/cards/drivers-license.png", "Driver's License credential", 300, 180),
+    width: "clamp(190px, 26vw, 350px)",
+    rotate: -9,
+    translateX: "2.5%",
+    opacity: 0.85,
+    z: 1,
+  },
+  {
+    id: "foundational-id",
+    image: media("/media/cards/foundational-id.png", "Foundational ID credential", 300, 180),
+    width: "clamp(205px, 28vw, 370px)",
+    rotate: 0,
+    translateX: "0px",
+    opacity: 1,
+    z: 3,
+  },
+  {
+    id: "bank-account",
+    image: media("/media/cards/bank-account.png", "Bank Account credential", 300, 180),
+    width: "clamp(190px, 26vw, 350px)",
+    rotate: 9,
+    translateX: "-2.5%",
+    opacity: 0.85,
+    z: 2,
+  },
 ];
 
 /**
