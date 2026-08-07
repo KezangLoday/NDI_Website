@@ -103,6 +103,43 @@ export interface FaqItem {
   answer: string;
 }
 
+/* ---- Organizations page ---------------------------------------- */
+
+export interface HeroPill {
+  id: string;
+  label: string;
+  sublabel: string;
+}
+
+/** Service → use case → benefit, the structure the requirement docs asked for. */
+export interface OrgService {
+  id: string;
+  tier: "core" | "advanced";
+  title: string;
+  useCase: string;
+  /** Core services state an organizational benefit; advanced ones do not. */
+  value?: string;
+  icon: IconName;
+}
+
+export interface WhyPartnerRow {
+  id: string;
+  number: string;
+  title: string;
+  tag: string;
+  description: string;
+}
+
+export interface PipelineStep {
+  code: string;
+  title: string;
+  tag: string;
+  body: string;
+  input: string;
+  output: string;
+  owners: string;
+}
+
 /* ---- Resources -------------------------------------------------
    Modelled as three arrays now, but shaped to collapse into one `posts`
    collection with a category facet in Phase 2 — the requirement docs
