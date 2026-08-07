@@ -18,13 +18,13 @@ export default async function FaqsPage() {
 
   return (
     <>
-      <PageSection className="pb-4 pt-44">
+      <PageSection className="pb-2 pt-44">
         <Reveal className="max-w-[820px]">
           <Eyebrow>— FAQs</Eyebrow>
           <h1 className="mt-5 font-display text-[clamp(38px,5vw,58px)] font-semibold leading-[1.04] tracking-[-0.03em] text-strong [text-wrap:pretty]">
             Answers about your <Emphasis>identity</Emphasis>
           </h1>
-          <p className="mt-6 max-w-[640px] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
+          <p className="mt-6 max-w-[620px] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
             Registration, credentials, consent and recovery for citizens — and the protocol
             questions integration teams ask. Still stuck?{" "}
             <Link href="/#contact" className="text-accent hover:text-accent-hover">

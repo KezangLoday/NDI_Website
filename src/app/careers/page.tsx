@@ -30,6 +30,7 @@ export default async function CareersPage() {
             </>
           }
           lead="We hire engineers, designers and communicators who want their work in the hands of every citizen in Bhutan."
+          leadWidth={600}
         />
 
         <Reveal className="mt-14 grid grid-cols-1 gap-4 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4">

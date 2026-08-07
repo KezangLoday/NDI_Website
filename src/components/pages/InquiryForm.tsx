@@ -7,10 +7,15 @@ import { Icon } from "@/components/ui/icons";
 import type { ServiceOption } from "@/content/types";
 
 const FIELD =
-  "ndi-field box-border w-full rounded-[10px] border border-grid bg-raised px-[14px] font-body text-sm text-strong outline-none";
-const LABEL = "font-mono text-[10px] uppercase tracking-[0.16em] text-muted";
+  "ndi-field box-border w-full rounded-xl border border-grid bg-white/[0.03] px-4 font-body text-[14.5px] text-strong outline-none";
 
-/** Business inquiry form. Presentational in Phase 1, as in the prototype. */
+/**
+ * Business inquiry form. Presentational in Phase 1, as in the prototype.
+ *
+ * The design places this bare on the CTA panel — a two-column grid of
+ * placeholder-only fields with no surround of its own — so there is no card
+ * shell here; the panel behind it provides that.
+ */
 export function InquiryForm({ services }: { services: ServiceOption[] }) {
   const [service, setService] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -23,53 +28,53 @@ export function InquiryForm({ services }: { services: ServiceOption[] }) {
   return (
     <form
       data-cta-form="1"
+      data-cta-fields="1"
       onSubmit={onSubmit}
-      className="relative flex flex-col gap-[18px] rounded-[16px] border border-grid p-5 min-[561px]:p-7 min-[901px]:rounded-[20px] min-[901px]:p-8"
-      style={{
-        background: "rgba(12,17,27,0.55)",
-        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 22px 50px -30px rgba(0,0,0,0.9)",
-      }}
+      className="relative grid grid-cols-1 gap-3.5 min-[561px]:grid-cols-2"
     >
-      <div className="grid grid-cols-1 gap-4 min-[561px]:grid-cols-2">
-        <label className="flex min-w-0 flex-col gap-[7px]">
-          <span className={LABEL}>Your name</span>
-          <input name="name" required placeholder="Sonam Wangchuk" className={`${FIELD} h-12`} />
-        </label>
-        <label className="flex min-w-0 flex-col gap-[7px]">
-          <span className={LABEL}>Organization</span>
-          <input name="organization" required placeholder="Bank of Bhutan" className={`${FIELD} h-12`} />
-        </label>
-      </div>
-
-      <label className="flex min-w-0 flex-col gap-[7px]">
-        <span className={LABEL}>Work email</span>
+      <label className="min-w-0">
+        <span className="sr-only">Your name</span>
+        <input name="name" required placeholder="Your name" className={`${FIELD} h-12`} />
+      </label>
+      <label className="min-w-0">
+        <span className="sr-only">Organization</span>
         <input
-          name="email"
-          type="email"
+          name="organization"
           required
-          placeholder="you@organization.bt"
+          placeholder="Organization"
           className={`${FIELD} h-12`}
         />
       </label>
 
-      <div className="flex min-w-0 flex-col gap-[7px]">
-        <span className={LABEL}>Service of interest</span>
+      <label className="min-w-0 min-[561px]:col-span-2">
+        <span className="sr-only">Work email</span>
+        <input
+          name="email"
+          type="email"
+          required
+          placeholder="Work email"
+          className={`${FIELD} h-12`}
+        />
+      </label>
+
+      <div className="min-w-0 min-[561px]:col-span-2">
+        <span className="sr-only">Service of interest</span>
         <ServiceSelect options={services} value={service} onChange={setService} />
       </div>
 
-      <label className="flex min-w-0 flex-col gap-[7px]">
-        <span className={LABEL}>Tell us about your use case</span>
+      <label className="min-w-0 min-[561px]:col-span-2">
+        <span className="sr-only">Tell us about your use case</span>
         <textarea
           name="message"
           rows={4}
-          placeholder="What are you trying to build, and for whom?"
-          className={`${FIELD} min-h-[104px] resize-y py-[13px] leading-[1.55]`}
+          placeholder="Tell us about your use case"
+          className={`${FIELD} resize-y py-3.5 leading-[1.6]`}
         />
       </label>
 
       <button
         type="submit"
-        className="ndi-sweepbtn relative inline-flex h-[52px] w-full cursor-pointer items-center justify-center gap-2.5 overflow-hidden rounded-xl border border-transparent px-6 font-display text-[15px] font-semibold"
+        className="ndi-sweepbtn relative inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2.5 overflow-hidden rounded-xl border border-transparent px-6 font-display text-[14.5px] font-semibold min-[561px]:col-span-2"
         style={{
           background:
             "linear-gradient(115deg, #8CF0C0 0%, #6FE0A9 24%, #4FC091 56%, #2FA189 80%, #1E8189 100%)",
@@ -84,12 +89,15 @@ export function InquiryForm({ services }: { services: ServiceOption[] }) {
       </button>
 
       {submitted ? (
-        <p role="status" className="m-0 flex items-center gap-2 text-xs leading-[1.5] text-accent">
+        <p
+          role="status"
+          className="m-0 flex items-center gap-2 text-xs leading-[1.5] text-accent min-[561px]:col-span-2"
+        >
           <Icon name="check" size={14} strokeWidth={2.2} className="flex-none" />
           Thanks — this is a demo build, so nothing was sent yet.
         </p>
       ) : (
-        <p className="m-0 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+        <p className="m-0 font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint min-[561px]:col-span-2">
           — We use your details only to respond to this inquiry
         </p>
       )}

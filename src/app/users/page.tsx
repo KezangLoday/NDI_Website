@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Emphasis, PageSection, SubSectionHeader } from "@/components/layout/PageHero";
 import { DechenJourney } from "@/components/pages/DechenJourney";
+import { UseCaseCards } from "@/components/pages/UseCaseCards";
 import { SpotlightCard } from "@/components/ui/Cards";
 import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
@@ -38,7 +39,7 @@ export default async function UsersPage() {
   return (
     <>
       {/* ============ HERO ============ */}
-      <PageSection className="pb-10 pt-44 text-center">
+      <PageSection className="pb-10 pt-[172px] text-center">
         {/* This hero runs a larger, heavier headline than the other subpages. */}
         <Reveal className="flex flex-col items-center">
           <Eyebrow>— For citizens</Eyebrow>
@@ -100,45 +101,20 @@ export default async function UsersPage() {
       </PageSection>
 
       {/* ============ USE CASES ============ */}
-      <PageSection id="use-cases" className="py-16">
+      <PageSection id="use-cases" className="py-[72px]">
         <Reveal>
           <SubSectionHeader
             eyebrow="— Use cases"
             title="What you can do today"
+            size="clamp(30px,3.6vw,44px)"
+            maxWidth={700}
+            leadSize={16}
             lead="Five everyday things your wallet handles — each one takes minutes instead of days."
           />
         </Reveal>
 
-        {/* Bento at desktop; a plain stack below, where the grid areas make no sense. */}
-        <Reveal delay={0.05} className="mt-9 flex flex-col gap-4 min-[1001px]:grid min-[1001px]:grid-cols-12 min-[1001px]:grid-rows-2">
-          {useCases.map((useCase) => (
-            <div
-              key={useCase.id}
-              className="min-[1001px]:[grid-area:var(--area)]"
-              style={{ "--area": useCase.gridArea } as React.CSSProperties}
-            >
-              <SpotlightCard className="h-full">
-                <span className="inline-flex h-6 flex-none items-center text-accent">
-                  <Icon name={useCase.icon} size={22} />
-                </span>
-                <h3 className="font-display text-[18px] font-semibold leading-[1.28] text-strong">
-                  {useCase.title}
-                </h3>
-                <p className="text-[14px] leading-[1.6] text-muted [text-wrap:pretty]">
-                  {useCase.description}
-                </p>
-                {useCase.tutorialHref ? (
-                  <a
-                    href={useCase.tutorialHref}
-                    className="ndi-tut mt-auto inline-flex items-center gap-2 pt-2 font-display text-[13.5px] font-semibold text-accent"
-                  >
-                    Watch tutorial
-                    <Icon name="arrowRight" size={14} strokeWidth={1.9} />
-                  </a>
-                ) : null}
-              </SpotlightCard>
-            </div>
-          ))}
+        <Reveal delay={0.05}>
+          <UseCaseCards useCases={useCases} />
         </Reveal>
       </PageSection>
 

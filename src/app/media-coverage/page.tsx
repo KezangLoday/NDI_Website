@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import { PageHero, PageSection, Emphasis } from "@/components/layout/PageHero";
-import { SpotlightCard } from "@/components/ui/Cards";
 import { Reveal } from "@/components/ui/Reveal";
 import { Icon } from "@/components/ui/icons";
 import { getPress } from "@/content";
@@ -26,14 +25,30 @@ export default async function MediaCoveragePage() {
             </>
           }
           lead="Reporting, interviews and features on Bhutan's national digital identity — at home and internationally."
+          leadWidth={600}
         />
       </PageSection>
 
       <PageSection id="media" className="pb-[104px] pt-8">
-        <Reveal className="mt-2 grid grid-cols-1 gap-3.5 min-[901px]:grid-cols-2">
+        <Reveal
+          data-ndi-2col="1"
+          className="mt-2 grid grid-cols-1 gap-3.5 min-[901px]:grid-cols-2"
+        >
           {items.map((item) => (
-            <SpotlightCard key={item.id} as="a" href={item.href} hoverLift>
-              <div className="flex w-full items-center justify-between gap-4">
+            <a
+              key={item.id}
+              href={item.href}
+              className="ndi-spot ndi-press-card flex flex-col gap-3.5 rounded-2xl border border-grid p-[26px]"
+              style={{
+                background: "var(--grad-card)",
+                backdropFilter: "blur(18px)",
+                WebkitBackdropFilter: "blur(18px)",
+                boxShadow: "var(--inset-top)",
+              }}
+            >
+              <div className="ndi-spot-halo" />
+              <div className="ndi-spot-fill" />
+              <div className="flex items-center justify-between gap-4">
                 <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
                   {item.category}
                 </span>
@@ -47,7 +62,7 @@ export default async function MediaCoveragePage() {
               <div className="font-mono text-[10.5px] tracking-[0.14em] text-faint">
                 {item.publishedAt}
               </div>
-            </SpotlightCard>
+            </a>
           ))}
         </Reveal>
 

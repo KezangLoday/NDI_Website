@@ -16,15 +16,14 @@ export default async function GlossaryPage() {
 
   return (
     <>
-      <PageSection className="pb-4 pt-44">
+      <PageSection className="pb-2 pt-44">
         <PageHero
-          eyebrow="— Glossary"
           title={
             <>
               The language of <Emphasis>self-sovereign</Emphasis> identity
             </>
           }
-          lead="Key terms across decentralized identity, verifiable credentials and digital trust — explained plainly."
+          lead="A collection of definitions to help you understand, use and adapt to the Bhutan NDI ecosystem faster. A constantly evolving list, with new vocabulary added regularly."
         />
       </PageSection>
 

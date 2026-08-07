@@ -117,34 +117,53 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
         })}
       </div>
 
-      {/* Detail panel */}
-      <div className="mt-4 rounded-2xl border border-grid bg-white/[0.02] p-7">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="font-mono text-[11px] tracking-[0.14em] text-accent">
+      {/* Detail panel — copy on the left, the three facts as rows on the right. */}
+      <div
+        data-ndi-2col="1"
+        className="mt-[22px] grid grid-cols-1 items-start gap-10 overflow-hidden rounded-2xl border border-grid px-8 py-[30px] min-[901px]:grid-cols-[1.1fr_1fr]"
+        style={{
+          background: "var(--grad-card)",
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
+          boxShadow: "var(--inset-top), 0 18px 44px rgba(0,0,0,0.28)",
+        }}
+      >
+        <div>
+          <div className="flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
             {active.code}
-          </span>
-          <span className="rounded-full border border-grid bg-white/[0.02] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+            <span
+              aria-hidden="true"
+              className="h-px w-10"
+              style={{
+                background: "linear-gradient(90deg, var(--border-strong), transparent)",
+              }}
+            />
             {active.tag}
-          </span>
+          </div>
+          <div className="mt-3.5 font-display text-[24px] font-semibold tracking-[-0.02em] text-strong">
+            {active.title}
+          </div>
+          <p className="mt-2.5 text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
+            {active.body}
+          </p>
         </div>
-        <h3 className="mt-3 font-display text-[21px] font-semibold tracking-[-0.02em] text-strong">
-          {active.title}
-        </h3>
-        <p className="mt-3 max-w-[720px] text-[15px] leading-[1.65] text-muted [text-wrap:pretty]">
-          {active.body}
-        </p>
 
-        <div className="mt-6 grid grid-cols-1 gap-5 border-t border-subtle pt-5 min-[701px]:grid-cols-3">
+        <div className="flex flex-col border-t border-subtle">
           {[
-            ["You bring", active.input],
-            ["Output", active.output],
-            ["Owners", active.owners],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            ["You bring", active.input, "text-body"],
+            ["Output", active.output, "text-body"],
+            ["Owners", active.owners, "text-muted"],
+          ].map(([label, value, tone], index) => (
+            <div
+              key={label}
+              className={`grid grid-cols-[96px_minmax(0,1fr)] gap-4 py-4 ${
+                index < 2 ? "border-b border-subtle" : ""
+              }`}
+            >
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
                 {label}
-              </div>
-              <div className="mt-2 text-[14px] leading-[1.55] text-body">{value}</div>
+              </span>
+              <span className={`text-[14px] leading-[1.6] ${tone}`}>{value}</span>
             </div>
           ))}
         </div>
