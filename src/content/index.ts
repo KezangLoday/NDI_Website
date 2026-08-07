@@ -39,6 +39,15 @@ import {
 import { insights, resourceNews, webinars } from "./resources";
 import { services } from "./services";
 import { siteSettings } from "./siteSettings";
+import {
+  credentialCards,
+  journeyChapters,
+  journeyStrip,
+  startSteps,
+  userBenefits,
+  userHeroStats,
+  userUseCases,
+} from "./users";
 
 import type {
   Capability,
@@ -52,6 +61,8 @@ import type {
   MissionStatement,
   NewsItem,
   HeroPill,
+  HeroStat,
+  JourneyChapter,
   Organization,
   OrgService,
   PipelineStep,
@@ -59,8 +70,11 @@ import type {
   ResourceNews,
   ServiceOption,
   SiteSettings,
+  StartStep,
   StoryStat,
   TeamMember,
+  UserBenefit,
+  UserUseCase,
   UseCase,
   VisionPillar,
   Webinar,
@@ -143,6 +157,28 @@ export async function getPipeline(): Promise<PipelineStep[]> {
 export async function getOrgServiceOptions(): Promise<ServiceOption[]> {
   return orgServiceOptions;
 }
+
+export async function getUserUseCases(): Promise<UserUseCase[]> {
+  return userUseCases;
+}
+
+export async function getJourneyChapters(): Promise<JourneyChapter[]> {
+  return journeyChapters;
+}
+
+export async function getUserBenefits(): Promise<UserBenefit[]> {
+  return userBenefits;
+}
+
+export async function getUserHeroStats(): Promise<HeroStat[]> {
+  return userHeroStats;
+}
+
+export async function getStartSteps(): Promise<StartStep[]> {
+  return startSteps;
+}
+
+export { credentialCards, journeyStrip };
 
 export async function getPress(): Promise<PressItem[]> {
   return press;
