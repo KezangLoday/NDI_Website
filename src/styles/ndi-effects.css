@@ -898,32 +898,28 @@ select option { background: #101827; color: #e9eef6; }
 }
 
 /* ---- Users hero: credential fan ----------------------------
-   The fan's resting rotation/offset comes in as custom properties so the
-   hover state can compose on top of it — writing `transform` directly on the
-   element would mean a hover rule had to restate the rotation, and any inline
-   transform would win over this class anyway. Opacity and z-index are vars
-   for the same reason: the hovered card lifts clear of its neighbours and
-   comes fully opaque, which an inline value would block. */
+   The fan's resting rotation and offset come in as custom properties so the
+   hover state can compose on top of them — writing `transform` directly would
+   mean the hover rule had to restate each card's rotation, and an inline
+   transform would win over this class anyway.
+
+   Hover raises the card on Y and nothing else: no scale, and no change to
+   stacking or opacity, so a card never climbs over its neighbour. */
 .ndi-credential {
   --card-rotate: 0deg;
   --card-shift: 0px;
   --card-opacity: 1;
   --card-z: 1;
+  --card-lift: 10px;
   position: relative;
   z-index: var(--card-z);
   opacity: var(--card-opacity);
   transform: rotate(var(--card-rotate)) translateX(var(--card-shift));
-  transition:
-    transform 0.45s var(--ease-out),
-    opacity 0.45s var(--ease-out),
-    filter 0.45s var(--ease-out);
+  transition: transform 0.4s var(--ease-out);
 }
 .ndi-credential:hover {
-  /* Above the middle card, which rests at 3. */
-  z-index: 4;
-  opacity: 1;
-  transform: rotate(var(--card-rotate)) translateX(var(--card-shift)) translateY(-14px) scale(1.03);
-  filter: drop-shadow(0 24px 44px rgba(0, 0, 0, 0.55));
+  transform: rotate(var(--card-rotate)) translateX(var(--card-shift))
+    translateY(calc(-1 * var(--card-lift)));
 }
 @media (prefers-reduced-motion: reduce) {
   .ndi-credential:hover { transform: rotate(var(--card-rotate)) translateX(var(--card-shift)); }
