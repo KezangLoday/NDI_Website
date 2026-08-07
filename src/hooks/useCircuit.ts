@@ -27,7 +27,9 @@ export function useCircuitBands() {
     const compute = () => {
       const height = Math.max(document.documentElement.scrollHeight, window.innerHeight);
       const bandHeight = Math.round(900 * (Math.min(window.innerWidth, 1920) / 1440));
+      if (!Number.isFinite(bandHeight) || bandHeight <= 0) return;
       const count = Math.ceil(height / bandHeight);
+      if (!Number.isFinite(count) || count <= 0) return;
 
       setDocumentHeight(height);
       setBands((previous) => {
