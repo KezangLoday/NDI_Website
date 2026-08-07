@@ -1,4 +1,4 @@
-import { EvervaultCard } from "@/components/ui/Cards";
+import { FeatureCard } from "@/components/ui/Cards";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeader, ViewAllLink } from "@/components/ui/SectionHeader";
 import { Icon } from "@/components/ui/icons";
@@ -21,7 +21,7 @@ export async function WhatYouCanDo() {
       <div className="mt-10 grid grid-cols-1 gap-[18px] min-[561px]:grid-cols-2 min-[901px]:grid-cols-4">
         {useCases.map((useCase, index) => (
           <Reveal key={useCase.id} delay={0.05 * (index + 1)} className="h-full">
-            <EvervaultCard>
+            <FeatureCard>
               <span className="inline-flex h-[26px] items-center text-accent">
                 <Icon name={useCase.icon} size={24} />
               </span>
@@ -29,7 +29,7 @@ export async function WhatYouCanDo() {
                 {useCase.title}
               </h3>
               <p className="text-sm leading-[1.55] text-muted">{useCase.description}</p>
-            </EvervaultCard>
+            </FeatureCard>
           </Reveal>
         ))}
       </div>

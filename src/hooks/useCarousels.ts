@@ -61,15 +61,39 @@ interface SlotState {
   pending: number;
 }
 
-export function useLogoCarousel(itemCounts: number[]) {
+/**
+ * @param itemCounts how many logos each slot holds
+ * @param exclusiveKeys optional per-slot key. Slots sharing a key are showing
+ *   the same list of logos, so the carousel keeps their indices distinct — two
+ *   columns drawn from one set never display the same mark at the same time.
+ */
+export function useLogoCarousel(itemCounts: number[], exclusiveKeys?: (string | undefined)[]) {
   // Slot composition is fixed by the content, so the joined counts are a
   // stable identity for the timer set.
   const key = itemCounts.join(",");
   const counts = useMemo(() => key.split(",").map(Number), [key]);
 
-  const [slots, setSlots] = useState<SlotState[]>(() =>
-    counts.map(() => ({ active: 0, exiting: null, pending: 0 })),
-  );
+  // Read through a ref so changing keys never restarts the timers.
+  const keysRef = useRef(exclusiveKeys);
+  useEffect(() => {
+    keysRef.current = exclusiveKeys;
+  }, [exclusiveKeys]);
+
+  // Slots sharing a list start on different logos, so the rule holds from the
+  // first paint rather than only from the first swap.
+  const [slots, setSlots] = useState<SlotState[]>(() => {
+    const seenPerKey = new Map<string, number>();
+    return counts.map((count, index) => {
+      const slotKey = exclusiveKeys?.[index];
+      let start = 0;
+      if (slotKey) {
+        const position = seenPerKey.get(slotKey) ?? 0;
+        seenPerKey.set(slotKey, position + 1);
+        start = count > 0 ? position % count : 0;
+      }
+      return { active: start, exiting: null, pending: start };
+    });
+  });
   const heldRef = useRef<Record<number, boolean>>({});
   const reduced = useReducedMotion();
 
@@ -90,7 +114,25 @@ export function useLogoCarousel(itemCounts: number[]) {
           const next = [...prev];
           const current = next[slot];
           const from = current.active ?? current.pending;
-          next[slot] = { active: null, exiting: from, pending: (from + 1) % count };
+
+          // Whatever a sibling slot drawing on the same list is showing (or is
+          // mid-handoff toward) is off limits.
+          const mine = keysRef.current?.[slot];
+          const taken = new Set<number>();
+          if (mine) {
+            prev.forEach((other, index) => {
+              if (index !== slot && keysRef.current?.[index] === mine) {
+                taken.add(other.active ?? other.pending);
+              }
+            });
+          }
+
+          let candidate = (from + 1) % count;
+          for (let step = 0; taken.has(candidate) && step < count; step += 1) {
+            candidate = (candidate + 1) % count;
+          }
+
+          next[slot] = { active: null, exiting: from, pending: candidate };
           return next;
         });
 

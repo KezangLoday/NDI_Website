@@ -53,8 +53,12 @@ export interface Collaborator {
   name: string;
   logo: Media;
   group: CollaboratorGroupId;
-  /** Logos share a slot and cross-fade; this groups them into that slot. */
-  slot: number;
+  /**
+   * Which display slots this logo appears in. Logos sharing a slot cross-fade
+   * between each other; a logo may appear in more than one slot, in which case
+   * the carousel guarantees two slots never show it simultaneously.
+   */
+  slots: number[];
   /** Per-logo optical sizing, carried over from the prototype. */
   maxWidth: string;
   maxHeight: string;
