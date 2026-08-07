@@ -896,3 +896,35 @@ select option { background: #101827; color: #e9eef6; }
     0 10px 26px -8px rgba(90, 201, 148, 0.4),
     0 0 0 1px rgba(90, 201, 148, 0.18);
 }
+
+/* ---- Users hero: credential fan ----------------------------
+   The fan's resting rotation/offset comes in as custom properties so the
+   hover state can compose on top of it — writing `transform` directly on the
+   element would mean a hover rule had to restate the rotation, and any inline
+   transform would win over this class anyway. Opacity and z-index are vars
+   for the same reason: the hovered card lifts clear of its neighbours and
+   comes fully opaque, which an inline value would block. */
+.ndi-credential {
+  --card-rotate: 0deg;
+  --card-shift: 0px;
+  --card-opacity: 1;
+  --card-z: 1;
+  position: relative;
+  z-index: var(--card-z);
+  opacity: var(--card-opacity);
+  transform: rotate(var(--card-rotate)) translateX(var(--card-shift));
+  transition:
+    transform 0.45s var(--ease-out),
+    opacity 0.45s var(--ease-out),
+    filter 0.45s var(--ease-out);
+}
+.ndi-credential:hover {
+  /* Above the middle card, which rests at 3. */
+  z-index: 4;
+  opacity: 1;
+  transform: rotate(var(--card-rotate)) translateX(var(--card-shift)) translateY(-14px) scale(1.03);
+  filter: drop-shadow(0 24px 44px rgba(0, 0, 0, 0.55));
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-credential:hover { transform: rotate(var(--card-rotate)) translateX(var(--card-shift)); }
+}
