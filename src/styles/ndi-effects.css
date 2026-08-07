@@ -442,47 +442,18 @@
 .ndi-spot-halo::before { inset: -4px; border-width: 4px; border-radius: calc(var(--rad) + 4px); }
 .ndi-spot > *:not(.ndi-spot-halo):not(.ndi-spot-fill) { position: relative; }
 
-/* ---- "What you can do" cards: evervault cursor reveal ------- */
-.ndi-ev { position: relative; overflow: hidden; isolation: isolate; --mx: 50%; --my: 50%; }
-.ndi-ev-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s var(--ease-out);
-  -webkit-mask-image: radial-gradient(320px at var(--mx) var(--my), #fff, transparent);
-  mask-image: radial-gradient(320px at var(--mx) var(--my), #fff, transparent);
-}
-.ndi-ev-grad {
-  background: linear-gradient(105deg, rgba(90, 201, 148, 0.3) 0%, rgba(18, 65, 67, 0.3) 55%, rgba(30, 111, 168, 0.3) 100%);
-}
-.ndi-ev-noise { mix-blend-mode: overlay; }
-.ndi-ev-noise p {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  padding: 4px;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 11px;
-  line-height: 1.15;
-  color: rgba(255, 255, 255, 0.32);
-  word-break: break-all;
-  white-space: pre-wrap;
-  overflow: hidden;
-}
-.ndi-ev:hover .ndi-ev-grad { opacity: 0.5; }
-.ndi-ev:hover .ndi-ev-noise { opacity: 0.32; }
-.ndi-ev > *:not(.ndi-ev-layer) { position: relative; z-index: 1; }
-@media (prefers-reduced-motion: reduce) {
-  .ndi-ev-layer { transition: none; }
-}
+/* ---- "What you can do" cards -------------------------------
+   The design gave these an evervault-style cursor reveal (a gradient and a
+   scrambling character field wiped in under the pointer). Removed by request:
+   these cards are now static, and only the glass fill and lens rim below
+   apply. overflow:hidden stays — the rim is an inset pseudo-element. */
+.ndi-usecase { position: relative; overflow: hidden; }
+.ndi-usecase > * { position: relative; z-index: 1; }
 
 /* ---- Glass + lens rim pass (Home's inline <style> block) ----
    These cards carry no fill of their own — just a blurred, lightly
    brightened view of the atmosphere behind, plus a conic lens rim. */
-#how-it-works .ndi-ev,
+#how-it-works .ndi-usecase,
 .ndi-spot,
 [data-news-featured],
 [data-org-tile] {
@@ -507,7 +478,7 @@
 }
 /* The spotlight ring owns ::before/::after on .ndi-spot, so the lens rim
    only goes on cards that have those pseudo-elements free. */
-#how-it-works .ndi-ev::after,
+#how-it-works .ndi-usecase::after,
 [data-news-featured]::after,
 [data-cta-form]::after,
 [data-org-tile]::after {

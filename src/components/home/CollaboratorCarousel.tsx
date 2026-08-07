@@ -15,12 +15,24 @@ interface CollaboratorCarouselProps {
 
 export function CollaboratorCarousel({ groups, collaborators }: CollaboratorCarouselProps) {
   // Logos are bucketed by slot; each slot is one box that cross-fades between
-  // the logos assigned to it.
-  const slotIds = Array.from(new Set(collaborators.map((item) => item.slot))).sort(
+  // the logos assigned to it. A logo may sit in several slots.
+  const slotIds = Array.from(new Set(collaborators.flatMap((item) => item.slots))).sort(
     (a, b) => a - b,
   );
-  const slots = slotIds.map((id) => collaborators.filter((item) => item.slot === id));
-  const { slots: slotState, hold } = useLogoCarousel(slots.map((items) => items.length));
+  const slots = slotIds.map((id) => collaborators.filter((item) => item.slots.includes(id)));
+
+  // Slots drawing on an identical list of logos must not show the same one at
+  // once; deriving the key from the list itself means that applies wherever it
+  // is true, without anyone having to declare it.
+  const exclusiveKeys = slots.map((items) => items.map((item) => item.id).join("|"));
+  const shared = new Set(
+    exclusiveKeys.filter((key, index) => exclusiveKeys.indexOf(key) !== index),
+  );
+
+  const { slots: slotState, hold } = useLogoCarousel(
+    slots.map((items) => items.length),
+    exclusiveKeys.map((key) => (shared.has(key) ? key : undefined)),
+  );
 
   return (
     <section className="pb-[104px] pt-24">
