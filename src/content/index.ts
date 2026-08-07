@@ -29,6 +29,13 @@ import { glossary } from "./glossary";
 import { news } from "./news";
 import { press } from "./press";
 import { organizationColumnDurations, organizations } from "./organizations";
+import {
+  orgHeroPills,
+  orgServiceOptions,
+  orgServices,
+  pipeline,
+  whyPartnerRows,
+} from "./organizationsPage";
 import { insights, resourceNews, webinars } from "./resources";
 import { services } from "./services";
 import { siteSettings } from "./siteSettings";
@@ -44,7 +51,10 @@ import type {
   Job,
   MissionStatement,
   NewsItem,
+  HeroPill,
   Organization,
+  OrgService,
+  PipelineStep,
   PressItem,
   ResourceNews,
   ServiceOption,
@@ -54,6 +64,7 @@ import type {
   UseCase,
   VisionPillar,
   Webinar,
+  WhyPartnerRow,
   WalletBenefit,
 } from "./types";
 
@@ -111,6 +122,26 @@ export async function getWebinars(): Promise<Webinar[]> {
 
 export async function getInsights(): Promise<Insight[]> {
   return insights;
+}
+
+export async function getOrgServices(): Promise<OrgService[]> {
+  return orgServices;
+}
+
+export async function getOrgHeroPills(): Promise<HeroPill[]> {
+  return orgHeroPills;
+}
+
+export async function getWhyPartnerRows(): Promise<WhyPartnerRow[]> {
+  return whyPartnerRows;
+}
+
+export async function getPipeline(): Promise<PipelineStep[]> {
+  return pipeline;
+}
+
+export async function getOrgServiceOptions(): Promise<ServiceOption[]> {
+  return orgServiceOptions;
 }
 
 export async function getPress(): Promise<PressItem[]> {
