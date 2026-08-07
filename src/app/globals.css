@@ -172,9 +172,13 @@ body {
   color: #fff;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* In @layer base so a `text-*` utility on an anchor still wins — unlayered,
+   this rule beat every Tailwind colour utility and links silently inherited. */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 /* Custom scrollbar — engineered feel */

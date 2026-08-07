@@ -146,62 +146,91 @@ export default async function UsersPage() {
       <DechenJourney chapters={chapters} strip={journeyStrip} />
 
       {/* ============ BENEFITS ============ */}
-      <PageSection className="py-16">
-        <Reveal>
-          <SubSectionHeader eyebrow="— Why it helps" title="Benefits of the NDI Wallet" />
+      <PageSection className="py-[72px]">
+        {/* Larger heading than the shared subpage scale — this section's own. */}
+        <Reveal className="max-w-[700px]">
+          <Eyebrow>— Why it helps</Eyebrow>
+          <h2 className="mt-4 font-display text-[clamp(30px,3.6vw,44px)] font-semibold leading-[1.08] tracking-[-0.03em] text-strong">
+            Benefits of the NDI Wallet
+          </h2>
         </Reveal>
-        <div className="mt-9 grid grid-cols-1 gap-4 min-[701px]:grid-cols-2 min-[1101px]:grid-cols-3">
-          {benefits.map((benefit, index) => (
-            <Reveal key={benefit.id} delay={0.05 * (index + 1)} className="h-full">
-              <SpotlightCard>
-                <span className="inline-flex h-6 flex-none items-center text-accent">
-                  <Icon name={benefit.icon} size={22} />
-                </span>
-                <h3 className="font-display text-[17px] font-semibold text-strong">
-                  {benefit.title}
-                </h3>
-                <p className="text-[14px] leading-[1.6] text-muted [text-wrap:pretty]">
-                  {benefit.description}
-                </p>
-              </SpotlightCard>
-            </Reveal>
+
+        {/* Five across at desktop, as designed; stepped down so the cards stay
+            readable on the widths the design leaves unspecified. */}
+        <Reveal
+          delay={0.05}
+          className="mt-10 grid grid-cols-1 gap-[18px] min-[561px]:grid-cols-2 min-[901px]:grid-cols-3 min-[1101px]:grid-cols-5"
+        >
+          {benefits.map((benefit) => (
+            <SpotlightCard key={benefit.id} className="h-full" gap={0}>
+              <span className="inline-flex h-[26px] items-center text-accent">
+                <Icon name={benefit.icon} size={24} />
+              </span>
+              <h3 className="mb-1.5 mt-[18px] font-display text-[18px] font-semibold text-strong">
+                {benefit.title}
+              </h3>
+              <p className="text-[14px] leading-[1.55] text-muted [text-wrap:pretty]">
+                {benefit.description}
+              </p>
+            </SpotlightCard>
           ))}
-        </div>
+        </Reveal>
       </PageSection>
 
       {/* ============ GET STARTED ============ */}
-      <PageSection id="get-started" className="pb-[104px] pt-16">
-        <Reveal className="grid grid-cols-1 items-start gap-10 min-[901px]:grid-cols-2 min-[901px]:gap-14">
-          <div>
-            <SubSectionHeader
-              eyebrow="— Get started"
-              title="Three steps to your digital identity"
-              lead="Registration takes a few minutes and only needs to happen once."
-            />
+      <PageSection id="get-started" className="pb-[104px] pt-[72px]">
+        <Reveal
+          className="relative grid grid-cols-1 items-center gap-8 overflow-hidden rounded-3xl border border-grid p-9 min-[901px]:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] min-[901px]:gap-12 min-[901px]:p-14"
+          style={{
+            background: "linear-gradient(162deg, #103440 0%, #101827 64%)",
+            boxShadow: "var(--inset-top), 0 24px 60px rgba(0,0,0,0.34)",
+          }}
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-[60px] -top-[120px] h-[360px] w-[520px]"
+            style={{
+              background: "radial-gradient(circle, rgba(90,201,148,0.20), transparent 70%)",
+              filter: "blur(14px)",
+            }}
+          />
+
+          <div className="relative">
+            <Eyebrow>— Get started</Eyebrow>
+            <h2 className="mt-4 font-display text-[clamp(28px,3.2vw,40px)] font-semibold leading-[1.1] tracking-[-0.03em] text-strong">
+              Three steps to your digital identity
+            </h2>
+            <p className="mt-4 max-w-[460px] text-[15.5px] leading-[1.62] text-muted">
+              Registration takes a few minutes and only needs to happen once.
+            </p>
             <StoreButtons />
           </div>
 
-          <div className="flex flex-col">
-            {steps.map((step, index) => (
+          {/* Each step is its own bordered card, then the two help links. */}
+          <div className="relative flex flex-col gap-3">
+            {steps.map((step) => (
               <div
                 key={step.number}
-                className={`flex items-center gap-5 py-5 ${
-                  index > 0 ? "border-t border-subtle" : ""
-                }`}
+                className="flex items-center gap-4 rounded-xl border border-grid px-5 py-[18px]"
+                style={{ background: "rgba(255,255,255,0.03)" }}
               >
-                <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-grid font-mono text-[13px] text-accent">
-                  {step.number}
-                </span>
-                <span className="text-[16px] leading-[1.5] text-body">{step.text}</span>
+                <span className="font-mono text-[11px] text-accent">{step.number}</span>
+                <span className="text-[15px] text-strong">{step.text}</span>
               </div>
             ))}
 
-            <div className="mt-6 flex flex-wrap gap-4">
-              <Link href="/faqs" className="font-display text-sm font-semibold text-accent">
-                Read the FAQs →
+            <div className="mt-2 flex flex-wrap gap-3">
+              <Link
+                href="/faqs"
+                className="ndi-outline-link inline-flex items-center gap-2 rounded-xl border border-grid px-[18px] py-3 font-display text-sm font-medium text-strong"
+              >
+                Read the FAQs
               </Link>
-              <Link href="/#contact" className="font-display text-sm font-semibold text-muted">
-                Need help? Contact us →
+              <Link
+                href="/#contact"
+                className="ndi-outline-link inline-flex items-center gap-2 rounded-xl border border-grid px-[18px] py-3 font-display text-sm font-medium text-strong"
+              >
+                Need help? Contact us
               </Link>
             </div>
           </div>

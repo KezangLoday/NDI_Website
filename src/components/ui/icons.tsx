@@ -73,6 +73,30 @@ const STROKE_ICONS = {
     </>
   ),
 
+  // Wallet benefits
+  zap: <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z" />,
+  eyeOff: (
+    <>
+      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M3 3l18 18" />
+    </>
+  ),
+  fileCheck: (
+    <>
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+      <path d="M14 2v5h6" />
+      <path d="m9 15 2 2 4-4" />
+    </>
+  ),
+  shieldAlert: (
+    <>
+      <path d="M12 2 4 6v6c0 5 8 10 8 10s8-5 8-10V6Z" />
+      <path d="M12 8v4" />
+      <path d="M12 16h.01" />
+    </>
+  ),
+
   // Navigation / mega menu
   newspaper: (
     <>
