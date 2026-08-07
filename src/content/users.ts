@@ -122,11 +122,11 @@ export const journeyStrip = media(
 );
 
 export const userBenefits: UserBenefit[] = [
-  { id: "convenience", title: "Convenience", description: "Complete transactions faster through digital verification and streamlined processes.", icon: "rotateCcw" },
+  { id: "convenience", title: "Convenience", description: "Complete transactions faster through digital verification and streamlined processes.", icon: "zap" },
   { id: "security", title: "Security", description: "Trusted identity verification and secure authentication protect every interaction.", icon: "shieldCheck" },
-  { id: "privacy", title: "Privacy & control", description: "Consent-based sharing: only the information a specific service needs leaves your wallet.", icon: "lockRounded" },
-  { id: "paperless", title: "Paperless", description: "Digital verification replaces physical documents and repeated photocopies.", icon: "fileText" },
-  { id: "trust", title: "Trust", description: "Credentials are issued by trusted sources, so services can rely on them immediately.", icon: "link" },
+  { id: "privacy", title: "Privacy & control", description: "Consent-based sharing: only the information a specific service needs leaves your wallet.", icon: "eyeOff" },
+  { id: "paperless", title: "Paperless", description: "Digital verification replaces physical documents and repeated photocopies.", icon: "fileCheck" },
+  { id: "trust", title: "Trust", description: "Credentials are issued by trusted sources, so services can rely on them immediately.", icon: "shieldAlert" },
 ];
 
 export const startSteps: StartStep[] = [

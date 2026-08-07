@@ -602,6 +602,11 @@
 .ndi-contact-row { transition: border-color var(--dur), background var(--dur); }
 .ndi-contact-row:hover { border-color: var(--border-strong); background: rgba(255, 255, 255, 0.045); }
 
+/* Bordered secondary link, e.g. the two chips under the Get started steps */
+.ndi-outline-link { transition: border-color var(--dur), color var(--dur); }
+.ndi-outline-link:hover,
+.ndi-outline-link:focus-visible { border-color: var(--border-strong); color: var(--accent); }
+
 /* Custom-select dropdown panel scrollbar */
 .ndi-ddscroll { scrollbar-width: thin; scrollbar-color: rgba(180, 190, 205, 0.28) transparent; }
 .ndi-ddscroll::-webkit-scrollbar { width: 8px; }

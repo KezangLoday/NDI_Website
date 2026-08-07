@@ -37,6 +37,8 @@ interface SpotlightCardProps {
   className?: string;
   /** Cards that are links lift slightly on hover. */
   hoverLift?: boolean;
+  /** Row gap between the card's children, in px. Some cards set their own margins. */
+  gap?: number;
 }
 
 export function SpotlightCard({
@@ -45,15 +47,17 @@ export function SpotlightCard({
   href,
   className = "",
   hoverLift = false,
+  gap = 14,
 }: SpotlightCardProps) {
   const Tag = as;
   return (
     <Tag
       href={href}
-      className={`ndi-spot flex flex-col items-start gap-[14px] rounded-2xl p-[26px] ${
+      className={`ndi-spot flex flex-col items-start rounded-2xl p-[26px] ${
         hoverLift ? "ndi-lift" : ""
       } ${className}`.trim()}
       style={{
+        gap,
         background: CARD_BACKGROUND,
         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07), 0 18px 40px -26px rgba(0,0,0,0.9)",
       }}
