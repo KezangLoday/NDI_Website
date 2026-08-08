@@ -49,7 +49,7 @@ function MegaCard({ card, reroll }: { card: MegaMenuCard; reroll: number }) {
       className="ndi-gc relative flex min-h-[170px] flex-col justify-between gap-8 overflow-hidden rounded-xl border border-white/[0.14] bg-white/[0.02] p-[18px] transition-[background,border-color,box-shadow,transform] duration-[220ms]"
     >
       <GridPattern reroll={reroll} />
-      <span className="relative text-accent">
+      <span className="ndi-navicon relative text-accent">
         <Icon name={card.icon} size={22} />
       </span>
       <div className="relative">
@@ -67,10 +67,12 @@ function MegaListLink({ card }: { card: MegaMenuCard }) {
       className="ndi-fill flex items-center justify-between gap-3 rounded-xl border border-white/[0.14] bg-white/[0.02] px-4 py-[17px] text-body transition-[background,border-color] duration-[220ms]"
     >
       <div className="min-w-0">
-        <div className="font-display text-sm font-semibold text-strong">{card.label}</div>
-        <div className="mt-0.5 text-xs text-body">{card.description}</div>
+        {/* Explicit sizes, not text-sm/text-xs: those bundle a line-height and
+            the design leaves these inheriting the body's 1.62. */}
+        <div className="font-display text-[14px] font-semibold text-strong">{card.label}</div>
+        <div className="mt-0.5 text-[12px] text-body">{card.description}</div>
       </div>
-      <span className="flex-none text-accent">
+      <span className="ndi-navicon flex-none text-accent">
         <Icon name={card.icon} size={20} />
       </span>
     </Link>
@@ -347,7 +349,7 @@ export function SiteHeader() {
               key={link.href}
               href={link.href}
               onClick={closeMobile}
-              className="flex items-center justify-between gap-4 border-b border-subtle px-1 py-[22px] font-display text-3xl font-semibold tracking-[-0.02em] text-strong hover:text-accent"
+              className="flex items-center justify-between gap-4 border-b border-subtle px-1 py-[22px] font-display text-[30px] font-semibold tracking-[-0.02em] text-strong hover:text-accent"
             >
               {link.label}
               <Icon name="arrowUpRight" size={20} className="flex-none opacity-55" />
@@ -362,7 +364,10 @@ export function SiteHeader() {
                   type="button"
                   onClick={() => setOpenAccordion(isOpen ? null : menu.key)}
                   aria-expanded={isOpen}
-                  className="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-subtle bg-transparent px-1 py-[22px] text-left font-display text-3xl font-semibold tracking-[-0.02em] text-strong"
+                  // leading-[normal] matches the design, where this trigger is a
+                  // <button> and so keeps the UA's normal leading rather than
+                  // inheriting the body's 1.62 the way the sibling links do.
+                  className="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-subtle bg-transparent px-1 py-[22px] text-left font-display text-[30px] font-semibold leading-[normal] tracking-[-0.02em] text-strong"
                 >
                   {menu.label}
                   <Icon
@@ -401,7 +406,7 @@ export function SiteHeader() {
                 closeMobile();
               }
             }}
-            className="flex items-center justify-between gap-4 border-b border-subtle px-1 py-[22px] font-display text-3xl font-semibold tracking-[-0.02em] text-accent hover:text-accent-hover"
+            className="flex items-center justify-between gap-4 border-b border-subtle px-1 py-[22px] font-display text-[30px] font-semibold tracking-[-0.02em] text-accent hover:text-accent-hover"
           >
             Contact Us
             <Icon name="arrowUpRight" size={20} className="flex-none" />
