@@ -1024,3 +1024,12 @@ select option { background: #101827; color: #e9eef6; }
   border-color: var(--border-strong);
   box-shadow: var(--inset-top), var(--glow-sm);
 }
+
+/* ---- Mega-menu icons ---------------------------------------
+   The design's nav icons are inline SVGs sitting in a text line box, so their
+   wrapper is taller than the glyph — 30px around a 22px icon. Tailwind's
+   preflight sets `svg { display: block; vertical-align: middle }`, which
+   collapsed that box and left every mega-menu card and list row ~8px short of
+   the design. Sitting the icon back on the baseline is what grows the line box
+   upward again. */
+.ndi-navicon > svg { display: inline; vertical-align: baseline; }
