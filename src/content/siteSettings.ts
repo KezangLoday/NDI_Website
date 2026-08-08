@@ -85,12 +85,11 @@ export const siteSettings: SiteSettings = {
             description: "Live view of national ID usage",
             icon: "dashboard",
           },
-          {
-            label: "Admin Login",
-            href: "#",
-            description: "Sign in to the CMS admin console",
-            icon: "userCog",
-          },
+          // Deliberate deviation from the design, which also listed an "Admin
+          // Login" here. The CMS console serves a handful of internal staff who
+          // will have it bookmarked — in Phase 2 Payload serves it from /admin —
+          // and advertising an admin entry point on a national identity site
+          // invites credential-stuffing traffic for no public benefit.
         ],
       },
     ],
