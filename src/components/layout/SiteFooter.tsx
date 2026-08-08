@@ -25,48 +25,87 @@ export function SiteFooter() {
   const footerRef = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
 
-  // Staggered entrance for the columns.
+  /**
+   * Size the curtain band to the footer's own content, and fall back to a
+   * normal block when it cannot fit.
+   *
+   * The band was three hard-coded values before; once the columns stack, the
+   * content outgrows all of them and `overflow:hidden` cuts the copyright bar
+   * off. The CSS values now act as a floor and the real height is measured.
+   *
+   * The curtain also only works while the footer is shorter than the viewport:
+   * it reveals the band by scrolling the page off it, so a footer taller than
+   * the screen has nothing to be revealed against and `top` would go negative.
+   * Below that threshold the footer lays out as an ordinary block.
+   */
   useEffect(() => {
-    const element = footerRef.current;
-    if (!element) return;
+    const curtain = curtainRef.current;
+    const footer = footerRef.current;
+    if (!curtain || !footer) return;
 
-    if (reduced || !("IntersectionObserver" in window)) {
-      element.classList.add("ndi-foot-in");
-      return;
-    }
+    const measure = () => {
+      // offsetHeight, not a bounding rect: it is the settled layout height, so
+      // the columns' entrance transform cannot inflate the band mid-animation.
+      const height = footer.offsetHeight;
+      curtain.style.setProperty("--foot-h", `${height}px`);
+      curtain.dataset.mode = height <= window.innerHeight - 40 ? "curtain" : "static";
+    };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) element.classList.add("ndi-foot-in");
-        });
-      },
-      { threshold: 0.18 },
-    );
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [reduced]);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(footer);
+    window.addEventListener("resize", measure);
+    // Re-measure once webfonts have settled, which reflows the columns.
+    const settle = setTimeout(measure, 400);
+    document.fonts?.ready.then(measure).catch(() => {});
 
-  // Zoom scrubbed by how much of the band has been revealed.
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+      clearTimeout(settle);
+    };
+  }, []);
+
+  /**
+   * Zoom scrubbed by how much of the band has been revealed, and the columns'
+   * staggered entrance.
+   *
+   * Both hang off the same scroll signal. The entrance used to be driven by an
+   * IntersectionObserver on the footer, which never fired inside the clipped,
+   * sticky curtain — so `.ndi-foot-in` was never applied and the columns and
+   * copyright bar sat permanently 30px low, spilling past the band's bottom
+   * edge and being clipped there. The scrub already knows when the band is in
+   * view, so it flips the class too.
+   */
   useEffect(() => {
     const zoom = zoomRef.current;
     const curtain = curtainRef.current;
-    if (!zoom || !curtain) return;
+    const footer = footerRef.current;
+    if (!zoom || !curtain || !footer) return;
 
     if (reduced) {
       zoom.style.opacity = "1";
       zoom.style.transform = "none";
+      footer.classList.add("ndi-foot-in");
       return;
     }
 
     let frame = 0;
     const scrub = () => {
       frame = 0;
+      // Nothing to scrub against once the footer is a plain block.
+      if (curtain.dataset.mode === "static") {
+        zoom.style.opacity = "1";
+        zoom.style.transform = "none";
+        footer.classList.add("ndi-foot-in");
+        return;
+      }
       const rect = curtain.getBoundingClientRect();
       const progress = Math.min(
         1,
         Math.max(0, (window.innerHeight - rect.top) / Math.max(1, rect.height)),
       );
+      if (progress > 0.02) footer.classList.add("ndi-foot-in");
       const eased = 1 - Math.pow(1 - progress, 3);
       zoom.style.opacity = eased.toFixed(3);
       zoom.style.transform = `scale(${(0.86 + 0.14 * eased).toFixed(4)}) translateY(${((1 - eased) * 44).toFixed(1)}px)`;
@@ -99,7 +138,7 @@ export function SiteFooter() {
           <footer
             ref={footerRef}
             className="relative flex flex-col overflow-hidden border-t border-grid bg-sunken pt-[76px]"
-            style={{ height: "var(--foot-h)" }}
+            style={{ minHeight: "var(--foot-min)" }}
           >
             <div
               aria-hidden="true"
@@ -154,7 +193,9 @@ export function SiteFooter() {
             <div
               ref={zoomRef}
               data-foot-zoom=""
-              className="relative z-[1] flex flex-1 flex-col opacity-0"
+              // flex-auto, not flex-1: a 0 basis would collapse this box and let
+              // its content spill out of the band instead of growing it.
+              className="relative z-[1] flex flex-auto flex-col opacity-0"
               style={{ transform: "scale(0.86)" }}
             >
               <div
