@@ -742,14 +742,30 @@
 .ndi-fl { transition: transform 0.28s var(--ease-out), color 0.28s var(--ease-out); will-change: transform; }
 .ndi-fl:hover { transform: translateX(8px); color: var(--text-strong); }
 
-/* Band height for the sticky curtain. The prototype hard-codes 430px, which
-   clips the footer columns once they stack — so it grows on narrow screens. */
-.ndi-footer-curtain { --foot-h: 430px; }
+/* Band height for the sticky curtain.
+   `--foot-h` is measured from the footer's own content on mount; these are the
+   floor, and the value the server renders with before that runs. The prototype
+   hard-codes 430px at every width, which clips the copyright bar. */
+.ndi-footer-curtain { --foot-min: 430px; --foot-h: var(--foot-min); }
 @media (max-width: 900px) {
-  .ndi-footer-curtain { --foot-h: 560px; }
+  .ndi-footer-curtain { --foot-min: 560px; }
 }
 @media (max-width: 560px) {
-  .ndi-footer-curtain { --foot-h: 720px; }
+  .ndi-footer-curtain { --foot-min: 720px; }
+}
+/* A footer taller than the viewport cannot be revealed by scrolling the page
+   off it, so it lays out as an ordinary block instead. */
+.ndi-footer-curtain[data-mode="static"] {
+  height: auto !important;
+  clip-path: none !important;
+}
+.ndi-footer-curtain[data-mode="static"] > div {
+  height: auto !important;
+  top: 0 !important;
+}
+.ndi-footer-curtain[data-mode="static"] > div > div {
+  position: static !important;
+  height: auto !important;
 }
 
 [data-foot-zoom] { transform-origin: 50% 85%; will-change: transform, opacity; }
