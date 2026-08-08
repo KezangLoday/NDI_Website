@@ -31,7 +31,7 @@ export function PagePlaceholder({
       </p>
       <Link
         href="/"
-        className="ndi-va mt-8 inline-flex h-[38px] flex-none items-center gap-[7px] rounded-[10px] border border-divider bg-[#18202c] px-[15px] font-display text-[13.5px] font-semibold text-strong transition-[border-color,background,color] duration-[280ms] ease-ndi"
+        className="ndi-va mt-8 inline-flex h-[38px] flex-none items-center gap-[7px] rounded-[10px] bg-[#18202c] px-[15px] font-display text-[13.5px] font-semibold text-strong transition-[background,color] duration-[280ms] ease-ndi"
       >
         Back to home
         <Icon name="arrowRight" size={14} strokeWidth={1.9} />
