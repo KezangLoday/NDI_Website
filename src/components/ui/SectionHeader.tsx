@@ -13,15 +13,15 @@ export function Eyebrow({ children }: { children: ReactNode }) {
 /**
  * The "View all →" pill on the right of a section header.
  *
- * Borderless by request: the design outlined it and turned that outline mint on
- * hover. The fill, the mint glow beneath, the inner bottom light and the arrow
- * slide all remain.
+ * Keeps the design's resting outline, but drops it on hover rather than turning
+ * it mint the way the design did. The fill, the mint glow beneath, the inner
+ * bottom light and the arrow slide all remain.
  */
 export function ViewAllLink({ href, children }: { href: string; children: ReactNode }) {
   return (
     <Link
       href={href}
-      className="ndi-va inline-flex h-[38px] flex-none items-center gap-[7px] rounded-[10px] bg-[#18202c] px-[15px] font-display text-[13.5px] font-semibold text-strong transition-[background,color] duration-[280ms] ease-ndi"
+      className="ndi-va inline-flex h-[38px] flex-none items-center gap-[7px] rounded-[10px] border border-divider bg-[#18202c] px-[15px] font-display text-[13.5px] font-semibold text-strong transition-[border-color,background,color] duration-[280ms] ease-ndi"
     >
       {children}
       <Icon name="arrowRight" size={14} strokeWidth={1.9} />
