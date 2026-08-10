@@ -238,6 +238,7 @@ export function SiteHeader() {
             alt="Bhutan NDI"
             width={1680}
             height={371}
+            sizes="150px"
             priority
             className="block h-[26px] w-auto"
           />
@@ -333,6 +334,7 @@ export function SiteHeader() {
             alt="Bhutan NDI"
             width={1680}
             height={371}
+            sizes="150px"
             className="h-[26px] w-auto"
           />
           <button

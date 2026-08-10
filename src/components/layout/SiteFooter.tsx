@@ -210,6 +210,7 @@ export function SiteFooter() {
                       alt="Bhutan NDI"
                       width={1680}
                       height={371}
+                      sizes="150px"
                       className="h-[34px] w-auto"
                     />
                   </div>

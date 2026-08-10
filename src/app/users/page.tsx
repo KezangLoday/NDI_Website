@@ -72,6 +72,10 @@ export default async function UsersPage() {
                 alt={card.image.alt}
                 width={card.image.width}
                 height={card.image.height}
+                // The artwork is only 300px wide, so it is already being
+                // upscaled on screen; a lossy re-encode on top of that is what
+                // tips it from soft into visibly mushy.
+                quality={95}
                 priority
                 className="block h-auto rounded-xl"
                 style={{

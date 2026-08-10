@@ -113,12 +113,18 @@ export const journeyChapters: JourneyChapter[] = [
   { id: "paperless", step: "08", title: "The end of paperwork", anchor: 0.9, caption: "120+ services, minutes instead of weeks. Dechen’s identity finally belongs to Dechen." },
 ];
 
-/** 14020×814. Served directly rather than through next/image — see the page. */
+/**
+ * The illustrated strip, 5000×290.
+ *
+ * It renders about 7160px wide, so it is already being upscaled ~1.4x. A
+ * 10000px-wide source would render it crisply; until then this is the ceiling.
+ * Served directly rather than through next/image — see DechenJourney.
+ */
 export const journeyStrip = media(
   "/media/company/journey-strip.webp",
   "Dechen's journey, from paperwork to a digital wallet",
-  14020,
-  814,
+  5000,
+  290,
 );
 
 export const userBenefits: UserBenefit[] = [

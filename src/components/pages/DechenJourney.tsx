@@ -178,9 +178,10 @@ export function DechenJourney({ chapters, strip }: DechenJourneyProps) {
                     "inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 2px 22px rgba(0,0,0,0.35)",
                 }}
               >
-                {/* Served directly, not through next/image: at 14020px wide the
-                    optimiser would generate enormous variants of an asset that
-                    is already a 76KB webp, and the element is hand-positioned. */}
+                {/* Served directly, not through next/image: the optimiser caps
+                    at 3840px, which is half the width this renders at, and the
+                    asset is already a 75KB webp. The element is hand-positioned
+                    besides. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   ref={stripRef}
