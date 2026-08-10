@@ -2,6 +2,8 @@
 
 import type { ReactNode } from "react";
 
+import { GlowCard } from "./spotlight-card";
+
 /** Shared card fill from the design — the glass pass in ndi-effects.css sits on top. */
 const CARD_BACKGROUND =
   "radial-gradient(120% 80% at 24% -10%, rgba(111,224,169,0.24) 0%, rgba(90,201,148,0.07) 40%, rgba(90,201,148,0) 66%), " +
@@ -9,14 +11,16 @@ const CARD_BACKGROUND =
   "linear-gradient(164deg, #0f3340 0%, #0d1420 68%)";
 
 /**
- * "What you can do" card.
+ * "What you can do" card, wearing the spotlight glow.
  *
- * Static by request — the design's evervault cursor reveal has been removed.
- * `.ndi-usecase` still carries the glass fill and lens rim from ndi-effects.css.
+ * `customSize` keeps GlowCard's preset dimensions out of the way — the card's
+ * own fill, radius and padding stay exactly as `.ndi-usecase` has them, and the
+ * glow is added on top.
  */
 export function FeatureCard({ children }: { children: ReactNode }) {
   return (
-    <div
+    <GlowCard
+      customSize
       className="ndi-usecase h-full rounded-2xl p-[26px]"
       style={{
         background: CARD_BACKGROUND,
@@ -24,7 +28,7 @@ export function FeatureCard({ children }: { children: ReactNode }) {
       }}
     >
       {children}
-    </div>
+    </GlowCard>
   );
 }
 

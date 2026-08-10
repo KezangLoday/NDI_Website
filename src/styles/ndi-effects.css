@@ -1035,3 +1035,101 @@ select option { background: #101827; color: #e9eef6; }
    upward again. */
 .ndi-navicon > svg { display: inline; vertical-align: baseline; }
 
+
+/* ---- Glow cards: spotlight that tracks the cursor -----------
+   Ported from the Aceternity glow card. Coordinates are element-local
+   (--glow-x/--glow-y, written by the shared listener in spotlight-card.tsx)
+   rather than the source's viewport-space values with
+   `background-attachment: fixed` — these cards carry a backdrop-filter, which
+   makes each one the containing block for a fixed background, so viewport
+   coordinates landed outside the card and nothing drew at all.
+   --gxp still comes from :root, and only shifts the hue. */
+.ndi-glow-card {
+  --glow-base: 138;
+  --glow-spread: 46;
+  --glow-size: 260;
+  --glow-border: 3;
+  --glow-bloom: 1;
+  /* The rim and its bloom sit outside the card box, so the card cannot clip
+     its own children — `.ndi-usecase` sets overflow:hidden, which erased them
+     entirely. Nothing else here needs the clip: the fill is bounded by the
+     border radius and the lens rim is an inset pseudo-element. */
+  overflow: visible;
+}
+.ndi-glow-rim,
+.ndi-glow-bloom {
+  --border-size: calc(var(--glow-border) * 1px);
+  --spotlight-size: calc(var(--glow-size) * 1px);
+  --hue: calc(var(--glow-base) + (var(--gxp, 0) * var(--glow-spread)));
+  --spot-x: calc(var(--glow-x, -9999) * 1px);
+  --spot-y: calc(var(--glow-y, -9999) * 1px);
+}
+/* Faint wash over the card face. */
+.ndi-glow-rim {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: radial-gradient(
+    var(--spotlight-size) var(--spotlight-size) at var(--spot-x) var(--spot-y),
+    hsl(var(--hue) 90% 65% / 0.12),
+    transparent
+  );
+}
+/* Above the fill, below the lens rim at z-index 3. Two classes so it outranks
+   `.ndi-usecase > *`, which would otherwise pull it up to the content layer. */
+.ndi-glow-card > .ndi-glow-rim { z-index: 2; }
+/* The two border spotlights: a coloured one and a white core. The mask keeps
+   each to the border ring, so only the rim lights up. */
+.ndi-glow-rim::before,
+.ndi-glow-rim::after,
+.ndi-glow-bloom::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: calc(var(--border-size) * -1);
+  border: var(--border-size) solid transparent;
+  border-radius: calc(var(--border-size) + 16px);
+  background-repeat: no-repeat;
+  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.ndi-glow-rim::before,
+.ndi-glow-bloom::before {
+  background-image: radial-gradient(
+    calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at var(--spot-x)
+      var(--spot-y),
+    hsl(var(--hue) 100% 60%),
+    transparent 100%
+  );
+  filter: brightness(1.6);
+}
+.ndi-glow-rim::after {
+  background-image: radial-gradient(
+    calc(var(--spotlight-size) * 0.4) calc(var(--spotlight-size) * 0.4) at var(--spot-x)
+      var(--spot-y),
+    hsl(0 0% 100% / 0.9),
+    transparent 100%
+  );
+}
+/* The same coloured rim again, blurred, for the bloom that spills outward. */
+.ndi-glow-bloom {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: var(--glow-bloom);
+  filter: blur(calc(var(--border-size) * 4));
+  will-change: filter;
+  pointer-events: none;
+}
+.ndi-glow-bloom::before {
+  inset: calc(var(--border-size) * -3);
+  border-width: calc(var(--border-size) * 3);
+}
+/* Content sits above the glow. */
+.ndi-glow-card > *:not(.ndi-glow-rim) { position: relative; z-index: 3; }
+@media (prefers-reduced-motion: reduce) {
+  .ndi-glow-bloom { display: none; }
+}
