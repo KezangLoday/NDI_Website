@@ -2,8 +2,6 @@
 
 import type { ReactNode } from "react";
 
-import { EvervaultPattern, useEvervaultPointer } from "./evervault-card";
-
 /** Shared card fill from the design — the glass pass in ndi-effects.css sits on top. */
 const CARD_BACKGROUND =
   "radial-gradient(120% 80% at 24% -10%, rgba(111,224,169,0.24) 0%, rgba(90,201,148,0.07) 40%, rgba(90,201,148,0) 66%), " +
@@ -11,25 +9,20 @@ const CARD_BACKGROUND =
   "linear-gradient(164deg, #0f3340 0%, #0d1420 68%)";
 
 /**
- * "What you can do" card, with the evervault cursor reveal.
+ * "What you can do" card.
  *
- * `.ndi-usecase` carries the glass fill and lens rim; the pattern sits between
- * that and the content, which `.ndi-usecase > *` already lifts to z-index 1.
+ * Static by request — the design's evervault cursor reveal has been removed.
+ * `.ndi-usecase` still carries the glass fill and lens rim from ndi-effects.css.
  */
 export function FeatureCard({ children }: { children: ReactNode }) {
-  const { ref, onPointerMove } = useEvervaultPointer<HTMLDivElement>();
-
   return (
     <div
-      ref={ref}
-      onPointerMove={onPointerMove}
-      className="ndi-usecase ndi-ev-card h-full rounded-2xl p-[26px]"
+      className="ndi-usecase h-full rounded-2xl p-[26px]"
       style={{
         background: CARD_BACKGROUND,
         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07), 0 18px 40px -26px rgba(0,0,0,0.9)",
       }}
     >
-      <EvervaultPattern />
       {children}
     </div>
   );
