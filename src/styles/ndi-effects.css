@@ -1035,3 +1035,61 @@ select option { background: #101827; color: #e9eef6; }
    the design. Sitting the icon back on the baseline is what grows the line box
    upward again. */
 .ndi-navicon > svg { display: inline; vertical-align: baseline; }
+
+/* ---- Evervault reveal on the "What you can do" cards --------
+   A radial window follows the cursor, uncovering a wash and a field of
+   scrambling characters. `--ev-x`/`--ev-y` are element-local pointer coords
+   written once per frame by useEvervaultPointer().
+
+   Sizes and opacities are the design's own `.ndi-ev`, not the upstream demo's:
+   a 220px window rather than 250, the wash at 0.88 and the characters at 0.5,
+   which is what keeps the card's own copy readable at this 271x232 size. */
+.ndi-ev-card { --ev-x: 50%; --ev-y: 50%; isolation: isolate; }
+/* Two class names deep so it outranks `.ndi-usecase > *`, which would otherwise
+   make this relative and collapse it to zero height. */
+.ndi-ev-card > .ndi-ev-pattern,
+.ndi-usecase > .ndi-ev-pattern {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.ndi-ev-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out);
+  -webkit-mask-image: radial-gradient(220px at var(--ev-x) var(--ev-y), #fff, transparent);
+  mask-image: radial-gradient(220px at var(--ev-x) var(--ev-y), #fff, transparent);
+}
+.ndi-ev-wash {
+  background: linear-gradient(
+    105deg,
+    rgba(90, 201, 148, 0.3) 0%,
+    rgba(18, 65, 67, 0.3) 55%,
+    rgba(30, 111, 168, 0.3) 100%
+  );
+}
+.ndi-ev-noise { mix-blend-mode: overlay; }
+.ndi-ev-noise p {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 4px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.5);
+  word-break: break-all;
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+.ndi-ev-card:hover .ndi-ev-wash { opacity: 0.88; }
+.ndi-ev-card:hover .ndi-ev-noise { opacity: 0.5; }
+@media (prefers-reduced-motion: reduce) {
+  .ndi-ev-layer { transition: none; }
+}
