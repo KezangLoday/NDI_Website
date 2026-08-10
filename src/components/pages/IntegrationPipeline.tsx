@@ -7,6 +7,12 @@ import type { PipelineStep } from "@/content/types";
 
 const STEP_MS = 5200;
 
+/** Column gap on the rail, in px. The connector geometry is derived from it. */
+const GUTTER = 16;
+
+/** Width of one card, as a calc term: the row minus its three gutters, quartered. */
+const CARD = `((100% - ${GUTTER * 3}px) / 4)`;
+
 /**
  * The four-step integration path.
  *
@@ -54,67 +60,115 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       {/* Rail — a dot per step on a trace that lights up as far as you have got. */}
-      <div ref={railRef} data-pipe-rail="1" className="grid grid-cols-2 gap-4 min-[901px]:grid-cols-4">
-        {steps.map((entry, index) => {
-          const isActive = index === step;
-          const isDone = index < step;
-          const state = isActive ? "1" : isDone ? "2" : "0";
-          return (
-            <button
-              key={entry.code}
-              type="button"
-              onClick={() => select(index)}
-              onFocus={() => select(index)}
-              onMouseEnter={() => select(index)}
-              aria-current={isActive ? "step" : undefined}
-              className="flex cursor-pointer flex-col gap-2.5 rounded-[14px] border px-[18px] pb-5 pt-4 text-left transition-[border-color,background,box-shadow] duration-300 ease-ndi"
-              style={{
-                borderColor: isActive ? "rgba(90,201,148,0.45)" : "var(--border-grid)",
-                background: isActive
-                  ? "linear-gradient(158deg, #1D4A45 0%, #16333A 42%, #111A26 100%)"
-                  : "linear-gradient(158deg, #16333A 0%, #131D2A 58%, #101823 100%)",
-                boxShadow: isActive ? "var(--glow-sm)" : "none",
-              }}
-            >
-              {/* The trace runs the full card width, so it bleeds past the padding. */}
-              <span
-                aria-hidden="true"
-                className="-mx-[18px] flex items-center self-stretch"
-              >
-                <span className="ndi-pipe-trace" data-on={state} style={{ flex: "0 0 18px" }} />
-                <span
-                  data-pipe-dot="1"
-                  className="h-[14px] w-[14px] flex-none rounded-full border transition-[background,border-color] duration-300 ease-ndi"
-                  style={{
-                    borderColor: isActive || isDone ? "var(--accent)" : "var(--border-grid)",
-                    background: isActive
-                      ? "var(--accent)"
-                      : isDone
-                        ? "rgba(90,201,148,0.45)"
-                        : "#0d1420",
-                    boxShadow: isActive ? "var(--glow-sm)" : "none",
-                  }}
-                />
-                <span className="ndi-pipe-trace relative" data-on={state}>
-                  {isActive ? <span className="ndi-pipe-pulse" /> : null}
-                </span>
-              </span>
+      <div ref={railRef} data-pipe-rail="1" className="relative">
+        {/*
+          The completed run, as one clipping window laid over the cards and the
+          gutters between them. The pulse travels inside it, so the light crosses
+          card boundaries unbroken instead of restarting in each card — that
+          continuity is what reads as one process rather than four tiles. The
+          window grows to the right edge of the active card: (step + 1) cards
+          plus the `step` gutters already crossed.
 
-              <span
-                className="font-mono text-[10.5px] uppercase tracking-[0.16em]"
-                style={{ color: isActive ? "var(--text-accent)" : "var(--text-faint)" }}
+          Geometry is inline rather than utilities throughout this block because
+          `.ndi-pipe-trace` is unlayered and would outrank a Tailwind `absolute`.
+        */}
+        <span
+          aria-hidden="true"
+          data-pipe-line="1"
+          style={{
+            position: "absolute",
+            top: 24,
+            left: 0,
+            height: 1,
+            overflow: "hidden",
+            zIndex: 2,
+            pointerEvents: "none",
+            width: `calc(${CARD} * ${step + 1} + ${GUTTER * step}px)`,
+            transition: "width 0.45s var(--ease-out)",
+          }}
+        >
+          <span className="ndi-pipe-pulse" />
+        </span>
+
+        {/* The gutters themselves — each card's own trace stops at its edge, so
+            without these the line breaks three times. Each segment overhangs by
+            1px at both ends to cover the card border the in-card trace sits
+            inside of, which would otherwise leave a hairline at every junction. */}
+        {[1, 2, 3].map((index) => (
+          <span
+            key={index}
+            aria-hidden="true"
+            data-pipe-line="1"
+            className="ndi-pipe-trace"
+            data-on={index <= step ? "2" : "0"}
+            style={{
+              position: "absolute",
+              top: 24,
+              height: 1,
+              width: GUTTER + 2,
+              flex: "none",
+              left: `calc(${CARD} * ${index} + ${GUTTER * (index - 1) - 1}px)`,
+            }}
+          />
+        ))}
+
+        <div className="relative grid grid-cols-1 gap-4 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4">
+          {steps.map((entry, index) => {
+            const isActive = index === step;
+            const isDone = index < step;
+            const state = isActive ? "1" : isDone ? "2" : "0";
+            return (
+              <button
+                key={entry.code}
+                type="button"
+                onClick={() => select(index)}
+                onFocus={() => select(index)}
+                onMouseEnter={() => select(index)}
+                aria-current={isActive ? "step" : undefined}
+                className="flex cursor-pointer flex-col gap-2.5 rounded-[14px] border px-[18px] pb-5 pt-4 text-left transition-[border-color,background,box-shadow] duration-300 ease-ndi"
+                style={{
+                  borderColor: isActive ? "rgba(90,201,148,0.45)" : "var(--border-grid)",
+                  background: isActive
+                    ? "linear-gradient(158deg, #1D4A45 0%, #16333A 42%, #111A26 100%)"
+                    : "linear-gradient(158deg, #16333A 0%, #131D2A 58%, #101823 100%)",
+                  boxShadow: isActive ? "var(--glow-sm)" : "none",
+                }}
               >
-                {entry.code}
-              </span>
-              <span
-                className="font-display text-[17px] font-semibold tracking-[-0.02em]"
-                style={{ color: isActive ? "var(--text-strong)" : "var(--text-muted)" }}
-              >
-                {entry.title}
-              </span>
-            </button>
-          );
-        })}
+                {/* The trace runs the full card width, so it bleeds past the padding. */}
+                <span aria-hidden="true" className="-mx-[18px] flex items-center self-stretch">
+                  <span className="ndi-pipe-trace" data-on={state} style={{ flex: "0 0 18px" }} />
+                  <span
+                    data-pipe-dot="1"
+                    className="h-[14px] w-[14px] flex-none rounded-full border transition-[background,border-color] duration-300 ease-ndi"
+                    style={{
+                      borderColor: isActive || isDone ? "var(--accent)" : "var(--border-grid)",
+                      background: isActive
+                        ? "var(--accent)"
+                        : isDone
+                          ? "rgba(90,201,148,0.45)"
+                          : "#0d1420",
+                      boxShadow: isActive ? "var(--glow-sm)" : "none",
+                    }}
+                  />
+                  <span className="ndi-pipe-trace" data-on={state} />
+                </span>
+
+                <span
+                  className="font-mono text-[10.5px] uppercase tracking-[0.16em]"
+                  style={{ color: isActive ? "var(--text-accent)" : "var(--text-faint)" }}
+                >
+                  {entry.code}
+                </span>
+                <span
+                  className="font-display text-[17px] font-semibold tracking-[-0.02em]"
+                  style={{ color: isActive ? "var(--text-strong)" : "var(--text-muted)" }}
+                >
+                  {entry.title}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Detail panel — copy on the left, the three facts as rows on the right. */}

@@ -960,6 +960,11 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   transition: background 0.3s var(--ease-out);
 }
 .ndi-pipe-trace[data-on="1"], .ndi-pipe-trace[data-on="2"] { background: rgba(90, 201, 148, 0.32); }
+/* Below 1001px the rail wraps to two columns, so the connector geometry —
+   which assumes one row of four — no longer describes anything. */
+@media (max-width: 1000px) {
+  [data-pipe-line] { display: none !important; }
+}
 
 /* ---- "Watch tutorial" arrow nudge -------------------------- */
 .ndi-tut svg { transition: transform 0.28s var(--ease-out); }
