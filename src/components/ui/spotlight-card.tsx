@@ -114,7 +114,7 @@ export function GlowCard({
   width,
   height,
   customSize = false,
-  spotlight = 260,
+  spotlight = 200,
   border = 3,
 }: GlowCardProps) {
   const ref = useRef<HTMLDivElement>(null);
