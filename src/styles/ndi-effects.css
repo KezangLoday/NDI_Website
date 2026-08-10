@@ -401,10 +401,9 @@
 .ndi-va:hover::before { opacity: 0.85; filter: blur(17px); }
 .ndi-va svg { transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
 .ndi-va:hover svg { transform: translateX(5px); }
-/* The design turned this outline mint on hover; by request it fades out instead,
-   leaving the fill, glow and inner light to carry the state. */
+/* The design turned this outline mint on hover; by request it stays exactly as
+   it is at rest, leaving the fill, glow and inner light to carry the state. */
 .ndi-va:hover {
-  border-color: transparent !important;
   background: #20303a !important;
   color: #eafff4 !important;
 }
