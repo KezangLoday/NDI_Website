@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 import { siteSettings } from "@/content/siteSettings";
+import { externalLinkProps } from "@/lib/links";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 import { Icon } from "../ui/icons";
@@ -239,6 +240,7 @@ export function SiteFooter() {
                         <Link
                           key={link.label}
                           href={link.href}
+                          {...externalLinkProps(link.href)}
                           className="ndi-fl inline-flex items-center text-[14.5px] text-muted"
                         >
                           {link.label}

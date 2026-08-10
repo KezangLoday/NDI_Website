@@ -81,7 +81,7 @@ export const siteSettings: SiteSettings = {
           },
           {
             label: "Dashboard",
-            href: "#",
+            href: "https://dashboard.ngotag.com/",
             description: "Live view of national ID usage",
             icon: "dashboard",
           },
@@ -113,7 +113,7 @@ export const siteSettings: SiteSettings = {
           { label: "About Us", href: "/company#about" },
           { label: "Careers", href: "/careers" },
           { label: "Media Coverage", href: "/media-coverage" },
-          { label: "Dashboard", href: "#" },
+          { label: "Dashboard", href: "https://dashboard.ngotag.com/" },
         ],
       },
     ],

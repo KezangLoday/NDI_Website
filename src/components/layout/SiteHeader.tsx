@@ -7,6 +7,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 import { navGroups, siteSettings } from "@/content/siteSettings";
 import type { MegaMenu, MegaMenuCard } from "@/content/types";
+import { externalLinkProps } from "@/lib/links";
 import { scrollToContact } from "@/lib/scroll";
 
 import { GridPattern } from "./GridPattern";
@@ -64,6 +65,7 @@ function MegaListLink({ card }: { card: MegaMenuCard }) {
   return (
     <Link
       href={card.href}
+      {...externalLinkProps(card.href)}
       className="ndi-fill flex items-center justify-between gap-3 rounded-xl border border-white/[0.14] bg-white/[0.02] px-4 py-[17px] text-body transition-[background,border-color] duration-[220ms]"
     >
       <div className="min-w-0">
@@ -383,6 +385,7 @@ export function SiteHeader() {
                       <Link
                         key={item.href + item.label}
                         href={item.href}
+                        {...externalLinkProps(item.href)}
                         onClick={closeMobile}
                         className="px-1 py-3 text-[15px] text-body hover:text-accent"
                       >

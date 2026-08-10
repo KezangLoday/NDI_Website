@@ -27,7 +27,10 @@ export function InquiryForm({ services }: { services: ServiceOption[] }) {
 
   return (
     <form
-      data-cta-form="1"
+      // No data-cta-form here: that hook paints the glass fill and conic lens
+      // rim, which belong to Home's boxed contact card. This form is bare on
+      // the CTA panel, as in the design, so the rim drew a stray outline across
+      // the submit button and the note beneath it.
       data-cta-fields="1"
       onSubmit={onSubmit}
       className="relative grid grid-cols-1 gap-3.5 min-[561px]:grid-cols-2"
@@ -59,7 +62,14 @@ export function InquiryForm({ services }: { services: ServiceOption[] }) {
 
       <div className="min-w-0 min-[561px]:col-span-2">
         <span className="sr-only">Service of interest</span>
-        <ServiceSelect options={services} value={service} onChange={setService} />
+        {/* Home's contact form says "Select a service or product"; this one has
+            its own wording in the design. */}
+        <ServiceSelect
+          options={services}
+          value={service}
+          onChange={setService}
+          placeholder="Service of interest — select one"
+        />
       </div>
 
       <label className="min-w-0 min-[561px]:col-span-2">
