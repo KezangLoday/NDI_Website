@@ -44,7 +44,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <div className="relative isolate min-h-screen">
           <Atmosphere />
           <PointerSpotlightProvider />
-          <div className="relative z-[1]">
+          {/* data-ndi-content marks the flow content for useCircuitBands, which
+              must measure this rather than the document: the band layers are
+              absolutely positioned and count toward document height, so sizing
+              them from it would mean they could never shrink again. */}
+          <div data-ndi-content="" className="relative z-[1]">
             <SiteHeader />
             {children}
             <SiteFooter />

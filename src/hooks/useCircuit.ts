@@ -13,19 +13,32 @@ export interface CircuitBand {
 const VARIANTS = ["#ndiTA", "#ndiTB", "#ndiTC"];
 
 /**
- * Tiles the circuit-trace SVG variants down the full document height.
+ * Tiles the circuit-trace SVG variants down the full page height.
  *
  * Band height scales with viewport width exactly as the prototype does, and
  * the set is recomputed on resize and again after layout settles, because
  * fonts and images keep growing the page after first paint.
+ *
+ * Height comes from the flow content, not `document.scrollHeight`. The band
+ * layers are absolutely positioned, so they count toward the document's own
+ * height — measuring that would let them hold the page open at the tallest
+ * size it had ever been, which left dead scroll space below the footer after
+ * navigating from a long page to a short one.
+ *
+ * A ResizeObserver on that content covers every way the page changes height:
+ * client-side navigation, an accordion opening, a tab switching, images
+ * arriving.
  */
 export function useCircuitBands() {
   const [bands, setBands] = useState<CircuitBand[]>([]);
   const [documentHeight, setDocumentHeight] = useState(0);
 
   useEffect(() => {
+    const content = document.querySelector<HTMLElement>("[data-ndi-content]");
+
     const compute = () => {
-      const height = Math.max(document.documentElement.scrollHeight, window.innerHeight);
+      const measured = content ? content.scrollHeight : document.documentElement.scrollHeight;
+      const height = Math.max(measured, window.innerHeight);
       const bandHeight = Math.round(900 * (Math.min(window.innerWidth, 1920) / 1440));
       if (!Number.isFinite(bandHeight) || bandHeight <= 0) return;
       const count = Math.ceil(height / bandHeight);
@@ -52,10 +65,14 @@ export function useCircuitBands() {
     };
     window.addEventListener("resize", onResize);
 
+    const observer = content ? new ResizeObserver(compute) : null;
+    if (content && observer) observer.observe(content);
+
     return () => {
       settle.forEach(clearTimeout);
       clearTimeout(resizeTimer);
       window.removeEventListener("resize", onResize);
+      observer?.disconnect();
     };
   }, []);
 
