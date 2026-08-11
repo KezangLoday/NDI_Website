@@ -647,8 +647,9 @@
    the value block's height, so the two move as one piece rather than the face
    sliding a fixed distance and hoping the value fits under it.
    Only transform and opacity animate. */
-/* 28px of padding + the label + two lines of value + a gap above it. Sized for
-   the longest value in the set; a one-line value just leaves more air. */
+/* Fallback only — bento-grid.tsx measures the value block and overwrites this
+   per card, so a value that wraps to three lines in a narrow column still
+   clears the face. */
 .ndi-bento { --bento-lift: 92px; }
 .ndi-bento-face,
 .ndi-bento-value,

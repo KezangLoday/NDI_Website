@@ -1,7 +1,14 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useEffect, useRef, type ReactNode } from "react";
 
 import { Icon } from "@/components/ui/icons";
 import type { IconName } from "@/components/ui/icons";
+
+/** The card's bottom padding, in px — `p-7` on the face and the value block. */
+const PAD = 28;
+/** Clearance left between the face's last line and the Value label. */
+const GAP = 20;
 
 /**
  * Bento grid — cards of unequal span, each revealing a second layer on hover.
@@ -28,7 +35,7 @@ export function BentoGrid({
 }) {
   return (
     <div
-      className={`grid w-full grid-cols-1 gap-4 min-[901px]:auto-rows-[19rem] min-[901px]:grid-cols-3 ${className}`.trim()}
+      className={`grid w-full grid-cols-1 gap-4 min-[901px]:grid-cols-[1.16fr_0.85fr_1.16fr] ${className}`.trim()}
     >
       {children}
     </div>
@@ -49,9 +56,37 @@ export function BentoCard({
   icon: IconName;
   className?: string;
 }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const valueRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * The face lifts by however tall the value block actually is.
+   *
+   * The source hardcodes `-translate-y-10`. A constant only works while every
+   * value wraps to the same number of lines — this grid has a narrow middle
+   * column where they wrap to three, and any fixed number either collides with
+   * the label or leaves a gap. Measuring costs one ResizeObserver and is right
+   * at every width.
+   */
+  useEffect(() => {
+    const card = cardRef.current;
+    const block = valueRef.current;
+    if (!card || !block) return;
+
+    const apply = () => {
+      card.style.setProperty("--bento-lift", `${Math.round(block.offsetHeight - PAD + GAP)}px`);
+    };
+    apply();
+
+    const observer = new ResizeObserver(apply);
+    observer.observe(block);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
-      className={`ndi-bento group relative flex flex-col justify-end overflow-hidden rounded-2xl border border-grid ${className}`.trim()}
+      ref={cardRef}
+      className={`ndi-bento group relative flex flex-col justify-end overflow-hidden rounded-2xl border border-grid min-[901px]:min-h-[19.5rem] ${className}`.trim()}
       style={{
         background: "var(--grad-card)",
         backdropFilter: "blur(18px)",
@@ -70,7 +105,10 @@ export function BentoCard({
       </div>
 
       {value ? (
-        <div className="ndi-bento-value absolute inset-x-0 bottom-0 flex flex-col gap-1.5 px-7 pb-7">
+        <div
+          ref={valueRef}
+          className="ndi-bento-value absolute inset-x-0 bottom-0 flex flex-col gap-1.5 px-7 pb-7"
+        >
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
             Value
           </span>

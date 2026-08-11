@@ -25,15 +25,20 @@ export const metadata: Metadata = {
 };
 
 /**
- * The reference bento layout, in the order the services are authored: a tall
- * centre column, tall-over-short on the left, short-over-tall on the right.
+ * The bento slots: a tall centre column flanked by two short cards a side.
+ *
+ * The reference runs three rows with the centre spanning all of them. That
+ * cannot work here: the short cards need ~312px to hold their content and the
+ * revealed value, and three rows of that make the centre 968px tall carrying
+ * one card's worth of copy. Two rows keeps the silhouette and halves the
+ * empty space.
  */
 const BENTO_SLOTS = [
-  "min-[901px]:col-start-1 min-[901px]:col-end-2 min-[901px]:row-start-1 min-[901px]:row-end-3",
-  "min-[901px]:col-start-2 min-[901px]:col-end-3 min-[901px]:row-start-1 min-[901px]:row-end-4",
+  "min-[901px]:col-start-1 min-[901px]:col-end-2 min-[901px]:row-start-1 min-[901px]:row-end-2",
+  "min-[901px]:col-start-2 min-[901px]:col-end-3 min-[901px]:row-start-1 min-[901px]:row-end-3",
   "min-[901px]:col-start-3 min-[901px]:col-end-4 min-[901px]:row-start-1 min-[901px]:row-end-2",
-  "min-[901px]:col-start-1 min-[901px]:col-end-2 min-[901px]:row-start-3 min-[901px]:row-end-4",
-  "min-[901px]:col-start-3 min-[901px]:col-end-4 min-[901px]:row-start-2 min-[901px]:row-end-4",
+  "min-[901px]:col-start-1 min-[901px]:col-end-2 min-[901px]:row-start-2 min-[901px]:row-end-3",
+  "min-[901px]:col-start-3 min-[901px]:col-end-4 min-[901px]:row-start-2 min-[901px]:row-end-3",
 ];
 
 /** An advanced service: a plainer card, three across. */
@@ -119,7 +124,7 @@ export default async function OrganizationsPage() {
           />
         </Reveal>
         <Reveal className="mt-10">
-          <BentoGrid className="min-[901px]:grid-rows-3">
+          <BentoGrid className="min-[901px]:grid-rows-2">
             {core.map((service, index) => (
               <BentoCard
                 key={service.id}
