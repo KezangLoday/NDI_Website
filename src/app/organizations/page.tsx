@@ -5,7 +5,6 @@ import { IntegrationPipeline } from "@/components/pages/IntegrationPipeline";
 import { InquiryForm } from "@/components/pages/InquiryForm";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { Reveal } from "@/components/ui/Reveal";
-import { RuleGrid, RuleItem } from "@/components/ui/RuleGrid";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { GradientButton } from "@/components/ui/GradientButton";
 import { Icon } from "@/components/ui/icons";
@@ -75,23 +74,30 @@ export default async function OrganizationsPage() {
           </div>
         </Reveal>
 
-        {/* Four facts, divided rather than boxed — they are statements about the
-            platform, not comparable objects. */}
-        <Reveal
-          delay={0.05}
-          data-ndi-4col="1"
-          className="mt-16 grid grid-cols-2 gap-x-10 min-[1001px]:grid-cols-4"
-        >
-          {pills.map((pill) => (
-            <div key={pill.id} className="border-t border-subtle pb-2 pt-5">
-              <div className="font-display text-[24px] font-semibold tracking-[-0.02em] text-strong">
-                {pill.label}
-              </div>
-              <div className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
-                {pill.sublabel}
-              </div>
-            </div>
-          ))}
+        {/* Thesis: these four support the headline, they do not compete with
+            it. As boxes — and then as a divided row — they read as a second
+            headline block and split the hero's attention four ways. Set as one
+            running line they stay legible, take a quarter of the vertical
+            space, and let the CTA remain the only thing asking to be clicked. */}
+        <Reveal delay={0.05} className="mt-12 max-w-[1000px]">
+          <p className="flex flex-wrap items-baseline gap-x-3 gap-y-2.5 text-[15px] leading-[1.5] text-muted">
+            {pills.map((pill, index) => (
+              <span key={pill.id} className="inline-flex items-baseline gap-2.5">
+                {index > 0 ? (
+                  <span
+                    aria-hidden="true"
+                    className="mr-0.5 h-[3px] w-[3px] translate-y-[-4px] rounded-full bg-accent"
+                  />
+                ) : null}
+                <span className="font-display text-[16px] font-semibold tracking-[-0.01em] text-strong">
+                  {pill.label}
+                </span>
+                <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
+                  {pill.sublabel}
+                </span>
+              </span>
+            ))}
+          </p>
         </Reveal>
       </PageSection>
 
@@ -130,34 +136,46 @@ export default async function OrganizationsPage() {
             size="clamp(30px,3.6vw,44px)"
           />
         </Reveal>
-        <RuleGrid
-          data-ndi-3col="1"
-          className="mt-9 grid-cols-1 min-[701px]:grid-cols-2 min-[1001px]:grid-cols-3"
-        >
+        {/* Thesis: these are reference material — niche services a technical
+            reader looks up, not a showcase to browse. A term/definition table
+            gives every name the same left edge to scan down, and lets the
+            explanation run at a readable measure instead of being squeezed into
+            a third of the width. It also reads as clearly secondary to the
+            bento above, which is what it is. */}
+        <div className="mt-9 flex flex-col">
           {advanced.map((service, index) => (
-            <Reveal key={service.id} delay={0.05 * (index + 1)}>
-              <RuleItem icon={service.icon} title={service.title}>
-                {service.useCase}
-              </RuleItem>
+            <Reveal key={service.id} delay={0.04 * (index + 1)}>
+              <div className="grid grid-cols-1 gap-x-12 gap-y-2 border-t border-subtle py-6 min-[761px]:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
+                <div className="flex items-start gap-3">
+                  <span className="mt-[1px] flex-none text-accent" aria-hidden="true">
+                    <Icon name={service.icon} size={19} />
+                  </span>
+                  <h3 className="font-display text-[16.5px] font-semibold tracking-[-0.01em] text-strong">
+                    {service.title}
+                  </h3>
+                </div>
+                <p className="max-w-[62ch] text-[14.5px] leading-[1.65] text-muted min-[761px]:pt-px">
+                  {service.useCase}
+                </p>
+              </div>
             </Reveal>
           ))}
-          {/* The prompt is the last cell of the same grid, as a line rather
-              than a panel. */}
-          <Reveal delay={0.05 * (advanced.length + 1)}>
-            <div className="border-t border-subtle pb-8 pt-5">
-              <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
+
+          <Reveal delay={0.04 * (advanced.length + 1)}>
+            <div className="grid grid-cols-1 gap-x-12 gap-y-2 border-y border-subtle py-6 min-[761px]:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
+              <div className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
                 — Not sure which fits?
               </div>
               <a
                 href="#inquiry"
-                className="ndi-va inline-flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-[-0.01em] text-strong"
+                className="ndi-va inline-flex w-max items-center gap-2.5 font-display text-[16.5px] font-semibold tracking-[-0.01em] text-strong"
               >
                 Talk to our integration team
-                <Icon name="arrowRight" size={17} strokeWidth={2} />
+                <Icon name="arrowRight" size={16} strokeWidth={2} />
               </a>
             </div>
           </Reveal>
-        </RuleGrid>
+        </div>
       </PageSection>
 
       {/* ============ WHY PARTNER ============ */}

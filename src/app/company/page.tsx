@@ -4,7 +4,6 @@ import Image from "next/image";
 import { PageSection } from "@/components/layout/PageHero";
 import { GlowPanel } from "@/components/ui/Cards";
 import { Reveal } from "@/components/ui/Reveal";
-import { RuleGrid, RuleItem } from "@/components/ui/RuleGrid";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { getMissionStatements, getStory, getTeam, getVisionPillars } from "@/content";
 import type { TeamMember } from "@/content/types";
@@ -170,9 +169,7 @@ export default async function CompanyPage() {
         </Reveal>
       </PageSection>
 
-      {/* ============ STORY ============
-          Four divided columns rather than four cards — the copy is prose, and
-          a rule is enough to separate one point from the next. */}
+      {/* ============ STORY ============ */}
       <PageSection data-circuit-next="" className="py-[72px]">
         <Reveal className="max-w-[820px]">
           <Eyebrow>— Our story</Eyebrow>
@@ -184,21 +181,30 @@ export default async function CompanyPage() {
           </p>
         </Reveal>
 
-        <RuleGrid
-          data-ndi-4col="1"
-          className="mt-9 grid-cols-1 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4"
-        >
+        {/* Thesis: this is prose, and prose needs measure. Four columns gave
+            each sentence roughly 24 characters a line and six lines to fall
+            down, which is unreadable however it is decorated. Full width with a
+            hanging number puts every sentence on two lines at a comfortable
+            measure, and the numerals — set large and faint in the gutter — are
+            what carries the rhythm the columns were trying to supply. */}
+        <div className="mt-10 flex max-w-[880px] flex-col">
           {story.bullets.map((bullet, index) => (
-            <Reveal key={bullet} delay={0.05 * (index + 1)}>
-              <RuleItem
-                eyebrow={String(index + 1).padStart(2, "0")}
-                title={BULLET_KICKERS[index] ?? ""}
-              >
-                {bullet}
-              </RuleItem>
+            <Reveal key={bullet} delay={0.06 * (index + 1)}>
+              <div className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-6 border-t border-subtle py-7 min-[641px]:gap-x-10">
+                <span
+                  aria-hidden="true"
+                  className="font-display text-[26px] font-semibold leading-none tracking-[-0.02em] text-faint/70 min-[641px]:text-[34px]"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <p className="text-[16px] leading-[1.7] text-body [text-wrap:pretty]">
+                  <span className="font-semibold text-strong">{BULLET_KICKERS[index]}</span>{" "}
+                  {bullet.replace(new RegExp(`^${BULLET_KICKERS[index]}\\s*`), "")}
+                </p>
+              </div>
             </Reveal>
           ))}
-        </RuleGrid>
+        </div>
       </PageSection>
 
       {/* ============ VISION ============ */}
