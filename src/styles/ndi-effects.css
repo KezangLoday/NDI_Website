@@ -183,7 +183,11 @@
   width: 180px;
   justify-content: center;
   box-sizing: border-box;
-  transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out), border-color 0.5s var(--ease-out);
+  /* Transform runs fast, the glow slowly. Both were 0.5s, which meant the
+     press — the one moment the user is watching for a response — took half a
+     second to register. Displacement is feedback and belongs in the 100-160ms
+     band; the glow is atmosphere and can take its time. */
+  transition: transform 0.16s var(--ease-out), box-shadow 0.5s var(--ease-out), border-color 0.5s var(--ease-out);
 }
 .ndi-store:hover {
   transform: translateY(-3px);
@@ -213,7 +217,7 @@
 .ndi-store:hover .ndi-store-icon { transform: scale(1.08); }
 
 /* Same sweep + glow, for the full-width CTA submit button */
-.ndi-sweepbtn { transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out); }
+.ndi-sweepbtn { transition: transform 0.16s var(--ease-out), box-shadow 0.5s var(--ease-out); }
 .ndi-sweepbtn:hover { transform: translateY(-3px); box-shadow: var(--glow-md); }
 .ndi-sweepbtn:active { transform: scale(0.99) translateY(0); }
 .ndi-sweepbtn:hover .ndi-store-sweep { transform: translateX(100%); }
@@ -579,7 +583,9 @@
   opacity: 0;
   transform: translate3d(0, -20%, 0);
   filter: blur(6px);
-  transition: opacity 0.3s ease-in, filter 0.3s ease-in, transform 0.3s ease-in;
+  /* Exits are still ease-out. ease-in starts slow, holding the outgoing logo
+     on screen exactly while the incoming one is arriving. */
+  transition: opacity 0.3s var(--ease-out), filter 0.3s var(--ease-out), transform 0.3s var(--ease-out);
 }
 .ndi-lc-item img { filter: brightness(0) invert(1); opacity: 0.82; transition: opacity 0.35s var(--ease-out); }
 .ndi-lc-col:hover .ndi-lc-item img { opacity: 1; }
