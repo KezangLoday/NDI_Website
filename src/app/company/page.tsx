@@ -4,6 +4,7 @@ import Image from "next/image";
 import { PageSection } from "@/components/layout/PageHero";
 import { GlowPanel } from "@/components/ui/Cards";
 import { Reveal } from "@/components/ui/Reveal";
+import { RuleGrid, RuleItem } from "@/components/ui/RuleGrid";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { getMissionStatements, getStory, getTeam, getVisionPillars } from "@/content";
 import type { TeamMember } from "@/content/types";
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 const HERO_PILLS = ["Security", "Privacy", "Consent"];
 
 /**
- * The leading verb of each story bullet, used as its card's kicker.
+ * The leading verb of each story bullet, used as its heading.
  *
  * Taken from the copy rather than written fresh: the four bullets already open
  * on a verb, and lifting it gives the grid a heading without inventing one.
@@ -170,8 +171,8 @@ export default async function CompanyPage() {
       </PageSection>
 
       {/* ============ STORY ============
-          The four points were a wall of bulleted prose. Same copy, now a card
-          each, so the section can be scanned before it is read. */}
+          Four divided columns rather than four cards — the copy is prose, and
+          a rule is enough to separate one point from the next. */}
       <PageSection data-circuit-next="" className="py-[72px]">
         <Reveal className="max-w-[820px]">
           <Eyebrow>— Our story</Eyebrow>
@@ -183,32 +184,21 @@ export default async function CompanyPage() {
           </p>
         </Reveal>
 
-        <div
+        <RuleGrid
           data-ndi-4col="1"
-          className="mt-9 grid grid-cols-1 gap-[18px] min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4"
+          className="mt-9 grid-cols-1 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4"
         >
           {story.bullets.map((bullet, index) => (
-            <Reveal key={bullet} delay={0.05 * (index + 1)} className="h-full">
-              <GlowPanel
-                className="flex flex-col p-[26px]"
-                glowColor={index % 2 === 0 ? "mint" : "spring"}
+            <Reveal key={bullet} delay={0.05 * (index + 1)}>
+              <RuleItem
+                eyebrow={String(index + 1).padStart(2, "0")}
+                title={BULLET_KICKERS[index] ?? ""}
               >
-                <span
-                  aria-hidden="true"
-                  className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mb-2.5 mt-4 font-display text-[17px] font-semibold text-strong">
-                  {BULLET_KICKERS[index] ?? ""}
-                </h3>
-                <p className="text-[14.5px] leading-[1.6] text-muted [text-wrap:pretty]">
-                  {bullet}
-                </p>
-              </GlowPanel>
+                {bullet}
+              </RuleItem>
             </Reveal>
           ))}
-        </div>
+        </RuleGrid>
       </PageSection>
 
       {/* ============ VISION ============ */}

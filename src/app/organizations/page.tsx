@@ -5,6 +5,7 @@ import { IntegrationPipeline } from "@/components/pages/IntegrationPipeline";
 import { InquiryForm } from "@/components/pages/InquiryForm";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { Reveal } from "@/components/ui/Reveal";
+import { RuleGrid, RuleItem } from "@/components/ui/RuleGrid";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { GradientButton } from "@/components/ui/GradientButton";
 import { Icon } from "@/components/ui/icons";
@@ -16,7 +17,6 @@ import {
   getSiteSettings,
   getWhyPartnerRows,
 } from "@/content";
-import type { OrgService } from "@/content/types";
 
 export const metadata: Metadata = {
   title: "For Organizations — Bhutan NDI",
@@ -40,21 +40,6 @@ const BENTO_SLOTS = [
   "min-[901px]:col-start-1 min-[901px]:col-end-2 min-[901px]:row-start-2 min-[901px]:row-end-3",
   "min-[901px]:col-start-3 min-[901px]:col-end-4 min-[901px]:row-start-2 min-[901px]:row-end-3",
 ];
-
-/** An advanced service: a plainer card, three across. */
-function AdvancedCard({ service }: { service: OrgService }) {
-  return (
-    <div className="ndi-spot ndi-adv-card flex h-full flex-col gap-3 rounded-2xl border border-grid bg-white/[0.02] p-6">
-      <div className="ndi-spot-halo" />
-      <div className="ndi-spot-fill" />
-      <span className="text-accent">
-        <Icon name={service.icon} size={20} />
-      </span>
-      <div className="font-display text-[16.5px] font-semibold text-strong">{service.title}</div>
-      <p className="text-[13.5px] leading-[1.6] text-muted">{service.useCase}</p>
-    </div>
-  );
-}
 
 export default async function OrganizationsPage() {
   const [pills, services, whyRows, steps, options, settings] = await Promise.all([
@@ -90,18 +75,15 @@ export default async function OrganizationsPage() {
           </div>
         </Reveal>
 
+        {/* Four facts, divided rather than boxed — they are statements about the
+            platform, not comparable objects. */}
         <Reveal
           delay={0.05}
           data-ndi-4col="1"
-          className="mt-16 grid grid-cols-2 gap-4 min-[1001px]:grid-cols-4"
+          className="mt-16 grid grid-cols-2 gap-x-10 min-[1001px]:grid-cols-4"
         >
           {pills.map((pill) => (
-            <div
-              key={pill.id}
-              className="ndi-spot rounded-2xl border border-grid bg-white/[0.02] p-[22px]"
-            >
-              <div className="ndi-spot-halo" />
-              <div className="ndi-spot-fill" />
+            <div key={pill.id} className="border-t border-subtle pb-2 pt-5">
               <div className="font-display text-[24px] font-semibold tracking-[-0.02em] text-strong">
                 {pill.label}
               </div>
@@ -148,33 +130,34 @@ export default async function OrganizationsPage() {
             size="clamp(30px,3.6vw,44px)"
           />
         </Reveal>
-        <div data-ndi-3col="1" className="mt-9 grid grid-cols-1 gap-4 min-[701px]:grid-cols-2 min-[1001px]:grid-cols-3">
+        <RuleGrid
+          data-ndi-3col="1"
+          className="mt-9 grid-cols-1 min-[701px]:grid-cols-2 min-[1001px]:grid-cols-3"
+        >
           {advanced.map((service, index) => (
-            <Reveal key={service.id} delay={0.05 * (index + 1)} className="h-full">
-              <AdvancedCard service={service} />
+            <Reveal key={service.id} delay={0.05 * (index + 1)}>
+              <RuleItem icon={service.icon} title={service.title}>
+                {service.useCase}
+              </RuleItem>
             </Reveal>
           ))}
-          {/* The prompt sits as the last cell of the same grid, not below it. */}
-          <Reveal delay={0.05 * (advanced.length + 1)} className="h-full">
-            <a
-              href="#inquiry"
-              className="ndi-advcta flex h-full flex-col justify-between gap-5 rounded-2xl border p-6"
-              style={{
-                borderColor: "rgba(90,201,148,0.25)",
-                background:
-                  "radial-gradient(120% 90% at 20% 0%, rgba(90,201,148,0.14), rgba(90,201,148,0.02) 60%, transparent)",
-              }}
-            >
-              <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
+          {/* The prompt is the last cell of the same grid, as a line rather
+              than a panel. */}
+          <Reveal delay={0.05 * (advanced.length + 1)}>
+            <div className="border-t border-subtle pb-8 pt-5">
+              <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
                 — Not sure which fits?
-              </span>
-              <span className="inline-flex items-center gap-2.5 font-display text-[18px] font-semibold tracking-[-0.02em] text-strong">
+              </div>
+              <a
+                href="#inquiry"
+                className="ndi-va inline-flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-[-0.01em] text-strong"
+              >
                 Talk to our integration team
                 <Icon name="arrowRight" size={17} strokeWidth={2} />
-              </span>
-            </a>
+              </a>
+            </div>
           </Reveal>
-        </div>
+        </RuleGrid>
       </PageSection>
 
       {/* ============ WHY PARTNER ============ */}

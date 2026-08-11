@@ -1,7 +1,6 @@
-import { SpotlightCard } from "@/components/ui/Cards";
 import { Reveal } from "@/components/ui/Reveal";
+import { RuleGrid, RuleItem } from "@/components/ui/RuleGrid";
 import { SectionHeader, ViewAllLink } from "@/components/ui/SectionHeader";
-import { Icon } from "@/components/ui/icons";
 import { getCapabilities } from "@/content";
 
 export async function Capabilities() {
@@ -17,23 +16,15 @@ export async function Capabilities() {
         />
       </Reveal>
 
-      <div className="mt-10 grid grid-cols-1 gap-[18px] min-[901px]:grid-cols-3">
+      <RuleGrid className="mt-10 grid-cols-1 min-[561px]:grid-cols-2 min-[901px]:grid-cols-3">
         {capabilities.map((capability, index) => (
-          <Reveal key={capability.id} delay={0.05 * (index + 1)} className="h-full">
-            <SpotlightCard glowColor="mint">
-              <span className="inline-flex h-6 flex-none items-center text-accent">
-                <Icon name={capability.icon} size={22} />
-              </span>
-              <div>
-                <h3 className="mb-[5px] font-display text-[17px] font-semibold text-strong">
-                  {capability.title}
-                </h3>
-                <p className="text-sm leading-[1.55] text-muted">{capability.description}</p>
-              </div>
-            </SpotlightCard>
+          <Reveal key={capability.id} delay={0.05 * (index + 1)}>
+            <RuleItem icon={capability.icon} title={capability.title}>
+              {capability.description}
+            </RuleItem>
           </Reveal>
         ))}
-      </div>
+      </RuleGrid>
     </section>
   );
 }
