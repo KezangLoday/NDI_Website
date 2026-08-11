@@ -75,7 +75,7 @@ export function GlossaryBrowser({ terms }: { terms: GlossaryTerm[] }) {
           no terms stay in place but dim, rather than being dropped. */}
       <nav
         aria-label="Jump to letter"
-        className="mt-[30px] flex flex-wrap gap-1 rounded-[14px] border border-grid bg-white/[0.02] px-3 py-2.5"
+        className="mt-[30px] flex flex-wrap gap-1 [@media(hover:none)]:gap-2 rounded-[14px] border border-grid bg-white/[0.02] px-3 py-2.5"
       >
         {ALPHABET.map((letter) => {
           const has = populated.has(letter);
@@ -83,7 +83,7 @@ export function GlossaryBrowser({ terms }: { terms: GlossaryTerm[] }) {
             <a
               key={letter}
               href={`#g-${letter.toLowerCase()}`}
-              className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[9px] font-mono text-[12.5px] text-accent transition-colors duration-[220ms] hover:bg-[rgba(90,201,148,0.12)]"
+              className="inline-flex h-[34px] w-[34px] [@media(hover:none)]:h-11 [@media(hover:none)]:w-11 items-center justify-center rounded-[9px] font-mono text-[12.5px] text-accent transition-colors duration-[220ms] hover:bg-[rgba(90,201,148,0.12)]"
             >
               {letter}
             </a>
@@ -91,7 +91,7 @@ export function GlossaryBrowser({ terms }: { terms: GlossaryTerm[] }) {
             <span
               key={letter}
               aria-disabled="true"
-              className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[9px] font-mono text-[12.5px] text-faint opacity-40"
+              className="inline-flex h-[34px] w-[34px] [@media(hover:none)]:h-11 [@media(hover:none)]:w-11 items-center justify-center rounded-[9px] font-mono text-[12.5px] text-faint opacity-40"
             >
               {letter}
             </span>

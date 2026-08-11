@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // The Claude Design handoff bundle — reference prototypes, not app source.
     "project/**",
+    // Vendored agent skills — third-party code, not ours to lint or fix.
+    ".claude/skills/**",
+    ".agents/**",
   ]),
 ]);
 

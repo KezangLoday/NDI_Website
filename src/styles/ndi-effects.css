@@ -940,13 +940,19 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
 [data-tabbtn]:hover { color: var(--text-strong); }
 
 /* ---- Integration pipeline (Organizations) ------------------ */
+/* Travels on `transform`, not `left`. This runs forever while the section is
+   on screen, and `left` invalidates layout on every frame where a transform
+   stays on the compositor. The end stop is the track's own width, published as
+   --pulse-end, because a percentage translate would resolve against the pulse
+   (190px) rather than the track. */
 @keyframes ndiTraceFlow {
-  from { left: -190px; }
-  to { left: 100%; }
+  from { transform: translateX(-190px); }
+  to { transform: translateX(var(--pulse-end, 100%)); }
 }
 .ndi-pipe-pulse {
   position: absolute;
   top: 0;
+  left: 0;
   height: 1px;
   width: 190px;
   pointer-events: none;
@@ -981,6 +987,24 @@ select option { background: #101827; color: #e9eef6; }
 /* Cards that are whole-card links lift on hover. */
 .ndi-lift { transition: transform var(--dur), box-shadow var(--dur); }
 .ndi-lift:hover { transform: translateY(-3px); }
+
+/* ---- Hover motion on touch --------------------------------
+   A tap on a touch screen applies :hover and leaves it applied until you tap
+   something else, so every hover-only displacement sticks: cards stay lifted,
+   footer links stay shifted, arrows stay nudged. Neutralised where the pointer
+   is coarse. Only displacement is undone — colour, glow and the one-shot
+   sweeps still fire, because those read as tap feedback rather than as a state
+   the element is stuck in. */
+@media (hover: none) {
+  .ndi-store:hover,
+  .ndi-sweepbtn:hover,
+  .ndi-lift:hover,
+  .ndi-role-card:hover,
+  .ndi-fl:hover,
+  .ndi-store:hover .ndi-store-icon,
+  .ndi-va:hover svg,
+  .ndi-tut:hover svg { transform: none; }
+}
 
 /* Careers role cards: lift with a mint rim on hover. */
 .ndi-role-card { transition: transform var(--dur), box-shadow var(--dur); }

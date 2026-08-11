@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { PipelineStep } from "@/content/types";
@@ -67,6 +67,9 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
 
   const active = steps[step];
 
+  /** Left edge to the right edge of the active card: the run already lit. */
+  const TRACK = `calc(${CARD} * ${step + 1} + ${GUTTER * step}px)`;
+
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       {/* Rail — a dot per step on a trace that lights up as far as you have got. */}
@@ -93,9 +96,12 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
             overflow: "hidden",
             zIndex: 2,
             pointerEvents: "none",
-            width: `calc(${CARD} * ${step + 1} + ${GUTTER * step}px)`,
+            width: TRACK,
+            // The pulse translates rather than animating `left`, so it needs
+            // the track's width as a length — see ndiTraceFlow.
+            "--pulse-end": TRACK,
             transition: "width 0.45s var(--ease-out)",
-          }}
+          } as CSSProperties}
         >
           <span className="ndi-pipe-pulse" />
         </span>
