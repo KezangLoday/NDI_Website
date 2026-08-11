@@ -17,11 +17,11 @@ const CARD = `((100% - ${GUTTER * 3}px) / 4)`;
  * Where the trace sits, measured from the top of the rail.
  *
  * Inside a card the trace is flex-centred against the 14px dot, which lands it
- * on a half pixel: 16px of padding + (14 - 1) / 2. The connectors are
+ * on a half pixel: 1px border + 16px padding + (14 - 1) / 2. The connectors are
  * absolutely positioned and have to match that exactly — a whole 24px looks
  * level in isolation but steps by a pixel at every card edge.
  */
-const TRACE_TOP = 16 + (14 - 1) / 2;
+const TRACE_TOP = 1 + 16 + (14 - 1) / 2;
 
 /**
  * The four-step integration path.
@@ -106,8 +106,10 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
           <span className="ndi-pipe-pulse" />
         </span>
 
-        {/* The gutters between columns — each step's own trace stops at its
-            column edge, so without these the line breaks three times. */}
+        {/* The gutters themselves — each card's own trace stops at its edge, so
+            without these the line breaks three times. Each segment overhangs by
+            1px at both ends to cover the card border the in-card trace sits
+            inside of, which would otherwise leave a hairline at every junction. */}
         {[1, 2, 3].map((index) => (
           <span
             key={index}
@@ -119,9 +121,9 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
               position: "absolute",
               top: TRACE_TOP,
               height: 1,
-              width: GUTTER,
+              width: GUTTER + 2,
               flex: "none",
-              left: `calc(${CARD} * ${index} + ${GUTTER * (index - 1)}px)`,
+              left: `calc(${CARD} * ${index} + ${GUTTER * (index - 1) - 1}px)`,
             }}
           />
         ))}
@@ -139,12 +141,18 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
                 onFocus={() => select(index)}
                 onMouseEnter={() => select(index)}
                 aria-current={isActive ? "step" : undefined}
-                // No box: the dot on the trace already marks the step, and a
-                // border around each one turned a timeline into four tiles.
-                className="flex cursor-pointer flex-col gap-2.5 pb-5 pt-4 text-left"
+                className="flex cursor-pointer flex-col gap-2.5 rounded-[14px] border px-[18px] pb-5 pt-4 text-left transition-[border-color,background,box-shadow] duration-300 ease-ndi"
+                style={{
+                  borderColor: isActive ? "rgba(90,201,148,0.45)" : "var(--border-grid)",
+                  background: isActive
+                    ? "linear-gradient(158deg, #1D4A45 0%, #16333A 42%, #111A26 100%)"
+                    : "linear-gradient(158deg, #16333A 0%, #131D2A 58%, #101823 100%)",
+                  boxShadow: isActive ? "var(--glow-sm)" : "none",
+                }}
               >
-                {/* The trace runs the full column width. */}
-                <span aria-hidden="true" className="flex items-center self-stretch">
+                {/* The trace runs the full card width, so it bleeds past the padding. */}
+                <span aria-hidden="true" className="-mx-[18px] flex items-center self-stretch">
+                  <span className="ndi-pipe-trace" data-on={state} style={{ flex: "0 0 18px" }} />
                   <span
                     data-pipe-dot="1"
                     className="h-[14px] w-[14px] flex-none rounded-full border transition-[background,border-color] duration-300 ease-ndi"
