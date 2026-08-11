@@ -85,16 +85,7 @@ function register(card: HTMLElement) {
   };
 }
 
-interface GlowCardProps {
-  children: ReactNode;
-  className?: string;
-  style?: CSSProperties;
-  glowColor?: GlowColor;
-  size?: keyof typeof SIZES;
-  width?: string | number;
-  height?: string | number;
-  /** Skip the preset sizing and let `className` / `width` / `height` decide. */
-  customSize?: boolean;
+interface GlowOptions {
   /** Spotlight diameter in px. */
   spotlight?: number;
   /** Rim thickness in px. */
@@ -104,6 +95,64 @@ interface GlowCardProps {
    * makes the rim straddle the card's own border rather than ring it.
    */
   proud?: number;
+}
+
+/**
+ * Subscribes an element to the shared pointer listener for as long as it is
+ * mounted. Attach the returned ref to the element the rim should trace.
+ */
+export function useGlowCard<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+
+  useEffect(() => {
+    const card = ref.current;
+    if (!card) return;
+    return register(card);
+  }, []);
+
+  return ref;
+}
+
+/** The custom properties ndi-effects.css reads to draw the rim. */
+export function glowVars(
+  glowColor: GlowColor,
+  { spotlight = 200, border = 2, proud = 1 }: GlowOptions = {},
+): CSSProperties {
+  const { base, spread, sat, light, bright } = GLOW_COLORS[glowColor];
+  return {
+    "--glow-base": base,
+    "--glow-spread": spread,
+    "--glow-sat": sat,
+    "--glow-light": light,
+    "--glow-bright": bright,
+    "--glow-size": spotlight,
+    "--glow-border": border,
+    "--glow-out": proud,
+  } as CSSProperties;
+}
+
+/**
+ * The rim and its bloom. Goes inside any element carrying `ndi-glow-card`, the
+ * glow custom properties and the ref from `useGlowCard`.
+ */
+export function GlowLayers() {
+  return (
+    <span aria-hidden="true" className="ndi-glow-rim">
+      <span className="ndi-glow-bloom" />
+    </span>
+  );
+}
+
+interface GlowCardProps extends GlowOptions {
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+  glowColor?: GlowColor;
+  size?: keyof typeof SIZES;
+  width?: string | number;
+  height?: string | number;
+  /** Skip the preset sizing and let `className` / `width` / `height` decide. */
+  customSize?: boolean;
 }
 
 /**
@@ -132,44 +181,24 @@ export function GlowCard({
   width,
   height,
   customSize = false,
-  spotlight = 200,
-  border = 2,
-  proud = 1,
+  ...glow
 }: GlowCardProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { base, spread, sat, light, bright } = GLOW_COLORS[glowColor];
-
-  useEffect(() => {
-    const card = ref.current;
-    if (!card) return;
-    return register(card);
-  }, []);
+  const ref = useGlowCard<HTMLDivElement>();
 
   return (
     <div
       ref={ref}
       className={`ndi-glow-card relative ${customSize ? "" : `${SIZES[size]} aspect-[3/4]`} ${className}`.trim()}
-      style={
-        {
-          "--glow-base": base,
-          "--glow-spread": spread,
-          "--glow-sat": sat,
-          "--glow-light": light,
-          "--glow-bright": bright,
-          "--glow-size": spotlight,
-          "--glow-border": border,
-          "--glow-out": proud,
-          ...(width !== undefined && { width: typeof width === "number" ? `${width}px` : width }),
-          ...(height !== undefined && {
-            height: typeof height === "number" ? `${height}px` : height,
-          }),
-          ...style,
-        } as CSSProperties
-      }
+      style={{
+        ...glowVars(glowColor, glow),
+        ...(width !== undefined && { width: typeof width === "number" ? `${width}px` : width }),
+        ...(height !== undefined && {
+          height: typeof height === "number" ? `${height}px` : height,
+        }),
+        ...style,
+      }}
     >
-      <span aria-hidden="true" className="ndi-glow-rim">
-        <span className="ndi-glow-bloom" />
-      </span>
+      <GlowLayers />
       {children}
     </div>
   );

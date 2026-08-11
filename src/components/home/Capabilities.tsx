@@ -20,7 +20,7 @@ export async function Capabilities() {
       <div className="mt-10 grid grid-cols-1 gap-[18px] min-[901px]:grid-cols-3">
         {capabilities.map((capability, index) => (
           <Reveal key={capability.id} delay={0.05 * (index + 1)} className="h-full">
-            <SpotlightCard>
+            <SpotlightCard glowColor="mint">
               <span className="inline-flex h-6 flex-none items-center text-accent">
                 <Icon name={capability.icon} size={22} />
               </span>

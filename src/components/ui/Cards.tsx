@@ -1,8 +1,8 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 
-import { GlowCard, type GlowColor } from "./spotlight-card";
+import { GlowCard, GlowLayers, glowVars, useGlowCard, type GlowColor } from "./spotlight-card";
 
 /** Shared card fill from the design — the glass pass in ndi-effects.css sits on top. */
 const CARD_BACKGROUND =
@@ -49,6 +49,15 @@ interface SpotlightCardProps {
   hoverLift?: boolean;
   /** Row gap between the card's children, in px. Some cards set their own margins. */
   gap?: number;
+  /**
+   * Wear the glow rim instead of the design's own cursor-tracked ring.
+   *
+   * The two cannot coexist: the rim's z-index rules would drag `.ndi-spot`'s
+   * halo and fill above it. Nothing is lost by the swap — the ring never drew,
+   * because its mask intersects a transparent padding-box layer with a white
+   * border-box one, which is empty by definition.
+   */
+  glowColor?: GlowColor;
 }
 
 export function SpotlightCard({
@@ -58,22 +67,37 @@ export function SpotlightCard({
   className = "",
   hoverLift = false,
   gap = 14,
+  glowColor,
 }: SpotlightCardProps) {
   const Tag = as;
+  const ref = useGlowCard<HTMLElement>();
+  const glowing = glowColor !== undefined;
+
   return (
     <Tag
+      // `Tag` is a union, so React types its ref as an intersection of both
+      // element refs. Only one of them is ever rendered — one cast at the seam.
+      ref={glowing ? (ref as Ref<HTMLDivElement & HTMLAnchorElement>) : undefined}
       href={href}
+      data-glow={glowing ? "" : undefined}
       className={`ndi-spot flex flex-col items-start rounded-2xl p-[26px] ${
-        hoverLift ? "ndi-lift" : ""
-      } ${className}`.trim()}
+        glowing ? "ndi-glow-card" : ""
+      } ${hoverLift ? "ndi-lift" : ""} ${className}`.trim()}
       style={{
         gap,
         background: CARD_BACKGROUND,
         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07), 0 18px 40px -26px rgba(0,0,0,0.9)",
+        ...(glowColor && glowVars(glowColor)),
       }}
     >
-      <div className="ndi-spot-halo" />
-      <div className="ndi-spot-fill" />
+      {glowing ? (
+        <GlowLayers />
+      ) : (
+        <>
+          <div className="ndi-spot-halo" />
+          <div className="ndi-spot-fill" />
+        </>
+      )}
       {children}
     </Tag>
   );

@@ -460,7 +460,12 @@
   opacity: 0.95;
 }
 .ndi-spot-halo::before { inset: -4px; border-width: 4px; border-radius: calc(var(--rad) + 4px); }
-.ndi-spot > *:not(.ndi-spot-halo):not(.ndi-spot-fill) { position: relative; }
+/* .ndi-glow-rim is excluded because this rule outranks its own
+   `position: absolute` and would drop the rim into the content flow. */
+.ndi-spot > *:not(.ndi-spot-halo):not(.ndi-spot-fill):not(.ndi-glow-rim) { position: relative; }
+/* Cards wearing the glow rim drop this ring entirely — see SpotlightCard. */
+.ndi-spot[data-glow]::before,
+.ndi-spot[data-glow]::after { content: none; }
 
 /* ---- "What you can do" cards -------------------------------
    The design gave these an evervault-style cursor reveal (a gradient and a
