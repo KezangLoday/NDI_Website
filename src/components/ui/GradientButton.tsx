@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { externalLinkProps } from "@/lib/links";
+
 /** The design's primary CTA gradient. */
 const GRADIENT =
   "linear-gradient(115deg, #8CF0C0 0%, #6FE0A9 24%, #4FC091 56%, #2FA189 80%, #1E8189 100%)";
@@ -23,6 +25,9 @@ export function GradientButton({
   return (
     <a
       href={href}
+      // Opens in a new tab when the href leaves the site — a no-op otherwise,
+      // so in-page anchors like #inquiry are unaffected.
+      {...externalLinkProps(href)}
       className={`ndi-sweepbtn relative inline-flex h-12 items-center gap-2.5 overflow-hidden rounded-xl border border-transparent px-6 font-display text-[14.5px] font-semibold ${className}`.trim()}
       style={{ background: GRADIENT, color: "#08130f", boxShadow: "var(--glow-sm)" }}
     >

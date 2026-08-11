@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Emphasis, PageHero, PageSection } from "@/components/layout/PageHero";
 import { SpotlightCard } from "@/components/ui/Cards";
+import { GradientButton } from "@/components/ui/GradientButton";
 import { Reveal } from "@/components/ui/Reveal";
 import { Icon } from "@/components/ui/icons";
 import {
@@ -118,35 +119,31 @@ export default function GovernancePage() {
           <Block id="act" number="01" title="Bhutan NDI Act">
             <p className="text-[16.5px] leading-[1.7] text-body [text-wrap:pretty]">{actBody}</p>
 
-            <a
-              href={actPdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ndi-role-card mt-7 flex flex-col gap-5 rounded-2xl border border-grid bg-white/[0.02] p-6 min-[701px]:flex-row min-[701px]:items-center"
-            >
+            {/* The card is a plain container — only the button is interactive,
+                so the hover belongs there rather than on the whole surface. */}
+            <div className="mt-7 flex flex-col gap-5 rounded-2xl border border-grid bg-white/[0.02] p-6 min-[701px]:flex-row min-[701px]:items-center">
               <span className="flex-none text-accent">
                 <Icon name="fileText" size={30} />
               </span>
-              <span className="flex-1">
-                <span className="block font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
+              <div className="flex-1">
+                <div className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
                   — The full Act
-                </span>
-                <span className="mt-1.5 block font-display text-[17px] font-semibold text-strong">
+                </div>
+                <div className="mt-1.5 font-display text-[17px] font-semibold text-strong">
                   National Digital Identity Act of Bhutan 2023
-                </span>
-                <span className="mt-1.5 block text-[13.5px] leading-[1.6] text-muted">
+                </div>
+                <p className="mt-1.5 text-[13.5px] leading-[1.6] text-muted">
                   {actPdfNote}
                   <Ref>§160</Ref>
+                </p>
+              </div>
+              <GradientButton href={actPdfUrl} className="flex-none">
+                <span className="ndi-dlbob inline-flex">
+                  <Icon name="download" size={18} strokeWidth={2} />
                 </span>
-              </span>
-              <span
-                className="inline-flex flex-none items-center justify-center gap-2 rounded-xl px-5 py-3 font-display text-sm font-semibold"
-                style={{ background: "var(--accent)", color: "var(--text-on-mint)" }}
-              >
-                <Icon name="download" size={18} strokeWidth={2} />
                 Download PDF
-              </span>
-            </a>
+              </GradientButton>
+            </div>
           </Block>
 
           <Block id="purpose" number="02" title="Purpose & application">

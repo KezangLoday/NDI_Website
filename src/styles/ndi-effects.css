@@ -218,6 +218,17 @@
 
 /* Same sweep + glow, for the full-width CTA submit button */
 .ndi-sweepbtn { transition: transform 0.16s var(--ease-out), box-shadow 0.5s var(--ease-out); }
+/* Download arrow: dips and returns while hovered, miming the action. Runs only
+   on hover, so it is not perpetual motion competing for attention, and it
+   moves on transform alone. */
+@keyframes ndiDownloadBob {
+  0%, 62%, 100% { transform: translateY(0); }
+  28% { transform: translateY(3px); }
+}
+.ndi-sweepbtn:hover .ndi-dlbob { animation: ndiDownloadBob 1.15s var(--ease-in-out) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .ndi-sweepbtn:hover .ndi-dlbob { animation: none; }
+}
 .ndi-sweepbtn:hover { transform: translateY(-3px); box-shadow: var(--glow-md); }
 .ndi-sweepbtn:active { transform: scale(0.99) translateY(0); }
 .ndi-sweepbtn:hover .ndi-store-sweep { transform: translateX(100%); }
