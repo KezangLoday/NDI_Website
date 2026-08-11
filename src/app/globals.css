@@ -28,7 +28,11 @@
   --ndi-ink-600: #232e40;
   --ndi-ink-500: #2e3a4f;
   --ndi-ink-400: #3b495f;
-  --ndi-300: #62676d;
+  /* Lifted from the design's #62676d, which measured 3.31:1 against the page
+     ground — below AA, and used for the smallest text on the site (10-12px
+     mono eyebrows, labels and captions on all ten pages). 4.87:1 at the same
+     hue, still clearly the faintest step in the ramp. */
+  --ndi-300: #7c828a;
   --ndi-200: #8b95a5;
   --ndi-100: #c5ccd8;
   --ndi-000: #ffffff;

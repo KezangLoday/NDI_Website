@@ -114,7 +114,11 @@ export function ServiceSelect({
       >
         <span
           className="overflow-hidden text-ellipsis whitespace-nowrap"
-          style={{ color: value ? "var(--text-strong)" : "var(--text-faint)" }}
+          // The unselected placeholder sits on the raised field fill, which is
+          // lighter than the page, so even the lifted faint token only reaches
+          // 4.02:1 there. Muted clears 5.15:1 and is the right weight for a
+          // placeholder anyway.
+          style={{ color: value ? "var(--text-strong)" : "var(--text-muted)" }}
         >
           {value || placeholder}
         </span>
