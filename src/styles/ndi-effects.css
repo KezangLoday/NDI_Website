@@ -1055,8 +1055,15 @@ select option { background: #101827; color: #e9eef6; }
 .ndi-glow-card {
   --glow-base: 138;
   --glow-spread: 46;
+  --glow-sat: 100;
+  --glow-light: 50;
+  --glow-bright: 2;
   --glow-size: 200;
-  --glow-border: 3;
+  --glow-border: 2;
+  /* How far the rim's outer edge clears the card. Below --glow-border, the rim
+     straddles the card's own border instead of ringing it from outside. */
+  --glow-out: 1;
+  --glow-blur: 28;
   --glow-bloom: 1;
   /* The rim and its bloom sit outside the card box, so the card cannot clip
      its own children — `.ndi-usecase` sets overflow:hidden, which erased them
@@ -1080,7 +1087,7 @@ select option { background: #101827; color: #e9eef6; }
   pointer-events: none;
   background-image: radial-gradient(
     var(--spotlight-size) var(--spotlight-size) at var(--spot-x) var(--spot-y),
-    hsl(var(--hue) 100% 70% / 0.12),
+    hsl(var(--hue) calc(var(--glow-sat) * 1%) 70% / 0.12),
     transparent
   );
 }
@@ -1098,9 +1105,10 @@ select option { background: #101827; color: #e9eef6; }
   pointer-events: none;
   position: absolute;
   --ring-size: var(--border-size);
-  inset: calc(var(--ring-size) * -1);
+  --ring-out: calc(var(--glow-out) * 1px);
+  inset: calc(var(--ring-out) * -1);
   border: var(--ring-size) solid transparent;
-  border-radius: calc(var(--ring-size) + 16px);
+  border-radius: calc(var(--ring-out) + 16px);
   background-repeat: no-repeat;
   /* The lit ring is the border, which lies outside the default padding-box
      positioning area — with `no-repeat` that strip received no paint at all,
@@ -1117,16 +1125,16 @@ select option { background: #101827; color: #e9eef6; }
 .ndi-glow-bloom::before {
   background-image: radial-gradient(
     calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
-      calc(var(--spot-x) + var(--ring-size)) calc(var(--spot-y) + var(--ring-size)),
-    hsl(var(--hue) 100% 50%),
+      calc(var(--spot-x) + var(--ring-out)) calc(var(--spot-y) + var(--ring-out)),
+    hsl(var(--hue) calc(var(--glow-sat) * 1%) calc(var(--glow-light) * 1%)),
     transparent 100%
   );
-  filter: brightness(2);
+  filter: brightness(var(--glow-bright));
 }
 .ndi-glow-rim::after {
   background-image: radial-gradient(
     calc(var(--spotlight-size) * 0.5) calc(var(--spotlight-size) * 0.5) at
-      calc(var(--spot-x) + var(--ring-size)) calc(var(--spot-y) + var(--ring-size)),
+      calc(var(--spot-x) + var(--ring-out)) calc(var(--spot-y) + var(--ring-out)),
     hsl(0 0% 100%),
     transparent 100%
   );
@@ -1137,12 +1145,15 @@ select option { background: #101827; color: #e9eef6; }
   inset: 0;
   border-radius: inherit;
   opacity: var(--glow-bloom);
-  filter: blur(calc(var(--border-size) * 10));
+  /* Pinned rather than derived from the rim: the bloom is the outward spill,
+     and thinning the rim should not shrink it. */
+  filter: blur(calc(var(--glow-blur) * 1px));
   will-change: filter;
   pointer-events: none;
 }
 .ndi-glow-bloom::before {
   --ring-size: 10px;
+  --ring-out: 10px;
 }
 /* Content sits above the glow. */
 .ndi-glow-card > *:not(.ndi-glow-rim) { position: relative; z-index: 5; }

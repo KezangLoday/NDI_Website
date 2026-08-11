@@ -21,7 +21,10 @@ export async function WhatYouCanDo() {
       <div className="mt-10 grid grid-cols-1 gap-[18px] min-[561px]:grid-cols-2 min-[901px]:grid-cols-4">
         {useCases.map((useCase, index) => (
           <Reveal key={useCase.id} delay={0.05 * (index + 1)} className="h-full">
-            <FeatureCard>
+            {/* The glow alternates so the row reads as a set rather than four
+                copies: NDI mint on the odd cards, the brighter spring green on
+                the even ones. */}
+            <FeatureCard glowColor={index % 2 === 0 ? "mint" : "spring"}>
               <span className="inline-flex h-[26px] items-center text-accent">
                 <Icon name={useCase.icon} size={24} />
               </span>

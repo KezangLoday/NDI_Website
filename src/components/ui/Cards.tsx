@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import { GlowCard } from "./spotlight-card";
+import { GlowCard, type GlowColor } from "./spotlight-card";
 
 /** Shared card fill from the design — the glass pass in ndi-effects.css sits on top. */
 const CARD_BACKGROUND =
@@ -17,10 +17,17 @@ const CARD_BACKGROUND =
  * own fill, radius and padding stay exactly as `.ndi-usecase` has them, and the
  * glow is added on top.
  */
-export function FeatureCard({ children }: { children: ReactNode }) {
+export function FeatureCard({
+  children,
+  glowColor = "mint",
+}: {
+  children: ReactNode;
+  glowColor?: GlowColor;
+}) {
   return (
     <GlowCard
       customSize
+      glowColor={glowColor}
       className="ndi-usecase h-full rounded-2xl p-[26px]"
       style={{
         background: CARD_BACKGROUND,

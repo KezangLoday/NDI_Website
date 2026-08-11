@@ -3,22 +3,35 @@
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
 /**
- * Hue range each colour sweeps as the pointer crosses the viewport:
- * `hue = base + xFraction * spread`.
+ * Hue range each colour sweeps as the pointer crosses the viewport —
+ * `hue = base + xFraction * spread` — plus the saturation, lightness and
+ * brightness that decide how the lit rim actually reads.
  *
- * `mint` is this site's addition. The upstream palette is kept as-is, but its
- * spreads are 200-300deg wide — `green` alone travels from green to magenta —
- * which no page in a single-accent palette can absorb. Mint starts on the NDI
- * accent (#5ac994, hue 152) and swings 46deg into teal.
+ * `mint` and `spring` are this site's additions:
+ *
+ * - `mint` is the NDI accent itself. #5ac994 is hsl(151 51% 57%), and it only
+ *   survives as mint at a gentle brightness — the vivid treatment blows it out
+ *   to a pale cyan. Its sweep is deliberately narrow: a wide one would carry
+ *   the cards on the right of the viewport well off the accent.
+ * - `spring` is the saturated, hard-brightened treatment. Its sweep is narrow
+ *   for the same reason: left to the upstream 46deg it reached full cyan on the
+ *   right of the row, which reads as a third colour rather than a second.
+ *
+ * The upstream palette is kept as-is, but its spreads are 200-300deg wide —
+ * `green` alone travels from green to magenta — which no page in a
+ * single-accent palette can absorb.
  */
 const GLOW_COLORS = {
-  mint: { base: 138, spread: 46 },
-  blue: { base: 220, spread: 200 },
-  purple: { base: 280, spread: 300 },
-  green: { base: 120, spread: 200 },
-  red: { base: 0, spread: 200 },
-  orange: { base: 30, spread: 200 },
+  mint: { base: 149, spread: 8, sat: 52, light: 58, bright: 1.35 },
+  spring: { base: 140, spread: 20, sat: 100, light: 50, bright: 2 },
+  blue: { base: 220, spread: 200, sat: 100, light: 50, bright: 2 },
+  purple: { base: 280, spread: 300, sat: 100, light: 50, bright: 2 },
+  green: { base: 120, spread: 200, sat: 100, light: 50, bright: 2 },
+  red: { base: 0, spread: 200, sat: 100, light: 50, bright: 2 },
+  orange: { base: 30, spread: 200, sat: 100, light: 50, bright: 2 },
 } as const;
+
+export type GlowColor = keyof typeof GLOW_COLORS;
 
 const SIZES = {
   sm: "w-48 h-64",
@@ -76,7 +89,7 @@ interface GlowCardProps {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
-  glowColor?: keyof typeof GLOW_COLORS;
+  glowColor?: GlowColor;
   size?: keyof typeof SIZES;
   width?: string | number;
   height?: string | number;
@@ -84,8 +97,13 @@ interface GlowCardProps {
   customSize?: boolean;
   /** Spotlight diameter in px. */
   spotlight?: number;
-  /** Border thickness in px. */
+  /** Rim thickness in px. */
   border?: number;
+  /**
+   * How far the rim's outer edge clears the card, in px. Less than `border`
+   * makes the rim straddle the card's own border rather than ring it.
+   */
+  proud?: number;
 }
 
 /**
@@ -115,10 +133,11 @@ export function GlowCard({
   height,
   customSize = false,
   spotlight = 200,
-  border = 3,
+  border = 2,
+  proud = 1,
 }: GlowCardProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const { base, spread } = GLOW_COLORS[glowColor];
+  const { base, spread, sat, light, bright } = GLOW_COLORS[glowColor];
 
   useEffect(() => {
     const card = ref.current;
@@ -134,8 +153,12 @@ export function GlowCard({
         {
           "--glow-base": base,
           "--glow-spread": spread,
+          "--glow-sat": sat,
+          "--glow-light": light,
+          "--glow-bright": bright,
           "--glow-size": spotlight,
           "--glow-border": border,
+          "--glow-out": proud,
           ...(width !== undefined && { width: typeof width === "number" ? `${width}px` : width }),
           ...(height !== undefined && {
             height: typeof height === "number" ? `${height}px` : height,
