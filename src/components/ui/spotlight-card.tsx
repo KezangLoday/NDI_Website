@@ -4,15 +4,20 @@ import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
 /**
  * Hue range each colour sweeps as the pointer crosses the viewport —
- * `hue = base + xFraction * spread` — plus the saturation, lightness and
- * brightness that decide how the lit rim actually reads.
+ * `hue = base + xFraction * spread` — plus the saturation, lightness,
+ * brightness and white-core strength that decide how the lit rim reads.
+ *
+ * `core` is the alpha of the white spotlight that sits inside the coloured
+ * one. At 1 it is the brightest thing on the rim, so the point nearest the
+ * cursor reads white whatever the hue is.
  *
  * `mint` and `spring` are this site's additions:
  *
  * - `mint` is the NDI accent itself. #5ac994 is hsl(151 51% 57%), and it only
  *   survives as mint at a gentle brightness — the vivid treatment blows it out
  *   to a pale cyan. Its sweep is deliberately narrow: a wide one would carry
- *   the cards on the right of the viewport well off the accent.
+ *   the cards on the right of the viewport well off the accent. Its core is
+ *   pulled well down so the hue, not the white, is what you see.
  * - `spring` is the saturated, hard-brightened treatment. Its sweep is narrow
  *   for the same reason: left to the upstream 46deg it reached full cyan on the
  *   right of the row, which reads as a third colour rather than a second.
@@ -22,13 +27,13 @@ import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
  * single-accent palette can absorb.
  */
 const GLOW_COLORS = {
-  mint: { base: 149, spread: 8, sat: 52, light: 58, bright: 1.35 },
-  spring: { base: 140, spread: 20, sat: 100, light: 50, bright: 2 },
-  blue: { base: 220, spread: 200, sat: 100, light: 50, bright: 2 },
-  purple: { base: 280, spread: 300, sat: 100, light: 50, bright: 2 },
-  green: { base: 120, spread: 200, sat: 100, light: 50, bright: 2 },
-  red: { base: 0, spread: 200, sat: 100, light: 50, bright: 2 },
-  orange: { base: 30, spread: 200, sat: 100, light: 50, bright: 2 },
+  mint: { base: 149, spread: 8, sat: 62, light: 57, bright: 1.5, core: 0.3 },
+  spring: { base: 140, spread: 20, sat: 100, light: 50, bright: 2, core: 1 },
+  blue: { base: 220, spread: 200, sat: 100, light: 50, bright: 2, core: 1 },
+  purple: { base: 280, spread: 300, sat: 100, light: 50, bright: 2, core: 1 },
+  green: { base: 120, spread: 200, sat: 100, light: 50, bright: 2, core: 1 },
+  red: { base: 0, spread: 200, sat: 100, light: 50, bright: 2, core: 1 },
+  orange: { base: 30, spread: 200, sat: 100, light: 50, bright: 2, core: 1 },
 } as const;
 
 export type GlowColor = keyof typeof GLOW_COLORS;
@@ -118,13 +123,14 @@ export function glowVars(
   glowColor: GlowColor,
   { spotlight = 200, border = 2, proud = 1 }: GlowOptions = {},
 ): CSSProperties {
-  const { base, spread, sat, light, bright } = GLOW_COLORS[glowColor];
+  const { base, spread, sat, light, bright, core } = GLOW_COLORS[glowColor];
   return {
     "--glow-base": base,
     "--glow-spread": spread,
     "--glow-sat": sat,
     "--glow-light": light,
     "--glow-bright": bright,
+    "--glow-core": core,
     "--glow-size": spotlight,
     "--glow-border": border,
     "--glow-out": proud,

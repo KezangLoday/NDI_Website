@@ -1063,6 +1063,8 @@ select option { background: #101827; color: #e9eef6; }
   --glow-sat: 100;
   --glow-light: 50;
   --glow-bright: 2;
+  /* Alpha of the white core inside the coloured spotlight. */
+  --glow-core: 1;
   --glow-size: 200;
   --glow-border: 2;
   /* How far the rim's outer edge clears the card. Below --glow-border, the rim
@@ -1140,7 +1142,7 @@ select option { background: #101827; color: #e9eef6; }
   background-image: radial-gradient(
     calc(var(--spotlight-size) * 0.5) calc(var(--spotlight-size) * 0.5) at
       calc(var(--spot-x) + var(--ring-out)) calc(var(--spot-y) + var(--ring-out)),
-    hsl(0 0% 100%),
+    hsl(0 0% 100% / var(--glow-core)),
     transparent 100%
   );
 }
