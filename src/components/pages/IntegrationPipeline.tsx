@@ -1,35 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { Icon } from "@/components/ui/icons";
 import type { PipelineStep } from "@/content/types";
 
 const STEP_MS = 5200;
 
-/** Column gap on the rail, in px. The connector geometry is derived from it. */
-const GUTTER = 16;
-
-/** Width of one card, as a calc term: the row minus its three gutters, quartered. */
-const CARD = `((100% - ${GUTTER * 3}px) / 4)`;
-
 /**
- * Where the trace sits, measured from the top of the rail.
+ * The four-step integration path, as a flow of medallions joined by arrows.
  *
- * Inside a card the trace is flex-centred against the 14px dot, which lands it
- * on a half pixel: 1px border + 16px padding + (14 - 1) / 2. The connectors are
- * absolutely positioned and have to match that exactly — a whole 24px looks
- * level in isolation but steps by a pixel at every card edge.
- */
-const TRACE_TOP = 1 + 16 + (14 - 1) / 2;
-
-/**
- * The four-step integration path.
+ * Boxing each step made a timeline read as four tiles. A medallion carrying the
+ * step number, an arrow into the next one, and the label beneath says "this
+ * happens, then this" without any container at all — and the arrows light up
+ * behind the pointer, so the run already travelled reads differently from the
+ * run still ahead. The pulse rides the segment currently being crossed.
  *
  * Auto-advances every 5.2s, and pauses on hover, while the tab is hidden, and
- * whenever the rail is scrolled out of view — there is no point animating a
- * component nobody is looking at, and it keeps the timer honest when the user
- * returns.
+ * whenever the rail is scrolled out of view.
  */
 export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
   const [step, setStep] = useState(0);
@@ -67,124 +56,63 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
 
   const active = steps[step];
 
-  /** Left edge to the right edge of the active card: the run already lit. */
-  const TRACK = `calc(${CARD} * ${step + 1} + ${GUTTER * step}px)`;
-
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      {/* Rail — a dot per step on a trace that lights up as far as you have got. */}
-      <div ref={railRef} data-pipe-rail="1" className="relative">
-        {/*
-          The completed run, as one clipping window laid over the cards and the
-          gutters between them. The pulse travels inside it, so the light crosses
-          card boundaries unbroken instead of restarting in each card — that
-          continuity is what reads as one process rather than four tiles. The
-          window grows to the right edge of the active card: (step + 1) cards
-          plus the `step` gutters already crossed.
+      <div
+        ref={railRef}
+        data-pipe-rail="1"
+        className="flex flex-col items-stretch gap-6 min-[761px]:flex-row min-[761px]:items-start min-[761px]:gap-0"
+      >
+        {steps.map((entry, index) => {
+          const isActive = index === step;
+          const isDone = index < step;
+          return (
+            <Fragment key={entry.code}>
+              {index > 0 ? (
+                <span
+                  aria-hidden="true"
+                  className="ndi-flow-link"
+                  data-on={index <= step ? "1" : "0"}
+                  data-crossing={index === step ? "1" : "0"}
+                >
+                  <span className="ndi-flow-line">
+                    {index === step ? <span className="ndi-pipe-pulse" /> : null}
+                  </span>
+                  <Icon name="arrowRight" size={15} strokeWidth={2} />
+                  <span className="ndi-flow-line" />
+                </span>
+              ) : null}
 
-          Geometry is inline rather than utilities throughout this block because
-          `.ndi-pipe-trace` is unlayered and would outrank a Tailwind `absolute`.
-        */}
-        <span
-          aria-hidden="true"
-          data-pipe-line="1"
-          style={{
-            position: "absolute",
-            top: TRACE_TOP,
-            left: 0,
-            height: 1,
-            overflow: "hidden",
-            zIndex: 2,
-            pointerEvents: "none",
-            width: TRACK,
-            // The pulse translates rather than animating `left`, so it needs
-            // the track's width as a length — see ndiTraceFlow.
-            "--pulse-end": TRACK,
-            transition: "width 0.45s var(--ease-out)",
-          } as CSSProperties}
-        >
-          <span className="ndi-pipe-pulse" />
-        </span>
-
-        {/* The gutters themselves — each card's own trace stops at its edge, so
-            without these the line breaks three times. Each segment overhangs by
-            1px at both ends to cover the card border the in-card trace sits
-            inside of, which would otherwise leave a hairline at every junction. */}
-        {[1, 2, 3].map((index) => (
-          <span
-            key={index}
-            aria-hidden="true"
-            data-pipe-line="1"
-            className="ndi-pipe-trace"
-            data-on={index <= step ? "2" : "0"}
-            style={{
-              position: "absolute",
-              top: TRACE_TOP,
-              height: 1,
-              width: GUTTER + 2,
-              flex: "none",
-              left: `calc(${CARD} * ${index} + ${GUTTER * (index - 1) - 1}px)`,
-            }}
-          />
-        ))}
-
-        <div className="relative grid grid-cols-1 gap-4 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4">
-          {steps.map((entry, index) => {
-            const isActive = index === step;
-            const isDone = index < step;
-            const state = isActive ? "1" : isDone ? "2" : "0";
-            return (
               <button
-                key={entry.code}
                 type="button"
                 onClick={() => select(index)}
                 onFocus={() => select(index)}
                 onMouseEnter={() => select(index)}
                 aria-current={isActive ? "step" : undefined}
-                className="flex cursor-pointer flex-col gap-2.5 rounded-[14px] border px-[18px] pb-5 pt-4 text-left transition-[border-color,background,box-shadow] duration-300 ease-ndi"
-                style={{
-                  borderColor: isActive ? "rgba(90,201,148,0.45)" : "var(--border-grid)",
-                  background: isActive
-                    ? "linear-gradient(158deg, #1D4A45 0%, #16333A 42%, #111A26 100%)"
-                    : "linear-gradient(158deg, #16333A 0%, #131D2A 58%, #101823 100%)",
-                  boxShadow: isActive ? "var(--glow-sm)" : "none",
-                }}
+                className="ndi-flow-step flex flex-1 cursor-pointer flex-col items-center px-2 text-center"
               >
-                {/* The trace runs the full card width, so it bleeds past the padding. */}
-                <span aria-hidden="true" className="-mx-[18px] flex items-center self-stretch">
-                  <span className="ndi-pipe-trace" data-on={state} style={{ flex: "0 0 18px" }} />
-                  <span
-                    data-pipe-dot="1"
-                    className="h-[14px] w-[14px] flex-none rounded-full border transition-[background,border-color] duration-300 ease-ndi"
-                    style={{
-                      borderColor: isActive || isDone ? "var(--accent)" : "var(--border-grid)",
-                      background: isActive
-                        ? "var(--accent)"
-                        : isDone
-                          ? "rgba(90,201,148,0.45)"
-                          : "#0d1420",
-                      boxShadow: isActive ? "var(--glow-sm)" : "none",
-                    }}
-                  />
-                  <span className="ndi-pipe-trace" data-on={state} />
-                </span>
-
                 <span
-                  className="font-mono text-[10.5px] uppercase tracking-[0.16em]"
-                  style={{ color: isActive ? "var(--text-accent)" : "var(--text-faint)" }}
+                  className="ndi-flow-badge"
+                  data-state={isActive ? "1" : isDone ? "2" : "0"}
                 >
-                  {entry.code}
+                  <span className="font-mono text-[13px] tracking-[0.1em]">{entry.code}</span>
                 </span>
                 <span
-                  className="font-display text-[17px] font-semibold tracking-[-0.02em]"
+                  className="mt-4 font-display text-[17px] font-semibold tracking-[-0.02em] transition-colors duration-300 ease-ndi"
                   style={{ color: isActive ? "var(--text-strong)" : "var(--text-muted)" }}
                 >
                   {entry.title}
                 </span>
+                <span
+                  className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.16em] transition-colors duration-300 ease-ndi"
+                  style={{ color: isActive ? "var(--text-accent)" : "var(--text-faint)" }}
+                >
+                  {entry.tag}
+                </span>
               </button>
-            );
-          })}
-        </div>
+            </Fragment>
+          );
+        })}
       </div>
 
       {/* Detail panel — copy on the left, the three facts as rows on the right. */}
