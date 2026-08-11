@@ -59,8 +59,11 @@ function ServiceCard({ service, wide = false }: { service: OrgService; wide?: bo
     </div>
   );
 
+  // These cards are static by request. `.ndi-spot` stays for the shared glass
+  // fill, which keys off that class, but `data-static` suppresses its cursor
+  // spotlight and the halo and fill layers are not rendered at all.
   const shell =
-    "ndi-spot ndi-svc-card h-full rounded-2xl border border-grid p-7 " +
+    "ndi-spot h-full rounded-2xl border border-grid p-7 " +
     (wide
       ? "flex flex-wrap items-center gap-8 min-[901px]:col-span-2"
       : "flex flex-col gap-[18px]");
@@ -68,6 +71,7 @@ function ServiceCard({ service, wide = false }: { service: OrgService; wide?: bo
   return (
     <div
       className={shell}
+      data-static=""
       style={{
         background: "var(--grad-card)",
         backdropFilter: "blur(18px)",
@@ -75,8 +79,6 @@ function ServiceCard({ service, wide = false }: { service: OrgService; wide?: bo
         boxShadow: "var(--inset-top), 0 18px 44px rgba(0,0,0,0.28)",
       }}
     >
-      <div className="ndi-spot-halo" />
-      <div className="ndi-spot-fill" />
       {wide ? (
         <>
           <div className="flex-[1_1_300px]">{title}</div>

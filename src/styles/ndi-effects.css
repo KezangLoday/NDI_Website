@@ -467,9 +467,13 @@
 /* .ndi-glow-rim is excluded because this rule outranks its own
    `position: absolute` and would drop the rim into the content flow. */
 .ndi-spot > *:not(.ndi-spot-halo):not(.ndi-spot-fill):not(.ndi-glow-rim) { position: relative; }
-/* Cards wearing the glow rim drop this ring entirely — see SpotlightCard. */
+/* Cards wearing the glow rim drop this ring entirely — see SpotlightCard.
+   `data-static` does the same for cards that keep the glass fill but are meant
+   to sit still: no cursor ring, and no halo or fill rendered either. */
 .ndi-spot[data-glow]::before,
-.ndi-spot[data-glow]::after { content: none; }
+.ndi-spot[data-glow]::after,
+.ndi-spot[data-static]::before,
+.ndi-spot[data-static]::after { content: none; }
 
 /* ---- "What you can do" cards -------------------------------
    The design gave these an evervault-style cursor reveal (a gradient and a
@@ -638,12 +642,6 @@
 .ndi-plainlink:hover { color: var(--text-strong); }
 
 /* Organizations service cards */
-.ndi-svc-card { transition: transform var(--dur), border-color var(--dur), box-shadow var(--dur); }
-.ndi-svc-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--border-strong);
-  box-shadow: var(--inset-top), var(--glow-sm), 0 24px 56px rgba(0, 0, 0, 0.34);
-}
 .ndi-adv-card { transition: border-color var(--dur), background var(--dur); }
 .ndi-adv-card:hover { border-color: var(--border-strong); background: rgba(90, 201, 148, 0.04); }
 
