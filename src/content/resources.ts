@@ -128,11 +128,3 @@ export const insights: Insight[] = [
     href: "#",
   },
 ];
-
-export const resourceTabs = [
-  { id: "news", label: "News & updates" },
-  { id: "webinars", label: "Webinars" },
-  { id: "insights", label: "Insights & publications" },
-] as const;
-
-export type ResourceTabId = (typeof resourceTabs)[number]["id"];

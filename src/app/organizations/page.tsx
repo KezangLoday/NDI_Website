@@ -96,19 +96,18 @@ export default async function OrganizationsPage() {
           className="mt-16 grid grid-cols-2 gap-4 min-[1001px]:grid-cols-4"
         >
           {pills.map((pill) => (
-            /* Glass, not the shared .ndi-spot pass: the rim, sheen and cast
-               shadow are what make it read as a pane rather than a tinted
-               rectangle, and .ndi-spot's fill would sit on top of them. */
-            <div key={pill.id} className="ndi-glass rounded-2xl">
-              <div className="ndi-glass-face p-[22px]">
-                <div className="font-display text-[24px] font-semibold tracking-[-0.02em] text-strong">
-                  {pill.label}
-                </div>
-                <div className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
-                  {pill.sublabel}
-                </div>
+            <div
+              key={pill.id}
+              className="ndi-spot rounded-2xl border border-grid bg-white/[0.02] p-[22px]"
+            >
+              <div className="ndi-spot-halo" />
+              <div className="ndi-spot-fill" />
+              <div className="font-display text-[24px] font-semibold tracking-[-0.02em] text-strong">
+                {pill.label}
               </div>
-              <div aria-hidden="true" className="ndi-glass-shadow" />
+              <div className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
+                {pill.sublabel}
+              </div>
             </div>
           ))}
         </Reveal>

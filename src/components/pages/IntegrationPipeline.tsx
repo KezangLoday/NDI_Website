@@ -146,7 +146,7 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
           </p>
         </div>
 
-        <div className="flex flex-col border-t border-subtle">
+        <div className="flex flex-col">
           {[
             ["You bring", active.input, "text-body"],
             ["Output", active.output, "text-body"],

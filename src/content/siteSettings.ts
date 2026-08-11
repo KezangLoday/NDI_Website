@@ -22,19 +22,19 @@ export const siteSettings: SiteSettings = {
         cards: [
           {
             label: "News & Updates",
-            href: "/resources#news",
+            href: "/resources/news",
             description: "Announcements, launches & press releases.",
             icon: "newspaper",
           },
           {
             label: "Webinars",
-            href: "/resources#webinars",
+            href: "/resources/webinars",
             description: "Recordings, upcoming sessions & talks.",
             icon: "video",
           },
           {
             label: "Insights & Publications",
-            href: "/resources#insights",
+            href: "/resources/insights",
             description: "Research, case studies & blogs.",
             icon: "book",
           },
@@ -155,6 +155,6 @@ export const navGroups: Record<string, string[]> = {
   users: ["/users"],
   orgs: ["/organizations"],
   governance: ["/governance"],
-  resources: ["/resources", "/faqs", "/glossary"],
+  resources: ["/resources", "/faqs", "/glossary"],  // sub-paths match by prefix
   company: ["/company", "/careers", "/media-coverage"],
 };
