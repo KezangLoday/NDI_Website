@@ -103,7 +103,9 @@ function documentBox(element: HTMLElement) {
 }
 
 function measureMask(): CircuitMask {
-  const hero = document.querySelector<HTMLElement>("[data-hero-grid]");
+  // `[data-hero-grid]` is Home's; `[data-circuit-hero]` lets any other page
+  // opt into the same treatment without inheriting Home's hero layout rules.
+  const hero = document.querySelector<HTMLElement>("[data-hero-grid], [data-circuit-hero]");
   const heroBox = hero ? documentBox(hero) : { top: 0, height: 700, left: 0, width: 0 };
   const heroTop = heroBox.top;
   const heroBottom = heroBox.top + heroBox.height;
@@ -122,7 +124,10 @@ function measureMask(): CircuitMask {
     const buttonBox = storeButton ? documentBox(storeButton) : headingBox;
     const top = headingBox.top;
     const bottom = Math.max(buttonBox.top + buttonBox.height, headingBox.top + headingBox.height);
-    holeX = headingBox.left + headingBox.width * 0.42;
+    // Home's headline is left-aligned, so the hole sits left of its midpoint
+    // to follow the text. A centred headline wants the hole centred with it.
+    const centred = getComputedStyle(heading).textAlign === "center";
+    holeX = headingBox.left + headingBox.width * (centred ? 0.5 : 0.42);
     holeY = (top + bottom) / 2;
     holeWidth = Math.max(360, headingBox.width * 0.98);
     holeHeight = Math.max(150, (bottom - top) * 0.62);
@@ -132,7 +137,9 @@ function measureMask(): CircuitMask {
   const fadeFull = Math.round(heroTop + 440);
 
   // The fade completes at the next section's eyebrow, ramping across the gap.
-  const feature = document.getElementById("how-it-works");
+  const feature =
+    document.getElementById("how-it-works") ??
+    document.querySelector<HTMLElement>("[data-circuit-next]");
   const featureTop = feature ? documentBox(feature).top : heroBottom + 200;
   const eyebrow = feature?.querySelector<HTMLElement>("div, p, span") ?? null;
   const fadeEnd = Math.round(eyebrow ? documentBox(eyebrow).top : featureTop + 56);

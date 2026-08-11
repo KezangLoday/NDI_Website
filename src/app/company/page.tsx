@@ -98,11 +98,13 @@ export default async function CompanyPage() {
       {/* ============ HERO ============
           Centred under a lit arc, with the story photograph carried below the
           copy as a wide panel rather than squeezed into a second column. */}
-      {/* `clip` rather than `hidden`: the arc is wider than the viewport on
-          narrow screens, and hidden would make this a scroll container. */}
-      <PageSection id="about" className="relative overflow-x-clip pb-[72px] pt-[168px]">
-        <div aria-hidden="true" className="ndi-arc top-[84px]" />
-
+      {/* `data-circuit-hero` puts the Home page's circuit field behind this
+          section — see Atmosphere and measureMask. */}
+      <PageSection
+        id="about"
+        data-circuit-hero=""
+        className="relative pb-[72px] pt-[168px]"
+      >
         <Reveal className="relative text-center">
           <span className="inline-flex h-8 items-center gap-2.5 rounded-full border border-grid bg-white/[0.03] px-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted">
             <span
@@ -142,48 +144,35 @@ export default async function CompanyPage() {
           </div>
         </Reveal>
 
+        {/* The three facts, divided rather than boxed — the hero has no panel
+            to carry them now, and a bordered band would fight the traces
+            behind it. */}
         <Reveal
           delay={0.08}
-          className="relative mt-14 overflow-hidden rounded-3xl border border-grid"
-          style={{ boxShadow: "var(--inset-top), 0 34px 80px -30px rgba(0,0,0,0.75)" }}
+          className="mt-16 grid grid-cols-1 gap-px overflow-hidden min-[641px]:grid-cols-3"
         >
-          <div className="relative h-[300px] min-[641px]:h-[420px] min-[1001px]:h-[480px]">
-            <Image
-              src={mediaUrl(story.image)}
-              alt={story.image.alt}
-              fill
-              sizes="(max-width: 1264px) 100vw, 1136px"
-              priority
-              className="object-cover"
-              style={{ objectPosition: story.imagePosition }}
-            />
-          </div>
-
-          {/* The facts ride on the photograph's lower edge, over a scrim, so
-              the panel carries them instead of needing a band of its own.
-              Stacked they would cover most of the picture, so below 641px they
-              drop underneath it on a solid fill instead. */}
-          <div
-            className="grid grid-cols-1 gap-5 bg-[#0b111c] px-6 py-6 min-[641px]:absolute min-[641px]:inset-x-0 min-[641px]:bottom-0 min-[641px]:grid-cols-3 min-[641px]:gap-6 min-[641px]:bg-transparent min-[641px]:bg-[linear-gradient(180deg,transparent,rgba(9,13,21,0.92)_62%)] min-[641px]:px-9 min-[641px]:pb-8 min-[641px]:pt-16"
-          >
-            {story.stats.map((stat) => (
-              <div key={stat.id}>
-                <div className="font-display text-[22px] font-semibold tracking-[-0.02em] text-strong min-[641px]:text-[26px]">
-                  {stat.value}
-                </div>
-                <div className="mt-1.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
-                  {stat.label}
-                </div>
+          {story.stats.map((stat, index) => (
+            <div
+              key={stat.id}
+              className={`py-5 text-center min-[641px]:py-2 ${
+                index > 0 ? "border-t border-subtle min-[641px]:border-l min-[641px]:border-t-0" : ""
+              }`}
+            >
+              <div className="font-display text-[24px] font-semibold tracking-[-0.02em] text-strong min-[641px]:text-[27px]">
+                {stat.value}
               </div>
-            ))}
-          </div>
+              <div className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
+                {stat.label}
+              </div>
+            </div>
+          ))}
         </Reveal>
       </PageSection>
 
       {/* ============ STORY ============
           The four points were a wall of bulleted prose. Same copy, now a card
           each, so the section can be scanned before it is read. */}
-      <PageSection className="py-[72px]">
+      <PageSection data-circuit-next="" className="py-[72px]">
         <Reveal className="max-w-[820px]">
           <Eyebrow>— Our story</Eyebrow>
           <h2 className="mt-4 font-display text-[clamp(26px,3vw,36px)] font-semibold leading-[1.15] tracking-[-0.03em] text-strong [text-wrap:pretty]">

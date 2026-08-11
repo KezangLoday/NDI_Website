@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
@@ -101,13 +101,14 @@ export function PageSection({
   id,
   className = "",
   children,
-}: {
-  id?: string;
-  className?: string;
-  children: ReactNode;
-}) {
+  ...rest
+}: ComponentPropsWithoutRef<"section">) {
   return (
-    <section id={id} className={`mx-auto max-w-[1200px] px-5 min-[641px]:px-8 ${className}`}>
+    <section
+      id={id}
+      className={`mx-auto max-w-[1200px] px-5 min-[641px]:px-8 ${className}`}
+      {...rest}
+    >
       {children}
     </section>
   );

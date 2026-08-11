@@ -971,50 +971,6 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   [data-pipe-line] { display: none !important; }
 }
 
-/* ---- Aurora arc (About hero) -------------------------------
-   A wide ellipse sitting behind the headline, lit along its top rim: a
-   hairline ring that fades out down the sides, a blurred copy of the same
-   ring for the bloom, and a soft wash under the crown. Built from a masked
-   ring rather than a box-shadow so the light stays a hairline at any width. */
-.ndi-arc {
-  position: absolute;
-  left: 50%;
-  translate: -50% 0;
-  width: min(1500px, 165%);
-  aspect-ratio: 2.3 / 1;
-  border-radius: 50%;
-  pointer-events: none;
-  background: radial-gradient(58% 40% at 50% 0%, rgba(90, 201, 148, 0.16), transparent 68%);
-}
-.ndi-arc::before,
-.ndi-arc::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  padding: 1px;
-  background: linear-gradient(
-    180deg,
-    rgba(222, 255, 240, 0.9) 0%,
-    rgba(111, 224, 169, 0.45) 14%,
-    rgba(90, 201, 148, 0.14) 30%,
-    transparent 48%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-/* The bloom is the same ring, blurred. Sharing the geometry keeps the two
-   registered on each other when the ellipse resizes. */
-.ndi-arc::after {
-  filter: blur(18px);
-  opacity: 0.75;
-}
-@media (prefers-reduced-motion: reduce) {
-  .ndi-arc::after { display: none; }
-}
-
 /* ---- "Watch tutorial" arrow nudge -------------------------- */
 .ndi-tut svg { transition: transform 0.28s var(--ease-out); }
 .ndi-tut:hover svg { transform: translateX(5px); }

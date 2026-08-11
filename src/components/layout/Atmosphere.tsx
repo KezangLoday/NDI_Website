@@ -11,6 +11,10 @@ import { CircuitDefs } from "./CircuitDefs";
 const BAND_FADE =
   "linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%)";
 
+/** Routes that carry the full circuit field behind their hero, not just the
+ *  cursor reveal. */
+const CIRCUIT_FIELD = new Set(["/", "/company"]);
+
 /**
  * The fixed decorative background: a depth gradient, a dim field of circuit
  * traces, a brighter copy of the same traces revealed under the cursor, and a
@@ -25,8 +29,10 @@ export function Atmosphere() {
   const { bands, documentHeight } = useCircuitBands();
   const pathname = usePathname();
 
-  // Only the home page shows the dim base traces and the ambient roaming glow.
-  const variant = pathname === "/" ? "home" : "subpage";
+  // These pages show the dim base traces and the ambient roaming glow; the
+  // rest reveal traces only under the cursor. Both need a hero to measure the
+  // mask against — `[data-hero-grid]` or `[data-circuit-hero]`.
+  const variant = CIRCUIT_FIELD.has(pathname) ? "home" : "subpage";
 
   useCircuitGlow(baseRef, glowRef, variant);
 
