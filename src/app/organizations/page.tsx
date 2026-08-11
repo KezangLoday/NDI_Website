@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Emphasis, PageSection, SubSectionHeader } from "@/components/layout/PageHero";
 import { IntegrationPipeline } from "@/components/pages/IntegrationPipeline";
 import { InquiryForm } from "@/components/pages/InquiryForm";
+import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { GradientButton } from "@/components/ui/GradientButton";
@@ -24,95 +25,16 @@ export const metadata: Metadata = {
 };
 
 /**
- * A core service: icon and title on one row, then the use case and the value
- * on a labelled two-column grid split by a hairline.
- *
- * The last core service runs the full width of the grid in the design, with the
- * title beside the details rather than above them — `wide` switches to that.
+ * The reference bento layout, in the order the services are authored: a tall
+ * centre column, tall-over-short on the left, short-over-tall on the right.
  */
-function ServiceCard({ service, wide = false }: { service: OrgService; wide?: boolean }) {
-  const details = (
-    <>
-      <span className="pt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
-        Use case
-      </span>
-      <span className="text-[14.5px] leading-[1.6] text-body">{service.useCase}</span>
-      {service.value ? (
-        <>
-          <span className="pt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
-            Value
-          </span>
-          <span className="text-[14.5px] leading-[1.6] text-muted">{service.value}</span>
-        </>
-      ) : null}
-    </>
-  );
-
-  const title = (
-    <div className="flex items-center gap-3.5">
-      <span className="inline-flex flex-none items-center justify-center text-accent">
-        <Icon name={service.icon} size={21} />
-      </span>
-      <div className="font-display text-[19px] font-semibold tracking-[-0.02em] text-strong">
-        {service.title}
-      </div>
-    </div>
-  );
-
-  // These cards are static by request. `.ndi-spot` stays for the shared glass
-  // fill, which keys off that class, but `data-static` suppresses its cursor
-  // spotlight and the halo and fill layers are not rendered at all.
-  const shell =
-    "ndi-spot h-full rounded-2xl border border-grid p-7 " +
-    (wide
-      ? "flex flex-wrap items-center gap-8 min-[901px]:col-span-2"
-      : "flex flex-col gap-[18px]");
-
-  return (
-    <div
-      className={shell}
-      data-static=""
-      style={{
-        background: "var(--grad-card)",
-        backdropFilter: "blur(18px)",
-        WebkitBackdropFilter: "blur(18px)",
-        boxShadow: "var(--inset-top), 0 18px 44px rgba(0,0,0,0.28)",
-      }}
-    >
-      {wide ? (
-        <>
-          <div className="flex-[1_1_300px]">{title}</div>
-          <div className="grid flex-[2_1_420px] grid-cols-[88px_minmax(0,1fr)] items-start gap-3.5">
-            {details}
-          </div>
-        </>
-      ) : (
-        <>
-          {title}
-          <div className="grid gap-3">
-            <div className="grid grid-cols-[88px_minmax(0,1fr)] items-start gap-3.5">
-              <span className="pt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
-                Use case
-              </span>
-              <span className="text-[14.5px] leading-[1.6] text-body">{service.useCase}</span>
-            </div>
-            {service.value ? (
-              <>
-                <div aria-hidden="true" className="h-px bg-[color:var(--border-subtle)]" />
-                <div className="grid grid-cols-[88px_minmax(0,1fr)] items-start gap-3.5">
-                  <span className="pt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
-                    Value
-                  </span>
-                  <span className="text-[14.5px] leading-[1.6] text-muted">{service.value}</span>
-                </div>
-              </>
-            ) : null}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
+const BENTO_SLOTS = [
+  "min-[901px]:col-start-1 min-[901px]:col-end-2 min-[901px]:row-start-1 min-[901px]:row-end-3",
+  "min-[901px]:col-start-2 min-[901px]:col-end-3 min-[901px]:row-start-1 min-[901px]:row-end-4",
+  "min-[901px]:col-start-3 min-[901px]:col-end-4 min-[901px]:row-start-1 min-[901px]:row-end-2",
+  "min-[901px]:col-start-1 min-[901px]:col-end-2 min-[901px]:row-start-3 min-[901px]:row-end-4",
+  "min-[901px]:col-start-3 min-[901px]:col-end-4 min-[901px]:row-start-2 min-[901px]:row-end-4",
+];
 
 /** An advanced service: a plainer card, three across. */
 function AdvancedCard({ service }: { service: OrgService }) {
@@ -196,17 +118,20 @@ export default async function OrganizationsPage() {
             lead="Each service, the use case it solves, and what your organization gets from it."
           />
         </Reveal>
-        <div data-ndi-2col="1" className="mt-10 grid grid-cols-1 gap-4 min-[901px]:grid-cols-2">
-          {core.map((service, index) => (
-            <Reveal
-              key={service.id}
-              delay={0.05 * (index + 1)}
-              className={`h-full ${index === core.length - 1 ? "min-[901px]:col-span-2" : ""}`}
-            >
-              <ServiceCard service={service} wide={index === core.length - 1} />
-            </Reveal>
-          ))}
-        </div>
+        <Reveal className="mt-10">
+          <BentoGrid className="min-[901px]:grid-rows-3">
+            {core.map((service, index) => (
+              <BentoCard
+                key={service.id}
+                name={service.title}
+                description={service.useCase}
+                value={service.value}
+                icon={service.icon}
+                className={BENTO_SLOTS[index] ?? ""}
+              />
+            ))}
+          </BentoGrid>
+        </Reveal>
       </PageSection>
 
       {/* ============ ADVANCED SERVICES ============ */}
