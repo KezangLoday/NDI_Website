@@ -39,6 +39,37 @@ export function FeatureCard({
   );
 }
 
+/**
+ * The shared card fill wearing the glow rim, with nothing else assumed.
+ *
+ * FeatureCard is the Home-specific version — it adds `.ndi-usecase`, which the
+ * glass pass keys off inside `#how-it-works`. This one is for the same
+ * treatment anywhere else.
+ */
+export function GlowPanel({
+  children,
+  className = "",
+  glowColor = "mint",
+}: {
+  children: ReactNode;
+  className?: string;
+  glowColor?: GlowColor;
+}) {
+  return (
+    <GlowCard
+      customSize
+      glowColor={glowColor}
+      className={`h-full rounded-2xl ${className}`.trim()}
+      style={{
+        background: CARD_BACKGROUND,
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07), 0 18px 40px -26px rgba(0,0,0,0.9)",
+      }}
+    >
+      {children}
+    </GlowCard>
+  );
+}
+
 interface SpotlightCardProps {
   children: ReactNode;
   /** Render as a link when the whole card is clickable. */

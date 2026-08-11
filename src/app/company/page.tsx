@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
-import { Emphasis, PageSection } from "@/components/layout/PageHero";
+import { PageSection } from "@/components/layout/PageHero";
+import { GlowPanel } from "@/components/ui/Cards";
 import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
-import {
-  getMissionStatements,
-  getStory,
-  getTeam,
-  getVisionPillars,
-} from "@/content";
+import { getMissionStatements, getStory, getTeam, getVisionPillars } from "@/content";
 import type { TeamMember } from "@/content/types";
 import { mediaUrl } from "@/lib/media";
 
@@ -20,6 +16,14 @@ export const metadata: Metadata = {
 };
 
 const HERO_PILLS = ["Security", "Privacy", "Consent"];
+
+/**
+ * The leading verb of each story bullet, used as its card's kicker.
+ *
+ * Taken from the copy rather than written fresh: the four bullets already open
+ * on a verb, and lifting it gives the grid a heading without inventing one.
+ */
+const BULLET_KICKERS = ["Empowers", "Allows", "Inspires", "Supports"];
 
 /** Initials stand in until the client supplies a portrait. */
 function Monogram({ name }: { name: string }) {
@@ -91,87 +95,80 @@ export default async function CompanyPage() {
 
   return (
     <>
-      {/* ============ HERO / ABOUT ============ */}
-      <PageSection id="about" className="pb-6 pt-[168px]">
-        <Reveal
-          data-ndi-2col="1"
-          className="grid grid-cols-1 items-center gap-10 min-[901px]:grid-cols-[1.05fr_0.95fr] min-[901px]:gap-12"
-        >
-          <div>
-            <Eyebrow>— About us</Eyebrow>
-            <h1 className="mt-5 font-display text-[clamp(38px,5vw,58px)] font-semibold leading-[1.04] tracking-[-0.03em] text-strong [text-wrap:pretty]">
-              We enhance and improve <Emphasis>digital services</Emphasis>
-            </h1>
-            <p className="mt-6 max-w-[620px] text-[19px] leading-[1.6] text-body [text-wrap:pretty]">
-              Keeping security, privacy, and consent at the heart of Bhutan NDI.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-2.5">
-              {HERO_PILLS.map((pill) => (
-                <span
-                  key={pill}
-                  className="inline-flex h-9 items-center gap-[9px] rounded-full border border-grid bg-white/[0.02] px-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="h-[5px] w-[5px] rounded-full bg-accent"
-                    style={{ boxShadow: "var(--glow-sm)" }}
-                  />
-                  {pill}
-                </span>
-              ))}
-            </div>
-          </div>
+      {/* ============ HERO ============
+          Centred under a lit arc, with the story photograph carried below the
+          copy as a wide panel rather than squeezed into a second column. */}
+      {/* `clip` rather than `hidden`: the arc is wider than the viewport on
+          narrow screens, and hidden would make this a scroll container. */}
+      <PageSection id="about" className="relative overflow-x-clip pb-[72px] pt-[168px]">
+        <div aria-hidden="true" className="ndi-arc top-[84px]" />
 
-          <div
-            className="relative h-[400px] overflow-hidden rounded-3xl border border-grid"
-            style={{ background: "#0c111b", boxShadow: "var(--inset-top), 0 20px 48px rgba(0,0,0,0.3)" }}
-          >
+        <Reveal className="relative text-center">
+          <span className="inline-flex h-8 items-center gap-2.5 rounded-full border border-grid bg-white/[0.03] px-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted">
+            <span
+              aria-hidden="true"
+              className="h-[5px] w-[5px] rounded-full bg-accent"
+              style={{ boxShadow: "var(--glow-sm)" }}
+            />
+            About Bhutan NDI
+          </span>
+
+          {/* Two lines, the second in the accent — the move all three
+              references share, and what gives the headline its shape. */}
+          <h1 className="mx-auto mt-6 max-w-[900px] font-display text-[clamp(38px,5.4vw,62px)] font-semibold leading-[1.06] tracking-[-0.03em] text-strong">
+            We enhance and improve
+            <br />
+            <span className="ndi-wave-text">digital services</span>
+          </h1>
+
+          <p className="mx-auto mt-6 max-w-[620px] text-[18px] leading-[1.6] text-body [text-wrap:pretty]">
+            Keeping security, privacy, and consent at the heart of Bhutan NDI.
+          </p>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-2.5">
+            {HERO_PILLS.map((pill) => (
+              <span
+                key={pill}
+                className="inline-flex h-9 items-center gap-[9px] rounded-full border border-grid bg-white/[0.02] px-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted"
+              >
+                <span
+                  aria-hidden="true"
+                  className="h-[5px] w-[5px] rounded-full bg-accent"
+                  style={{ boxShadow: "var(--glow-sm)" }}
+                />
+                {pill}
+              </span>
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal
+          delay={0.08}
+          className="relative mt-14 overflow-hidden rounded-3xl border border-grid"
+          style={{ boxShadow: "var(--inset-top), 0 34px 80px -30px rgba(0,0,0,0.75)" }}
+        >
+          <div className="relative h-[300px] min-[641px]:h-[420px] min-[1001px]:h-[480px]">
             <Image
               src={mediaUrl(story.image)}
               alt={story.image.alt}
               fill
-              sizes="(max-width: 900px) 100vw, 560px"
+              sizes="(max-width: 1264px) 100vw, 1136px"
               priority
               className="object-cover"
               style={{ objectPosition: story.imagePosition }}
             />
           </div>
-        </Reveal>
-      </PageSection>
 
-      {/* ============ STORY ============ */}
-      <PageSection className="pb-[72px] pt-6">
-        <Reveal className="max-w-[1100px]">
-          <h2 className="max-w-[760px] font-display text-[clamp(24px,2.7vw,32px)] font-semibold leading-[1.2] tracking-[-0.03em] text-strong [text-wrap:pretty]">
-            Bhutan NDI has been introduced as the foundation for Bhutan&apos;s digital economy
-          </h2>
-          <p className="mt-5 text-[16px] leading-[1.7] text-body">
-            Facilitating trusted interactions between individuals and organizations. Bhutan NDI:
-          </p>
-
+          {/* The facts ride on the photograph's lower edge, over a scrim, so
+              the panel carries them instead of needing a band of its own.
+              Stacked they would cover most of the picture, so below 641px they
+              drop underneath it on a solid fill instead. */}
           <div
-            data-ndi-2col="1"
-            className="mt-6 grid grid-cols-1 gap-x-10 gap-y-[18px] min-[901px]:grid-cols-2"
+            className="grid grid-cols-1 gap-5 bg-[#0b111c] px-6 py-6 min-[641px]:absolute min-[641px]:inset-x-0 min-[641px]:bottom-0 min-[641px]:grid-cols-3 min-[641px]:gap-6 min-[641px]:bg-transparent min-[641px]:bg-[linear-gradient(180deg,transparent,rgba(9,13,21,0.92)_62%)] min-[641px]:px-9 min-[641px]:pb-8 min-[641px]:pt-16"
           >
-            {story.bullets.map((bullet) => (
-              <div key={bullet} className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3.5">
-                <span
-                  aria-hidden="true"
-                  className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"
-                  style={{ boxShadow: "var(--glow-sm)" }}
-                />
-                <p className="text-[15.5px] leading-[1.65] text-muted [text-wrap:pretty]">
-                  {bullet}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Three facts, laid out as a row rather than a bordered band. */}
-          <div className="mt-[34px] flex flex-wrap gap-9">
             {story.stats.map((stat) => (
               <div key={stat.id}>
-                <div className="font-display text-[24px] font-semibold tracking-[-0.02em] text-strong">
+                <div className="font-display text-[22px] font-semibold tracking-[-0.02em] text-strong min-[641px]:text-[26px]">
                   {stat.value}
                 </div>
                 <div className="mt-1.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
@@ -183,77 +180,107 @@ export default async function CompanyPage() {
         </Reveal>
       </PageSection>
 
-      {/* ============ VISION & MISSION ============ */}
+      {/* ============ STORY ============
+          The four points were a wall of bulleted prose. Same copy, now a card
+          each, so the section can be scanned before it is read. */}
+      <PageSection className="py-[72px]">
+        <Reveal className="max-w-[820px]">
+          <Eyebrow>— Our story</Eyebrow>
+          <h2 className="mt-4 font-display text-[clamp(26px,3vw,36px)] font-semibold leading-[1.15] tracking-[-0.03em] text-strong [text-wrap:pretty]">
+            The foundation for Bhutan&apos;s digital economy
+          </h2>
+          <p className="mt-5 text-[16px] leading-[1.7] text-body [text-wrap:pretty]">
+            Facilitating trusted interactions between individuals and organizations. Bhutan NDI:
+          </p>
+        </Reveal>
+
+        <div
+          data-ndi-4col="1"
+          className="mt-9 grid grid-cols-1 gap-[18px] min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4"
+        >
+          {story.bullets.map((bullet, index) => (
+            <Reveal key={bullet} delay={0.05 * (index + 1)} className="h-full">
+              <GlowPanel
+                className="flex flex-col p-[26px]"
+                glowColor={index % 2 === 0 ? "mint" : "spring"}
+              >
+                <span
+                  aria-hidden="true"
+                  className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mb-2.5 mt-4 font-display text-[17px] font-semibold text-strong">
+                  {BULLET_KICKERS[index] ?? ""}
+                </h3>
+                <p className="text-[14.5px] leading-[1.6] text-muted [text-wrap:pretty]">
+                  {bullet}
+                </p>
+              </GlowPanel>
+            </Reveal>
+          ))}
+        </div>
+      </PageSection>
+
+      {/* ============ VISION ============ */}
       <PageSection className="py-14">
-        <Reveal>
-          <Eyebrow>— Vision &amp; mission</Eyebrow>
-          <h2 className="mt-4 max-w-[700px] font-display text-[clamp(28px,3.2vw,38px)] font-semibold leading-[1.1] tracking-[-0.03em] text-strong [text-wrap:pretty]">
+        <Reveal className="max-w-[760px]">
+          <Eyebrow>— Our vision</Eyebrow>
+          <h2 className="mt-4 font-display text-[clamp(28px,3.2vw,38px)] font-semibold leading-[1.1] tracking-[-0.03em] text-strong [text-wrap:pretty]">
             We aspire to deliver convenience and efficiency with our user-centric solutions
           </h2>
         </Reveal>
 
-        {/* The vision block sits inside one glass panel, closing on the
-            statement that gives the section its point. */}
-        <Reveal
-          delay={0.05}
-          className="relative mt-8 overflow-hidden rounded-3xl border border-grid p-7 min-[641px]:p-10"
-          style={{
-            background: "var(--grad-card)",
-            backdropFilter: "blur(18px)",
-            WebkitBackdropFilter: "blur(18px)",
-            boxShadow: "var(--inset-top), 0 18px 44px rgba(0,0,0,0.28)",
-          }}
+        <div
+          data-ndi-3col="1"
+          className="mt-9 grid grid-cols-1 gap-[18px] min-[641px]:grid-cols-3"
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-20 -top-[120px] h-[280px] w-[340px]"
-            style={{
-              background: "radial-gradient(circle, rgba(90,201,148,0.16), transparent 70%)",
-              filter: "blur(12px)",
-            }}
-          />
-          <div className="relative font-mono text-[10.5px] uppercase tracking-[0.18em] text-accent">
-            — Our vision
-          </div>
-          <div
-            data-ndi-3col="1"
-            className="relative mt-7 grid grid-cols-1 gap-4 min-[641px]:grid-cols-3"
-          >
-            {vision.map((pillar) => (
-              <div
-                key={pillar.id}
-                className="flex flex-col items-center gap-3.5 rounded-2xl border border-grid bg-white/[0.02] p-[26px]"
-              >
+          {vision.map((pillar, index) => (
+            <Reveal key={pillar.id} delay={0.05 * (index + 1)} className="h-full">
+              <GlowPanel className="flex flex-col items-center gap-4 p-8 text-center">
                 <Image
                   src={mediaUrl(pillar.icon)}
                   alt=""
                   width={pillar.icon.width}
                   height={pillar.icon.height}
-                  className="h-16 w-16 object-contain"
+                  className="h-20 w-20 object-contain"
                 />
-                <div className="font-display text-[16.5px] font-semibold text-strong">
+                <div className="font-display text-[17px] font-semibold text-strong">
                   {pillar.label}
                 </div>
-              </div>
-            ))}
-          </div>
-          <p className="relative mx-auto mt-7 max-w-[760px] text-center font-display text-[21px] font-medium leading-[1.4] tracking-[-0.02em] text-strong [text-wrap:pretty]">
+              </GlowPanel>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* The statement the three pillars add up to, given the width to land. */}
+        <Reveal delay={0.2}>
+          <p className="mx-auto mt-11 max-w-[820px] text-center font-display text-[clamp(20px,2.3vw,26px)] font-medium leading-[1.42] tracking-[-0.02em] text-strong [text-wrap:pretty]">
             <span className="text-accent">Bhutan NDI</span> accelerates seamless access to
             government, business, and financial services by building a digital ecosystem rooted in
             trust.
           </p>
         </Reveal>
+      </PageSection>
 
-        <Reveal delay={0.1} className="mt-11">
+      {/* ============ MISSION ============ */}
+      <PageSection className="py-14">
+        <Reveal className="max-w-[760px]">
           <Eyebrow>— Our mission</Eyebrow>
-          <div
-            data-ndi-3col="1"
-            className="mt-6 grid grid-cols-1 gap-4 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4"
-          >
-            {mission.map((statement) => (
-              <div
-                key={statement.id}
-                className="flex flex-col gap-4 rounded-2xl border border-grid bg-white/[0.02] p-[26px]"
+          <h2 className="mt-4 font-display text-[clamp(28px,3.2vw,38px)] font-semibold leading-[1.1] tracking-[-0.03em] text-strong [text-wrap:pretty]">
+            Four commitments we build against
+          </h2>
+        </Reveal>
+
+        <div
+          data-ndi-4col="1"
+          className="mt-9 grid grid-cols-1 gap-[18px] min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4"
+        >
+          {mission.map((statement, index) => (
+            <Reveal key={statement.id} delay={0.05 * (index + 1)} className="h-full">
+              <GlowPanel
+                className="flex flex-col gap-5 p-[26px]"
+                glowColor={index % 2 === 0 ? "mint" : "spring"}
               >
                 <Image
                   src={mediaUrl(statement.icon)}
@@ -263,25 +290,25 @@ export default async function CompanyPage() {
                   className="h-16 w-16 object-contain"
                 />
                 <p className="text-[14.5px] leading-[1.6] text-muted [text-wrap:pretty]">
-                  {statement.segments.map((segment, index) =>
+                  {statement.segments.map((segment, segmentIndex) =>
                     segment.emphasis ? (
-                      <span key={index} className="text-accent">
+                      <span key={segmentIndex} className="text-accent">
                         {segment.text}
                       </span>
                     ) : (
-                      <span key={index}>{segment.text}</span>
+                      <span key={segmentIndex}>{segment.text}</span>
                     ),
                   )}
                 </p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
+              </GlowPanel>
+            </Reveal>
+          ))}
+        </div>
       </PageSection>
 
       {/* ============ TEAM ============ */}
       <PageSection id="team" className="pb-[104px] pt-14">
-        <Reveal>
+        <Reveal className="max-w-[760px]">
           <Eyebrow>— Team</Eyebrow>
           <h2 className="mt-4 font-display text-[clamp(28px,3.2vw,38px)] font-semibold leading-[1.1] tracking-[-0.03em] text-strong">
             The people behind the platform
