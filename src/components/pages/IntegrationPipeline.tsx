@@ -14,6 +14,16 @@ const GUTTER = 16;
 const CARD = `((100% - ${GUTTER * 3}px) / 4)`;
 
 /**
+ * Where the trace sits, measured from the top of the rail.
+ *
+ * Inside a card the trace is flex-centred against the 14px dot, which lands it
+ * on a half pixel: 1px border + 16px padding + (14 - 1) / 2. The connectors are
+ * absolutely positioned and have to match that exactly — a whole 24px looks
+ * level in isolation but steps by a pixel at every card edge.
+ */
+const TRACE_TOP = 1 + 16 + (14 - 1) / 2;
+
+/**
  * The four-step integration path.
  *
  * Auto-advances every 5.2s, and pauses on hover, while the tab is hidden, and
@@ -77,7 +87,7 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
           data-pipe-line="1"
           style={{
             position: "absolute",
-            top: 24,
+            top: TRACE_TOP,
             left: 0,
             height: 1,
             overflow: "hidden",
@@ -103,7 +113,7 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
             data-on={index <= step ? "2" : "0"}
             style={{
               position: "absolute",
-              top: 24,
+              top: TRACE_TOP,
               height: 1,
               width: GUTTER + 2,
               flex: "none",
