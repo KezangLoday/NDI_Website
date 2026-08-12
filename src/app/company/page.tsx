@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import { PageSection } from "@/components/layout/PageHero";
-import { GlowPanel } from "@/components/ui/Cards";
 import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { getMissionStatements, getStory, getTeam, getVisionPillars } from "@/content";
@@ -207,7 +206,12 @@ export default async function CompanyPage() {
         </div>
       </PageSection>
 
-      {/* ============ VISION ============ */}
+      {/* ============ VISION ============
+          One composition, not three boxes and a caption. The statement is the
+          vision; the three principles are what it rests on, so they sit beside
+          it as a supporting column rather than as equal cards above it. The
+          artwork is the asset here and was being shrunk inside mostly-empty
+          panels — unboxed it can run at a size worth looking at. */}
       <PageSection className="py-14">
         <Reveal className="max-w-[760px]">
           <Eyebrow>— Our vision</Eyebrow>
@@ -217,38 +221,46 @@ export default async function CompanyPage() {
         </Reveal>
 
         <div
-          data-ndi-3col="1"
-          className="mt-9 grid grid-cols-1 gap-[18px] min-[641px]:grid-cols-3"
+          data-ndi-2col="1"
+          className="mt-14 flex flex-col items-start gap-14 min-[901px]:flex-row min-[901px]:items-center min-[901px]:gap-16"
         >
-          {vision.map((pillar, index) => (
-            <Reveal key={pillar.id} delay={0.05 * (index + 1)} className="h-full">
-              <GlowPanel className="flex flex-col items-center gap-4 p-8 text-center">
-                <Image
-                  src={mediaUrl(pillar.icon)}
-                  alt=""
-                  width={pillar.icon.width}
-                  height={pillar.icon.height}
-                  className="h-20 w-20 object-contain"
-                />
-                <div className="font-display text-[17px] font-semibold text-strong">
-                  {pillar.label}
+          {/* flex-none rather than a grid column: a fraction column is far
+              wider than three short labels and left a gulf before the quote. */}
+          <div className="flex flex-none flex-col gap-10">
+            {vision.map((pillar, index) => (
+              <Reveal key={pillar.id} delay={0.06 * (index + 1)}>
+                <div className="flex items-center gap-6">
+                  <Image
+                    src={mediaUrl(pillar.icon)}
+                    alt=""
+                    width={pillar.icon.width}
+                    height={pillar.icon.height}
+                    className="h-[68px] w-[68px] flex-none object-contain"
+                  />
+                  <div className="font-display text-[22px] font-semibold tracking-[-0.02em] text-strong">
+                    {pillar.label}
+                  </div>
                 </div>
-              </GlowPanel>
-            </Reveal>
-          ))}
-        </div>
+              </Reveal>
+            ))}
+          </div>
 
-        {/* The statement the three pillars add up to, given the width to land. */}
-        <Reveal delay={0.2}>
-          <p className="mx-auto mt-11 max-w-[820px] text-center font-display text-[clamp(20px,2.3vw,26px)] font-medium leading-[1.42] tracking-[-0.02em] text-strong [text-wrap:pretty]">
-            <span className="text-accent">Bhutan NDI</span> accelerates seamless access to
-            government, business, and financial services by building a digital ecosystem rooted in
-            trust.
-          </p>
-        </Reveal>
+          <Reveal delay={0.24} className="min-[901px]:flex-1">
+            <p className="border-l border-subtle pl-8 font-display text-[clamp(21px,2.4vw,28px)] font-medium leading-[1.44] tracking-[-0.02em] text-strong [text-wrap:pretty]">
+              <span className="text-accent">Bhutan NDI</span> accelerates seamless access to
+              government, business, and financial services by building a digital ecosystem rooted
+              in trust.
+            </p>
+          </Reveal>
+        </div>
       </PageSection>
 
-      {/* ============ MISSION ============ */}
+      {/* ============ MISSION ============
+          Four declarations, set as declarations. A card each made them look
+          like four comparable products; with the mark beside the sentence and
+          space instead of a border, they read as things the organisation is
+          committing to. No rules either — the story section above already uses
+          those, and repeating them would flatten the two into one texture. */}
       <PageSection className="py-14">
         <Reveal className="max-w-[760px]">
           <Eyebrow>— Our mission</Eyebrow>
@@ -258,26 +270,23 @@ export default async function CompanyPage() {
         </Reveal>
 
         <div
-          data-ndi-4col="1"
-          className="mt-9 grid grid-cols-1 gap-[18px] min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4"
+          data-ndi-2col="1"
+          className="mt-12 grid grid-cols-1 gap-x-16 gap-y-12 min-[761px]:grid-cols-2"
         >
           {mission.map((statement, index) => (
-            <Reveal key={statement.id} delay={0.05 * (index + 1)} className="h-full">
-              <GlowPanel
-                className="flex flex-col gap-5 p-[26px]"
-                glowColor={index % 2 === 0 ? "mint" : "spring"}
-              >
+            <Reveal key={statement.id} delay={0.06 * (index + 1)}>
+              <div className="flex items-start gap-5">
                 <Image
                   src={mediaUrl(statement.icon)}
                   alt=""
                   width={statement.icon.width}
                   height={statement.icon.height}
-                  className="h-16 w-16 object-contain"
+                  className="h-14 w-14 flex-none object-contain"
                 />
-                <p className="text-[14.5px] leading-[1.6] text-muted [text-wrap:pretty]">
+                <p className="max-w-[42ch] pt-1 text-[16px] leading-[1.65] text-body [text-wrap:pretty]">
                   {statement.segments.map((segment, segmentIndex) =>
                     segment.emphasis ? (
-                      <span key={segmentIndex} className="text-accent">
+                      <span key={segmentIndex} className="font-semibold text-accent">
                         {segment.text}
                       </span>
                     ) : (
@@ -285,7 +294,7 @@ export default async function CompanyPage() {
                     ),
                   )}
                 </p>
-              </GlowPanel>
+              </div>
             </Reveal>
           ))}
         </div>
