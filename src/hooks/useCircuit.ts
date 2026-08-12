@@ -206,6 +206,9 @@ export function useCircuitGlow(
         base.style.webkitMaskImage = SUBPAGE_FADE;
         base.style.maskImage = SUBPAGE_FADE;
       }
+      // The glow keeps the mask the previous route left on it until the pointer
+      // next moves, which on a subpage would briefly show traces above the fade.
+      if (glowRef.current) glowRef.current.style.opacity = "0";
 
       const applySpot = (x: number, y: number) => {
         const glow = glowRef.current;
@@ -232,6 +235,12 @@ export function useCircuitGlow(
         document.removeEventListener("mouseleave", onLeave);
       };
     }
+
+    // Undo what the subpage branch wrote. Atmosphere lives in the layout, so
+    // these layers are the same DOM nodes across a client-side navigation, and
+    // the inline `opacity: 0` a subpage sets outlives the route that set it —
+    // arriving here from one left the base traces invisible until a reload.
+    if (baseRef.current) baseRef.current.style.opacity = "1";
 
     let mask: CircuitMask | null = null;
 
