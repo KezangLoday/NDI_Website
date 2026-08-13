@@ -218,17 +218,13 @@ export function SiteFooter() {
                     {footer.tagline}
                   </p>
                   <div className="mt-[26px] flex gap-2.5">
-                    {social.map((item, index) => (
+                    {social.map((item) => (
                       <a
                         key={item.label}
                         href={item.href}
                         {...externalLinkProps(item.href)}
                         aria-label={item.label}
-                        // WhatsApp is the only channel that answers back, so a
-                        // wider gap after it separates support from broadcast.
-                        className={`ndi-social inline-flex h-10 w-10 items-center justify-center rounded-xl border border-grid bg-white/[0.02] text-muted ${
-                          index === 0 ? "mr-2.5" : ""
-                        }`}
+                        className="ndi-social inline-flex h-10 w-10 items-center justify-center rounded-xl border border-grid bg-white/[0.02] text-muted"
                       >
                         <Icon name={item.icon} size={item.icon === "linkedin" ? 17 : 18} />
                       </a>

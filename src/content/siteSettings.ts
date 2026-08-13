@@ -135,10 +135,9 @@ export const siteSettings: SiteSettings = {
    * The live channels, ordered the way the site orders its audiences.
    *
    * WhatsApp leads because it is the only two-way channel here — the others
-   * broadcast, this one answers — and the footer sets it slightly apart for
-   * the same reason. Facebook, Instagram and YouTube follow as the
-   * citizen-facing feeds, which is the "For Users" half of the nav, and
-   * LinkedIn closes as the channel for organizations and partners.
+   * broadcast, this one answers. LinkedIn follows as the organizational
+   * channel, then Facebook, Instagram and YouTube as the citizen-facing feeds.
+   * Spacing is even across the row.
    *
    * LinkedIn points at the public company page. The URL supplied was the
    * admin feed (/admin/feed/posts/?feedType=following), which only members of
@@ -149,6 +148,7 @@ export const siteSettings: SiteSettings = {
    */
   social: [
     { label: "WhatsApp", href: "https://wa.me/97517112086", icon: "whatsapp" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/96956149/", icon: "linkedin" },
     {
       label: "Facebook",
       href: "https://www.facebook.com/profile.php?id=61551076655472",
@@ -160,27 +160,21 @@ export const siteSettings: SiteSettings = {
       href: "https://www.youtube.com/channel/UCfGUaTDHpHBGDmxsxpbSrng",
       icon: "youtube",
     },
-    { label: "LinkedIn", href: "https://www.linkedin.com/company/96956149/", icon: "linkedin" },
   ],
   /**
    * The mobile sheet shows four. The design's fourth was X, for which no
-   * account was supplied, so the set is the first four above — support plus
-   * the three citizen-facing feeds. LinkedIn is the one dropped: the sheet
-   * belongs to the phone audience, and LinkedIn is where partners look.
+   * account was supplied, so the set is simply the first four above — one
+   * ordering to maintain rather than two. YouTube is the one left behind.
    */
   mobileSocial: [
     { label: "WhatsApp", href: "https://wa.me/97517112086", icon: "whatsapp" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/96956149/", icon: "linkedin" },
     {
       label: "Facebook",
       href: "https://www.facebook.com/profile.php?id=61551076655472",
       icon: "facebook",
     },
     { label: "Instagram", href: "https://www.instagram.com/bhutanndi/", icon: "instagram" },
-    {
-      label: "YouTube",
-      href: "https://www.youtube.com/channel/UCfGUaTDHpHBGDmxsxpbSrng",
-      icon: "youtube",
-    },
   ],
 };
 
