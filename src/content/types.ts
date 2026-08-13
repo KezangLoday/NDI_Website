@@ -377,6 +377,8 @@ export interface SiteSettings {
     /** Displayed alongside the office number in the footer. */
     phoneDisplay: string;
     phoneHref: string;
+    /** Same number as phoneHref, as a wa.me deep link. */
+    whatsappHref: string;
     officePhoneDisplay: string;
     officePhoneHref: string;
     location: string;

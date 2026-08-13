@@ -11,15 +11,19 @@ function ContactRow({
   icon,
   label,
   value,
+  external = false,
 }: {
   href: string;
   icon: IconName;
   label: string;
   value: string;
+  /** wa.me opens a site, so it gets a tab; mailto: and tel: hand off. */
+  external?: boolean;
 }) {
   return (
     <a
       href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className="ndi-contact-row flex items-center gap-3.5 rounded-xl border border-grid bg-white/[0.02] px-3.5 py-3 text-[15px] text-body"
     >
       <span className="inline-flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[10px] border border-grid bg-[color:var(--ndi-mint-08)] text-accent">
@@ -58,11 +62,22 @@ export async function ContactSection() {
               label="Email"
               value={contact.email}
             />
+            {/* One number, two ways to use it. The row used to be labelled
+                "Phone · WhatsApp" while only offering tel:, so on a desktop —
+                where tel: usually goes nowhere — WhatsApp was named but
+                unreachable. */}
             <ContactRow
               href={contact.phoneHref}
               icon="phone"
-              label="Phone · WhatsApp"
+              label="Phone"
               value={contact.phoneDisplay}
+            />
+            <ContactRow
+              href={contact.whatsappHref}
+              icon="whatsapp"
+              label="WhatsApp"
+              value={contact.phoneDisplay}
+              external
             />
           </div>
 

@@ -7,6 +7,19 @@ import type { SiteSettings } from "./types";
  * two places the prototype disagreed with itself — the phone number and the
  * contact email — now have one source of truth.
  */
+/**
+ * The single contact number, in the three shapes the site needs it: what a
+ * reader sees, what a dialer needs, and what wa.me needs. Declared once so a
+ * change lands everywhere — the same digits appear in the contact rows, the
+ * footer, the Organizations page and the social row.
+ *
+ * wa.me takes international format with no punctuation; a tel: URI must not
+ * contain spaces.
+ */
+const PHONE_DISPLAY = "+975 17112086";
+const PHONE_HREF = "tel:+97517112086";
+const WHATSAPP_HREF = "https://wa.me/97517112086";
+
 export const siteSettings: SiteSettings = {
   nav: {
     primary: [
@@ -122,12 +135,13 @@ export const siteSettings: SiteSettings = {
   },
   contact: {
     email: "info@bhutanndi.com",
-    phoneDisplay: "+975 17 12 34 56",
-    // The prototype's href contained a literal space ("tel:+9751712 3456"),
-    // which is not a dialable tel: URI — normalised here.
-    phoneHref: "tel:+97517123456",
-    officePhoneDisplay: "+975 2 335 566",
-    officePhoneHref: "tel:+9752335566",
+    phoneDisplay: PHONE_DISPLAY,
+    phoneHref: PHONE_HREF,
+    whatsappHref: WHATSAPP_HREF,
+    // There is one number, so the office fields point at it too rather than
+    // holding a second copy that can drift out of sync.
+    officePhoneDisplay: PHONE_DISPLAY,
+    officePhoneHref: PHONE_HREF,
     location: "Thimphu, Bhutan",
     responseTime: "Replies within 2 business days",
   },
@@ -147,7 +161,7 @@ export const siteSettings: SiteSettings = {
    * punctuation, which is the only shape the deep link accepts.
    */
   social: [
-    { label: "WhatsApp", href: "https://wa.me/97517112086", icon: "whatsapp" },
+    { label: "WhatsApp", href: WHATSAPP_HREF, icon: "whatsapp" },
     { label: "LinkedIn", href: "https://www.linkedin.com/company/96956149/", icon: "linkedin" },
     {
       label: "Facebook",
@@ -167,7 +181,7 @@ export const siteSettings: SiteSettings = {
    * ordering to maintain rather than two. YouTube is the one left behind.
    */
   mobileSocial: [
-    { label: "WhatsApp", href: "https://wa.me/97517112086", icon: "whatsapp" },
+    { label: "WhatsApp", href: WHATSAPP_HREF, icon: "whatsapp" },
     { label: "LinkedIn", href: "https://www.linkedin.com/company/96956149/", icon: "linkedin" },
     {
       label: "Facebook",
