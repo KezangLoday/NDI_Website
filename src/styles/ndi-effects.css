@@ -499,8 +499,7 @@
    brightened view of the atmosphere behind, plus a conic lens rim. */
 #how-it-works .ndi-usecase,
 .ndi-spot,
-[data-news-featured],
-[data-org-tile] {
+[data-news-featured] {
   background: linear-gradient(158deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.006) 46%, rgba(90, 201, 148, 0.03) 100%) !important;
   -webkit-backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
   backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
@@ -653,6 +652,26 @@
 .ndi-plainlink:hover { color: var(--text-strong); }
 
 /* Organizations service cards */
+/* ---- Liquid glass cards ------------------------------------
+   The card itself carries no fill — only the bevel and glow, as box-shadows.
+   The blur lives on a separate layer so the warp filter can act on it without
+   also displacing the card's text, which would make the labels wobble. */
+.ndi-lgc-bend {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  filter: url(#ndi-glass-warp);
+}
+/* Safari applies SVG filters to backdrop layers unpredictably; the blur alone
+   still reads there. */
+@supports (-webkit-hyphens: none) {
+  .ndi-lgc-bend { filter: none; }
+}
+
 /* ---- Capabilities index (Home) -----------------------------
    The hairline above each entry draws in from the left as the entry arrives,
    a beat after the text starts rising, so the rule reads as being placed
