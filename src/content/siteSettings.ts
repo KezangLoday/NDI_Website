@@ -131,18 +131,49 @@ export const siteSettings: SiteSettings = {
     location: "Thimphu, Bhutan",
     responseTime: "Replies within 2 business days",
   },
+  /**
+   * The live channels.
+   *
+   * LinkedIn points at the public company page. The URL supplied was the
+   * admin feed (/admin/feed/posts/?feedType=following), which only members of
+   * the page can open — everyone else gets a redirect or a permission error.
+   *
+   * WhatsApp uses wa.me with the number in international format and no
+   * punctuation, which is the only shape the deep link accepts.
+   */
   social: [
-    { label: "WhatsApp", href: "#", icon: "whatsapp" },
-    { label: "LinkedIn", href: "#", icon: "linkedin" },
-    { label: "Facebook", href: "#", icon: "facebook" },
-    { label: "YouTube", href: "#", icon: "youtube" },
-    { label: "Instagram", href: "#", icon: "instagram" },
+    { label: "WhatsApp", href: "https://wa.me/97517112086", icon: "whatsapp" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/96956149/", icon: "linkedin" },
+    {
+      label: "Facebook",
+      href: "https://www.facebook.com/profile.php?id=61551076655472",
+      icon: "facebook",
+    },
+    {
+      label: "YouTube",
+      href: "https://www.youtube.com/channel/UCfGUaTDHpHBGDmxsxpbSrng",
+      icon: "youtube",
+    },
+    { label: "Instagram", href: "https://www.instagram.com/bhutanndi/", icon: "instagram" },
   ],
+  /**
+   * The mobile sheet shows four. The design's fourth was X, for which no
+   * account was supplied — Facebook takes the slot so the set stays the
+   * desktop order minus Instagram, rather than carrying a dead link.
+   */
   mobileSocial: [
-    { label: "WhatsApp", href: "#", icon: "whatsapp" },
-    { label: "LinkedIn", href: "#", icon: "linkedin" },
-    { label: "X", href: "#", icon: "x" },
-    { label: "YouTube", href: "#", icon: "youtube" },
+    { label: "WhatsApp", href: "https://wa.me/97517112086", icon: "whatsapp" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/96956149/", icon: "linkedin" },
+    {
+      label: "Facebook",
+      href: "https://www.facebook.com/profile.php?id=61551076655472",
+      icon: "facebook",
+    },
+    {
+      label: "YouTube",
+      href: "https://www.youtube.com/channel/UCfGUaTDHpHBGDmxsxpbSrng",
+      icon: "youtube",
+    },
   ],
 };
 

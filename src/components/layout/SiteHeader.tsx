@@ -425,6 +425,7 @@ export function SiteHeader() {
               <a
                 key={item.label}
                 href={item.href}
+                {...externalLinkProps(item.href)}
                 aria-label={item.label}
                 className="ndi-sheet-social inline-flex h-11 w-11 items-center justify-center rounded-xl border border-grid bg-transparent text-muted transition-all duration-[220ms]"
               >

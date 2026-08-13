@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
-import { siteSettings } from "@/content/siteSettings";
 import { externalLinkProps } from "@/lib/links";
+import { siteSettings } from "@/content/siteSettings";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 import { Icon } from "../ui/icons";
@@ -222,6 +222,7 @@ export function SiteFooter() {
                       <a
                         key={item.label}
                         href={item.href}
+                        {...externalLinkProps(item.href)}
                         aria-label={item.label}
                         className="ndi-social inline-flex h-10 w-10 items-center justify-center rounded-xl border border-grid bg-white/[0.02] text-muted"
                       >
