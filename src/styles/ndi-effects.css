@@ -499,7 +499,8 @@
    brightened view of the atmosphere behind, plus a conic lens rim. */
 #how-it-works .ndi-usecase,
 .ndi-spot,
-[data-news-featured] {
+[data-news-featured],
+[data-org-tile] {
   background: linear-gradient(158deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.006) 46%, rgba(90, 201, 148, 0.03) 100%) !important;
   -webkit-backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
   backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
@@ -652,63 +653,6 @@
 .ndi-plainlink:hover { color: var(--text-strong); }
 
 /* Organizations service cards */
-/* ---- Liquid glass (Trusted by tiles) -----------------------
-   Real glass, not a tinted panel: the fill is translucent enough that the
-   circuit field behind actually reads through it, and backdrop-filter does the
-   blurring. That only works because the column's fade stopped being a mask —
-   a mask creates a backdrop root and the blur had nothing to sample.
-
-   Four layers. The blurred, saturated, slightly brightened backdrop; a rim
-   that runs bright where light enters and dark where it leaves, so the pane
-   has an edge with thickness; a sheen down the upper half; and an inner
-   bottom shadow, which is what stops it reading as a flat cutout. */
-.ndi-liquid {
-  border-radius: 14px;
-  background: linear-gradient(
-    152deg,
-    rgba(255, 255, 255, 0.11) 0%,
-    rgba(255, 255, 255, 0.04) 46%,
-    rgba(90, 201, 148, 0.05) 100%
-  );
-  -webkit-backdrop-filter: blur(18px) saturate(185%) brightness(1.08);
-  backdrop-filter: blur(18px) saturate(185%) brightness(1.08);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -14px 22px -18px rgba(255, 255, 255, 0.14),
-    0 14px 34px -20px rgba(0, 0, 0, 0.7);
-}
-.ndi-liquid::before,
-.ndi-liquid::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-}
-/* The refracted edge. */
-.ndi-liquid::before {
-  padding: 1px;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(255, 255, 255, 0.08) 34%,
-    rgba(255, 255, 255, 0.03) 62%,
-    rgba(0, 0, 0, 0.35) 100%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-/* Sheen, where a curved surface would catch the light. */
-.ndi-liquid::after {
-  inset: 0 0 auto 0;
-  height: 52%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-}
-/* Content sits above both. */
-.ndi-liquid > * { position: relative; z-index: 1; }
-
 /* ---- Capabilities index (Home) -----------------------------
    The hairline above each entry draws in from the left as the entry arrives,
    a beat after the text starts rising, so the rule reads as being placed
