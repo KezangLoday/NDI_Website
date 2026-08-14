@@ -4,7 +4,7 @@ import { useEffect, useRef, type ReactNode } from "react";
 
 import { Icon } from "@/components/ui/icons";
 import type { IconName } from "@/components/ui/icons";
-import { GlowLayers, glowVars, useGlowCard } from "@/components/ui/spotlight-card";
+import { useGlowCards } from "@/hooks/useGlowCards";
 
 /** The card's bottom padding, in px — `p-7` on the face and the value block. */
 const PAD = 28;
@@ -27,14 +27,9 @@ const GAP = 20;
  *   "Learn more" link that repeats a href, but Value is real content, and on
  *   touch there is no hover to give it. Below `(hover: hover)` both layers are
  *   simply shown — see `.ndi-bento` in ndi-effects.css.
- * - The rim is this site's own port of the effect (`spotlight-card.tsx`), not
- *   a second copy of it. The upstream component positions its gradient with
- *   `background-attachment: fixed`, and these cards carry a `backdrop-filter`,
- *   which makes each card the containing block for a fixed background — so the
- *   viewport coordinates would resolve against the card and land outside it,
- *   drawing nothing at all. The port uses element-local coordinates, shares one
- *   pointer listener across every glow card on the page instead of registering
- *   one per card, and is already in the site's mint.
+ * - The border glow is the same `.ndi-glow` arc the use-case cards carry, not a
+ *   second implementation of it: one class, one shared `useGlowCards()`
+ *   subscription, already in the site's mint.
  */
 export function BentoGrid({
   children,
@@ -43,6 +38,11 @@ export function BentoGrid({
   children: ReactNode;
   className?: string;
 }) {
+  /* One subscription for the whole grid. The hook collects the `.ndi-glow`
+     layers already in the DOM, and child effects run before the parent's, so
+     every card's layer is present by the time this fires. */
+  useGlowCards();
+
   return (
     <div
       className={`grid w-full grid-cols-1 gap-4 min-[901px]:grid-cols-[1.16fr_0.85fr_1.16fr] ${className}`.trim()}
@@ -66,12 +66,7 @@ export function BentoCard({
   icon: IconName;
   className?: string;
 }) {
-  /**
-   * One element serves both purposes: it subscribes to the shared pointer
-   * listener that drives the rim, and it is where `--bento-lift` is written for
-   * the face and value to read.
-   */
-  const cardRef = useGlowCard<HTMLDivElement>();
+  const cardRef = useRef<HTMLDivElement>(null);
   const valueRef = useRef<HTMLDivElement>(null);
 
   /**
@@ -96,23 +91,18 @@ export function BentoCard({
     const observer = new ResizeObserver(apply);
     observer.observe(block);
     return () => observer.disconnect();
-    // cardRef comes from a hook rather than a bare useRef, so the linter cannot
-    // see that it is stable and asks for it here. Listing it changes nothing.
-  }, [cardRef]);
+  }, []);
 
   return (
-    /* The rim lives on a wrapper rather than on the card itself. The card has
+    /* The glow lives on a wrapper rather than on the card itself. The card has
        to keep `overflow: hidden` — that clip is the only thing holding the
-       value block out of sight below the card at rest — and the rim and its
-       bloom are drawn outside the card box, so on the clipping element they
-       would be erased. `proud` matches `border` so the whole 2px ring sits
-       outside the card face instead of half under it. */
+       value block out of sight below the card at rest — and the arc is drawn
+       2px outside the box, so on the clipping element it would be erased. */
     <div
       ref={cardRef}
-      className={`ndi-bento ndi-glow-card group relative flex flex-col rounded-2xl min-[901px]:min-h-[19.5rem] ${className}`.trim()}
-      style={glowVars("mint", { spotlight: 260, border: 2, proud: 2 })}
+      className={`ndi-bento group relative flex flex-col rounded-2xl min-[901px]:min-h-[19.5rem] ${className}`.trim()}
     >
-      <GlowLayers />
+      <div className="ndi-glow" />
       <div
         className="ndi-bento-inner relative flex flex-1 flex-col justify-end overflow-hidden rounded-2xl border border-grid"
         style={{

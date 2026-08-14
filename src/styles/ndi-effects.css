@@ -718,7 +718,11 @@
 
   .ndi-bento:hover .ndi-bento-face { transform: translateY(calc(var(--bento-lift) * -1)); }
   .ndi-bento:hover .ndi-bento-value { transform: none; opacity: 1; }
-  .ndi-bento:hover .ndi-bento-icon { transform: scale(0.82); }
+  /* 0.82 took a 34px glyph down to 28px, which nobody reads as a change. At
+     0.62 it lands at 21px — the same step the icon takes between a heading and
+     a list item, so the shrink is legible as a change of role. It scales from
+     its left edge, so it stays on the text's margin as it goes. */
+  .ndi-bento:hover .ndi-bento-icon { transform: scale(0.62); }
   .ndi-bento:hover .ndi-bento-inner { border-color: var(--border-strong); }
 
   /* Arriving overshoots and settles back. The face and the value carry the
