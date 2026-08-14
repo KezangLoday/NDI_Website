@@ -95,7 +95,11 @@ export function BentoCard({
       }}
     >
       <div className="ndi-bento-face relative z-10 flex flex-col gap-2 p-7">
-        <span className="ndi-bento-icon inline-flex h-10 w-10 origin-left items-center text-accent">
+        {/* The icon used to scale to 0.82 alongside the lift. A vector at 34px
+            re-rasterises at every intermediate scale, so its strokes crawled
+            for the length of the transition — the one thing on the card whose
+            edges were visibly unstable. It rides up with the face instead. */}
+        <span className="inline-flex h-10 w-10 items-center text-accent">
           <Icon name={icon} size={34} />
         </span>
         <h3 className="mt-1.5 font-display text-[19px] font-semibold tracking-[-0.02em] text-strong">

@@ -687,11 +687,17 @@
 /* Fallback only — bento-grid.tsx measures the value block and overwrites this
    per card, so a value that wraps to three lines in a narrow column still
    clears the face. */
-.ndi-bento { --bento-lift: 92px; }
+.ndi-bento {
+  --bento-lift: 92px;
+  /* The border used to jump to its hover colour with no duration at all while
+     the contents eased — one snap inside a smooth move is what you notice. */
+  transition: border-color 0.34s var(--ease-glide);
+}
 .ndi-bento-face,
-.ndi-bento-value,
-.ndi-bento-icon {
-  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
+.ndi-bento-value {
+  /* Leaving is quicker than arriving: the card is putting itself away, and a
+     slow retreat feels like the card is reluctant to let the pointer go. */
+  transition: transform 0.34s var(--ease-glide), opacity 0.22s linear;
 }
 .ndi-bento-value {
   transform: translateY(var(--bento-lift));
@@ -699,10 +705,24 @@
   pointer-events: none;
 }
 @media (hover: hover) {
+  /* ~90px of body text has to be rasterised once and moved as a texture. Left
+     unpromoted it is re-rasterised at a new subpixel offset every frame, which
+     is the shimmer that reads as jitter. */
+  .ndi-bento-face,
+  .ndi-bento-value { will-change: transform; }
+
   .ndi-bento:hover .ndi-bento-face { transform: translateY(calc(var(--bento-lift) * -1)); }
-  .ndi-bento:hover .ndi-bento-icon { transform: scale(0.82); }
   .ndi-bento:hover .ndi-bento-value { transform: none; opacity: 1; }
   .ndi-bento:hover { border-color: var(--border-strong); }
+
+  /* Arriving takes longer than the 0.3s this used to run in — at 90px that was
+     a jump. The value's fade trails the lift by a beat so the two read as one
+     gesture, the face making room and the value moving into it, rather than as
+     two things starting at once. */
+  .ndi-bento:hover .ndi-bento-face { transition-duration: 0.46s; }
+  .ndi-bento:hover .ndi-bento-value {
+    transition: transform 0.46s var(--ease-glide), opacity 0.3s linear 0.08s;
+  }
 }
 /* No pointer means no hover, and Value is content rather than decoration — so
    it is simply present, with the face sitting above it in normal flow. */
@@ -713,8 +733,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .ndi-bento-face,
-  .ndi-bento-value,
-  .ndi-bento-icon { transition-duration: 0.01ms; }
+  .ndi-bento-value { transition-duration: 0.01ms; }
 }
 
 .ndi-adv-card { transition: border-color var(--dur), background var(--dur); }
