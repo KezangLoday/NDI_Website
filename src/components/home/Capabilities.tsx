@@ -13,7 +13,7 @@ import { getCapabilities } from "@/content";
  * object rather than three stacked ones, and the interval between entries far
  * exceeds the interval inside them — which is what gives the section a cadence.
  *
- * The hairline above each entry draws itself in as the entry arrives, a beat
+ * The hairline between entries draws itself in as the entry arrives, a beat
  * after the text starts rising. It supplies the spine the boxes used to give
  * without putting anything back in a container, and it is the one piece of
  * motion here: these are not interactive, so per the animation framework
@@ -32,7 +32,7 @@ export async function Capabilities() {
         />
       </Reveal>
 
-      <div className="mt-12 grid grid-cols-1 gap-x-20 min-[761px]:grid-cols-2">
+      <div className="ndi-cap-list mt-12 grid grid-cols-1 gap-x-20 min-[761px]:grid-cols-2">
         {capabilities.map((capability, index) => (
           <Reveal key={capability.id} delay={0.05 * (index + 1)}>
             <div className="relative pb-9 pt-6">

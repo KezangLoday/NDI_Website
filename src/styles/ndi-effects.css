@@ -671,6 +671,13 @@
 @media (prefers-reduced-motion: reduce) {
   .ndi-cap-rule { transform: none; transition: none; }
 }
+/* The rule separates entries, so the first row gets none — up there it has
+   nothing above it to divide, and it read as an underline belonging to the
+   section heading. One column means one first entry; two columns mean two. */
+.ndi-cap-list > :first-child .ndi-cap-rule { display: none; }
+@media (min-width: 761px) {
+  .ndi-cap-list > :nth-child(2) .ndi-cap-rule { display: none; }
+}
 
 /* ---- Bento cards (Organizations solutions) -----------------
    The face lifts to make room and the value rises into it. --bento-lift is
