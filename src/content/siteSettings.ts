@@ -54,10 +54,10 @@ export const siteSettings: SiteSettings = {
         ],
         links: [
           {
-            label: "FAQs",
-            href: "/faqs",
-            description: "Answers to common questions",
-            icon: "helpCircle",
+            label: "Technical Documentation",
+            href: "https://docs.bhutanndi.com/",
+            description: "Integration guides and API reference",
+            icon: "fileText",
           },
           {
             label: "Glossary",
@@ -86,6 +86,12 @@ export const siteSettings: SiteSettings = {
           },
         ],
         links: [
+          {
+            label: "FAQs",
+            href: "/faqs",
+            description: "Answers to common questions",
+            icon: "helpCircle",
+          },
           {
             label: "Media Coverage",
             href: "/media-coverage",
@@ -201,6 +207,6 @@ export const navGroups: Record<string, string[]> = {
   users: ["/users"],
   orgs: ["/organizations"],
   governance: ["/governance"],
-  resources: ["/resources", "/faqs", "/glossary"],  // sub-paths match by prefix
-  company: ["/company", "/careers", "/media-coverage"],
+  resources: ["/resources", "/glossary"],  // sub-paths match by prefix
+  company: ["/company", "/careers", "/media-coverage", "/faqs"],
 };
