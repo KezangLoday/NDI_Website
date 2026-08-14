@@ -113,6 +113,9 @@
      the travel is more than a few dozen pixels. This is the same shape with
      the front loading taken out, for the long moves. */
   --ease-glide: cubic-bezier(0.33, 1, 0.68, 1);
+  /* Overshoots by about 10% and settles back — the bounce. Only ever on the
+     way in: a UI element that bounces as it leaves reads as unstable. */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --dur-fast: 140ms;
   --dur: 220ms;
   --dur-slow: 400ms;

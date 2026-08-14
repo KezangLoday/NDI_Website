@@ -687,16 +687,18 @@
 /* Fallback only — bento-grid.tsx measures the value block and overwrites this
    per card, so a value that wraps to three lines in a narrow column still
    clears the face. */
-.ndi-bento {
-  --bento-lift: 92px;
+.ndi-bento { --bento-lift: 92px; }
+.ndi-bento-inner {
   /* The border used to jump to its hover colour with no duration at all while
      the contents eased — one snap inside a smooth move is what you notice. */
   transition: border-color 0.34s var(--ease-glide);
 }
 .ndi-bento-face,
-.ndi-bento-value {
-  /* Leaving is quicker than arriving: the card is putting itself away, and a
-     slow retreat feels like the card is reluctant to let the pointer go. */
+.ndi-bento-value,
+.ndi-bento-icon {
+  /* Leaving is quicker than arriving and does not bounce: the card is putting
+     itself away, and something that wobbles on its way out reads as unstable
+     rather than playful. */
   transition: transform 0.34s var(--ease-glide), opacity 0.22s linear;
 }
 .ndi-bento-value {
@@ -707,33 +709,43 @@
 @media (hover: hover) {
   /* ~90px of body text has to be rasterised once and moved as a texture. Left
      unpromoted it is re-rasterised at a new subpixel offset every frame, which
-     is the shimmer that reads as jitter. */
+     is the shimmer that reads as jitter — and it is what made the icon's
+     strokes crawl as it scaled. Promoted, the icon is rasterised once at full
+     size and the layer is scaled down, which downsamples cleanly. */
   .ndi-bento-face,
-  .ndi-bento-value { will-change: transform; }
+  .ndi-bento-value,
+  .ndi-bento-icon { will-change: transform; }
 
   .ndi-bento:hover .ndi-bento-face { transform: translateY(calc(var(--bento-lift) * -1)); }
   .ndi-bento:hover .ndi-bento-value { transform: none; opacity: 1; }
-  .ndi-bento:hover { border-color: var(--border-strong); }
+  .ndi-bento:hover .ndi-bento-icon { transform: scale(0.82); }
+  .ndi-bento:hover .ndi-bento-inner { border-color: var(--border-strong); }
 
-  /* Arriving takes longer than the 0.3s this used to run in — at 90px that was
-     a jump. The value's fade trails the lift by a beat so the two read as one
-     gesture, the face making room and the value moving into it, rather than as
-     two things starting at once. */
-  .ndi-bento:hover .ndi-bento-face { transition-duration: 0.46s; }
+  /* Arriving overshoots and settles back. The face and the value carry the
+     same curve and the same duration so the gap between them never changes —
+     they are one moving object, not two things that happen to bounce.
+     The value's fade trails the lift by a beat, so the pair reads as the face
+     making room and the value moving into it rather than as a crossfade. */
+  .ndi-bento:hover .ndi-bento-face,
+  .ndi-bento:hover .ndi-bento-icon {
+    transition-duration: 0.52s;
+    transition-timing-function: var(--ease-bounce);
+  }
   .ndi-bento:hover .ndi-bento-value {
-    transition: transform 0.46s var(--ease-glide), opacity 0.3s linear 0.08s;
+    transition: transform 0.52s var(--ease-bounce), opacity 0.3s linear 0.08s;
   }
 }
 /* No pointer means no hover, and Value is content rather than decoration — so
    it is simply present, with the face sitting above it in normal flow. */
 @media (hover: none) {
-  .ndi-bento { display: flex; flex-direction: column; justify-content: flex-start; }
+  .ndi-bento-inner { justify-content: flex-start; }
   .ndi-bento-value { position: static; transform: none; opacity: 1; padding-top: 0; }
   .ndi-bento-face { padding-bottom: 0.75rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ndi-bento-face,
-  .ndi-bento-value { transition-duration: 0.01ms; }
+  .ndi-bento-value,
+  .ndi-bento-icon { transition-duration: 0.01ms; }
 }
 
 .ndi-adv-card { transition: border-color var(--dur), background var(--dur); }
