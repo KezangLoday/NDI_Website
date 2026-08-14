@@ -1,18 +1,23 @@
 import Image from "next/image";
 
-import { LiquidGlassCard, LiquidGlassDefs } from "@/components/ui/liquid-glass-card";
 import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { getOrganizations, organizationColumnDurations } from "@/content";
 import type { Organization } from "@/content/types";
 import { mediaUrl } from "@/lib/media";
 
+const COLUMN_MASK = "linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent)";
+
 function OrgTile({ organization, duplicate }: { organization: Organization; duplicate: boolean }) {
   return (
-    <LiquidGlassCard
+    <div
       data-org-tile="1"
       aria-hidden={duplicate || undefined}
-      className="w-full flex-none px-[18px] py-5 text-center"
+      className="relative flex w-full flex-none flex-col items-center gap-3 rounded-[14px] border border-grid px-[18px] py-5 text-center"
+      style={{
+        background: "linear-gradient(160deg, #162c37 0%, #1c2535 60%)",
+        boxShadow: "var(--inset-top)",
+      }}
     >
       <div className="ndi-org-logo flex h-[68px] w-[68px] flex-none items-center justify-center">
         <Image
@@ -33,7 +38,7 @@ function OrgTile({ organization, duplicate }: { organization: Organization; dupl
         </div>
         <p className="mt-[9px] text-xs leading-[1.5] text-muted">{organization.description}</p>
       </div>
-    </LiquidGlassCard>
+    </div>
   );
 }
 
@@ -56,16 +61,11 @@ export async function TrustedBy() {
         </p>
       </Reveal>
 
-      {/* The fade was a mask on this container, and a mask creates a backdrop
-          root — every tile inside it had nothing of the page to sample, so the
-          blur did nothing. Two scrims in the page's own colour at this scroll
-          depth fade the same way and leave the backdrop reachable. */}
-      <div className="relative mx-auto mt-[34px] max-w-[1200px]">
-        <LiquidGlassDefs />
-        <div
-          data-org-cols="1"
-          className="flex max-h-[500px] justify-center gap-5 overflow-hidden px-8"
-        >
+      <div
+        data-org-cols="1"
+        className="mx-auto mt-[34px] flex max-h-[500px] max-w-[1200px] justify-center gap-5 overflow-hidden px-8"
+        style={{ WebkitMaskImage: COLUMN_MASK, maskImage: COLUMN_MASK }}
+      >
         {columns.map((column, columnIndex) => (
           <div
             key={columnIndex}
@@ -92,18 +92,6 @@ export async function TrustedBy() {
             </div>
           </div>
         ))}
-        </div>
-
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[110px]"
-          style={{ background: "linear-gradient(to bottom, rgb(19,26,40), rgba(19,26,40,0))" }}
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[110px]"
-          style={{ background: "linear-gradient(to top, rgb(15,21,32), rgba(15,21,32,0))" }}
-        />
       </div>
     </section>
   );
