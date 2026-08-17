@@ -2,9 +2,10 @@ import { media } from "@/lib/media";
 
 import type { Collaborator, CollaboratorGroup } from "./types";
 
+/** Render order, left to right. */
 export const collaboratorGroups: CollaboratorGroup[] = [
-  { id: "service-providers", label: "Service providers" },
   { id: "international-partners", label: "International partners" },
+  { id: "service-providers", label: "Service providers" },
 ];
 
 /**
@@ -14,13 +15,15 @@ export const collaboratorGroups: CollaboratorGroup[] = [
  * Slot order is significant: the carousel's per-column timing table is indexed
  * by it, which is what keeps the columns off the same beat.
  *
- * The two service providers hold a box each rather than sharing both boxes.
- * They shared them while there were three of them and two boxes, so every box
- * always had something to rotate to. With two logos in two mutually exclusive
- * boxes there is nothing to rotate to — the exclusivity rule sends each box
- * back to the logo it is already showing — and the carousel would play a
- * cross-fade between a logo and itself every few seconds. One logo per box
- * makes each one static, which is what having exactly two of them means.
+ * Four boxes for the seven international partners, one for the two service
+ * providers.
+ *
+ * All four international boxes draw on the same list rather than owning two
+ * logos each. Seven logos do not divide into four boxes without leaving one
+ * box holding a single logo, which would sit frozen while its neighbours
+ * turned; sharing the list gives every box all seven to cycle through, and the
+ * exclusivity rule — which applies to boxes whose lists are identical — keeps
+ * the same mark off the row twice at once.
  */
 export const collaborators: Collaborator[] = [
   {
@@ -31,9 +34,13 @@ export const collaborators: Collaborator[] = [
     // what it says rather than sizing a mostly-empty canvas.
     logo: media("/media/logos/collab/aws.png", "Powered by AWS", 440, 317),
     group: "service-providers",
-    slots: [0],
-    maxWidth: "92%",
-    maxHeight: "88%",
+    slots: [4],
+    // Sized down against the row rather than against the box. At 92% it filled
+    // 9,500px² where nothing else passed 7,700 — a two-line lockup reads bigger
+    // than its bounding box already, and full colour among monochrome adds to
+    // that. 74% puts it at ~6,200px², in the band the rest of the row occupies.
+    maxWidth: "74%",
+    maxHeight: "70%",
     // AWS does not permit its mark to be recoloured; the smile stays orange.
     preserveColor: true,
   },
@@ -42,7 +49,7 @@ export const collaborators: Collaborator[] = [
     name: "Regula",
     logo: media("/media/logos/collab/regula.png", "Regula", 384, 119),
     group: "service-providers",
-    slots: [1],
+    slots: [4],
     maxWidth: "96%",
     maxHeight: "58%",
   },
@@ -51,7 +58,7 @@ export const collaborators: Collaborator[] = [
     name: "World Wide Web Consortium",
     logo: media("/media/logos/collab/w3c.png", "World Wide Web Consortium", 318, 159),
     group: "international-partners",
-    slots: [2],
+    slots: [0, 1, 2, 3],
     maxWidth: "90%",
     maxHeight: "74%",
   },
@@ -60,7 +67,7 @@ export const collaborators: Collaborator[] = [
     name: "ID4Africa",
     logo: media("/media/logos/collab/id4africa.png", "ID4Africa", 225, 225),
     group: "international-partners",
-    slots: [2],
+    slots: [0, 1, 2, 3],
     maxWidth: "80%",
     maxHeight: "96%",
   },
@@ -69,7 +76,7 @@ export const collaborators: Collaborator[] = [
     name: "Trust over IP Foundation",
     logo: media("/media/logos/collab/trust-over-ip.png", "Trust over IP Foundation", 310, 163),
     group: "international-partners",
-    slots: [3],
+    slots: [0, 1, 2, 3],
     maxWidth: "90%",
     maxHeight: "74%",
   },
@@ -78,7 +85,7 @@ export const collaborators: Collaborator[] = [
     name: "Internet Identity Workshop",
     logo: media("/media/logos/collab/iiw.png", "Internet Identity Workshop", 256, 197),
     group: "international-partners",
-    slots: [3],
+    slots: [0, 1, 2, 3],
     maxWidth: "70%",
     maxHeight: "88%",
   },
@@ -87,7 +94,7 @@ export const collaborators: Collaborator[] = [
     name: "DIACC",
     logo: media("/media/logos/collab/diacc.png", "DIACC", 318, 159),
     group: "international-partners",
-    slots: [4],
+    slots: [0, 1, 2, 3],
     maxWidth: "90%",
     maxHeight: "74%",
   },
@@ -96,7 +103,7 @@ export const collaborators: Collaborator[] = [
     name: "Identity Woman",
     logo: media("/media/logos/collab/identity-woman.png", "Identity Woman", 384, 96),
     group: "international-partners",
-    slots: [4],
+    slots: [0, 1, 2, 3],
     maxWidth: "100%",
     maxHeight: "50%",
   },
@@ -105,7 +112,7 @@ export const collaborators: Collaborator[] = [
     name: "iDen2",
     logo: media("/media/logos/collab/iden2.png", "iDen2", 502, 106),
     group: "international-partners",
-    slots: [4],
+    slots: [0, 1, 2, 3],
     maxWidth: "100%",
     maxHeight: "48%",
   },
