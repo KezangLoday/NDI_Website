@@ -2,42 +2,13 @@
 
 import type { ReactNode, Ref } from "react";
 
-import { GlowCard, GlowLayers, glowVars, useGlowCard, type GlowColor } from "./spotlight-card";
+import { GlowLayers, glowVars, useGlowCard, type GlowColor } from "./spotlight-card";
 
 /** Shared card fill from the design — the glass pass in ndi-effects.css sits on top. */
 const CARD_BACKGROUND =
   "radial-gradient(120% 80% at 24% -10%, rgba(111,224,169,0.24) 0%, rgba(90,201,148,0.07) 40%, rgba(90,201,148,0) 66%), " +
   "radial-gradient(90% 60% at 50% 118%, rgba(18,65,67,0.55) 0%, rgba(18,65,67,0) 70%), " +
   "linear-gradient(164deg, #0f3340 0%, #0d1420 68%)";
-
-/**
- * "What you can do" card, wearing the spotlight glow.
- *
- * `customSize` keeps GlowCard's preset dimensions out of the way — the card's
- * own fill, radius and padding stay exactly as `.ndi-usecase` has them, and the
- * glow is added on top.
- */
-export function FeatureCard({
-  children,
-  glowColor = "mint",
-}: {
-  children: ReactNode;
-  glowColor?: GlowColor;
-}) {
-  return (
-    <GlowCard
-      customSize
-      glowColor={glowColor}
-      className="ndi-usecase h-full rounded-2xl p-[26px]"
-      style={{
-        background: CARD_BACKGROUND,
-        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07), 0 18px 40px -26px rgba(0,0,0,0.9)",
-      }}
-    >
-      {children}
-    </GlowCard>
-  );
-}
 
 interface SpotlightCardProps {
   children: ReactNode;

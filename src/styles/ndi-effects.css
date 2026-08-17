@@ -486,18 +486,13 @@
 .ndi-spot[data-static]::before,
 .ndi-spot[data-static]::after { content: none; }
 
-/* ---- "What you can do" cards -------------------------------
-   The design gave these an evervault-style cursor reveal (a gradient and a
-   scrambling character field wiped in under the pointer). Removed by request:
-   these cards are now static, and only the glass fill and lens rim below
-   apply. overflow:hidden stays — the rim is an inset pseudo-element. */
-.ndi-usecase { position: relative; overflow: hidden; }
-.ndi-usecase > * { position: relative; z-index: 1; }
-
 /* ---- Glass + lens rim pass (Home's inline <style> block) ----
    These cards carry no fill of their own — just a blurred, lightly
-   brightened view of the atmosphere behind, plus a conic lens rim. */
-#how-it-works .ndi-usecase,
+   brightened view of the atmosphere behind, plus a conic lens rim.
+
+   The "What you can do" cards used to have their own class here. They are
+   plain `.ndi-spot` cards now, wearing the same cursor-tracked ring as the
+   Users benefits row, so they are covered by the entry below. */
 .ndi-spot,
 [data-news-featured],
 [data-org-tile] {
@@ -522,7 +517,6 @@
 }
 /* The spotlight ring owns ::before/::after on .ndi-spot, so the lens rim
    only goes on cards that have those pseudo-elements free. */
-#how-it-works .ndi-usecase::after,
 [data-news-featured]::after,
 [data-cta-form]::after,
 [data-org-tile]::after {
@@ -1271,10 +1265,10 @@ select option { background: #101827; color: #e9eef6; }
   --glow-out: 1;
   --glow-blur: 28;
   --glow-bloom: 1;
-  /* The rim and its bloom sit outside the card box, so the card cannot clip
-     its own children — `.ndi-usecase` sets overflow:hidden, which erased them
-     entirely. Nothing else here needs the clip: the fill is bounded by the
-     border radius and the lens rim is an inset pseudo-element. */
+  /* The rim and its bloom sit outside the card box, so a host that clips its
+     own children erases them entirely. Nothing here needs the clip: the fill
+     is bounded by the border radius and the lens rim is an inset
+     pseudo-element. */
   overflow: visible;
 }
 .ndi-glow-rim,
@@ -1298,7 +1292,7 @@ select option { background: #101827; color: #e9eef6; }
   );
 }
 /* Above the card's own conic lens rim, which sits at z-index 3 and otherwise
-   veils the glow. Two classes so it outranks `.ndi-usecase > *`. */
+   veils the glow. Two classes so it outranks a host's own `> *` rule. */
 .ndi-glow-card > .ndi-glow-rim { z-index: 4; }
 /* The two border spotlights: a coloured one and a white core. The mask keeps
    each to the border ring, so only the rim lights up. (The source's

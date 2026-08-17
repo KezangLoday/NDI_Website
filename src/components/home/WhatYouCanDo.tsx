@@ -1,4 +1,4 @@
-import { FeatureCard } from "@/components/ui/Cards";
+import { SpotlightCard } from "@/components/ui/Cards";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeader, ViewAllLink } from "@/components/ui/SectionHeader";
 import { Icon } from "@/components/ui/icons";
@@ -21,12 +21,11 @@ export async function WhatYouCanDo() {
       <div className="mt-10 grid grid-cols-1 gap-[18px] min-[561px]:grid-cols-2 min-[901px]:grid-cols-4">
         {useCases.map((useCase, index) => (
           <Reveal key={useCase.id} delay={0.05 * (index + 1)} className="h-full">
-            {/* The glow is bracketed rather than alternating: NDI mint on the
-                two outer cards, the brighter spring green on the ones between,
-                so the row reads as a set that closes on the accent. */}
-            <FeatureCard
-              glowColor={index === 0 || index === useCases.length - 1 ? "mint" : "spring"}
-            >
+            {/* The same card as the Users page's benefits row: the cursor-tracked
+                hairline ring with its blurred halo and face wash, rather than the
+                heavier glow rim these carried. One colour, not a bracketed mint
+                and spring pair — the ring is the accent everywhere it appears. */}
+            <SpotlightCard className="h-full" gap={0}>
               <span className="inline-flex h-[26px] items-center text-accent">
                 <Icon name={useCase.icon} size={24} />
               </span>
@@ -34,7 +33,7 @@ export async function WhatYouCanDo() {
                 {useCase.title}
               </h3>
               <p className="text-sm leading-[1.55] text-muted">{useCase.description}</p>
-            </FeatureCard>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>
