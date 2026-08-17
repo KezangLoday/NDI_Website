@@ -68,9 +68,16 @@ export function CollaboratorCarousel({ groups, collaborators }: CollaboratorCaro
                   <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
                     {group.label}
                   </span>
+                  {/* `flex-1` alone has a 0% basis, so it contributes nothing to
+                      the group's max-content width. That is invisible while a
+                      group is wider than its own label — the partners' four
+                      boxes leave plenty for the rule to grow into — but the
+                      single service-provider box is narrower than the words
+                      above it, so there was no free space and the rule
+                      collapsed to nothing. A floor gives every group a rule. */}
                   <span
                     aria-hidden="true"
-                    className="h-px flex-1"
+                    className="h-px min-w-[72px] flex-1"
                     style={{
                       background: "linear-gradient(90deg, var(--border-grid), transparent)",
                     }}
