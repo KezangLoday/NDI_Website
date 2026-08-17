@@ -26,11 +26,14 @@ export const collaborators: Collaborator[] = [
   {
     id: "aws",
     name: "Amazon Web Services",
-    logo: media("/media/logos/collab/aws.png", "Powered by AWS", 960, 640),
+    // Supplied at 978x621, of which 55% of the width and half the height were
+    // transparent margin; trimmed to the mark so the optical sizing below means
+    // what it says rather than sizing a mostly-empty canvas.
+    logo: media("/media/logos/collab/aws.png", "Powered by AWS", 440, 317),
     group: "service-providers",
     slots: [0],
-    maxWidth: "100%",
-    maxHeight: "100%",
+    maxWidth: "92%",
+    maxHeight: "88%",
     // AWS does not permit its mark to be recoloured; the smile stays orange.
     preserveColor: true,
   },
