@@ -653,30 +653,174 @@
 .ndi-plainlink:hover { color: var(--text-strong); }
 
 /* Organizations service cards */
-/* ---- Capabilities index (Home) -----------------------------
-   The hairline above each entry draws in from the left as the entry arrives,
-   a beat after the text starts rising, so the rule reads as being placed
-   rather than as having always been there. scaleX on a 1px element, so it
-   stays on the compositor. */
-.ndi-cap-rule {
+/* ---- Capabilities: the wallet, annotated ---------------------
+   The phone leads and the six capabilities are labels attached to it. Geometry
+   is here rather than in utilities because it is the section's subject: three
+   named regions, hairlines that cross the gutter, and copy that turns to face
+   the device.
+
+   Narrow: one column, phone first. */
+.ndi-cap-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 26px;
+}
+/* The stage runs its own choreography, so it does not also slide up as a block
+   the way every other revealed group does — two gestures at once read as one
+   muddy one. Two selectors so this outranks `[data-reveal]`. */
+[data-reveal].ndi-cap-stage { transform: none; }
+
+.ndi-cap-phone { position: relative; }
+/* The device sits in light rather than on the page. Behind the image, so the
+   hand's cut edge is lit from behind instead of outlined. */
+.ndi-cap-halo {
   position: absolute;
-  inset: 0 0 auto 0;
-  height: 1px;
-  background: var(--border-subtle);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.62s var(--ease-out) 0.09s;
+  left: 50%;
+  top: 42%;
+  width: 152%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(90, 201, 148, 0.26) 0%,
+    rgba(90, 201, 148, 0.1) 38%,
+    rgba(90, 201, 148, 0) 66%
+  );
 }
-[data-revealed="true"] .ndi-cap-rule { transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .ndi-cap-rule { transform: none; transition: none; }
+/* The supplied cutout ends mid-forearm at the frame edge. On a dark page that
+   reads as a severed limb, so the last stretch dissolves instead. The stop sits
+   below the bottom bezel, which is at 88% of the crop — the device itself never
+   fades. */
+.ndi-cap-phone img {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 88%,
+    rgba(0, 0, 0, 0.34) 96%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 88%,
+    rgba(0, 0, 0, 0.34) 96%,
+    transparent 100%
+  );
 }
-/* The rule separates entries, so the first row gets none — up there it has
-   nothing above it to divide, and it read as an underline belonging to the
-   section heading. One column means one first entry; two columns mean two. */
-.ndi-cap-list > :first-child .ndi-cap-rule { display: none; }
+
+.ndi-cap-item { position: relative; display: flex; align-items: flex-start; gap: 14px; }
+.ndi-cap-node {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  border: 1px solid var(--border-grid);
+  background: var(--ndi-mint-08);
+  color: var(--accent);
+}
+.ndi-cap-copy { display: flex; flex-direction: column; }
+/* No gutter to cross until the annotated layout applies. */
+.ndi-cap-wire { display: none; }
+
+/* Intermediate: the phone takes the full width, the six pair up beneath it. */
 @media (min-width: 761px) {
-  .ndi-cap-list > :nth-child(2) .ndi-cap-rule { display: none; }
+  .ndi-cap-stage {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(28px, 4vw, 52px);
+    row-gap: 32px;
+  }
+  .ndi-cap-phone { grid-column: 1 / -1; justify-self: center; width: min(320px, 44vw); }
+}
+
+/* Wide: the annotated layout. */
+@media (min-width: 1101px) {
+  .ndi-cap-stage {
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 31vw, 392px) minmax(0, 1fr);
+    grid-template-rows: repeat(3, auto);
+    column-gap: clamp(26px, 3vw, 46px);
+    row-gap: clamp(34px, 4vw, 60px);
+    /* Top-aligned, not centred: the pair at each height has to share a baseline
+       for the row to read as a pair, and centring drops whichever entry has the
+       shorter description by half the difference. */
+    align-items: start;
+  }
+  .ndi-cap-phone { grid-area: 1 / 2 / 4 / 3; width: auto; align-self: center; }
+  /* The phone is the stage's first child, so the entries are 2 through 7:
+     reading order down the left column, then down the right. */
+  .ndi-cap-stage > .ndi-cap-item:nth-child(2) { grid-area: 1 / 1; }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(3) { grid-area: 2 / 1; }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(4) { grid-area: 3 / 1; }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(5) { grid-area: 1 / 3; }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(6) { grid-area: 2 / 3; }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(7) { grid-area: 3 / 3; }
+
+  /* Each side turns to face the device: the node takes the inner edge and the
+     copy runs away from it. Without this the left column reads as a list that
+     happens to sit near a photo. */
+  .ndi-cap-item[data-side="left"] { flex-direction: row-reverse; text-align: right; }
+  .ndi-cap-item[data-side="left"] .ndi-cap-copy { align-items: flex-end; }
+
+  /* The hairline crosses the gutter, brightest at the node and fading as it
+     reaches the device — the attachment is asserted, not drawn all the way in
+     over the photograph. The middle row is level with the widest part of the
+     hand, so it needs less of it. */
+  .ndi-cap-wire {
+    display: block;
+    position: absolute;
+    top: 19px;
+    width: var(--wire, 30px);
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-grid), transparent);
+    transform-origin: left center;
+  }
+  .ndi-cap-item[data-side="left"] .ndi-cap-wire { left: 100%; }
+  .ndi-cap-item[data-side="right"] .ndi-cap-wire {
+    right: 100%;
+    background: linear-gradient(270deg, var(--border-grid), transparent);
+    transform-origin: right center;
+  }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(3),
+  .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --wire: 16px; }
+
+  /* Entries step outward from the device; below this width there are no sides
+     to step out of, so they rise instead. */
+  .ndi-cap-item[data-side="left"] { transform: translateX(13px); }
+  .ndi-cap-item[data-side="right"] { transform: translateX(-13px); }
+}
+
+/* ---- Choreography -------------------------------------------
+   One gesture from one observer: the device resolves out of a blur, the
+   annotations step out of it, their hairlines draw last. Transform-only on the
+   text, as everywhere else here, so nothing is left hidden if a transition is
+   dropped. */
+.ndi-cap-phone {
+  transform: translateY(20px) scale(0.975);
+  filter: blur(9px);
+  transition: transform 0.95s var(--ease-glide), filter 0.95s var(--ease-glide);
+}
+.ndi-cap-item {
+  transform: translateY(16px);
+  transition: transform 0.72s var(--ease-glide);
+  transition-delay: var(--d, 0s);
+}
+.ndi-cap-wire {
+  transform: scaleX(0);
+  transition: transform 0.5s var(--ease-glide);
+  transition-delay: calc(var(--d, 0s) + 0.26s);
+}
+/* Last, so it outranks the per-side resting transforms above at equal weight. */
+[data-revealed="true"] .ndi-cap-phone { transform: none; filter: none; }
+[data-revealed="true"] .ndi-cap-item { transform: none; }
+[data-revealed="true"] .ndi-cap-wire { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .ndi-cap-phone,
+  .ndi-cap-item,
+  .ndi-cap-wire { transform: none; filter: none; transition: none; }
 }
 
 /* ---- Bento cards (Organizations solutions) -----------------

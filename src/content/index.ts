@@ -12,7 +12,7 @@
  *   }
  */
 
-import { capabilities, useCases, walletBenefits } from "./capabilities";
+import { capabilities, useCases, walletBenefits, walletInHand } from "./capabilities";
 import { careerValues, jobs } from "./careers";
 import {
   missionStatements,
@@ -179,6 +179,7 @@ export async function getStartSteps(): Promise<StartStep[]> {
 }
 
 export { credentialCards, journeyStrip };
+export { walletInHand };
 
 export async function getPress(): Promise<PressItem[]> {
   return press;

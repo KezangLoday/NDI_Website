@@ -1,3 +1,5 @@
+import { media } from "@/lib/media";
+
 import type { Capability, UseCase, WalletBenefit } from "./types";
 
 /** Prospective Payload collection: `useCases` — the "What you can do" cards. */
@@ -78,3 +80,19 @@ export const walletBenefits: WalletBenefit[] = [
   { id: "streamlined", text: "Streamlined and efficient digital interactions" },
   { id: "platforms", text: "Access to different platforms and services through the wallet" },
 ];
+
+/**
+ * The wallet itself, held, at the centre of the capabilities section.
+ *
+ * Supplied at 2000x1842 with the device in the upper-left third and a forearm
+ * sprawling to the far corner, so 60% of the frame was empty and any width that
+ * left room for the annotations either side rendered the phone too small to
+ * lead. Cropped to the device and the grip, with the arm running off the corner
+ * it already ran off.
+ */
+export const walletInHand = media(
+  "/media/phone-in-hand.webp",
+  "The Bhutan NDI wallet open on a phone, held in one hand",
+  1070,
+  1470,
+);
