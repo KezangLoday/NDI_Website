@@ -1148,6 +1148,13 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
 .ndi-tut svg { transition: transform 0.28s var(--ease-out); }
 .ndi-tut:hover svg { transform: translateX(5px); }
 
+/* ---- Send icon on the two enquiry forms -------------------
+   The same nudge the tutorial and view-all arrows use, on its own class rather
+   than on `.ndi-sweepbtn svg`: that button is also the Governance download,
+   whose icon already owns its transform for the bob. */
+.ndi-sendnudge { transition: transform 0.28s var(--ease-out); }
+.ndi-sweepbtn:hover .ndi-sendnudge { transform: translateX(5px); }
+
 /* ---- Native control colours -------------------------------- */
 select option { background: #101827; color: #e9eef6; }
 
@@ -1170,7 +1177,8 @@ select option { background: #101827; color: #e9eef6; }
   .ndi-fl:hover,
   .ndi-store:hover .ndi-store-icon,
   .ndi-va:hover svg,
-  .ndi-tut:hover svg { transform: none; }
+  .ndi-tut:hover svg,
+  .ndi-sweepbtn:hover .ndi-sendnudge { transform: none; }
 }
 
 /* Careers role cards: lift with a mint rim on hover. */

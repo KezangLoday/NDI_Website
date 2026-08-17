@@ -3,18 +3,25 @@
 import { useState, type FormEvent } from "react";
 
 import { ServiceSelect } from "@/components/ui/ServiceSelect";
+import { FIELD_BLOCK_CLASS, FIELD_CLASS, LABEL_CLASS } from "@/components/ui/formStyles";
 import { Icon } from "@/components/ui/icons";
 import type { ServiceOption } from "@/content/types";
-
-const FIELD =
-  "ndi-field box-border w-full rounded-xl border border-grid bg-white/[0.03] px-4 font-body text-[14.5px] text-strong outline-none";
 
 /**
  * Business inquiry form. Presentational in Phase 1, as in the prototype.
  *
- * The design places this bare on the CTA panel — a two-column grid of
- * placeholder-only fields with no surround of its own — so there is no card
- * shell here; the panel behind it provides that.
+ * Laid out like Home's contact form — same field treatment, same mono labels
+ * above each field, same worked-example placeholders — because it is the same
+ * form asked on a different page, and the two reading differently made the
+ * site look like two sites.
+ *
+ * The labels were previously `sr-only`, leaving the placeholder as the only
+ * visible name for each field. That is the one form pattern that fails as soon
+ * as anyone starts typing: the label disappears exactly when it is needed to
+ * check the answer.
+ *
+ * There is no card shell here. The design places this bare on the CTA panel,
+ * which supplies the surround.
  */
 export function InquiryForm({ services }: { services: ServiceOption[] }) {
   const [service, setService] = useState("");
@@ -27,64 +34,62 @@ export function InquiryForm({ services }: { services: ServiceOption[] }) {
 
   return (
     <form
-      // No data-cta-form here: that hook paints the glass fill and conic lens
-      // rim, which belong to Home's boxed contact card. This form is bare on
-      // the CTA panel, as in the design, so the rim drew a stray outline across
-      // the submit button and the note beneath it.
-      data-cta-fields="1"
       onSubmit={onSubmit}
-      className="relative grid grid-cols-1 gap-3.5 min-[561px]:grid-cols-2"
+      className="relative grid grid-cols-1 gap-[18px] min-[561px]:grid-cols-2"
     >
-      <label className="min-w-0">
-        <span className="sr-only">Your name</span>
-        <input name="name" required placeholder="Your name" className={`${FIELD} h-12`} />
+      <label className={FIELD_BLOCK_CLASS}>
+        <span className={LABEL_CLASS}>Full name</span>
+        <input
+          name="name"
+          required
+          placeholder="Sonam Wangchuk"
+          className={`${FIELD_CLASS} h-12`}
+        />
       </label>
-      <label className="min-w-0">
-        <span className="sr-only">Organization</span>
+      {/* Required here, unlike Home's: an integration inquiry that does not say
+          who is asking cannot be scoped or routed. */}
+      <label className={FIELD_BLOCK_CLASS}>
+        <span className={LABEL_CLASS}>Organization</span>
         <input
           name="organization"
           required
-          placeholder="Organization"
-          className={`${FIELD} h-12`}
+          placeholder="Where do you work?"
+          className={`${FIELD_CLASS} h-12`}
         />
       </label>
 
-      <label className="min-w-0 min-[561px]:col-span-2">
-        <span className="sr-only">Work email</span>
+      <label className={`${FIELD_BLOCK_CLASS} min-[561px]:col-span-2`}>
+        <span className={LABEL_CLASS}>Work email</span>
         <input
           name="email"
           type="email"
           required
-          placeholder="Work email"
-          className={`${FIELD} h-12`}
+          placeholder="you@example.bt"
+          className={`${FIELD_CLASS} h-12`}
         />
       </label>
 
-      <div className="min-w-0 min-[561px]:col-span-2">
-        <span className="sr-only">Service of interest</span>
-        {/* Home's contact form says "Select a service or product"; this one has
-            its own wording in the design. */}
-        <ServiceSelect
-          options={services}
-          value={service}
-          onChange={setService}
-          placeholder="Service of interest — select one"
-        />
+      <div className={`${FIELD_BLOCK_CLASS} min-[561px]:col-span-2`}>
+        <span className={LABEL_CLASS}>Service or product of interest</span>
+        {/* The design's wording, "Service of interest — select one", was the
+            field's only name while the label was hidden. With the label back
+            the instruction is redundant, so this takes the shared default. */}
+        <ServiceSelect options={services} value={service} onChange={setService} />
       </div>
 
-      <label className="min-w-0 min-[561px]:col-span-2">
-        <span className="sr-only">Tell us about your use case</span>
+      <label className={`${FIELD_BLOCK_CLASS} min-[561px]:col-span-2`}>
+        <span className={LABEL_CLASS}>How can we help?</span>
         <textarea
           name="message"
           rows={4}
-          placeholder="Tell us about your use case"
-          className={`${FIELD} resize-y py-3.5 leading-[1.6]`}
+          placeholder="Tell us about your use case and rough timeline."
+          className={`${FIELD_CLASS} min-h-[104px] resize-y py-[13px] leading-[1.55]`}
         />
       </label>
 
       <button
         type="submit"
-        className="ndi-sweepbtn relative inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2.5 overflow-hidden rounded-xl border border-transparent px-6 font-display text-[14.5px] font-semibold min-[561px]:col-span-2"
+        className="ndi-sweepbtn relative inline-flex h-[52px] w-full cursor-pointer items-center justify-center gap-2.5 overflow-hidden rounded-xl border border-transparent px-6 font-display text-[15px] font-semibold min-[561px]:col-span-2"
         style={{
           background:
             "linear-gradient(115deg, #8CF0C0 0%, #6FE0A9 24%, #4FC091 56%, #2FA189 80%, #1E8189 100%)",
@@ -95,7 +100,7 @@ export function InquiryForm({ services }: { services: ServiceOption[] }) {
         <span className="ndi-store-sweep" />
         <span className="ndi-store-glow" />
         <span className="relative z-[1]">Send inquiry</span>
-        <Icon name="send" size={16} strokeWidth={1.9} className="relative z-[1]" />
+        <Icon name="send" size={16} strokeWidth={1.9} className="ndi-sendnudge relative z-[1]" />
       </button>
 
       {submitted ? (
@@ -107,8 +112,8 @@ export function InquiryForm({ services }: { services: ServiceOption[] }) {
           Thanks — this is a demo build, so nothing was sent yet.
         </p>
       ) : (
-        <p className="m-0 font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint min-[561px]:col-span-2">
-          — We use your details only to respond to this inquiry
+        <p className="m-0 text-xs leading-[1.5] text-muted min-[561px]:col-span-2">
+          We use your details only to answer this enquiry. Nothing is shared without your consent.
         </p>
       )}
     </form>

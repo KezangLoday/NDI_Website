@@ -3,15 +3,10 @@
 import { useState, type FormEvent } from "react";
 
 import { ServiceSelect } from "@/components/ui/ServiceSelect";
+import { FIELD_BLOCK_CLASS, FIELD_CLASS, LABEL_CLASS } from "@/components/ui/formStyles";
 import { Icon } from "@/components/ui/icons";
 import { contactAudiences, type ContactAudienceId } from "@/content/services";
 import type { ServiceOption } from "@/content/types";
-
-const FIELD_CLASS =
-  "ndi-field box-border w-full rounded-[10px] border border-grid bg-raised px-[14px] font-body text-sm text-strong outline-none";
-
-const LABEL_CLASS =
-  "font-mono text-[10px] uppercase tracking-[0.16em] text-muted";
 
 /**
  * Presentational contact form.
@@ -59,11 +54,11 @@ export function ContactForm({ services }: { services: ServiceOption[] }) {
       </fieldset>
 
       <div className="grid grid-cols-1 gap-4 min-[561px]:grid-cols-2">
-        <label className="flex min-w-0 flex-col gap-[7px]">
+        <label className={FIELD_BLOCK_CLASS}>
           <span className={LABEL_CLASS}>Full name</span>
           <input name="name" required placeholder="Sonam Wangchuk" className={`${FIELD_CLASS} h-12`} />
         </label>
-        <label className="flex min-w-0 flex-col gap-[7px]">
+        <label className={FIELD_BLOCK_CLASS}>
           <span className={LABEL_CLASS}>
             Organization <span className="normal-case tracking-normal">(optional)</span>
           </span>
@@ -71,7 +66,7 @@ export function ContactForm({ services }: { services: ServiceOption[] }) {
         </label>
       </div>
 
-      <label className="flex min-w-0 flex-col gap-[7px]">
+      <label className={FIELD_BLOCK_CLASS}>
         <span className={LABEL_CLASS}>Email</span>
         <input
           name="email"
@@ -82,12 +77,12 @@ export function ContactForm({ services }: { services: ServiceOption[] }) {
         />
       </label>
 
-      <div className="flex min-w-0 flex-col gap-[7px]">
+      <div className={FIELD_BLOCK_CLASS}>
         <span className={LABEL_CLASS}>Service or product of interest</span>
         <ServiceSelect options={services} value={service} onChange={setService} />
       </div>
 
-      <label className="flex min-w-0 flex-col gap-[7px]">
+      <label className={FIELD_BLOCK_CLASS}>
         <span className={LABEL_CLASS}>How can we help?</span>
         <textarea
           name="message"
@@ -110,7 +105,7 @@ export function ContactForm({ services }: { services: ServiceOption[] }) {
         <span className="ndi-store-sweep" />
         <span className="ndi-store-glow" />
         <span className="relative z-[1]">Send message</span>
-        <Icon name="send" size={16} strokeWidth={1.9} className="relative z-[1]" />
+        <Icon name="send" size={16} strokeWidth={1.9} className="ndi-sendnudge relative z-[1]" />
       </button>
 
       {submitted ? (
