@@ -604,6 +604,12 @@
 }
 .ndi-lc-item img { filter: brightness(0) invert(1); opacity: 0.82; transition: opacity 0.35s var(--ease-out); }
 .ndi-lc-col:hover .ndi-lc-item img { opacity: 1; }
+/* Marks whose owners do not permit recolouring. Set from `preserveColor` in
+   the content, not from the filename, so the rule travels with the record into
+   Payload. The dimming goes too: it is part of the same normalising treatment,
+   and it is the other thing a brand guideline objects to. */
+.ndi-lc-item[data-full-color] img,
+.ndi-lc-col:hover .ndi-lc-item[data-full-color] img { filter: none; opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .ndi-lc-item { transition: opacity 0.3s linear; transform: none !important; filter: none !important; }
 }

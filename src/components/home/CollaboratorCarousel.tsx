@@ -97,6 +97,7 @@ export function CollaboratorCarousel({ groups, collaborators }: CollaboratorCaro
                             className="ndi-lc-item"
                             data-active={state?.active === itemIndex ? "" : undefined}
                             data-exit={state?.exiting === itemIndex ? "" : undefined}
+                            data-full-color={item.preserveColor ? "" : undefined}
                           >
                             <Image
                               src={mediaUrl(item.logo)}

@@ -62,6 +62,15 @@ export interface Collaborator {
   /** Per-logo optical sizing, carried over from the prototype. */
   maxWidth: string;
   maxHeight: string;
+  /**
+   * Render the mark as supplied instead of flattening it to white.
+   *
+   * The row is monochrome by default so a dozen unrelated brands read as one
+   * set. Some owners do not permit that — AWS requires its smile to stay
+   * orange — so those opt out and are also shown at full opacity, since the
+   * dimming is part of the same normalising treatment.
+   */
+  preserveColor?: boolean;
 }
 
 export type CollaboratorGroupId = "service-providers" | "international-partners";

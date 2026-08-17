@@ -14,35 +14,32 @@ export const collaboratorGroups: CollaboratorGroup[] = [
  * Slot order is significant: the carousel's per-column timing table is indexed
  * by it, which is what keeps the columns off the same beat.
  *
- * The three service-provider logos each sit in both columns, so neither column
- * is left static. The carousel skips any logo its sibling column is currently
- * showing, so the same mark never appears twice at once.
+ * The two service providers hold a box each rather than sharing both boxes.
+ * They shared them while there were three of them and two boxes, so every box
+ * always had something to rotate to. With two logos in two mutually exclusive
+ * boxes there is nothing to rotate to — the exclusivity rule sends each box
+ * back to the logo it is already showing — and the carousel would play a
+ * cross-fade between a logo and itself every few seconds. One logo per box
+ * makes each one static, which is what having exactly two of them means.
  */
 export const collaborators: Collaborator[] = [
   {
     id: "aws",
     name: "Amazon Web Services",
-    logo: media("/media/logos/collab/aws.png", "Amazon Web Services", 384, 384),
+    logo: media("/media/logos/collab/aws.png", "Powered by AWS", 960, 640),
     group: "service-providers",
-    slots: [0, 1],
-    maxWidth: "80%",
-    maxHeight: "96%",
-  },
-  {
-    id: "dsr",
-    name: "DSR",
-    logo: media("/media/logos/collab/dsr.png", "DSR", 225, 225),
-    group: "service-providers",
-    slots: [0, 1],
-    maxWidth: "80%",
-    maxHeight: "96%",
+    slots: [0],
+    maxWidth: "100%",
+    maxHeight: "100%",
+    // AWS does not permit its mark to be recoloured; the smile stays orange.
+    preserveColor: true,
   },
   {
     id: "regula",
     name: "Regula",
     logo: media("/media/logos/collab/regula.png", "Regula", 384, 119),
     group: "service-providers",
-    slots: [0, 1],
+    slots: [1],
     maxWidth: "96%",
     maxHeight: "58%",
   },
