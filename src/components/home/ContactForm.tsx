@@ -29,11 +29,10 @@ export function ContactForm({ services }: { services: ServiceOption[] }) {
     <form
       data-cta-form="1"
       onSubmit={onSubmit}
+      // Fill, blur and inner light come from the shared panel rule in
+      // ndi-effects.css, which the contact rows beside this also wear. They used
+      // to be declared inline here too and were overridden by it anyway.
       className="relative flex flex-col gap-[18px] rounded-[16px] border border-grid p-4 min-[561px]:p-6 min-[901px]:rounded-[20px] min-[901px]:p-[30px]"
-      style={{
-        background: "rgba(12,17,27,0.55)",
-        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 22px 50px -30px rgba(0,0,0,0.9)",
-      }}
     >
       <fieldset className="flex flex-col gap-2.5 border-0 p-0">
         <legend className={LABEL_CLASS}>I&apos;m reaching out as</legend>

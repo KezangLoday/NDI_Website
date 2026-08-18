@@ -505,15 +505,20 @@
     inset 0 -20px 34px -24px rgba(255, 255, 255, 0.07),
     0 18px 40px -26px rgba(0, 0, 0, 0.9) !important;
 }
-[data-cta-form] {
-  background: var(--fill-panel) !important;
+/* The contact panel surface. The form and the three contact rows beside it are
+   one rule, not two that resemble each other: matching the gradient alone still
+   left the rows flat, because most of what lifts this surface is the blur and
+   the inner top light, not the fill. */
+[data-cta-form],
+.ndi-contact-row {
+  background: var(--fill-panel);
   -webkit-backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
   backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     inset 1px 0 0 rgba(255, 255, 255, 0.04),
     inset 0 -20px 34px -24px rgba(255, 255, 255, 0.07),
-    0 18px 40px -26px rgba(0, 0, 0, 0.9) !important;
+    0 18px 40px -26px rgba(0, 0, 0, 0.9);
 }
 /* The spotlight ring owns ::before/::after on .ndi-spot, so the lens rim
    only goes on cards that have those pseudo-elements free. */
@@ -710,13 +715,8 @@
 .ndi-field:hover { border-color: var(--border-strong); }
 .ndi-field:focus { border-color: var(--accent); box-shadow: var(--ring); }
 
-/* The rows carry the form's fill, so the two halves of the contact section read
-   as one surface rather than as a panel next to three lighter strips. Colour
-   only: the form's blur and inner light belong to a panel, not to a row. */
-.ndi-contact-row {
-  background: var(--fill-panel);
-  transition: border-color var(--dur), background var(--dur);
-}
+/* Surface comes from the shared panel rule above; this is only the hover. */
+.ndi-contact-row { transition: border-color var(--dur), background var(--dur); }
 /* Layered over the fill rather than replacing it, so hover is the same lift it
    always was and not a different surface. */
 .ndi-contact-row:hover {
