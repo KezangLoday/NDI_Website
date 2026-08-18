@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeader, ViewAllLink } from "@/components/ui/SectionHeader";
 import { Icon } from "@/components/ui/icons";
