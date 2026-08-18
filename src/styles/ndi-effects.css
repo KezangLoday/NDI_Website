@@ -820,15 +820,29 @@
   .ndi-cap-item[data-side="left"] { flex-direction: row-reverse; text-align: right; }
   .ndi-cap-item[data-side="left"] .ndi-cap-copy { align-items: flex-end; }
 
+  /* The entries bow around the device instead of ruling up in two straight
+     columns. The hand is widest at the middle row, so that one sits furthest
+     out and the rows above and below tuck in toward the phone, which is what
+     turns two lists into annotations on a shape.
+
+     Margin, not transform: transform is spoken for by the entrance, and a
+     negative margin on a grid item widens it past its track rather than moving
+     a painted copy of it, so the wire anchored to its inner edge comes along. */
+  .ndi-cap-stage { --tuck: clamp(9px, 1.35vw, 21px); --bow: clamp(7px, 1vw, 15px); }
+  .ndi-cap-item[data-side="left"] { margin-right: calc(var(--tuck) * -1); }
+  .ndi-cap-item[data-side="right"] { margin-left: calc(var(--tuck) * -1); }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(3) { margin-right: var(--bow); }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(6) { margin-left: var(--bow); }
+
   /* The hairline crosses the gutter, brightest at the node and fading as it
      reaches the device — the attachment is asserted, not drawn all the way in
-     over the photograph. The middle row is level with the widest part of the
-     hand, so it needs less of it. */
+     over the photograph. Now that the bow has moved the nodes, the middle row
+     starts further out and needs a longer line to arrive at the same place. */
   .ndi-cap-wire {
     display: block;
     position: absolute;
     top: 19px;
-    width: var(--wire, 30px);
+    width: var(--wire, 16px);
     height: 1px;
     background: linear-gradient(90deg, var(--border-grid), transparent);
     transform-origin: left center;
@@ -840,7 +854,7 @@
     transform-origin: right center;
   }
   .ndi-cap-stage > .ndi-cap-item:nth-child(3),
-  .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --wire: 16px; }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --wire: clamp(26px, 3.2vw, 46px); }
 
   /* Entries step outward from the device; below this width there are no sides
      to step out of, so they rise instead. */
