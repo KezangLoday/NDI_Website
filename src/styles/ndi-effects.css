@@ -713,13 +713,16 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 26px;
+  /* Scroll progress, published by CapabilityStage. Every part of the entrance
+     is a function of it. The default is the finished state, so with no
+     JavaScript the section is simply in place. */
+  --p: 1;
 }
-/* The stage runs its own choreography, so it does not also slide up as a block
-   the way every other revealed group does — two gestures at once read as one
-   muddy one. Two selectors so this outranks `[data-reveal]`. */
-[data-reveal].ndi-cap-stage { transform: none; }
 
-.ndi-cap-phone { position: relative; }
+/* Above the entries, so they pass behind it rather than across it. The fade
+   does the rest: the image carries transparent margin at its edges, and text
+   crossing that is still text on a photograph. */
+.ndi-cap-phone { position: relative; z-index: 2; }
 /* The device sits in light rather than on the page. Behind the image, so the
    hand's cut edge is lit from behind instead of outlined. */
 .ndi-cap-halo {
@@ -874,6 +877,8 @@
     transform-origin: left center;
   }
   .ndi-cap-item[data-side="left"] .ndi-cap-wire { left: 100%; }
+  /* Drawn last, once its entry has arrived. */
+  .ndi-cap-wire { transform: scaleX(clamp(0, calc((var(--q) - 0.72) / 0.28), 1)); }
   .ndi-cap-item[data-side="right"] .ndi-cap-wire {
     right: 100%;
     background: linear-gradient(270deg, var(--border-grid), transparent);
@@ -883,17 +888,26 @@
   .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --wire: clamp(30px, 3.8vw, 54px); }
 
   /* Entries start at the middle of the device, small, and travel out to their
-     place. Across: the gutter plus half the phone. Down or up: the row's own
-     height plus the row gap, which is the pitch to the middle row — a
-     percentage, so it stays right whatever the descriptions wrap to.
+     place as the section scrolls up — and back into it on the way down again.
 
-     Gated on [data-ready], which Reveal sets once its observer is attached. The
-     offset puts all six on top of the phone, and that is not a state to leave
-     anyone in whose JS never arrives; without it they simply sit where they
-     belong. */
-  .ndi-cap-stage[data-ready] > .ndi-cap-item {
-    transform: translate(var(--ex), var(--ey)) scale(0.88);
+     Each row takes its own slice of the range, so they leave one after another
+     rather than together. `--q` is this entry's own 0-to-1 within its slice.
+
+     The fade is held back until the entry is most of the way out. It starts on
+     the phone, and text sitting over a photograph of a phone looks like a
+     mistake however well it is placed; the phone also paints above the entries,
+     so most of that journey is spent genuinely behind it. */
+  .ndi-cap-stage > .ndi-cap-item {
+    --span: 0.62;
+    --q: clamp(0, calc((var(--p) - var(--t, 0)) / var(--span)), 1);
+    transform: translate(calc(var(--ex) * (1 - var(--q))), calc(var(--ey) * (1 - var(--q))))
+      scale(calc(0.88 + 0.12 * var(--q)));
+    opacity: clamp(0, calc((var(--q) - 0.62) / 0.3), 1);
   }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(3),
+  .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --t: 0.16; }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(4),
+  .ndi-cap-stage > .ndi-cap-item:nth-child(7) { --t: 0.32; }
   .ndi-cap-item[data-side="left"] { --ex: var(--emit); }
   .ndi-cap-item[data-side="right"] { --ex: calc(var(--emit) * -1); }
   .ndi-cap-item { --ey: var(--ey-mid); }
@@ -912,33 +926,24 @@
    annotations step out of it, their hairlines draw last. Transform-only on the
    text, as everywhere else here, so nothing is left hidden if a transition is
    dropped. */
-/* The rest states carry no transition of their own. They have to be taken up
-   the instant Reveal attaches its observer — animating six entries *into* the
-   phone on load is a gesture nobody asked for, and that is what a transition
-   here would produce. The transition is declared on the arrival instead, which
-   is the style the browser reads it from when the change happens. */
-.ndi-cap-phone { transform: translateY(16px) scale(0.982); }
-.ndi-cap-item { transform: translateY(16px); }
-.ndi-cap-wire { transform: scaleX(0); }
-/* Last, so it outranks the per-side resting transforms above at equal weight. */
-/* The device lands first, then the entries come out of it, so their delay is
-   the phone's settle plus their own place in the stagger. */
-.ndi-cap-stage[data-revealed="true"] > .ndi-cap-phone {
-  transform: none;
-  transition: transform 0.8s var(--ease-glide);
+/* The device settles as the section arrives, a beat ahead of the entries. */
+.ndi-cap-phone {
+  transform: translateY(calc((1 - clamp(0, calc(var(--p) / 0.45), 1)) * 18px))
+    scale(calc(0.982 + 0.018 * clamp(0, calc(var(--p) / 0.45), 1)));
 }
-.ndi-cap-stage[data-revealed="true"] > .ndi-cap-item {
-  transform: none;
-  transition: transform 0.95s var(--ease-glide) calc(var(--d, 0s) + 0.16s);
-}
-.ndi-cap-stage[data-revealed="true"] .ndi-cap-wire {
-  transform: none;
-  transition: transform 0.5s var(--ease-glide) calc(var(--d, 0s) + 0.62s);
+/* Narrow has no device to come out of — no sides, no gutter, no wire — so the
+   entries simply rise and fade on the same progress. */
+@media (max-width: 1100px) {
+  .ndi-cap-stage > .ndi-cap-item {
+    --q: clamp(0, calc(var(--p) / 0.7), 1);
+    transform: translateY(calc((1 - var(--q)) * 18px));
+    opacity: var(--q);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .ndi-cap-phone,
-  .ndi-cap-item,
-  .ndi-cap-wire { transform: none; transition: none; }
+  .ndi-cap-stage > .ndi-cap-item,
+  .ndi-cap-wire { transform: none; opacity: 1; }
 }
 
 /* ---- Bento cards (Organizations solutions) -----------------

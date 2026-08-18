@@ -1,6 +1,8 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { Reveal } from "@/components/ui/Reveal";
+
+import { CapabilityStage } from "./CapabilityStage";
 import { SectionHeader, ViewAllLink } from "@/components/ui/SectionHeader";
 import { Icon } from "@/components/ui/icons";
 import { getCapabilities, walletInHand } from "@/content";
@@ -43,7 +45,7 @@ export async function Capabilities() {
         />
       </Reveal>
 
-      <Reveal className="ndi-cap-stage mt-14 min-[1101px]:mt-20">
+      <CapabilityStage className="ndi-cap-stage mt-14 min-[1101px]:mt-20">
         <div className="ndi-cap-phone">
           <span aria-hidden="true" className="ndi-cap-halo" />
           <Image
@@ -83,7 +85,7 @@ export async function Capabilities() {
             </div>
           );
         })}
-      </Reveal>
+      </CapabilityStage>
     </section>
   );
 }
