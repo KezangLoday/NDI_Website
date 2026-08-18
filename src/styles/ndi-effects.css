@@ -765,7 +765,10 @@
   mask-composite: intersect;
 }
 
-.ndi-cap-item { position: relative; display: flex; align-items: flex-start; gap: 14px; }
+/* The node centres on the entry rather than sitting at its top: the entry is
+   one object — a mark and the two lines that name it — and top-aligning the
+   mark to the heading leaves it hanging above a block it belongs to. */
+.ndi-cap-item { position: relative; display: flex; align-items: center; gap: 14px; }
 .ndi-cap-node {
   display: inline-flex;
   flex: none;
@@ -828,7 +831,7 @@
      Margin, not transform: transform is spoken for by the entrance, and a
      negative margin on a grid item widens it past its track rather than moving
      a painted copy of it, so the wire anchored to its inner edge comes along. */
-  .ndi-cap-stage { --tuck: clamp(9px, 1.35vw, 21px); --bow: clamp(7px, 1vw, 15px); }
+  .ndi-cap-stage { --tuck: clamp(14px, 2.1vw, 34px); --bow: clamp(10px, 1.6vw, 24px); }
   .ndi-cap-item[data-side="left"] { margin-right: calc(var(--tuck) * -1); }
   .ndi-cap-item[data-side="right"] { margin-left: calc(var(--tuck) * -1); }
   .ndi-cap-stage > .ndi-cap-item:nth-child(3) { margin-right: var(--bow); }
@@ -841,8 +844,9 @@
   .ndi-cap-wire {
     display: block;
     position: absolute;
-    top: 19px;
-    width: var(--wire, 16px);
+    /* Follows the node, which is now the entry's vertical centre. */
+    top: calc(50% - 0.5px);
+    width: var(--wire, clamp(8px, 0.85vw, 12px));
     height: 1px;
     background: linear-gradient(90deg, var(--border-grid), transparent);
     transform-origin: left center;
@@ -854,12 +858,15 @@
     transform-origin: right center;
   }
   .ndi-cap-stage > .ndi-cap-item:nth-child(3),
-  .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --wire: clamp(26px, 3.2vw, 46px); }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --wire: clamp(30px, 3.8vw, 54px); }
 
-  /* Entries step outward from the device; below this width there are no sides
-     to step out of, so they rise instead. */
-  .ndi-cap-item[data-side="left"] { transform: translateX(13px); }
-  .ndi-cap-item[data-side="right"] { transform: translateX(-13px); }
+  /* Entries start gathered at the device, small, and travel out to their place.
+     The origin is the inner edge — the side the phone is on — so the scale
+     grows away from it and the whole thing reads as being emitted rather than
+     as a box that happens to slide. Below this width there is no device to come
+     out of, so they simply rise. */
+  .ndi-cap-item[data-side="left"] { transform: translateX(46px) scale(0.955); transform-origin: right center; }
+  .ndi-cap-item[data-side="right"] { transform: translateX(-46px) scale(0.955); transform-origin: left center; }
 }
 
 /* ---- Choreography -------------------------------------------
@@ -868,28 +875,29 @@
    text, as everywhere else here, so nothing is left hidden if a transition is
    dropped. */
 .ndi-cap-phone {
-  transform: translateY(20px) scale(0.975);
-  filter: blur(9px);
-  transition: transform 0.95s var(--ease-glide), filter 0.95s var(--ease-glide);
+  transform: translateY(16px) scale(0.982);
+  transition: transform 0.8s var(--ease-glide);
 }
+/* The device lands first, then the entries come out of it, so the base delay is
+   the phone's settle. */
 .ndi-cap-item {
   transform: translateY(16px);
-  transition: transform 0.72s var(--ease-glide);
-  transition-delay: var(--d, 0s);
+  transition: transform 0.85s var(--ease-glide);
+  transition-delay: calc(var(--d, 0s) + 0.14s);
 }
 .ndi-cap-wire {
   transform: scaleX(0);
   transition: transform 0.5s var(--ease-glide);
-  transition-delay: calc(var(--d, 0s) + 0.26s);
+  transition-delay: calc(var(--d, 0s) + 0.62s);
 }
 /* Last, so it outranks the per-side resting transforms above at equal weight. */
-[data-revealed="true"] .ndi-cap-phone { transform: none; filter: none; }
+[data-revealed="true"] .ndi-cap-phone { transform: none; }
 [data-revealed="true"] .ndi-cap-item { transform: none; }
 [data-revealed="true"] .ndi-cap-wire { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .ndi-cap-phone,
   .ndi-cap-item,
-  .ndi-cap-wire { transform: none; filter: none; transition: none; }
+  .ndi-cap-wire { transform: none; transition: none; }
 }
 
 /* ---- Bento cards (Organizations solutions) -----------------
