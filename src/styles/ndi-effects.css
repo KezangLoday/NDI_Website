@@ -506,7 +506,7 @@
     0 18px 40px -26px rgba(0, 0, 0, 0.9) !important;
 }
 [data-cta-form] {
-  background: linear-gradient(158deg, rgba(15, 20, 32, 0.62) 0%, rgba(15, 20, 32, 0.46) 46%, rgba(15, 20, 32, 0.62) 100%) !important;
+  background: var(--fill-panel) !important;
   -webkit-backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
   backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
   box-shadow:
@@ -557,6 +557,34 @@
 
 /* ---- Trusted-by scrolling columns -------------------------- */
 [data-org-cols]:hover .ndi-org-track { animation-play-state: paused; }
+
+/* The hand does not just thin out at the bottom, it goes out of focus: the same
+   source again, blurred, masked to the last stretch and laid over the sharp copy
+   where that has begun to give up. A fade alone reads as the image running out;
+   losing focus first reads as the arm leaving the frame.
+
+   A pseudo-element rather than a second <img>: no extra node in the
+   accessibility tree, and the browser already has the file. `inset: 0` with a
+   100% background size lines it up exactly, because the image is the only
+   in-flow child and so sets the container's box. */
+.ndi-cap-phone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--phone-src);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  filter: blur(7px);
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 85%, #000 93%, #000 96%, transparent 100%),
+    linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.6) 96%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, transparent 85%, #000 93%, #000 96%, transparent 100%),
+    linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.6) 96%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
 
 /* A lit glass edge on the partner tiles, in place of the shared lens rim's
    even conic sweep. Brightest where light would land on a pane held at this
@@ -682,8 +710,20 @@
 .ndi-field:hover { border-color: var(--border-strong); }
 .ndi-field:focus { border-color: var(--accent); box-shadow: var(--ring); }
 
-.ndi-contact-row { transition: border-color var(--dur), background var(--dur); }
-.ndi-contact-row:hover { border-color: var(--border-strong); background: rgba(255, 255, 255, 0.045); }
+/* The rows carry the form's fill, so the two halves of the contact section read
+   as one surface rather than as a panel next to three lighter strips. Colour
+   only: the form's blur and inner light belong to a panel, not to a row. */
+.ndi-contact-row {
+  background: var(--fill-panel);
+  transition: border-color var(--dur), background var(--dur);
+}
+/* Layered over the fill rather than replacing it, so hover is the same lift it
+   always was and not a different surface. */
+.ndi-contact-row:hover {
+  border-color: var(--border-strong);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.045)),
+    var(--fill-panel);
+}
 
 /* Muted link that brightens on hover */
 .ndi-plainlink { transition: color var(--dur); }
@@ -742,10 +782,10 @@
    vanishing rather than as it leaving the frame. */
 .ndi-cap-phone img {
   -webkit-mask-image:
-    linear-gradient(to bottom, #000 0%, #000 91%, rgba(0, 0, 0, 0.62) 96%, rgba(0, 0, 0, 0.2) 99%, transparent 100%),
+    linear-gradient(to bottom, #000 0%, #000 91%, rgba(0, 0, 0, 0.55) 96%, transparent 99%),
     linear-gradient(to right, #000 0%, #000 86%, rgba(0, 0, 0, 0.6) 95%, rgba(0, 0, 0, 0.2) 99%, transparent 100%);
   mask-image:
-    linear-gradient(to bottom, #000 0%, #000 91%, rgba(0, 0, 0, 0.62) 96%, rgba(0, 0, 0, 0.2) 99%, transparent 100%),
+    linear-gradient(to bottom, #000 0%, #000 91%, rgba(0, 0, 0, 0.55) 96%, transparent 99%),
     linear-gradient(to right, #000 0%, #000 86%, rgba(0, 0, 0, 0.6) 95%, rgba(0, 0, 0, 0.2) 99%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;

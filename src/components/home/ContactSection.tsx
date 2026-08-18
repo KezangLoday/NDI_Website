@@ -24,7 +24,7 @@ function ContactRow({
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="ndi-contact-row flex items-center gap-3.5 rounded-xl border border-grid bg-white/[0.02] px-3.5 py-3 text-[15px] text-body"
+      className="ndi-contact-row flex items-center gap-3.5 rounded-xl border border-grid px-3.5 py-3 text-[15px] text-body"
     >
       <span className="inline-flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[10px] border border-grid bg-[color:var(--ndi-mint-08)] text-accent">
         <Icon name={icon} size={18} />

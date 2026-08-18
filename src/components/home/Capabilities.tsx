@@ -45,7 +45,13 @@ export async function Capabilities() {
       </Reveal>
 
       <Reveal className="ndi-cap-stage mt-12 min-[1101px]:mt-6">
-        <div className="ndi-cap-phone">
+        {/* The source is handed to CSS as a property so the blurred tail can draw
+            from the same record as the image, rather than a URL hard-coded in a
+            stylesheet that Phase 2 would have to remember to change. */}
+        <div
+          className="ndi-cap-phone"
+          style={{ "--phone-src": `url(${mediaUrl(walletInHand)})` } as CSSProperties}
+        >
           <span aria-hidden="true" className="ndi-cap-halo" />
           <Image
             src={mediaUrl(walletInHand)}

@@ -58,6 +58,15 @@
   --surface-card: var(--ndi-ink-600);
   --surface-hover: var(--ndi-ink-500);
   --surface-glass: rgba(18, 65, 67, 0.35);
+  /* The contact panel's fill. Named because two things wear it — the Home
+     contact form and the contact rows beside it — and a copy in each is a copy
+     that drifts. */
+  --fill-panel: linear-gradient(
+    158deg,
+    rgba(15, 20, 32, 0.62) 0%,
+    rgba(15, 20, 32, 0.46) 46%,
+    rgba(15, 20, 32, 0.62) 100%
+  );
   --surface-glass-strong: rgba(18, 65, 67, 0.55);
 
   /* ---- Text ---------------------------------------------- */
