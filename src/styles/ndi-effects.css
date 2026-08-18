@@ -563,6 +563,15 @@
 /* ---- Trusted-by scrolling columns -------------------------- */
 [data-org-cols]:hover .ndi-org-track { animation-play-state: paused; }
 
+/* Blur only. The shared glass rule pairs its blur with a saturate and a
+   brightness, which is right where the fill is doing the work — but these tiles
+   were asked to soften what is behind them without tinting it, and now that the
+   filter is live rather than inert that distinction matters. */
+[data-org-tile] {
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
 /* A lit glass edge on the partner tiles, in place of the shared lens rim's
    even conic sweep. Brightest where light would land on a pane held at this
    angle, dropping away across the face, with a second pickup on the far corner
@@ -584,21 +593,27 @@
   );
 }
 
-/* The frosted pool the tiles sit against — see TrustedBy.tsx for why it is a
-   sibling of the window rather than inside it. Blur only: no saturate, no
-   brightness, no fill, so nothing behind the section changes colour, it only
-   goes soft. Inset to the columns' own box so the frost stops where the cards
-   do, and feathered top and bottom so blurred never meets sharp on a line. */
-.ndi-org-frost {
-  position: absolute;
-  inset: 0 32px;
-  z-index: 0;
-  pointer-events: none;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+/* A lit glass edge on the partner tiles, in place of the shared lens rim's
+   even conic sweep. Brightest where light would land on a pane held at this
+   angle, dropping away across the face, with a second pickup on the far corner
+   so a tile reads as a solid piece of glass rather than a decal. The shared rim
+   stays as it is everywhere else: it is right for cards that sit still, and a
+   directional edge is what makes a moving pane look like glass.
+
+   Only the rim changes. The tile keeps its own mint hairline underneath, its
+   fill and its shadow. */
+[data-org-tile]::after {
+  opacity: 0.82;
+  background: linear-gradient(
+    143deg,
+    rgba(255, 255, 255, 0.48) 0%,
+    rgba(255, 255, 255, 0.09) 26%,
+    rgba(255, 255, 255, 0.02) 52%,
+    rgba(255, 255, 255, 0.08) 76%,
+    rgba(255, 255, 255, 0.28) 100%
+  );
 }
+
 @media (prefers-reduced-motion: reduce) {
   .ndi-org-track { animation: none !important; }
 }

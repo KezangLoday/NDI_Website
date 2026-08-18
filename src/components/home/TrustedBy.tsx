@@ -6,7 +6,7 @@ import { getOrganizations, organizationColumnDurations } from "@/content";
 import type { Organization } from "@/content/types";
 import { mediaUrl } from "@/lib/media";
 
-const COLUMN_MASK = "linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent)";
+import { OrgTileFade } from "./OrgTileFade";
 
 function OrgTile({ organization, duplicate }: { organization: Organization; duplicate: boolean }) {
   return (
@@ -61,21 +61,16 @@ export async function TrustedBy() {
         </p>
       </Reveal>
 
-      {/* The frost is a sibling of the window, not a child of it.
-          The window fades its ends with a mask, and a mask makes an element a
-          backdrop root: the `backdrop-filter` the tiles already declare has
-          nothing inside that root to sample, which is why the circuit read
-          through them sharp. Rather than move the fade — it is the effect, and
-          the tiles' own filter also carries a saturate and a brightness that
-          would shift the colour if it ever came alive — the blur goes behind
-          the whole window, where it samples the page. Its own mask feathers it
-          so there is no seam where blurred meets sharp. */}
+      {/* The window's fade lives on the tiles now, one slice of it each — see
+          useOrgTileFade. A mask here would make this element a backdrop root
+          and leave the tiles' own glass with nothing to sample, which is what
+          sent the blur out to a pool behind the whole section and into the gaps
+          between the cards. */}
       <div className="relative mx-auto mt-[34px] max-w-[1200px]">
-        <span aria-hidden="true" className="ndi-org-frost" />
+        <OrgTileFade />
         <div
           data-org-cols="1"
           className="flex max-h-[500px] justify-center gap-5 overflow-hidden px-8"
-          style={{ WebkitMaskImage: COLUMN_MASK, maskImage: COLUMN_MASK }}
         >
           {columns.map((column, columnIndex) => (
             <div
