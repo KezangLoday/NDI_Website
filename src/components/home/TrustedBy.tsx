@@ -61,37 +61,49 @@ export async function TrustedBy() {
         </p>
       </Reveal>
 
-      <div
-        data-org-cols="1"
-        className="mx-auto mt-[34px] flex max-h-[500px] max-w-[1200px] justify-center gap-5 overflow-hidden px-8"
-        style={{ WebkitMaskImage: COLUMN_MASK, maskImage: COLUMN_MASK }}
-      >
-        {columns.map((column, columnIndex) => (
-          <div
-            key={columnIndex}
-            className={`ndi-org-col min-w-0 flex-1 ${
-              columnIndex === 1 ? "ndi-org-col-2" : columnIndex === 2 ? "ndi-org-col-3" : ""
-            }`}
-          >
-            {/* The tiles are rendered twice so the -50% loop is seamless. */}
+      {/* The frost is a sibling of the window, not a child of it.
+          The window fades its ends with a mask, and a mask makes an element a
+          backdrop root: the `backdrop-filter` the tiles already declare has
+          nothing inside that root to sample, which is why the circuit read
+          through them sharp. Rather than move the fade — it is the effect, and
+          the tiles' own filter also carries a saturate and a brightness that
+          would shift the colour if it ever came alive — the blur goes behind
+          the whole window, where it samples the page. Its own mask feathers it
+          so there is no seam where blurred meets sharp. */}
+      <div className="relative mx-auto mt-[34px] max-w-[1200px]">
+        <span aria-hidden="true" className="ndi-org-frost" />
+        <div
+          data-org-cols="1"
+          className="flex max-h-[500px] justify-center gap-5 overflow-hidden px-8"
+          style={{ WebkitMaskImage: COLUMN_MASK, maskImage: COLUMN_MASK }}
+        >
+          {columns.map((column, columnIndex) => (
             <div
-              className="ndi-org-track flex flex-col gap-5 pb-5"
-              style={{
-                animation: `ndiOrgUp ${
-                  organizationColumnDurations[(columnIndex + 1) as 1 | 2 | 3]
-                } linear infinite`,
-              }}
+              key={columnIndex}
+              className={`ndi-org-col min-w-0 flex-1 ${
+                columnIndex === 1 ? "ndi-org-col-2" : columnIndex === 2 ? "ndi-org-col-3" : ""
+              }`}
             >
-              {[...column, ...column].map((organization, tileIndex) => (
-                <OrgTile
-                  key={`${organization.id}-${tileIndex}`}
-                  organization={organization}
-                  duplicate={tileIndex >= column.length}
-                />
-              ))}
+              {/* The tiles are rendered twice so the -50% loop is seamless. */}
+              <div
+                className="ndi-org-track flex flex-col gap-5 pb-5"
+                style={{
+                  animation: `ndiOrgUp ${
+                    organizationColumnDurations[(columnIndex + 1) as 1 | 2 | 3]
+                  } linear infinite`,
+                }}
+              >
+                {[...column, ...column].map((organization, tileIndex) => (
+                  <OrgTile
+                    key={`${organization.id}-${tileIndex}`}
+                    organization={organization}
+                    duplicate={tileIndex >= column.length}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

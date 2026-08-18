@@ -557,6 +557,22 @@
 
 /* ---- Trusted-by scrolling columns -------------------------- */
 [data-org-cols]:hover .ndi-org-track { animation-play-state: paused; }
+
+/* The frosted pool the tiles sit against — see TrustedBy.tsx for why it is a
+   sibling of the window rather than inside it. Blur only: no saturate, no
+   brightness, no fill, so nothing behind the section changes colour, it only
+   goes soft. Inset to the columns' own box so the frost stops where the cards
+   do, and feathered top and bottom so blurred never meets sharp on a line. */
+.ndi-org-frost {
+  position: absolute;
+  inset: 0 32px;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+}
 @media (prefers-reduced-motion: reduce) {
   .ndi-org-track { animation: none !important; }
 }
