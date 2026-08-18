@@ -1424,6 +1424,56 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
 .ndi-tut svg { transition: transform 0.28s var(--ease-out); }
 .ndi-tut:hover svg { transform: translateX(5px); }
 
+/* ---- Use-case cards: the tutorial opens on hover ------------
+   The heading and its text rise, and the call to action comes up into the
+   space they leave — the same move the Organizations bento makes, at the
+   smaller scale a one-line label needs.
+
+   Only cards carrying a tutorial do it, marked with `data-tut`. `:has()` would
+   have read that off the CTA's presence with no flag to keep in sync, but where
+   it is unsupported the whole rule drops and the CTA still fades in — over the
+   text it was meant to rise beneath. An attribute degrades to nothing.
+
+   The lift is a constant, unlike the bento's measured one, because this label
+   is a single line at a fixed size and cannot wrap. */
+.ndi-uc { --uc-lift: 30px; }
+.ndi-uc-face,
+.ndi-uc-icon,
+.ndi-uc-cta {
+  transition: transform 0.42s var(--ease-glide), opacity 0.28s linear;
+}
+.ndi-uc-cta {
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  bottom: 26px;
+  z-index: 1;
+  transform: translateY(var(--uc-lift));
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .ndi-uc[data-tut]:hover .ndi-uc-face {
+    transform: translateY(calc(var(--uc-lift) * -1));
+  }
+  .ndi-uc[data-tut]:hover .ndi-uc-icon { transform: scale(0.85); }
+  .ndi-uc[data-tut]:hover .ndi-uc-cta { transform: none; opacity: 1; }
+}
+/* No pointer means no hover to reveal it, and the tutorial is the reason the
+   card leads anywhere. It stays where the hover would have put it and the card
+   makes room, rather than joining the flow — the card is a three-way
+   `justify-between`, and a third child there would push the text off the
+   bottom edge it is aligned to. */
+@media (hover: none) {
+  .ndi-uc[data-tut] { padding-bottom: calc(26px + var(--uc-lift)); }
+  .ndi-uc[data-tut] .ndi-uc-cta { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-uc-face,
+  .ndi-uc-icon,
+  .ndi-uc-cta { transition: none; }
+}
+
 /* ---- Send icon on the two enquiry forms -------------------
    The same nudge the tutorial and view-all arrows use, on its own class rather
    than on `.ndi-sweepbtn svg`: that button is also the Governance download,
