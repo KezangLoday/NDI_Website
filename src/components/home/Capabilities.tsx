@@ -43,7 +43,7 @@ export async function Capabilities() {
         />
       </Reveal>
 
-      <Reveal className="ndi-cap-stage mt-12 min-[1101px]:mt-14">
+      <Reveal className="ndi-cap-stage mt-14 min-[1101px]:mt-20">
         <div className="ndi-cap-phone">
           <span aria-hidden="true" className="ndi-cap-halo" />
           <Image
