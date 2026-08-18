@@ -563,34 +563,6 @@
 /* ---- Trusted-by scrolling columns -------------------------- */
 [data-org-cols]:hover .ndi-org-track { animation-play-state: paused; }
 
-/* The hand does not just thin out at the bottom, it goes out of focus: the same
-   source again, blurred, masked to the last stretch and laid over the sharp copy
-   where that has begun to give up. A fade alone reads as the image running out;
-   losing focus first reads as the arm leaving the frame.
-
-   A pseudo-element rather than a second <img>: no extra node in the
-   accessibility tree, and the browser already has the file. `inset: 0` with a
-   100% background size lines it up exactly, because the image is the only
-   in-flow child and so sets the container's box. */
-.ndi-cap-phone::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: var(--phone-src);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  filter: blur(7px);
-  -webkit-mask-image:
-    linear-gradient(to bottom, transparent 84%, #000 93%, #000 97%, transparent 100%),
-    linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.6) 96%, transparent 100%);
-  mask-image:
-    linear-gradient(to bottom, transparent 84%, #000 93%, #000 97%, transparent 100%),
-    linear-gradient(to right, #000 0%, #000 88%, rgba(0, 0, 0, 0.6) 96%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
-
 /* A lit glass edge on the partner tiles, in place of the shared lens rim's
    even conic sweep. Brightest where light would land on a pane held at this
    angle, dropping away across the face, with a second pickup on the far corner
@@ -776,17 +748,19 @@
    height and the right bezel at 73% of its width, so the phone itself never
    softens — only the hand does, and only where it was being severed.
 
-   The ramps hold most of their opacity through the visible arm and spend it in
-   the last couple of percent: a linear falloff took the wrist to a third of its
-   weight while there was still plenty of it left to see, which read as the hand
-   vanishing rather than as it leaving the frame. */
+   The ramps hold full opacity through the hand and then dissolve over a long
+   tail. A blurred copy of the image used to carry that tail, and it was wrong:
+   a wide field of half-transparent blurred skin over a dark page reads as a
+   milky blue haze, and the mask box it was clipped to gave that haze straight
+   edges. Alpha alone fades to whatever is actually behind at that point, which
+   is what blending with the background means — no colour is assumed anywhere. */
 .ndi-cap-phone img {
   -webkit-mask-image:
-    linear-gradient(to bottom, #000 0%, #000 90%, rgba(0, 0, 0, 0.5) 96%, transparent 99%),
-    linear-gradient(to right, #000 0%, #000 86%, rgba(0, 0, 0, 0.6) 95%, rgba(0, 0, 0, 0.2) 99%, transparent 100%);
+    linear-gradient(to bottom, #000 0%, #000 84%, rgba(0, 0, 0, 0.72) 90%, rgba(0, 0, 0, 0.3) 96%, transparent 100%),
+    linear-gradient(to right, #000 0%, #000 82%, rgba(0, 0, 0, 0.7) 90%, rgba(0, 0, 0, 0.28) 96%, transparent 100%);
   mask-image:
-    linear-gradient(to bottom, #000 0%, #000 90%, rgba(0, 0, 0, 0.5) 96%, transparent 99%),
-    linear-gradient(to right, #000 0%, #000 86%, rgba(0, 0, 0, 0.6) 95%, rgba(0, 0, 0, 0.2) 99%, transparent 100%);
+    linear-gradient(to bottom, #000 0%, #000 84%, rgba(0, 0, 0, 0.72) 90%, rgba(0, 0, 0, 0.3) 96%, transparent 100%),
+    linear-gradient(to right, #000 0%, #000 82%, rgba(0, 0, 0, 0.7) 90%, rgba(0, 0, 0, 0.28) 96%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
