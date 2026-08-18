@@ -6,6 +6,8 @@ import { getOrganizations, organizationColumnDurations } from "@/content";
 import type { Organization } from "@/content/types";
 import { mediaUrl } from "@/lib/media";
 
+const COLUMN_MASK = "linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent)";
+
 function OrgTile({ organization, duplicate }: { organization: Organization; duplicate: boolean }) {
   return (
     <div
@@ -59,15 +61,10 @@ export async function TrustedBy() {
         </p>
       </Reveal>
 
-      {/* The window used to fade its ends with a mask on this element. A mask
-          makes an element a backdrop root, which left every tile inside it
-          declaring `backdrop-filter` with nothing behind it to sample — the
-          circuit read through the glass sharp instead of frosted. The fade is
-          now two scrims that are siblings of the columns rather than an
-          ancestor of the tiles, so the glass works. */}
       <div
         data-org-cols="1"
-        className="relative mx-auto mt-[34px] flex max-h-[500px] max-w-[1200px] justify-center gap-5 overflow-hidden px-8"
+        className="mx-auto mt-[34px] flex max-h-[500px] max-w-[1200px] justify-center gap-5 overflow-hidden px-8"
+        style={{ WebkitMaskImage: COLUMN_MASK, maskImage: COLUMN_MASK }}
       >
         {columns.map((column, columnIndex) => (
           <div
@@ -95,9 +92,6 @@ export async function TrustedBy() {
             </div>
           </div>
         ))}
-
-        <span aria-hidden="true" className="ndi-org-fade" data-edge="top" />
-        <span aria-hidden="true" className="ndi-org-fade" data-edge="bottom" />
       </div>
     </section>
   );

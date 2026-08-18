@@ -557,51 +557,6 @@
 
 /* ---- Trusted-by scrolling columns -------------------------- */
 [data-org-cols]:hover .ndi-org-track { animation-play-state: paused; }
-
-/* The window's soft ends, as scrims rather than as a mask on the window — see
-   TrustedBy.tsx. `opacity()` inside backdrop-filter fades the band toward the
-   page's own ground, which is what the mask did, without anyone having to name
-   that colour; the blur means the tiles dissolve into fog at the ends rather
-   than simply thinning, which is the same material argument the tiles make. */
-.ndi-org-fade {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 22%;
-  z-index: 2;
-  pointer-events: none;
-  -webkit-backdrop-filter: blur(9px) opacity(0.34);
-  backdrop-filter: blur(9px) opacity(0.34);
-}
-.ndi-org-fade[data-edge="top"] {
-  top: 0;
-  -webkit-mask-image: linear-gradient(to bottom, #000 10%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 10%, transparent 100%);
-}
-.ndi-org-fade[data-edge="bottom"] {
-  bottom: 0;
-  -webkit-mask-image: linear-gradient(to top, #000 10%, transparent 100%);
-  mask-image: linear-gradient(to top, #000 10%, transparent 100%);
-}
-
-/* A lit glass edge, in place of the flat hairline: brightest where light would
-   land on a pane held at this angle, dropping away across the face, with a
-   second pickup on the far corner so the tile reads as a solid piece of glass
-   rather than a decal. The shared lens rim is the same idea at 0.45 and one
-   conic sweep, which is right for cards that sit still; these move, and a
-   directional edge is what makes a moving pane look like glass. */
-[data-org-tile] { border-color: rgba(255, 255, 255, 0.09); }
-[data-org-tile]::after {
-  opacity: 0.9;
-  background: linear-gradient(
-    143deg,
-    rgba(255, 255, 255, 0.52) 0%,
-    rgba(255, 255, 255, 0.1) 24%,
-    rgba(255, 255, 255, 0.02) 52%,
-    rgba(255, 255, 255, 0.09) 76%,
-    rgba(255, 255, 255, 0.32) 100%
-  );
-}
 @media (prefers-reduced-motion: reduce) {
   .ndi-org-track { animation: none !important; }
 }
