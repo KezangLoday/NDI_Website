@@ -726,25 +726,24 @@
     rgba(90, 201, 148, 0) 66%
   );
 }
-/* The supplied cutout ends mid-forearm at the frame edge. On a dark page that
-   reads as a severed limb, so the last stretch dissolves instead. The stop sits
-   below the bottom bezel, which is at 88% of the crop — the device itself never
-   fades. */
+/* The supplied cutout runs off two edges of the frame, not one: mid-forearm at
+   the bottom, and again at the right where the wrist crosses it. On a dark page
+   both read as a cut limb, so the arm dissolves toward each. Two gradients
+   intersected rather than one corner-anchored radial, so each edge is tuned to
+   what actually crosses it.
+
+   Both stops clear the device. The bottom bezel sits at 88% of the crop's
+   height and the right bezel at 73% of its width, so the phone itself never
+   softens — only the hand does, and only where it was being severed. */
 .ndi-cap-phone img {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    #000 88%,
-    rgba(0, 0, 0, 0.34) 96%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    #000 88%,
-    rgba(0, 0, 0, 0.34) 96%,
-    transparent 100%
-  );
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0%, #000 88%, rgba(0, 0, 0, 0.34) 96%, transparent 100%),
+    linear-gradient(to right, #000 0%, #000 82%, rgba(0, 0, 0, 0.38) 93%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, #000 0%, #000 88%, rgba(0, 0, 0, 0.34) 96%, transparent 100%),
+    linear-gradient(to right, #000 0%, #000 82%, rgba(0, 0, 0, 0.38) 93%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
 .ndi-cap-item { position: relative; display: flex; align-items: flex-start; gap: 14px; }
