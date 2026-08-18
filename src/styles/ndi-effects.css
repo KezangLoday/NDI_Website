@@ -734,14 +734,19 @@
 
    Both stops clear the device. The bottom bezel sits at 88% of the crop's
    height and the right bezel at 73% of its width, so the phone itself never
-   softens — only the hand does, and only where it was being severed. */
+   softens — only the hand does, and only where it was being severed.
+
+   The ramps hold most of their opacity through the visible arm and spend it in
+   the last couple of percent: a linear falloff took the wrist to a third of its
+   weight while there was still plenty of it left to see, which read as the hand
+   vanishing rather than as it leaving the frame. */
 .ndi-cap-phone img {
   -webkit-mask-image:
-    linear-gradient(to bottom, #000 0%, #000 88%, rgba(0, 0, 0, 0.34) 96%, transparent 100%),
-    linear-gradient(to right, #000 0%, #000 82%, rgba(0, 0, 0, 0.38) 93%, transparent 100%);
+    linear-gradient(to bottom, #000 0%, #000 91%, rgba(0, 0, 0, 0.62) 96%, rgba(0, 0, 0, 0.2) 99%, transparent 100%),
+    linear-gradient(to right, #000 0%, #000 86%, rgba(0, 0, 0, 0.6) 95%, rgba(0, 0, 0, 0.2) 99%, transparent 100%);
   mask-image:
-    linear-gradient(to bottom, #000 0%, #000 88%, rgba(0, 0, 0, 0.34) 96%, transparent 100%),
-    linear-gradient(to right, #000 0%, #000 82%, rgba(0, 0, 0, 0.38) 93%, transparent 100%);
+    linear-gradient(to bottom, #000 0%, #000 91%, rgba(0, 0, 0, 0.62) 96%, rgba(0, 0, 0, 0.2) 99%, transparent 100%),
+    linear-gradient(to right, #000 0%, #000 86%, rgba(0, 0, 0, 0.6) 95%, rgba(0, 0, 0, 0.2) 99%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
