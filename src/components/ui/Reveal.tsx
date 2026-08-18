@@ -34,6 +34,13 @@ export function Reveal({ children, className, style, delay = 0, id }: RevealProp
       element.dataset.revealed = "true";
     };
 
+    /* Marks that the observer is attached, so an entrance may hold its subject
+       somewhere it could not sensibly be left. Most reveals here offset by a
+       few pixels and are fine either way; the capabilities entries start piled
+       on the phone, and without this they would sit there for anyone whose JS
+       never arrives. */
+    element.dataset.ready = "";
+
     if (!("IntersectionObserver" in window)) {
       reveal();
       return;

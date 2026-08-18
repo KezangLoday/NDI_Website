@@ -798,10 +798,32 @@
 /* Wide: the annotated layout. */
 @media (min-width: 1101px) {
   .ndi-cap-stage {
-    grid-template-columns: minmax(0, 1fr) clamp(300px, 31vw, 392px) minmax(0, 1fr);
+    --phone-w: clamp(300px, 31vw, 392px);
+    --gutter: clamp(26px, 3vw, 46px);
+    --rgap: clamp(34px, 4vw, 60px);
+    /* Where the entries come from: the middle of the device.
+
+       Across, that is the gutter plus half the phone. Down, it is one row
+       pitch — and the pitch is not the entry's own height, because the phone
+       spans all three rows and is taller than they are, so the grid stretches
+       the three tracks equally to fit it. The track is therefore the phone's
+       height less the two gaps, divided by three. The phone's height follows
+       from its width and the crop's ratio, which is the one number here that
+       is tied to the asset. */
+    --phone-ar: 1.589;
+    --emit: calc(var(--gutter) + var(--phone-w) / 2);
+    --track: calc((var(--phone-w) * var(--phone-ar) - 2 * var(--rgap)) / 3);
+    --pitch: calc(var(--track) + var(--rgap));
+    /* An entry is top-aligned in its track and shorter than it, so its own
+       middle sits above the track's. This is the difference — half the track
+       less half the entry, the percentage resolving against the entry itself —
+       and it is what puts the cluster on the device's centre rather than a
+       constant distance above it. */
+    --ey-mid: calc(var(--track) / 2 - 50%);
+    grid-template-columns: minmax(0, 1fr) var(--phone-w) minmax(0, 1fr);
     grid-template-rows: repeat(3, auto);
-    column-gap: clamp(26px, 3vw, 46px);
-    row-gap: clamp(34px, 4vw, 60px);
+    column-gap: var(--gutter);
+    row-gap: var(--rgap);
     /* Top-aligned, not centred: the pair at each height has to share a baseline
        for the row to read as a pair, and centring drops whichever entry has the
        shorter description by half the difference. */
@@ -860,13 +882,29 @@
   .ndi-cap-stage > .ndi-cap-item:nth-child(3),
   .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --wire: clamp(30px, 3.8vw, 54px); }
 
-  /* Entries start gathered at the device, small, and travel out to their place.
-     The origin is the inner edge — the side the phone is on — so the scale
-     grows away from it and the whole thing reads as being emitted rather than
-     as a box that happens to slide. Below this width there is no device to come
-     out of, so they simply rise. */
-  .ndi-cap-item[data-side="left"] { transform: translateX(46px) scale(0.955); transform-origin: right center; }
-  .ndi-cap-item[data-side="right"] { transform: translateX(-46px) scale(0.955); transform-origin: left center; }
+  /* Entries start at the middle of the device, small, and travel out to their
+     place. Across: the gutter plus half the phone. Down or up: the row's own
+     height plus the row gap, which is the pitch to the middle row — a
+     percentage, so it stays right whatever the descriptions wrap to.
+
+     Gated on [data-ready], which Reveal sets once its observer is attached. The
+     offset puts all six on top of the phone, and that is not a state to leave
+     anyone in whose JS never arrives; without it they simply sit where they
+     belong. */
+  .ndi-cap-stage[data-ready] > .ndi-cap-item {
+    transform: translate(var(--ex), var(--ey)) scale(0.88);
+  }
+  .ndi-cap-item[data-side="left"] { --ex: var(--emit); }
+  .ndi-cap-item[data-side="right"] { --ex: calc(var(--emit) * -1); }
+  .ndi-cap-item { --ey: var(--ey-mid); }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(2),
+  .ndi-cap-stage > .ndi-cap-item:nth-child(5) { --ey: calc(var(--ey-mid) + var(--pitch)); }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(4),
+  .ndi-cap-stage > .ndi-cap-item:nth-child(7) { --ey: calc(var(--ey-mid) - var(--pitch)); }
+  /* The middle rows are bowed outward, so they start that much further from the
+     centre than the rows above and below and need it back. */
+  .ndi-cap-stage > .ndi-cap-item:nth-child(3) { --ex: calc(var(--emit) + var(--bow)); }
+  .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --ex: calc((var(--emit) + var(--bow)) * -1); }
 }
 
 /* ---- Choreography -------------------------------------------
@@ -874,26 +912,29 @@
    annotations step out of it, their hairlines draw last. Transform-only on the
    text, as everywhere else here, so nothing is left hidden if a transition is
    dropped. */
-.ndi-cap-phone {
-  transform: translateY(16px) scale(0.982);
+/* The rest states carry no transition of their own. They have to be taken up
+   the instant Reveal attaches its observer — animating six entries *into* the
+   phone on load is a gesture nobody asked for, and that is what a transition
+   here would produce. The transition is declared on the arrival instead, which
+   is the style the browser reads it from when the change happens. */
+.ndi-cap-phone { transform: translateY(16px) scale(0.982); }
+.ndi-cap-item { transform: translateY(16px); }
+.ndi-cap-wire { transform: scaleX(0); }
+/* Last, so it outranks the per-side resting transforms above at equal weight. */
+/* The device lands first, then the entries come out of it, so their delay is
+   the phone's settle plus their own place in the stagger. */
+.ndi-cap-stage[data-revealed="true"] > .ndi-cap-phone {
+  transform: none;
   transition: transform 0.8s var(--ease-glide);
 }
-/* The device lands first, then the entries come out of it, so the base delay is
-   the phone's settle. */
-.ndi-cap-item {
-  transform: translateY(16px);
-  transition: transform 0.85s var(--ease-glide);
-  transition-delay: calc(var(--d, 0s) + 0.14s);
+.ndi-cap-stage[data-revealed="true"] > .ndi-cap-item {
+  transform: none;
+  transition: transform 0.95s var(--ease-glide) calc(var(--d, 0s) + 0.16s);
 }
-.ndi-cap-wire {
-  transform: scaleX(0);
-  transition: transform 0.5s var(--ease-glide);
-  transition-delay: calc(var(--d, 0s) + 0.62s);
+.ndi-cap-stage[data-revealed="true"] .ndi-cap-wire {
+  transform: none;
+  transition: transform 0.5s var(--ease-glide) calc(var(--d, 0s) + 0.62s);
 }
-/* Last, so it outranks the per-side resting transforms above at equal weight. */
-[data-revealed="true"] .ndi-cap-phone { transform: none; }
-[data-revealed="true"] .ndi-cap-item { transform: none; }
-[data-revealed="true"] .ndi-cap-wire { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .ndi-cap-phone,
   .ndi-cap-item,
