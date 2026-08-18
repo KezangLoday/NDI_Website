@@ -94,5 +94,5 @@ export const walletInHand = media(
   "/media/phone-in-hand.webp",
   "The Bhutan NDI wallet open on a phone, held in one hand",
   1070,
-  1470,
+  1700,
 );
