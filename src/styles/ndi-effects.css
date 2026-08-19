@@ -1896,7 +1896,10 @@ select option { background: #101827; color: #e9eef6; }
        this the picture keeps its 68% at any height and the section outgrows the
        screen it was sized to fill. */
     max-width: min(820px, calc((100svh - 210px) * 1.171));
-    margin-left: -5%;
+    /* Flush with the container's gutter, not bled past it. Breaking out by 5%
+       put the phone 57px left of the line every other section starts on, and at
+       1280 that left only 15px between it and the window edge — below about
+       1240 it clipped. */
     justify-self: start;
     align-self: center;
     pointer-events: none;
