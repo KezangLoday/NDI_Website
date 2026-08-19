@@ -41,21 +41,28 @@ export function CapabilityStage({
       frame = 0;
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
-      /* Progress tracks the stage's centre, not its top: the top crosses the
-         viewport long before the composition is worth looking at, and how far
-         ahead depends on how tall the stage is.
+      /* Finished when the stage sits centred in the viewport, over the 0.62vh
+         of travel before that.
 
-         The window it replaced ran from the top entering the foot of the
-         viewport to it reaching a fifth of the way up. Measured at 1440x950,
-         where the stage is 623px tall, that put the entries at 89% of their
-         travel by the time the whole stage was on screen — so the gesture was
-         all but over before there was anything to watch, and the last row had
-         31px left to move. Anchored on the centre it is at 68% there, with
-         120px still to go, over a window half again as long. */
-      const centre = rect.top + rect.height / 2;
-      const to = vh * 0.42;
-      const from = to + vh * 0.8;
-      const p = Math.min(1, Math.max(0, (from - centre) / Math.max(1, from - to)));
+         Both endpoints have to come from the stage's own height, not from a
+         fraction of the viewport. The first attempt at this ran the window
+         against the stage's top, which crosses the viewport long before the
+         composition is worth looking at: measured at 1440x950, the entries were
+         89% through their travel by the time the whole stage was on screen. The
+         second measured the stage's centre against a fixed 0.42vh, which mixes
+         the two and breaks as the window shortens — the target resolves to
+         `0.42vh - height/2`, so at 1434x832 it landed at rect.top 38 and at
+         1280x720 at -9, demanding the section be scrolled off the top before it
+         would finish.
+
+         Centring is the same idea with the height on both sides, so it holds at
+         any window: 164, 105 and 49 at those three sizes, always with the whole
+         section still framed and clear of the point where it starts to leave.
+         Clamped at 0 for a stage taller than the viewport, which can never be
+         centred and finishes as its top reaches the top instead. */
+      const to = Math.max(0, (vh - rect.height) / 2);
+      const from = to + vh * 0.62;
+      const p = Math.min(1, Math.max(0, (from - rect.top) / Math.max(1, from - to)));
       el.style.setProperty("--p", p.toFixed(4));
     };
     const onScroll = () => {
