@@ -1253,18 +1253,38 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
      time. Every stop is lit now, and every stop is on the brand ramp: the first
      fix for that dead segment reached for #c6ffe2 and a near-white radial,
      which lit the arc by draining the colour out of it. The peak here is a
-     bright mint, not a pale one. */
+     bright mint, not a pale one.
+
+     The arc is a gradient along its own length — light mint at its leading
+     edge, running down to the deeper teal-mint of the send button at its tail.
+     That only reads because the conic shares the mask's origin: both start at
+     `(--start - --spread)`, so the ramp is pinned to the lit window and travels
+     with it instead of sliding underneath it. The last stop returns to the
+     first at 360deg, which keeps the seam out of the arc no matter where the
+     cursor puts it. The lightest stop is at `--spread` for a reason: that is
+     where the mask peaks, and it falls to nothing at both ends, so whatever
+     colour lands at that angle is the only one ever seen at full strength. Put
+     the deeper mint anywhere near it and the arc loses brightness it cannot
+     spare — the ramp has to be arranged around that crest, not through it.
+
+     The three radials stay on the viewport (see background-attachment below) —
+     they are ambient, a light in the room rather than a light on this card, and
+     every card that shares the screen catches the same one. The conic is the
+     opposite and has to be anchored to the card: on the viewport its centre is
+     off-screen for most cards, so the whole ring samples a few degrees of the
+     ramp and comes out one flat colour. That is what made the earlier attempt
+     at this invisible. */
   --glow-arc:
     radial-gradient(circle, rgba(111, 224, 169, 0.95) 10%, rgba(111, 224, 169, 0) 20%),
     radial-gradient(circle at 40% 40%, rgba(90, 201, 148, 0.95) 5%, rgba(90, 201, 148, 0) 15%),
     radial-gradient(circle at 60% 60%, rgba(61, 168, 118, 0.9) 10%, rgba(61, 168, 118, 0) 20%),
-    repeating-conic-gradient(
-      from 236.84deg at 50% 50%,
-      var(--ndi-mint) 0%,
-      var(--ndi-mint-bright) 5%,
-      #7fe8b8 10%,
-      var(--ndi-mint-bright) 15%,
-      var(--ndi-mint) 20%
+    conic-gradient(
+      from calc((var(--start) - var(--spread)) * 1deg) at 50% 50%,
+      var(--ndi-mint-bright) 0deg,
+      #7fe8b8 calc(var(--spread) * 1deg),
+      var(--ndi-mint) calc(var(--spread) * 1.5deg),
+      #2fa189 calc(var(--spread) * 2deg),
+      var(--ndi-mint-bright) 360deg
     );
 }
 /* ::before is the same ring, blurred, so the arc has a bloom around it rather
@@ -1278,7 +1298,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   border-radius: inherit;
   border: var(--bw) solid transparent;
   background: var(--glow-arc);
-  background-attachment: fixed;
+  background-attachment: fixed, fixed, fixed, scroll;
   opacity: var(--active);
   transition: opacity 0.3s var(--ease-out);
   -webkit-mask-image: linear-gradient(#0000, #0000),
