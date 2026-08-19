@@ -289,9 +289,22 @@ export default function GovernancePage() {
           </Block>
 
           <Block id="chapters" number="08" title="Chapters of the Act">
+            {/* The first column is sized to its own content rather than to
+                half the grid. Split evenly, it gets 375px where its widest
+                chapter needs 410 and wraps, while the second column sits on 375
+                needing 329 — the row was never short of width, it was sharing
+                it in the wrong proportion. max-content keeps that self-adjusting
+                if a chapter is ever renamed.
+
+                Only above 1150px, which is where the grid reaches its full
+                760px and the two columns' 410 + 329 both fit. max-content does
+                not shrink, so applied any narrower it holds its 412px while the
+                second column collapses — at 950px that left it 140px wide and
+                twelve chapters wrapping. Below that the even split is still the
+                best available. */}
             <div
               data-ndi-2col="1"
-              className="mt-2 grid grid-cols-1 gap-2.5 min-[701px]:grid-cols-2"
+              className="mt-2 grid grid-cols-1 gap-2.5 min-[701px]:grid-cols-2 min-[1150px]:grid-cols-[max-content_minmax(0,1fr)]"
             >
               {actChapters.map((chapter) => (
                 <div
