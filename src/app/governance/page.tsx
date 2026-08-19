@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Emphasis, PageHero, PageSection } from "@/components/layout/PageHero";
-import { SpotlightCard } from "@/components/ui/Cards";
 import { GradientButton } from "@/components/ui/GradientButton";
 import { Reveal } from "@/components/ui/Reveal";
 import { Icon } from "@/components/ui/icons";
@@ -180,7 +179,14 @@ export default function GovernancePage() {
             </p>
             <div className="mt-6 grid grid-cols-1 gap-4">
               {institutionalBodies.map((body) => (
-                <SpotlightCard key={body.id}>
+                /* Plain page cards. These were the only SpotlightCards on
+                   Governance, so their cursor-tracked halo was the one hover on
+                   the page that nothing else shared. */
+                <div
+                  key={body.id}
+                  data-gov-card="1"
+                  className="flex flex-col items-start gap-3.5 rounded-2xl border border-grid p-[26px]"
+                >
                   <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
                     {body.label}
                   </span>
@@ -198,7 +204,7 @@ export default function GovernancePage() {
                   <div className="font-mono text-[11px] tracking-[0.08em] text-faint">
                     {body.ref}
                   </div>
-                </SpotlightCard>
+                </div>
               ))}
             </div>
           </Block>
@@ -310,7 +316,7 @@ export default function GovernancePage() {
                 <div
                   key={chapter.number}
                   data-gov-card="1"
-                  className="flex gap-3.5 rounded-xl border border-grid px-[18px] py-4"
+                  className="ndi-role-card flex gap-3.5 rounded-xl border border-grid px-[18px] py-4"
                 >
                   <span className="pt-0.5 font-mono text-[11px] text-accent">{chapter.number}</span>
                   <span className="text-[14.5px] text-body">{chapter.title}</span>
