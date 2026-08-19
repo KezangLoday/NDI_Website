@@ -100,31 +100,41 @@ export const userUseCases: UserUseCase[] = [
  * The pinned "Dechen's journey" scrollytelling chapters.
  *
  * `anchor` is the horizontal position along the strip, 0–1, that this chapter
- * settles on. The values come straight from the prototype.
+ * settles on — placed at the centre of the screen, and clamped at both ends, so
+ * anything inside half a screen-width of an edge (about 0.07 here) resolves to
+ * that edge.
+ *
+ * These are measured off the artwork rather than inherited: the values from the
+ * prototype belonged to the older, wider strip, and against the current one
+ * they drifted a whole beat out of step — chapter 05, where Dechen downloads
+ * the wallet, was landing on her slumped over a laptop with a draining battery,
+ * two scenes before the app appears. Re-measure them against any new strip.
  */
 export const journeyChapters: JourneyChapter[] = [
-  { id: "graduation", step: "01", title: "Graduation", anchor: 0.045, caption: "Dechen finishes her degree. Everything that comes next will ask her to prove who she is." },
-  { id: "applications", step: "02", title: "The applications", anchor: 0.108, caption: "Job forms, bank forms, campus forms — the same documents photocopied again and again." },
-  { id: "counters", step: "03", title: "Counter to counter", anchor: 0.205, caption: "Offices across Thimphu, queues and stamps, and a trip back for the one paper she forgot." },
-  { id: "wall", step: "04", title: "The wall", anchor: 0.335, caption: "Weeks lost to verification. Her identity sits in filing cabinets she cannot reach." },
-  { id: "ndi", step: "05", title: "Bhutan NDI", anchor: 0.45, caption: "She downloads the wallet. Her foundational ID is issued to her phone, held only by her." },
-  { id: "issued", step: "06", title: "Credentials, issued", anchor: 0.565, caption: "Degree, census, licence — signed by the issuer, tamper-proof, and stored with her." },
-  { id: "consent", step: "07", title: "Consent, not copies", anchor: 0.675, caption: "A scan and a tap. She shares only the fields a service asks for — and nothing else." },
-  { id: "paperless", step: "08", title: "The end of paperwork", anchor: 0.9, caption: "120+ services, minutes instead of weeks. Dechen’s identity finally belongs to Dechen." },
+  { id: "graduation", step: "01", title: "Graduation", anchor: 0.03, caption: "Dechen finishes her degree. Everything that comes next will ask her to prove who she is." },
+  { id: "applications", step: "02", title: "The applications", anchor: 0.14, caption: "Job forms, bank forms, campus forms — the same documents photocopied again and again." },
+  { id: "counters", step: "03", title: "Counter to counter", anchor: 0.36, caption: "Offices across Thimphu, queues and stamps, and a trip back for the one paper she forgot." },
+  { id: "wall", step: "04", title: "The wall", anchor: 0.5, caption: "Weeks lost to verification. Her identity sits in filing cabinets she cannot reach." },
+  { id: "ndi", step: "05", title: "Bhutan NDI", anchor: 0.7, caption: "She downloads the wallet. Her foundational ID is issued to her phone, held only by her." },
+  { id: "issued", step: "06", title: "Credentials, issued", anchor: 0.8, caption: "Degree, census, licence — signed by the issuer, tamper-proof, and stored with her." },
+  { id: "consent", step: "07", title: "Consent, not copies", anchor: 0.885, caption: "A scan and a tap. She shares only the fields a service asks for — and nothing else." },
+  { id: "paperless", step: "08", title: "The end of paperwork", anchor: 0.96, caption: "120+ services, minutes instead of weeks. Dechen’s identity finally belongs to Dechen." },
 ];
 
 /**
  * The illustrated strip, 5000×290.
  *
- * It renders about 7160px wide, so it is already being upscaled ~1.4x. A
- * 10000px-wide source would render it crisply; until then this is the ceiling.
+ * The strip is drawn at 114% of the screen's height, so its rendered width is
+ * set by its aspect ratio: at 11.17:1 it lays out about 4830px wide inside a
+ * ~675px screen. The source is 2000px, so it is being upscaled ~2.4x — soft,
+ * and worth replacing with the full-resolution original when it is to hand.
  * Served directly rather than through next/image — see DechenJourney.
  */
 export const journeyStrip = media(
   "/media/company/journey-strip.webp",
   "Dechen's journey, from paperwork to a digital wallet",
-  5000,
-  290,
+  2000,
+  179,
 );
 
 export const userBenefits: UserBenefit[] = [
