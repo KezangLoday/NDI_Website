@@ -40,7 +40,6 @@ import { insights, resourceNews, webinars } from "./resources";
 import { services } from "./services";
 import { siteSettings } from "./siteSettings";
 import {
-  cardCornerRatio,
   credentialCards,
   journeyChapters,
   journeyStrip,
@@ -179,7 +178,7 @@ export async function getStartSteps(): Promise<StartStep[]> {
   return startSteps;
 }
 
-export { cardCornerRatio, credentialCards, journeyStrip };
+export { credentialCards, journeyStrip };
 export { walletInHand };
 
 export async function getPress(): Promise<PressItem[]> {

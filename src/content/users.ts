@@ -15,28 +15,14 @@ export const userHeroStats: HeroStat[] = [
  * wider, sits fully opaque and stacks above the two flanking cards, which are
  * rotated outward, pulled inward to overlap, and held slightly back at 0.85.
  *
- * The artwork is opaque, not transparent: its rounded corners are painted white
- * rather than cut out, so the corners have to be clipped in CSS or four white
- * crescents show against the page.
+ * The artwork carries its own rounded corners in its alpha channel, and they are
+ * a squircle rather than a circle, so nothing here should try to round the cards
+ * in CSS: a border-radius large enough to trace that shape overshoots it along
+ * the straight edges, and one that matches the edges leaves the corners
+ * unclipped. Let the alpha do it. (A flattened, white-matted copy of this
+ * artwork briefly made that a live problem — worth knowing if these files are
+ * ever re-exported.)
  */
-/**
- * Radius of the CSS clip that removes the artwork's painted-white corners, as a
- * fraction of the card's width.
- *
- * Not simply the painted radius. The artwork's corner is a squircle — Figma's
- * smooth corner — which runs further along the edges than a circle through the
- * same points: white reaches 70px in along the top edge of the 1500px card,
- * where a 68px circular corner would have ended it at 42px. Clipping at the
- * apparent radius therefore left a white crescent at every corner.
- *
- * 0.053 is the smallest circular radius that covers the whole painted region
- * (79px of 1500, against the 77px solved from the measured profile, plus a
- * little for the artwork's own anti-aliased edge). It costs about 2px of the
- * card's corner at full size, which is invisible; a surviving white crescent
- * was not.
- */
-export const cardCornerRatio = 0.053;
-
 export const credentialCards = [
   {
     id: "drivers-license",

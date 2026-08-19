@@ -11,7 +11,6 @@ import { Eyebrow } from "@/components/ui/SectionHeader";
 import { StoreButtons } from "@/components/ui/StoreButtons";
 import { Icon } from "@/components/ui/icons";
 import {
-  cardCornerRatio,
   credentialCards,
   getJourneyChapters,
   getStartSteps,
@@ -83,14 +82,12 @@ export default async function UsersPage() {
                 // rather than upscaled.
                 quality={95}
                 priority
+                // No border-radius here: the artwork carries its own rounded
+                // corners in its alpha channel, and they are a squircle, which
+                // no CSS radius reproduces.
                 className="block h-auto"
                 style={{
                   width: card.width,
-                  // Clips the artwork's painted-white corners — see
-                  // cardCornerRatio. Derived from the same clamp as the width so
-                  // it tracks the card at every viewport, which a fixed radius
-                  // cannot: the card ranges from 205px to 370px wide.
-                  borderRadius: `calc(${card.width} * ${cardCornerRatio})`,
                   boxShadow: "0 26px 54px -22px rgba(0,0,0,0.85)",
                 }}
               />
