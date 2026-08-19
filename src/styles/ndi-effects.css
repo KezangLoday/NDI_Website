@@ -1250,18 +1250,21 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   /* One definition, worn twice: sharp on ::after, blurred on ::before. The
      conic used to pass through #124143, a near-black teal, which put a dead
      segment in every revolution — the arc dimmed to nothing a fifth of the
-     time. The stops are all light now, so the arc is lit wherever it lands. */
+     time. Every stop is lit now, and every stop is on the brand ramp: the first
+     fix for that dead segment reached for #c6ffe2 and a near-white radial,
+     which lit the arc by draining the colour out of it. The peak here is a
+     bright mint, not a pale one. */
   --glow-arc:
-    radial-gradient(circle, rgba(198, 255, 226, 0.95) 10%, rgba(198, 255, 226, 0) 20%),
-    radial-gradient(circle at 40% 40%, rgba(111, 224, 169, 0.95) 5%, rgba(111, 224, 169, 0) 15%),
-    radial-gradient(circle at 60% 60%, rgba(158, 247, 204, 0.9) 10%, rgba(158, 247, 204, 0) 20%),
+    radial-gradient(circle, rgba(111, 224, 169, 0.95) 10%, rgba(111, 224, 169, 0) 20%),
+    radial-gradient(circle at 40% 40%, rgba(90, 201, 148, 0.95) 5%, rgba(90, 201, 148, 0) 15%),
+    radial-gradient(circle at 60% 60%, rgba(61, 168, 118, 0.9) 10%, rgba(61, 168, 118, 0) 20%),
     repeating-conic-gradient(
       from 236.84deg at 50% 50%,
-      #5ac994 0%,
-      #9ef7cc 5%,
-      #c6ffe2 10%,
-      #6fe0a9 15%,
-      #5ac994 20%
+      var(--ndi-mint) 0%,
+      var(--ndi-mint-bright) 5%,
+      #7fe8b8 10%,
+      var(--ndi-mint-bright) 15%,
+      var(--ndi-mint) 20%
     );
 }
 /* ::before is the same ring, blurred, so the arc has a bloom around it rather
@@ -1289,7 +1292,9 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
 }
 .ndi-glow::before {
   filter: blur(6px);
-  opacity: calc(var(--active) * 0.85);
+  /* Lower than the sharp ring: the two overlap, and light on light composites
+     toward white, which is the other half of how the arc lost its hue. */
+  opacity: calc(var(--active) * 0.62);
 }
 @media (prefers-reduced-motion: reduce) {
   .ndi-glow::before,
