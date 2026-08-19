@@ -74,21 +74,27 @@ export default async function OrganizationsPage() {
   return (
     <>
       {/* ============ HERO ============ */}
-      {/* Two columns, the product on the left. The credentials fan up and to
-          the right, so from that side the artwork points into the headline
-          rather than off the page — which is the whole reason it can sit ahead
-          of the copy without fighting it. Below 1001px it stacks, and the
-          heading keeps its place at the top of the document either way: the
-          copy is first in the DOM and swapped into second position by `order`.
-      */}
-      <PageSection className="pb-12 pt-36 min-[1001px]:pt-40">
-        <div className="grid grid-cols-1 items-center gap-12 min-[1001px]:grid-cols-[minmax(0,1fr)_minmax(0,1.06fr)] min-[1001px]:gap-12">
-          <Reveal className="min-[1001px]:order-2">
+      {/* One cell, two layers. The artwork and the copy are both in grid
+          area 1/1 and overlap: the credentials fan out of the top-right of the
+          picture and cross over the copy column, so the wallet can be large
+          without the text being pushed into a narrow lane beside it.
+
+          The overlap is safe rather than lucky. Measured on the asset, the
+          right 40% of it carries only the fan and nothing below 40% of its
+          height — the phone is entirely in the left 60% — so the copy, anchored
+          to the bottom of the cell, sits in a region of the picture that is
+          pure transparency. The cards pass over it; no glyph is ever behind
+          one.
+
+          Below 1101px the two unstack into ordinary rows and the copy leads. */}
+      <PageSection className="ndi-orghero-section pb-14">
+        <div className="ndi-orghero">
+          <Reveal className="ndi-orghero-copy">
             <Eyebrow>— For organizations</Eyebrow>
             <h1 className="mt-5 font-display text-[clamp(36px,3.9vw,50px)] font-semibold leading-[1.06] tracking-[-0.03em] text-strong [text-wrap:pretty]">
               Onboard customers in minutes, <Emphasis>not weeks</Emphasis>
             </h1>
-            <p className="mt-6 max-w-[540px] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
+            <p className="mt-6 max-w-[520px] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
               Verify identity, authenticate users and sign documents on government-backed digital
               identity infrastructure. One integration, every service.
             </p>
@@ -103,26 +109,23 @@ export default async function OrganizationsPage() {
           {/* The device treatment is the home hero's, not a new one: two soft
               mint pools behind the subject, a dark lift and a mint rim as drop
               shadows on the artwork itself, and the same slow float. */}
-          <Reveal
-            delay={0.08}
-            className="relative flex items-center justify-center min-[1001px]:order-1"
-          >
+          <Reveal delay={0.08} className="ndi-orghero-art">
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute h-[78%] w-[min(620px,108%)]"
+              className="pointer-events-none absolute left-[26%] top-[52%] h-[70%] w-[64%] -translate-x-1/2 -translate-y-1/2"
               style={{
                 background:
                   "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(90,201,148,0.20) 0%, rgba(90,201,148,0.10) 26%, rgba(78,176,132,0.04) 48%, transparent 74%)",
-                filter: "blur(34px)",
+                filter: "blur(38px)",
               }}
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute h-[52%] w-[min(360px,72%)]"
+              className="pointer-events-none absolute left-[62%] top-[22%] h-[42%] w-[46%] -translate-x-1/2 -translate-y-1/2"
               style={{
                 background:
-                  "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(126,232,182,0.22) 0%, rgba(90,201,148,0.08) 38%, transparent 70%)",
-                filter: "blur(46px)",
+                  "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(126,232,182,0.20) 0%, rgba(90,201,148,0.07) 38%, transparent 70%)",
+                filter: "blur(50px)",
               }}
             />
             <Image
@@ -131,8 +134,8 @@ export default async function OrganizationsPage() {
               width={orgHeroImage.width}
               height={orgHeroImage.height}
               priority
-              sizes="(max-width: 1000px) 88vw, 560px"
-              className="relative block h-auto w-full max-w-[560px]"
+              sizes="(max-width: 1100px) 92vw, 780px"
+              className="relative block h-auto w-full"
               style={{
                 filter:
                   "drop-shadow(0 34px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 46px rgba(90,201,148,0.18))",

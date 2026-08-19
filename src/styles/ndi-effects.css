@@ -1844,3 +1844,68 @@ select option { background: #101827; color: #e9eef6; }
 @media (prefers-reduced-motion: reduce) {
   .ndi-glow-bloom { display: none; }
 }
+
+/* ---- Organizations hero -----------------------------------
+   A full-screen opening: the section is sized to the viewport less the nav, so
+   nothing of the next section shows above the fold, and the two layers are
+   centred in whatever height that leaves.
+
+   Stacked first, because below 1101px there is no room to overlap anything and
+   the copy has to lead. */
+/* 100svh, not 100vh: on mobile browsers vh is the tallest the viewport ever
+   gets, so 100vh leaves the section overflowing while the toolbars are out.
+   The padding clears the fixed nav, which is its own height plus its offset. */
+.ndi-orghero-section {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 96px;
+}
+.ndi-orghero {
+  display: grid;
+  gap: 40px;
+}
+.ndi-orghero-art {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  justify-self: center;
+}
+@media (min-width: 1101px) {
+  .ndi-orghero-section { padding-top: 108px; }
+  .ndi-orghero {
+    gap: 0;
+    align-items: center;
+    min-height: min(660px, calc(100svh - 220px));
+  }
+  /* Both layers in one cell. The artwork is second in the DOM and sits above,
+     which is the point — the fan crosses the copy column. It cannot swallow the
+     button's clicks, so the layer is inert and only the picture inside it is
+     painted. */
+  .ndi-orghero-art,
+  .ndi-orghero-copy {
+    grid-area: 1 / 1;
+  }
+  .ndi-orghero-art {
+    z-index: 2;
+    width: 68%;
+    /* Capped against the viewport as well as the container, so a short window
+       cannot push the button below the fold: the artwork's height is its width
+       over 1.171, and 210px is the nav and the section's own padding. Without
+       this the picture keeps its 68% at any height and the section outgrows the
+       screen it was sized to fill. */
+    max-width: min(820px, calc((100svh - 210px) * 1.171));
+    margin-left: -5%;
+    justify-self: start;
+    align-self: center;
+    pointer-events: none;
+  }
+  .ndi-orghero-copy {
+    z-index: 1;
+    width: 53%;
+    justify-self: end;
+    align-self: end;
+    padding-bottom: 2%;
+  }
+}
