@@ -21,10 +21,11 @@ const STEP_MS = 5200;
  *
  * The one structural move is the branch. The live pad drops a conductor into
  * the detail panel and lands on a via at its edge, so the rail and the panel
- * are one circuit instead of a widget sitting above a card — which is what the
- * old "STEP 03 —— BUILD" line was there to paper over, and why it is gone.
- * The branch is placed by translating a step-width element by whole multiples
- * of its own width, so nothing has to be measured for it to track the step.
+ * are one circuit instead of a widget sitting above a card. It is placed by
+ * translating a step-width element by whole multiples of its own width, so
+ * nothing has to be measured for it to track the step.
+ *
+ * The panel's own layout is the one it has always had, kept on request.
  *
  * Auto-advances every 5.2s, and pauses on hover, while the tab is hidden, and
  * whenever the rail is scrolled out of view.
@@ -128,32 +129,50 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
         <span className="ndi-board-branch" />
       </div>
 
-      {/* The step's name is already on the live pad a few pixels above, so the
-          panel does not repeat it — the branch says which step this is. The
-          heading stays for structure, and for anyone who cannot see the wire. */}
       <div
-        className="ndi-board-panel rounded-2xl border border-grid px-8 py-[30px]"
+        data-ndi-2col="1"
         id="ndi-pipeline-detail"
+        className="ndi-board-panel grid grid-cols-1 items-start gap-10 overflow-hidden rounded-2xl border border-grid px-8 py-[30px] min-[901px]:grid-cols-[1.1fr_1fr]"
       >
-        <h3 className="sr-only">{active.title}</h3>
-        <p className="max-w-[64ch] text-[17px] leading-[1.6] text-body [text-wrap:pretty]">
-          {active.body}
-        </p>
+        <div>
+          <div className="flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
+            Step {active.code}
+            <span
+              aria-hidden="true"
+              className="h-px w-10"
+              style={{
+                background: "linear-gradient(90deg, var(--border-strong), transparent)",
+              }}
+            />
+            {active.tag}
+          </div>
+          <h3 className="mt-3.5 font-display text-[24px] font-semibold tracking-[-0.02em] text-strong">
+            {active.title}
+          </h3>
+          <p className="mt-2.5 text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
+            {active.body}
+          </p>
+        </div>
 
-        <dl className="mt-7 grid gap-x-10 gap-y-6 border-t border-subtle pt-6 min-[761px]:grid-cols-3">
+        <div className="flex flex-col">
           {[
-            ["You bring", active.input],
-            ["Output", active.output],
-            ["Owners", active.owners],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            ["You bring", active.input, "text-body"],
+            ["Output", active.output, "text-body"],
+            ["Owners", active.owners, "text-muted"],
+          ].map(([label, value, tone], index) => (
+            <div
+              key={label}
+              className={`grid grid-cols-[96px_minmax(0,1fr)] gap-4 py-4 ${
+                index < 2 ? "border-b border-subtle" : ""
+              }`}
+            >
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
                 {label}
-              </dt>
-              <dd className="mt-2.5 text-[14.5px] leading-[1.55] text-body">{value}</dd>
+              </span>
+              <span className={`text-[14px] leading-[1.6] ${tone}`}>{value}</span>
             </div>
           ))}
-        </dl>
+        </div>
       </div>
     </div>
   );
