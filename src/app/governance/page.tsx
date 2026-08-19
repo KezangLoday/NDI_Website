@@ -121,7 +121,8 @@ export default function GovernancePage() {
 
             {/* The card is a plain container — only the button is interactive,
                 so the hover belongs there rather than on the whole surface. */}
-            <div className="mt-7 flex flex-col gap-5 rounded-2xl border border-grid bg-white/[0.02] p-6 min-[701px]:flex-row min-[701px]:items-center">
+            <div data-gov-card="1"
+              className="mt-7 flex flex-col gap-5 rounded-2xl border border-grid p-6 min-[701px]:flex-row min-[701px]:items-center">
               <span className="flex-none text-accent">
                 <Icon name="fileText" size={30} />
               </span>
@@ -152,11 +153,8 @@ export default function GovernancePage() {
               <Ref>§2, §4</Ref>
             </p>
             <div
+              data-gov-card="1"
               className="mt-6 flex flex-col overflow-hidden rounded-xl border border-grid"
-              style={{
-                backdropFilter: "blur(24px) saturate(150%)",
-                WebkitBackdropFilter: "blur(24px) saturate(150%)",
-              }}
             >
               {purposeBullets.map((bullet) => (
                 <div key={bullet.text} className="flex items-center gap-3.5 px-[18px] py-4">
@@ -216,7 +214,8 @@ export default function GovernancePage() {
               {frameworkSpecs.map((spec) => (
                 <div
                   key={spec.id}
-                  className="ndi-role-card relative overflow-hidden rounded-2xl border border-grid bg-white/[0.02] p-5"
+                  data-gov-card="1"
+                  className="ndi-role-card relative overflow-hidden rounded-2xl border border-grid p-5"
                 >
                   <div className="font-display text-[15.5px] font-semibold text-strong">
                     {spec.title}
@@ -247,11 +246,8 @@ export default function GovernancePage() {
           <Block id="privacy" number="06" title="Privacy, residency & security">
             {/* These sit in one bordered, frosted panel — a row per requirement. */}
             <div
+              data-gov-card="1"
               className="flex flex-col overflow-hidden rounded-xl border border-grid"
-              style={{
-                backdropFilter: "blur(24px) saturate(150%)",
-                WebkitBackdropFilter: "blur(24px) saturate(150%)",
-              }}
             >
               {privacyBullets.map((bullet) => (
                 <div key={bullet.text} className="flex gap-3.5 p-[18px]">
@@ -275,11 +271,8 @@ export default function GovernancePage() {
               <Ref>§131–§146</Ref>
             </p>
             <div
+              data-gov-card="1"
               className="mt-6 flex flex-col overflow-hidden rounded-xl border border-grid"
-              style={{
-                backdropFilter: "blur(24px) saturate(150%)",
-                WebkitBackdropFilter: "blur(24px) saturate(150%)",
-              }}
             >
               {offences.map((row) => (
                 <div
@@ -303,11 +296,8 @@ export default function GovernancePage() {
               {actChapters.map((chapter) => (
                 <div
                   key={chapter.number}
+                  data-gov-card="1"
                   className="flex gap-3.5 rounded-xl border border-grid px-[18px] py-4"
-                  style={{
-                    backdropFilter: "blur(24px) saturate(150%)",
-                    WebkitBackdropFilter: "blur(24px) saturate(150%)",
-                  }}
                 >
                   <span className="pt-0.5 font-mono text-[11px] text-accent">{chapter.number}</span>
                   <span className="text-[14.5px] text-body">{chapter.title}</span>
