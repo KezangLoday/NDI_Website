@@ -1454,12 +1454,13 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
 }
 
 /* A junction pad, square-cornered on the card's own radius and carrying the
-   card's fill, so the pads and the panel read as cut from one material.
-   --grad-card is translucent, so it sits on the ground rather than replacing
-   it: opaque is what lets a pad punch through the conductor running behind it
-   in the stacked layout, and it puts the fill over the same dark the panel has
-   under it. That also makes the panel's backdrop blur pointless here, so it is
-   not carried over — there is nothing left to see through. */
+   panel's material exactly: the same translucent fill over the same blurred
+   backdrop. Backing it with an opaque --surface-sunken instead came out
+   measurably darker and flatter — rgb(22,32,45) against the panel's
+   rgb(21,44,55) — because what sits behind the panel is the atmosphere, not
+   the ground colour, and because the blur is doing as much of the lift as the
+   fill is. Translucent is also why the stacked conductor is drawn gap by gap
+   rather than as one line behind the pads: there is nothing left to hide it. */
 .ndi-node {
   display: grid;
   place-items: center;
@@ -1468,7 +1469,9 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   border-radius: 16px;
   flex: none;
   border: 1.6px solid rgba(90, 201, 148, 0.26);
-  background: var(--grad-card), var(--surface-sunken);
+  background: var(--grad-card);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   color: var(--text-faint);
   box-shadow: var(--inset-top);
   transition:
@@ -1592,12 +1595,15 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
    The pads carry the ground as their fill, so they punch through the conductor
    without anything being masked. */
 @media (max-width: 760px) {
-  .ndi-board-rail::before {
+  /* One segment per gap. A single line down the column would run behind the
+     pads, and they are translucent. Every step but the first is preceded by a
+     hidden connector, which is what the sibling selector picks out. */
+  .ndi-trace + .ndi-board-step::before {
     content: "";
     position: absolute;
     left: 29.2px;
-    top: 30px;
-    bottom: 30px;
+    top: -24px;
+    height: 24px;
     width: 1.6px;
     background: rgba(90, 201, 148, 0.26);
   }
