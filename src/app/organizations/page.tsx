@@ -107,8 +107,11 @@ export default async function OrganizationsPage() {
           </Reveal>
 
           {/* The device treatment is the home hero's, not a new one: two soft
-              mint pools behind the subject, a dark lift and a mint rim as drop
-              shadows on the artwork itself, and the same slow float. */}
+              mint pools behind the subject, and a dark lift and a mint rim as
+              drop shadows on the artwork itself. The home hero's float is left
+              off — that one has two phones drifting against each other, which
+              is what makes the motion read; a single object bobbing on its own
+              just looks loose. */}
           <Reveal delay={0.08} className="ndi-orghero-art">
             <span
               aria-hidden="true"
@@ -139,7 +142,6 @@ export default async function OrganizationsPage() {
               style={{
                 filter:
                   "drop-shadow(0 34px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 46px rgba(90,201,148,0.18))",
-                animation: "ndiFloat 7.5s ease-in-out infinite",
               }}
             />
           </Reveal>
