@@ -41,12 +41,21 @@ export function CapabilityStage({
       frame = 0;
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
-      /* 0 while the stage's top is still at the foot of the viewport, 1 once it
-         has risen to a fifth of the way up — by which point the whole stage is
-         in view on any viewport tall enough to hold it. */
-      const from = vh;
-      const to = vh * 0.2;
-      const p = Math.min(1, Math.max(0, (from - rect.top) / Math.max(1, from - to)));
+      /* Progress tracks the stage's centre, not its top: the top crosses the
+         viewport long before the composition is worth looking at, and how far
+         ahead depends on how tall the stage is.
+
+         The window it replaced ran from the top entering the foot of the
+         viewport to it reaching a fifth of the way up. Measured at 1440x950,
+         where the stage is 623px tall, that put the entries at 89% of their
+         travel by the time the whole stage was on screen — so the gesture was
+         all but over before there was anything to watch, and the last row had
+         31px left to move. Anchored on the centre it is at 68% there, with
+         120px still to go, over a window half again as long. */
+      const centre = rect.top + rect.height / 2;
+      const to = vh * 0.42;
+      const from = to + vh * 0.8;
+      const p = Math.min(1, Math.max(0, (from - centre) / Math.max(1, from - to)));
       el.style.setProperty("--p", p.toFixed(4));
     };
     const onScroll = () => {
