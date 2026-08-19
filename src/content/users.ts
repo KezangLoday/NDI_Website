@@ -122,19 +122,29 @@ export const journeyChapters: JourneyChapter[] = [
 ];
 
 /**
- * The illustrated strip, 5000×290.
+ * The illustrated strip, 9095×814.
+ *
+ * The full-resolution original, cut to the same framing the 2000×179 version
+ * had. That artwork was the leftmost 64.87% of project/assets/journey-strip.png
+ * (14020×814) scaled down; this is that same region at native size, so the
+ * aspect ratio is unchanged at 11.17:1 and the chapter anchors below still
+ * land on the beats they were measured against.
  *
  * The strip is drawn at 114% of the screen's height, so its rendered width is
- * set by its aspect ratio: at 11.17:1 it lays out about 4830px wide inside a
- * ~675px screen. The source is 2000px, so it is being upscaled ~2.4x — soft,
- * and worth replacing with the full-resolution original when it is to hand.
+ * set by its aspect ratio: about 4640px inside a ~648px screen. At 9095px the
+ * source now covers that with room to spare instead of being upscaled 2.3x.
+ *
+ * The original runs on past this crop — three more scenes and a "THE END"
+ * card. Extending the strip is a content decision, not a resolution one, and
+ * would need the anchors re-measured.
+ *
  * Served directly rather than through next/image — see DechenJourney.
  */
 export const journeyStrip = media(
   "/media/company/journey-strip.webp",
   "Dechen's journey, from paperwork to a digital wallet",
-  2000,
-  179,
+  9095,
+  814,
 );
 
 export const userBenefits: UserBenefit[] = [
