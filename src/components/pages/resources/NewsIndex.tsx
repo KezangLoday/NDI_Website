@@ -153,6 +153,32 @@ function ArchiveCard({ entry }: { entry: Entry }) {
   );
 }
 
+/**
+ * Page numbers with a previous and a next.
+ *
+ * Built on this project's own primitives rather than the shadcn pagination the
+ * shape came from: that one needs lucide-react, radix-ui,
+ * class-variance-authority, tw-animate-css and a `cn` helper, plus a second
+ * token set (--primary, --accent, --ring, --destructive-foreground) beside the
+ * NDI one. This repo has three dependencies in total and hand-authored icon
+ * paths. Six packages and a parallel design system for one control on one page
+ * is the wrong trade; the shape is the part worth having.
+ *
+ * The window keeps the first page, the last, and the current with a neighbour
+ * either side, collapsing the gaps to an ellipsis. Two pages never sees it, but
+ * the archive is the one list on this site that grows on its own.
+ */
+function pageWindow(page: number, pages: number): (number | "gap")[] {
+  if (pages <= 7) return Array.from({ length: pages }, (_, i) => i + 1);
+  const keep = new Set([1, pages, page, page - 1, page + 1]);
+  const out: (number | "gap")[] = [];
+  for (let n = 1; n <= pages; n++) {
+    if (keep.has(n)) out.push(n);
+    else if (out[out.length - 1] !== "gap") out.push("gap");
+  }
+  return out;
+}
+
 function Pagination({
   page,
   pages,
@@ -163,19 +189,54 @@ function Pagination({
   onPage: (next: number) => void;
 }) {
   if (pages < 2) return null;
+
   return (
-    <nav aria-label="News pages" className="mt-12 flex items-center justify-center gap-2.5">
-      {Array.from({ length: pages }, (_, index) => index + 1).map((n) => (
-        <button
-          key={n}
-          type="button"
-          onClick={() => onPage(n)}
-          aria-current={n === page ? "page" : undefined}
-          className="ndi-news-page"
-        >
-          {n}
-        </button>
-      ))}
+    <nav aria-label="News pages" className="mt-12 flex justify-center">
+      <ul className="flex flex-row items-center gap-1">
+        <li>
+          <button
+            type="button"
+            onClick={() => onPage(page - 1)}
+            disabled={page === 1}
+            className="ndi-page ndi-page-step"
+          >
+            <Icon name="chevronLeft" size={15} strokeWidth={2} />
+            Previous
+          </button>
+        </li>
+
+        {pageWindow(page, pages).map((entry, index) =>
+          entry === "gap" ? (
+            <li key={`gap-${index}`} aria-hidden="true" className="ndi-page-gap">
+              <Icon name="ellipsis" size={15} strokeWidth={2.4} />
+            </li>
+          ) : (
+            <li key={entry}>
+              <button
+                type="button"
+                onClick={() => onPage(entry)}
+                aria-current={entry === page ? "page" : undefined}
+                aria-label={`Page ${entry}`}
+                className="ndi-page ndi-page-n"
+              >
+                {entry}
+              </button>
+            </li>
+          ),
+        )}
+
+        <li>
+          <button
+            type="button"
+            onClick={() => onPage(page + 1)}
+            disabled={page === pages}
+            className="ndi-page ndi-page-step"
+          >
+            Next
+            <Icon name="chevronRight" size={15} strokeWidth={2} />
+          </button>
+        </li>
+      </ul>
     </nav>
   );
 }

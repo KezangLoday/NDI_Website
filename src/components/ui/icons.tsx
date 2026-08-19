@@ -190,6 +190,9 @@ const STROKE_ICONS = {
     </>
   ),
   chevronDown: <path d="m6 9 6 6 6-6" />,
+  chevronLeft: <path d="m15 18-6-6 6-6" />,
+  chevronRight: <path d="m9 18 6-6-6-6" />,
+  ellipsis: <path d="M5 12h.01 M12 12h.01 M19 12h.01" />,
   check: <path d="M20 6 9 17l-5-5" />,
   close: <path d="M18 6 6 18 M6 6l12 12" />,
   send: (

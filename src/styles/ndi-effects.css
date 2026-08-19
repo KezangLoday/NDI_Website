@@ -2011,29 +2011,53 @@ select option { background: #101827; color: #e9eef6; }
   background-size: auto, var(--grid-size), auto;
 }
 
-/* Pagination. */
-.ndi-news-page {
-  display: inline-grid;
-  place-items: center;
-  min-width: 38px;
-  height: 38px;
-  padding: 0 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border-grid);
+/* Pagination. Ghost by default; the current page is the only outlined one, the
+   way the reference has it — an outline reads as "you are here" without the
+   filled pill shouting over the row. */
+.ndi-page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--text-muted);
-  transition: color 0.24s var(--ease-out), border-color 0.24s var(--ease-out),
-    background 0.24s var(--ease-out);
+  transition: color 0.22s var(--ease-out), border-color 0.22s var(--ease-out),
+    background 0.22s var(--ease-out);
 }
-.ndi-news-page:hover { color: var(--text-strong); border-color: var(--border-strong); }
-.ndi-news-page[aria-current="page"] {
-  color: var(--text-on-mint);
-  border-color: transparent;
-  background: var(--grad-mint);
+.ndi-page-n { min-width: 34px; padding: 0 8px; }
+.ndi-page-step { padding: 0 10px; }
+.ndi-page:hover:not(:disabled) {
+  color: var(--text-strong);
+  background: var(--ndi-mint-08);
+}
+.ndi-page:disabled {
+  cursor: default;
+  opacity: 0.38;
+}
+.ndi-page[aria-current="page"] {
+  color: var(--text-strong);
+  border-color: var(--border-strong);
+  background: transparent;
+}
+.ndi-page:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+.ndi-page-gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 34px;
+  color: var(--text-faint);
 }
 
 /* The story rail's tabs: the selected one is simply the one that is lit. */
