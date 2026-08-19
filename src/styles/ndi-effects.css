@@ -540,22 +540,21 @@
 /* Governance ran three fills across one page: a flat white wash on some cards,
    a 24px blur with no fill on others, and the shared glass on two.
 
-   They share the glass cards' material now, but over an opaque base rather than
-   over the page. Translucency is the reason they looked inconsistent in the
-   first place — a card that samples what is behind it takes a different colour
-   from every patch of background it crosses, and this page runs from flat dark
-   to the mint atmosphere. Measured across it, the same treatment came out
-   rgb(21,27,38) on one card and rgb(33,47,57) on another. On a base they all
-   render the reference tile's colour instead, wherever they sit.
+   They all wear the glass cards' material now, and stay glass: the page still
+   shows through, softened, as it does through the Trusted-by tiles.
 
-   Nothing to see through means the backdrop filter is only a wasted layer, so
-   it is off. The rim still needs a containing block and most of these are plain
-   flex containers, hence position. */
+   The rim needs a containing block and most of these are plain flex
+   containers, hence position. */
 [data-gov-card] {
   position: relative;
-  background: var(--fill-card), var(--ndi-ink-800) !important;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+  background: var(--fill-card) !important;
+  /* Blur only, the same as the Trusted-by tiles. The shared rule pairs its blur
+     with a saturate and a brightness, and those amplify whatever is behind the
+     card — which is what had the same treatment reading rgb(21,27,38) on one
+     card here and rgb(33,47,57) on another. Blur alone softens the page behind
+     the glass without taking colour from it. */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   box-shadow: var(--shadow-card) !important;
 }
 
