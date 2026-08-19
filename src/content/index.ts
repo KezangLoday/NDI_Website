@@ -31,7 +31,6 @@ import { press } from "./press";
 import { organizationColumnDurations, organizations } from "./organizations";
 import {
   orgHeroImage,
-  orgHeroPills,
   orgServiceOptions,
   orgServices,
   pipeline,
@@ -61,7 +60,6 @@ import type {
   Job,
   MissionStatement,
   NewsItem,
-  HeroPill,
   HeroStat,
   JourneyChapter,
   Organization,
@@ -141,10 +139,6 @@ export async function getInsights(): Promise<Insight[]> {
 
 export async function getOrgServices(): Promise<OrgService[]> {
   return orgServices;
-}
-
-export async function getOrgHeroPills(): Promise<HeroPill[]> {
-  return orgHeroPills;
 }
 
 export async function getWhyPartnerRows(): Promise<WhyPartnerRow[]> {

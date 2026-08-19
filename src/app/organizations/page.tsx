@@ -11,7 +11,6 @@ import { Icon } from "@/components/ui/icons";
 import Image from "next/image";
 
 import {
-  getOrgHeroPills,
   getOrgServiceOptions,
   getOrgServices,
   getPipeline,
@@ -61,8 +60,7 @@ function AdvancedCard({ service }: { service: OrgService }) {
 }
 
 export default async function OrganizationsPage() {
-  const [pills, services, whyRows, steps, options, settings] = await Promise.all([
-    getOrgHeroPills(),
+  const [services, whyRows, steps, options, settings] = await Promise.all([
     getOrgServices(),
     getWhyPartnerRows(),
     getPipeline(),
@@ -143,28 +141,6 @@ export default async function OrganizationsPage() {
             />
           </Reveal>
         </div>
-
-        <Reveal
-          delay={0.05}
-          data-ndi-4col="1"
-          className="mt-14 grid grid-cols-2 gap-4 min-[1001px]:grid-cols-4"
-        >
-          {pills.map((pill) => (
-            <div
-              key={pill.id}
-              className="ndi-spot rounded-2xl border border-grid bg-white/[0.02] p-[22px]"
-            >
-              <div className="ndi-spot-halo" />
-              <div className="ndi-spot-fill" />
-              <div className="font-display text-[24px] font-semibold tracking-[-0.02em] text-strong">
-                {pill.label}
-              </div>
-              <div className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
-                {pill.sublabel}
-              </div>
-            </div>
-          ))}
-        </Reveal>
       </PageSection>
 
       {/* ============ SOLUTIONS ============ */}

@@ -1,5 +1,5 @@
 import { media } from "@/lib/media";
-import type { HeroPill, OrgService, PipelineStep, ServiceOption, WhyPartnerRow } from "./types";
+import type { OrgService, PipelineStep, ServiceOption, WhyPartnerRow } from "./types";
 
 /**
  * The hero's product shot: the wallet's credential list, with the credentials
@@ -16,13 +16,6 @@ export const orgHeroImage = media(
   1874,
   1600,
 );
-
-export const orgHeroPills: HeroPill[] = [
-  { id: "ekyc", label: "eKYC", sublabel: "Compliance ready" },
-  { id: "passwordless", label: "Passwordless", sublabel: "Authentication" },
-  { id: "verifiable", label: "Verifiable", sublabel: "Credentials & signatures" },
-  { id: "sandbox", label: "Sandbox", sublabel: "Test before you launch" },
-];
 
 /**
  * Prospective Payload collection: `orgServices`.

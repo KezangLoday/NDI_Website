@@ -157,12 +157,6 @@ export interface StartStep {
 
 /* ---- Organizations page ---------------------------------------- */
 
-export interface HeroPill {
-  id: string;
-  label: string;
-  sublabel: string;
-}
-
 /** Service → use case → benefit, the structure the requirement docs asked for. */
 export interface OrgService {
   id: string;
