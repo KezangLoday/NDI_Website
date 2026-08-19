@@ -928,11 +928,19 @@
    per card, so a value that wraps to three lines in a narrow column still
    clears the face. */
 .ndi-bento { --bento-lift: 92px; }
-.ndi-bento-inner {
-  /* The border used to jump to its hover colour with no duration at all while
-     the contents eased — one snap inside a smooth move is what you notice. */
-  transition: border-color 0.34s var(--ease-glide);
-}
+
+/* The arc sits on the card's border, the way it does on the Users use-case
+   cards, rather than ringing it from 2px outside.
+
+   Two things had to change together for that. The offset: this host has no
+   border of its own, so its padding box already is its border box and
+   --glow-out: 0 lands the arc where .ndi-uc's -1px/0 pair lands it there. And
+   the stacking: .ndi-glow is a sibling of the card face and comes before it in
+   the DOM, so with both positioned the face painted over the arc — which is why
+   the arc was outside the box in the first place. z-index lifts it back over.
+   The face's overflow clip never applied here: it clips its own descendants,
+   and the glow is not one. */
+.ndi-bento .ndi-glow { --glow-out: 0px; z-index: 2; }
 .ndi-bento-face,
 .ndi-bento-value,
 .ndi-bento-icon {
@@ -963,7 +971,6 @@
      a list item, so the shrink is legible as a change of role. It scales from
      its left edge, so it stays on the text's margin as it goes. */
   .ndi-bento:hover .ndi-bento-icon { transform: scale(0.62); }
-  .ndi-bento:hover .ndi-bento-inner { border-color: var(--border-strong); }
 
   /* Arriving overshoots and settles back. The face and the value carry the
      same curve and the same duration so the gap between them never changes —
