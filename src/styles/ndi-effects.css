@@ -1198,6 +1198,11 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
    layout is expressed in Tailwind, as on the home page.
    ============================================================ */
 
+/* This card is the card — it carries the border the arc is meant to trace, so
+   the arc moves onto its border box and sits on that border rather than ringing
+   it from outside. Anywhere else the default applies. */
+.ndi-uc .ndi-glow { --glow-inset: -1px; --glow-out: 0px; }
+
 /* ---- Bento use-case cards ------------------------------------
    The 12-column grid and its 232px minimum row are the design's. At 900px it
    drops every card to a half-width span; the stack below 640px is ours, since
@@ -1214,28 +1219,62 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   [data-uc-grid] > a { grid-column: span 12 !important; }
 }
 
-/* Cursor-tracked conic glow border */
+/* Cursor-tracked conic glow border.
+
+   `inset: -1px` puts this on the card's border box, not its padding box. An
+   absolutely positioned child insets from the padding box, so at `inset: 0`
+   this sat *inside* the card's 1px border and the arc was drawn a border-width
+   away from the edge it was meant to trace — with a radius inherited from the
+   border box on top of that, so the two curves disagreed at the corners and
+   left a visible gap there. On the border box the arc and the border are the
+   same ring at the same radius.
+
+   Two hosts wear this and they want the ring in different places, so the offset
+   is a pair of variables rather than a constant. The default puts the ring
+   wholly outside the host, which is what the bento wrapper needs — its visible
+   card is a child that would otherwise paint over half of it. A host that is
+   itself the card overrides both and takes the ring on its own border. */
 .ndi-glow {
   position: absolute;
-  inset: 0;
+  inset: var(--glow-inset, 0);
   border-radius: inherit;
   pointer-events: none;
   --start: 0;
   --active: 0;
-  --spread: 40;
+  /* Half-width of the lit arc, in degrees. Wider carries further round the
+     card, which is most of what makes it read at a glance. */
+  --spread: 58;
   --bw: 2px;
+  --glow-inset: 0;
+  --glow-out: calc(-1 * var(--bw));
+  /* One definition, worn twice: sharp on ::after, blurred on ::before. The
+     conic used to pass through #124143, a near-black teal, which put a dead
+     segment in every revolution — the arc dimmed to nothing a fifth of the
+     time. The stops are all light now, so the arc is lit wherever it lands. */
+  --glow-arc:
+    radial-gradient(circle, rgba(198, 255, 226, 0.95) 10%, rgba(198, 255, 226, 0) 20%),
+    radial-gradient(circle at 40% 40%, rgba(111, 224, 169, 0.95) 5%, rgba(111, 224, 169, 0) 15%),
+    radial-gradient(circle at 60% 60%, rgba(158, 247, 204, 0.9) 10%, rgba(158, 247, 204, 0) 20%),
+    repeating-conic-gradient(
+      from 236.84deg at 50% 50%,
+      #5ac994 0%,
+      #9ef7cc 5%,
+      #c6ffe2 10%,
+      #6fe0a9 15%,
+      #5ac994 20%
+    );
 }
+/* ::before is the same ring, blurred, so the arc has a bloom around it rather
+   than being a hairline you have to look for. It sits under ::after, which
+   keeps the sharp edge on the card. */
+.ndi-glow::before,
 .ndi-glow::after {
   content: "";
   position: absolute;
-  inset: calc(-1 * var(--bw));
+  inset: var(--glow-out);
   border-radius: inherit;
   border: var(--bw) solid transparent;
-  background:
-    radial-gradient(circle, rgba(158, 247, 204, 0.9) 10%, rgba(158, 247, 204, 0) 20%),
-    radial-gradient(circle at 40% 40%, rgba(90, 201, 148, 0.9) 5%, rgba(90, 201, 148, 0) 15%),
-    radial-gradient(circle at 60% 60%, rgba(18, 65, 67, 0.9) 10%, rgba(18, 65, 67, 0) 20%),
-    repeating-conic-gradient(from 236.84deg at 50% 50%, #5ac994 0%, #9ef7cc 5%, #124143 10%, #6fe0a9 15%, #5ac994 20%);
+  background: var(--glow-arc);
   background-attachment: fixed;
   opacity: var(--active);
   transition: opacity 0.3s var(--ease-out);
@@ -1248,7 +1287,12 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
+.ndi-glow::before {
+  filter: blur(6px);
+  opacity: calc(var(--active) * 0.85);
+}
 @media (prefers-reduced-motion: reduce) {
+  .ndi-glow::before,
   .ndi-glow::after { transition: none; }
 }
 
