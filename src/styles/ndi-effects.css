@@ -1945,6 +1945,48 @@ select option { background: #101827; color: #e9eef6; }
   }
 }
 
+/* ---- Story page: inline links and the way back -------------
+   The article is running copy on the page rather than in a panel, so its links
+   need to read as links without a box to sit in: underlined at a distance from
+   the baseline so descenders stay legible, taking the accent on hover.
+
+   The foot action is sized as a real button. It is the only thing to do once
+   the article ends, so it should not have to be hunted for the way the small
+   "view all" pill would be — and its arrow travels left, toward where it goes,
+   rather than borrowing the forward nudge. */
+.ndi-inline-link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(90, 201, 148, 0.4);
+  text-underline-offset: 3px;
+  transition: color 0.28s var(--ease-out), text-decoration-color 0.28s var(--ease-out);
+  overflow-wrap: anywhere;
+}
+.ndi-inline-link:hover {
+  color: var(--accent-hover);
+  text-decoration-color: var(--accent-hover);
+}
+.ndi-backbtn {
+  transition: background 0.28s var(--ease-out), border-color 0.28s var(--ease-out),
+    color 0.28s var(--ease-out), box-shadow 0.28s var(--ease-out);
+}
+.ndi-backbtn svg { transition: transform 0.28s var(--ease-out); }
+@media (hover: hover) {
+  .ndi-backbtn:hover {
+    background: var(--ndi-mint-08);
+    border-color: rgba(90, 201, 148, 0.42);
+    color: var(--text-strong);
+    box-shadow: var(--glow-sm);
+  }
+  .ndi-backbtn:hover svg { transform: translateX(-4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-inline-link,
+  .ndi-backbtn,
+  .ndi-backbtn svg { transition: none; }
+  .ndi-backbtn:hover svg { transform: none; }
+}
+
 /* ---- News index and story ---------------------------------
    A reading surface, so the hover is quiet: the headline takes the accent, the
    photograph lifts a little inside its own frame, and the arrow uses the shared

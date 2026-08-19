@@ -44,12 +44,31 @@ export interface NewsItem {
    */
   popularRank?: number;
   /**
-   * The article itself. Payload will hold richText; Phase 1 has no body copy
-   * for these stories, and inventing it would mean writing claims about real
-   * partners, so the detail page says so rather than filling the space.
+   * The full formal headline, for the story page where there is room. Cards
+   * keep the shorter `title` — a press-release headline set at card size wraps
+   * to five lines and buries everything under it.
    */
-  body?: string[];
+  headline?: string;
+  /**
+   * The article itself, as blocks. Payload will hold richText; until then this
+   * is the smallest shape that carries what a release actually contains —
+   * running paragraphs, the "About" sections at the foot, and the links out to
+   * each partner. Stories with no body render without it rather than having
+   * copy invented for them.
+   */
+  body?: NewsBlock[];
 }
+
+/**
+ * A block of article copy.
+ *
+ * A paragraph may carry one trailing link, which is how the "To learn more,
+ * visit:" lines read in the source. Keeping the lead-in in the content rather
+ * than the component means the wording stays editorial, not hard-coded.
+ */
+export type NewsBlock =
+  | { kind: "heading"; text: string }
+  | { kind: "paragraph"; text: string; link?: { label: string; href: string } };
 
 /** Collection: `organizations` — the "Trusted by" tiles. */
 export interface Organization {

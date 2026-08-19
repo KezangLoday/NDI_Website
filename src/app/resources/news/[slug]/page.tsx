@@ -17,11 +17,14 @@ import { mediaUrl } from "@/lib/media";
  * Three quarters article, one quarter rail — the rail sticks, so the rest of
  * the newsroom stays reachable however long the read is.
  *
- * The body is the one thing Phase 1 cannot supply. These are real stories about
- * real partners, and writing the article text would mean inventing claims about
- * them, so the page renders the standfirst it does have and says plainly that
- * the rest is still to come rather than filling the space with prose nobody
- * approved. In Phase 2 `body` is Payload richText and the block below it goes.
+ * The article sets straight onto the page rather than inside a panel: a card is
+ * a thing to pick out of a grid, and a body of running copy is the page's whole
+ * purpose here, so framing it only narrows the measure and boxes the reading.
+ *
+ * Where a story has no body yet the same holds — the note says so in plain copy
+ * rather than in a card pretending to be an article. Writing that text would
+ * mean inventing claims about real partners. In Phase 2 `body` is Payload
+ * richText and the fallback goes.
  */
 
 type Params = { params: Promise<{ slug: string }> };
@@ -80,8 +83,8 @@ export default async function NewsStoryPage({ params }: Params) {
               </span>
             </div>
 
-            <h1 className="mt-5 max-w-[22ch] font-display text-[clamp(30px,3.6vw,44px)] font-semibold leading-[1.1] tracking-[-0.03em] text-strong [text-wrap:balance]">
-              {item.title}
+            <h1 className="mt-5 max-w-[26ch] font-display text-[clamp(30px,3.6vw,44px)] font-semibold leading-[1.1] tracking-[-0.03em] text-strong [text-wrap:balance]">
+              {item.headline ?? item.title}
             </h1>
 
             <p className="mt-6 max-w-[66ch] text-[18px] leading-[1.6] text-body [text-wrap:pretty]">
@@ -104,24 +107,40 @@ export default async function NewsStoryPage({ params }: Params) {
 
           <Reveal delay={0.05} className="mt-10">
             {item.body?.length ? (
-              <div className="flex max-w-[66ch] flex-col gap-5">
-                {item.body.map((paragraph) => (
-                  <p
-                    key={paragraph.slice(0, 40)}
-                    className="text-[16.5px] leading-[1.75] text-body [text-wrap:pretty]"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+              <div className="max-w-[66ch]">
+                {item.body.map((block, index) =>
+                  block.kind === "heading" ? (
+                    <h2
+                      key={block.text}
+                      className="mt-11 font-display text-[21px] font-semibold leading-[1.25] tracking-[-0.02em] text-strong first:mt-0 [text-wrap:balance]"
+                    >
+                      {block.text}
+                    </h2>
+                  ) : (
+                    <p
+                      key={`${index}-${block.text.slice(0, 32)}`}
+                      className="mt-5 text-[16.5px] leading-[1.75] text-body first:mt-0 [text-wrap:pretty]"
+                    >
+                      {block.text}
+                      {block.link ? (
+                        <>
+                          {" "}
+                          <a
+                            href={block.link.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="ndi-inline-link"
+                          >
+                            {block.link.label}
+                          </a>
+                        </>
+                      ) : null}
+                    </p>
+                  ),
+                )}
               </div>
             ) : (
-              <div
-                data-gov-card="1"
-                className="flex max-w-[66ch] flex-col items-start gap-3 rounded-2xl border border-grid p-7"
-              >
-                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
-                  — Full article
-                </span>
+              <div className="max-w-[66ch]">
                 <p className="text-[15px] leading-[1.65] text-muted [text-wrap:pretty]">
                   The article text for this story is held in the CMS and has not been loaded into
                   this build. Everything else on the page — the headline, the standfirst, the
@@ -130,7 +149,7 @@ export default async function NewsStoryPage({ params }: Params) {
                 {item.href && item.href !== "#" ? (
                   <a
                     href={item.href}
-                    className="ndi-tut inline-flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent"
+                    className="ndi-tut mt-5 inline-flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent"
                   >
                     {item.ctaLabel}
                     <Icon name={item.ctaIcon} size={14} strokeWidth={2} />
@@ -138,6 +157,17 @@ export default async function NewsStoryPage({ params }: Params) {
                 ) : null}
               </div>
             )}
+          </Reveal>
+
+          {/* The article ends and the reader needs somewhere to go. */}
+          <Reveal delay={0.05} className="mt-14 max-w-[66ch] border-t border-subtle pt-8">
+            <Link
+              href="/resources/news"
+              className="ndi-backbtn inline-flex h-[46px] items-center gap-2.5 rounded-full border border-grid px-[22px] font-display text-[14.5px] font-semibold text-body"
+            >
+              <Icon name="arrowRight" size={15} strokeWidth={2} className="rotate-180" />
+              Back to all news
+            </Link>
           </Reveal>
         </article>
 
