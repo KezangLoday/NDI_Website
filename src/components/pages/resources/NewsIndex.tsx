@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Icon } from "@/components/ui/icons";
+import { NewsRow } from "@/components/pages/resources/NewsRow";
 import { Reveal } from "@/components/ui/Reveal";
 import type { NewsItem, ResourceNews } from "@/content/types";
 import { formatNewsDate } from "@/lib/format";
@@ -68,33 +69,6 @@ function LeadStory({ item }: { item: NewsItem }) {
         </span>
       </Link>
     </article>
-  );
-}
-
-/** A top read: thumbnail, headline, date — the compact form. */
-function TopRead({ item }: { item: NewsItem }) {
-  return (
-    <Link
-      href={`/resources/news/${item.slug}`}
-      className="ndi-news-row group grid grid-cols-[96px_minmax(0,1fr)] gap-4 rounded-xl p-2.5"
-    >
-      <div className="ndi-news-shot relative aspect-[4/3] overflow-hidden rounded-lg border border-grid">
-        <Image src={mediaUrl(item.image)} alt="" fill sizes="96px" className="object-cover" />
-      </div>
-      <div className="min-w-0">
-        <h3 className="ndi-news-title font-display text-[14.5px] font-semibold leading-[1.35] tracking-[-0.01em] text-strong">
-          {item.title}
-        </h3>
-        <div className="mt-2 flex flex-wrap items-center gap-2.5">
-          <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-faint">
-            {formatNewsDate(item.publishedAt)}
-          </span>
-          <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-accent">
-            {item.category}
-          </span>
-        </div>
-      </div>
-    </Link>
   );
 }
 
@@ -288,7 +262,7 @@ export function NewsIndex({ stories, notices }: { stories: NewsItem[]; notices: 
             </h2>
             <div className="mt-6 flex flex-col gap-2">
               {topReads.map((item) => (
-                <TopRead key={item.id} item={item} />
+                <NewsRow key={item.id} item={item} />
               ))}
             </div>
           </section>

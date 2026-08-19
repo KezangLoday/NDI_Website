@@ -1,12 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 
+import { NewsRow } from "@/components/pages/resources/NewsRow";
 import type { NewsItem } from "@/content/types";
-import { formatNewsDate } from "@/lib/format";
-import { mediaUrl } from "@/lib/media";
 
 /**
  * The detail page's right-hand rail: the rest of the newsroom, as Latest or
@@ -47,37 +44,11 @@ export function NewsAside({ latest, popular }: { latest: NewsItem[]; popular: Ne
         role="tabpanel"
         id="news-tab-panel"
         aria-labelledby={`news-tab-${tab}`}
-        className="mt-5 flex flex-col"
+        className="mt-4 flex flex-col gap-0.5"
       >
         {list.length ? (
-          list.map((item) => (
-            <Link
-              key={item.id}
-              href={`/resources/news/${item.slug}`}
-              className="ndi-news-row group grid grid-cols-[76px_minmax(0,1fr)] gap-3.5 border-t border-subtle py-4"
-            >
-              <div className="ndi-news-shot relative aspect-[4/3] overflow-hidden rounded-lg border border-grid">
-                <Image
-                  src={mediaUrl(item.image)}
-                  alt=""
-                  fill
-                  sizes="76px"
-                  className="object-cover"
-                />
-              </div>
-              <div className="min-w-0">
-                <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-faint">
-                  {formatNewsDate(item.publishedAt)}
-                </span>
-                <h3 className="ndi-news-title mt-1.5 font-display text-[13.5px] font-semibold leading-[1.35] tracking-[-0.01em] text-strong">
-                  {item.title}
-                </h3>
-                <span className="mt-1.5 inline-block font-mono text-[9px] uppercase tracking-[0.14em] text-accent">
-                  {item.category}
-                </span>
-              </div>
-            </Link>
-          ))
+          /* The index's Top reads row, at the width this narrower rail allows. */
+          list.map((item) => <NewsRow key={item.id} item={item} thumb={84} />)
         ) : (
           <p className="border-t border-subtle py-5 text-[13.5px] leading-[1.6] text-muted">
             No stories have been ranked yet.

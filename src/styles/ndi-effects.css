@@ -1645,9 +1645,15 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   }
 }
 
-/* ---- "Watch tutorial" arrow nudge -------------------------- */
+/* ---- "Watch tutorial" arrow nudge --------------------------
+   Keyed on the enclosing link as well as the label itself. Where this sits in a
+   card — the news lead, the archive cards, the use-case bento — the whole card
+   is the hover target, so nudging only when the pointer reached the words made
+   the arrow look broken for most of the card's area. Where the label *is* the
+   link, the second rule is the one that fires. */
 .ndi-tut svg { transition: transform 0.28s var(--ease-out); }
-.ndi-tut:hover svg { transform: translateX(5px); }
+.ndi-tut:hover svg,
+a:hover .ndi-tut svg { transform: translateX(5px); }
 
 /* ---- Send icon on the two enquiry forms -------------------
    The same nudge the tutorial and view-all arrows use, on its own class rather
@@ -1679,6 +1685,7 @@ select option { background: #101827; color: #e9eef6; }
   .ndi-store:hover .ndi-store-icon,
   .ndi-va:hover svg,
   .ndi-tut:hover svg,
+  a:hover .ndi-tut svg,
   .ndi-sweepbtn:hover .ndi-sendnudge { transform: none; }
 }
 
