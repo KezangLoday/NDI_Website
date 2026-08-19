@@ -1,4 +1,21 @@
+import { media } from "@/lib/media";
 import type { HeroPill, OrgService, PipelineStep, ServiceOption, WhyPartnerRow } from "./types";
+
+/**
+ * The hero's product shot: the wallet's credential list, with the credentials
+ * themselves fanning out of it.
+ *
+ * Cropped from a 2000x2000 export whose subject occupied 27% of the canvas —
+ * the rest was transparent padding, which would have made the layout box square
+ * and the sizing guesswork. Trimmed to the alpha bounding box plus 6px, so the
+ * element's box is the picture.
+ */
+export const orgHeroImage = media(
+  "/media/org-hero-credentials.webp",
+  "The Bhutan NDI wallet's credential list, with issued credentials fanning out of it",
+  1874,
+  1600,
+);
 
 export const orgHeroPills: HeroPill[] = [
   { id: "ekyc", label: "eKYC", sublabel: "Compliance ready" },

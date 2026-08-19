@@ -8,6 +8,8 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { GradientButton } from "@/components/ui/GradientButton";
 import { Icon } from "@/components/ui/icons";
+import Image from "next/image";
+
 import {
   getOrgHeroPills,
   getOrgServiceOptions,
@@ -15,8 +17,10 @@ import {
   getPipeline,
   getSiteSettings,
   getWhyPartnerRows,
+  orgHeroImage,
 } from "@/content";
 import type { OrgService } from "@/content/types";
+import { mediaUrl } from "@/lib/media";
 
 export const metadata: Metadata = {
   title: "For Organizations — Bhutan NDI",
@@ -72,28 +76,78 @@ export default async function OrganizationsPage() {
   return (
     <>
       {/* ============ HERO ============ */}
-      <PageSection className="pb-12 pt-44">
-        <Reveal className="max-w-[860px]">
-          <Eyebrow>— For organizations</Eyebrow>
-          <h1 className="mt-5 font-display text-[clamp(38px,5.2vw,62px)] font-semibold leading-[1.04] tracking-[-0.03em] text-strong [text-wrap:pretty]">
-            Onboard customers in minutes, <Emphasis>not weeks</Emphasis>
-          </h1>
-          <p className="mt-6 max-w-[620px] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
-            Verify identity, authenticate users and sign documents on government-backed digital
-            identity infrastructure. One integration, every service.
-          </p>
-          <div className="mt-[34px] flex flex-wrap gap-3.5">
-            <GradientButton href="#inquiry">
-              <span>Start a business inquiry</span>
-              <Icon name="arrowRight" size={16} strokeWidth={2} />
-            </GradientButton>
-          </div>
-        </Reveal>
+      {/* Two columns, the product on the left. The credentials fan up and to
+          the right, so from that side the artwork points into the headline
+          rather than off the page — which is the whole reason it can sit ahead
+          of the copy without fighting it. Below 1001px it stacks, and the
+          heading keeps its place at the top of the document either way: the
+          copy is first in the DOM and swapped into second position by `order`.
+      */}
+      <PageSection className="pb-12 pt-36 min-[1001px]:pt-40">
+        <div className="grid grid-cols-1 items-center gap-12 min-[1001px]:grid-cols-[minmax(0,1fr)_minmax(0,1.06fr)] min-[1001px]:gap-12">
+          <Reveal className="min-[1001px]:order-2">
+            <Eyebrow>— For organizations</Eyebrow>
+            <h1 className="mt-5 font-display text-[clamp(36px,3.9vw,50px)] font-semibold leading-[1.06] tracking-[-0.03em] text-strong [text-wrap:pretty]">
+              Onboard customers in minutes, <Emphasis>not weeks</Emphasis>
+            </h1>
+            <p className="mt-6 max-w-[540px] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
+              Verify identity, authenticate users and sign documents on government-backed digital
+              identity infrastructure. One integration, every service.
+            </p>
+            <div className="mt-[34px] flex flex-wrap gap-3.5">
+              <GradientButton href="#inquiry">
+                <span>Start a business inquiry</span>
+                <Icon name="arrowRight" size={16} strokeWidth={2} />
+              </GradientButton>
+            </div>
+          </Reveal>
+
+          {/* The device treatment is the home hero's, not a new one: two soft
+              mint pools behind the subject, a dark lift and a mint rim as drop
+              shadows on the artwork itself, and the same slow float. */}
+          <Reveal
+            delay={0.08}
+            className="relative flex items-center justify-center min-[1001px]:order-1"
+          >
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute h-[78%] w-[min(620px,108%)]"
+              style={{
+                background:
+                  "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(90,201,148,0.20) 0%, rgba(90,201,148,0.10) 26%, rgba(78,176,132,0.04) 48%, transparent 74%)",
+                filter: "blur(34px)",
+              }}
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute h-[52%] w-[min(360px,72%)]"
+              style={{
+                background:
+                  "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(126,232,182,0.22) 0%, rgba(90,201,148,0.08) 38%, transparent 70%)",
+                filter: "blur(46px)",
+              }}
+            />
+            <Image
+              src={mediaUrl(orgHeroImage)}
+              alt={orgHeroImage.alt}
+              width={orgHeroImage.width}
+              height={orgHeroImage.height}
+              priority
+              sizes="(max-width: 1000px) 88vw, 560px"
+              className="relative block h-auto w-full max-w-[560px]"
+              style={{
+                filter:
+                  "drop-shadow(0 34px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 46px rgba(90,201,148,0.18))",
+                animation: "ndiFloat 7.5s ease-in-out infinite",
+              }}
+            />
+          </Reveal>
+        </div>
 
         <Reveal
           delay={0.05}
           data-ndi-4col="1"
-          className="mt-16 grid grid-cols-2 gap-4 min-[1001px]:grid-cols-4"
+          className="mt-14 grid grid-cols-2 gap-4 min-[1001px]:grid-cols-4"
         >
           {pills.map((pill) => (
             <div

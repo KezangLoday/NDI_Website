@@ -30,6 +30,7 @@ import { news } from "./news";
 import { press } from "./press";
 import { organizationColumnDurations, organizations } from "./organizations";
 import {
+  orgHeroImage,
   orgHeroPills,
   orgServiceOptions,
   orgServices,
@@ -221,3 +222,5 @@ export async function getStory(): Promise<{
 
 export { organizationColumnDurations };
 export * from "./types";
+
+export { orgHeroImage };
