@@ -14,11 +14,33 @@ export const userHeroStats: HeroStat[] = [
  * Fan geometry is per-card data straight from the design: the middle card is
  * wider, sits fully opaque and stacks above the two flanking cards, which are
  * rotated outward, pulled inward to overlap, and held slightly back at 0.85.
+ *
+ * The artwork is opaque, not transparent: its rounded corners are painted white
+ * rather than cut out, so the corners have to be clipped in CSS or four white
+ * crescents show against the page.
  */
+/**
+ * Radius of the CSS clip that removes the artwork's painted-white corners, as a
+ * fraction of the card's width.
+ *
+ * Not simply the painted radius. The artwork's corner is a squircle — Figma's
+ * smooth corner — which runs further along the edges than a circle through the
+ * same points: white reaches 70px in along the top edge of the 1500px card,
+ * where a 68px circular corner would have ended it at 42px. Clipping at the
+ * apparent radius therefore left a white crescent at every corner.
+ *
+ * 0.053 is the smallest circular radius that covers the whole painted region
+ * (79px of 1500, against the 77px solved from the measured profile, plus a
+ * little for the artwork's own anti-aliased edge). It costs about 2px of the
+ * card's corner at full size, which is invisible; a surviving white crescent
+ * was not.
+ */
+export const cardCornerRatio = 0.053;
+
 export const credentialCards = [
   {
     id: "drivers-license",
-    image: media("/media/cards/drivers-license.png", "Driver's License credential", 300, 180),
+    image: media("/media/cards/drivers-license.webp", "Driver's License credential", 1500, 900),
     width: "clamp(190px, 26vw, 350px)",
     rotate: -9,
     translateX: "2.5%",
@@ -27,7 +49,7 @@ export const credentialCards = [
   },
   {
     id: "foundational-id",
-    image: media("/media/cards/foundational-id.png", "Foundational ID credential", 300, 180),
+    image: media("/media/cards/foundational-id.webp", "Foundational ID credential", 1500, 900),
     width: "clamp(205px, 28vw, 370px)",
     rotate: 0,
     translateX: "0px",
@@ -36,7 +58,7 @@ export const credentialCards = [
   },
   {
     id: "bank-account",
-    image: media("/media/cards/bank-account.png", "Bank Account credential", 300, 180),
+    image: media("/media/cards/bank-account.webp", "Bank Account credential", 1500, 900),
     width: "clamp(190px, 26vw, 350px)",
     rotate: 9,
     translateX: "-2.5%",

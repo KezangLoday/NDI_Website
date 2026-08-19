@@ -11,6 +11,7 @@ import { Eyebrow } from "@/components/ui/SectionHeader";
 import { StoreButtons } from "@/components/ui/StoreButtons";
 import { Icon } from "@/components/ui/icons";
 import {
+  cardCornerRatio,
   credentialCards,
   getJourneyChapters,
   getStartSteps,
@@ -72,14 +73,24 @@ export default async function UsersPage() {
                 alt={card.image.alt}
                 width={card.image.width}
                 height={card.image.height}
-                // The artwork is only 300px wide, so it is already being
-                // upscaled on screen; a lossy re-encode on top of that is what
-                // tips it from soft into visibly mushy.
+                // `sizes` is what makes the 1500px artwork worth having. Without
+                // it next/image builds a 1x/2x srcset off the `width` prop and
+                // would ship a ~1920px derivative for a 370px slot; with it the
+                // browser asks for the ~750px one a 2x display actually needs.
+                sizes="(max-width: 732px) 205px, (max-width: 1321px) 28vw, 370px"
+                // Fine text at small size, so the second generation of loss is
+                // worth avoiding even though the source is now downscaled
+                // rather than upscaled.
                 quality={95}
                 priority
-                className="block h-auto rounded-xl"
+                className="block h-auto"
                 style={{
                   width: card.width,
+                  // Clips the artwork's painted-white corners — see
+                  // cardCornerRatio. Derived from the same clamp as the width so
+                  // it tracks the card at every viewport, which a fixed radius
+                  // cannot: the card ranges from 205px to 370px wide.
+                  borderRadius: `calc(${card.width} * ${cardCornerRatio})`,
                   boxShadow: "0 26px 54px -22px rgba(0,0,0,0.85)",
                 }}
               />
