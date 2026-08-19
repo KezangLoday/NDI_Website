@@ -572,48 +572,6 @@
   backdrop-filter: blur(12px);
 }
 
-/* A lit glass edge on the partner tiles, in place of the shared lens rim's
-   even conic sweep. Brightest where light would land on a pane held at this
-   angle, dropping away across the face, with a second pickup on the far corner
-   so a tile reads as a solid piece of glass rather than a decal. The shared rim
-   stays as it is everywhere else: it is right for cards that sit still, and a
-   directional edge is what makes a moving pane look like glass.
-
-   Only the rim changes. The tile keeps its own mint hairline underneath, its
-   fill and its shadow. */
-[data-org-tile]::after {
-  opacity: 0.82;
-  background: linear-gradient(
-    143deg,
-    rgba(255, 255, 255, 0.48) 0%,
-    rgba(255, 255, 255, 0.09) 26%,
-    rgba(255, 255, 255, 0.02) 52%,
-    rgba(255, 255, 255, 0.08) 76%,
-    rgba(255, 255, 255, 0.28) 100%
-  );
-}
-
-/* A lit glass edge on the partner tiles, in place of the shared lens rim's
-   even conic sweep. Brightest where light would land on a pane held at this
-   angle, dropping away across the face, with a second pickup on the far corner
-   so a tile reads as a solid piece of glass rather than a decal. The shared rim
-   stays as it is everywhere else: it is right for cards that sit still, and a
-   directional edge is what makes a moving pane look like glass.
-
-   Only the rim changes. The tile keeps its own mint hairline underneath, its
-   fill and its shadow. */
-[data-org-tile]::after {
-  opacity: 0.82;
-  background: linear-gradient(
-    143deg,
-    rgba(255, 255, 255, 0.48) 0%,
-    rgba(255, 255, 255, 0.09) 26%,
-    rgba(255, 255, 255, 0.02) 52%,
-    rgba(255, 255, 255, 0.08) 76%,
-    rgba(255, 255, 255, 0.28) 100%
-  );
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ndi-org-track { animation: none !important; }
 }
