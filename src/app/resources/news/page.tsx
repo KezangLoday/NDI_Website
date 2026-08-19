@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 
 import { PageHero, PageSection } from "@/components/layout/PageHero";
-import { NewsPanel } from "@/components/pages/resources/NewsPanel";
-import { Reveal } from "@/components/ui/Reveal";
-import { getResourceNews } from "@/content";
+import { NewsIndex } from "@/components/pages/resources/NewsIndex";
+import { getNews, getResourceNews } from "@/content";
 import { resourceSections } from "@/content/resourceSections";
 
 const section = resourceSections.find((entry) => entry.id === "news")!;
@@ -14,7 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsPage() {
-  const news = await getResourceNews();
+  /* Both collections. The stories carry artwork and a standfirst, the notices
+     are a dated line — see NewsIndex for why they stay two groups. */
+  const [stories, notices] = await Promise.all([getNews(), getResourceNews()]);
 
   return (
     <>
@@ -22,10 +23,8 @@ export default async function NewsPage() {
         <PageHero eyebrow={section.eyebrow} title={section.title} lead={section.description} />
       </PageSection>
 
-      <PageSection className="pb-[104px] pt-4">
-        <Reveal>
-          <NewsPanel news={news} />
-        </Reveal>
+      <PageSection className="pb-[104px] pt-6">
+        <NewsIndex stories={stories} notices={notices} />
       </PageSection>
     </>
   );

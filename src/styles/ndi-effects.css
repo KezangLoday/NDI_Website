@@ -1937,3 +1937,34 @@ select option { background: #101827; color: #e9eef6; }
     padding-bottom: 2%;
   }
 }
+
+/* ---- News index ------------------------------------------
+   A Read surface, so the hover is quiet: the title takes the accent, the
+   photograph lifts a little under its own frame, and the arrow nudges on the
+   shared .ndi-tut rule the rest of the site already uses. No card lift and no
+   cursor-tracked halo — these are rows in an index, not things to click at. */
+.ndi-news-title {
+  transition: color 0.28s var(--ease-out);
+}
+.ndi-news-row:hover .ndi-news-title,
+.ndi-news-lead:hover .ndi-news-title {
+  color: var(--accent);
+}
+.ndi-news-shot img {
+  transition: transform 0.5s var(--ease-glide);
+}
+@media (hover: hover) {
+  .ndi-news-row:hover .ndi-news-shot img,
+  .ndi-news-lead:hover .ndi-news-shot img {
+    transform: scale(1.035);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-news-shot img { transition: none; }
+  .ndi-news-row:hover .ndi-news-shot img,
+  .ndi-news-lead:hover .ndi-news-shot img { transform: none; }
+}
+/* The last row closes the list, so it carries a rule under it too. */
+.ndi-news-row:last-child {
+  border-bottom: 1px solid var(--border-subtle);
+}
