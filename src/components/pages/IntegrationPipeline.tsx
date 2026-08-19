@@ -1,21 +1,30 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState, type CSSProperties } from "react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { Icon } from "@/components/ui/icons";
 import type { PipelineStep } from "@/content/types";
 
 const STEP_MS = 5200;
 
 /**
- * The four-step integration path, as a flow of medallions joined by arrows.
+ * The four-step integration path, drawn as a conductor on a board.
  *
- * Boxing each step made a timeline read as four tiles. A medallion carrying the
- * step number, an arrow into the next one, and the label beneath says "this
- * happens, then this" without any container at all — and the arrows light up
- * behind the pointer, so the run already travelled reads differently from the
- * run still ahead. The pulse rides the segment currently being crossed.
+ * The site's whole visual world is circuit trace — orthogonal runs with 45°
+ * chamfers, ground-filled junction pads, solid vias, everything at 1.6px (see
+ * CircuitDefs). This section used to opt out of it and draw a row of numbered
+ * medallions joined by arrow glyphs, which is the shape every stepper takes and
+ * says nothing about this product. An integration path already is a trace, so
+ * it is drawn as one: the run behind the current step is energised, the run
+ * ahead is dark, and the segment being crossed carries a pulse travelling the
+ * chamfers rather than a gradient sliding along a straight line.
+ *
+ * The one structural move is the branch. The live pad drops a conductor into
+ * the detail panel and lands on a via at its edge, so the rail and the panel
+ * are one circuit instead of a widget sitting above a card — which is what the
+ * old "STEP 03 —— BUILD" line was there to paper over, and why it is gone.
+ * The branch is placed by translating a step-width element by whole multiples
+ * of its own width, so nothing has to be measured for it to track the step.
  *
  * Auto-advances every 5.2s, and pauses on hover, while the tab is hidden, and
  * whenever the rail is scrolled out of view.
@@ -57,12 +66,18 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
   const active = steps[step];
 
   return (
-    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <div
-        ref={railRef}
-        data-pipe-rail="1"
-        className="flex flex-col items-stretch gap-6 min-[761px]:flex-row min-[761px]:items-start min-[761px]:gap-0"
-      >
+    <div
+      className="ndi-board"
+      style={{ "--n": steps.length, "--i": step } as CSSProperties}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div ref={railRef} data-pipe-rail="1" className="ndi-board-rail">
+        {/* The trace runs off both edges: this is a detail of a larger board,
+            not a diagram that begins and ends with the first and last step. */}
+        <span aria-hidden="true" className="ndi-board-lead" data-side="in" />
+        <span aria-hidden="true" className="ndi-board-lead" data-side="out" />
+
         {steps.map((entry, index) => {
           const isActive = index === step;
           const isDone = index < step;
@@ -71,15 +86,16 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
               {index > 0 ? (
                 <span
                   aria-hidden="true"
-                  className="ndi-flow-link"
+                  className="ndi-trace"
                   data-on={index <= step ? "1" : "0"}
-                  data-crossing={index === step ? "1" : "0"}
                 >
-                  <span className="ndi-flow-line">
-                    {index === step ? <span className="ndi-pipe-pulse" /> : null}
-                  </span>
-                  <Icon name="arrowRight" size={15} strokeWidth={2} />
-                  <span className="ndi-flow-line" />
+                  <svg viewBox="0 0 74 24" fill="none" aria-hidden="true">
+                    <path d="M0 12 H24 L32 4 H42 L50 12 H74" />
+                    <circle className="ndi-trace-via" cx="37" cy="4" r="2.4" />
+                    {index === step ? (
+                      <path className="ndi-trace-pulse" d="M0 12 H24 L32 4 H42 L50 12 H74" />
+                    ) : null}
+                  </svg>
                 </span>
               ) : null}
 
@@ -89,24 +105,16 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
                 onFocus={() => select(index)}
                 onMouseEnter={() => select(index)}
                 aria-current={isActive ? "step" : undefined}
-                className="ndi-flow-step flex flex-1 cursor-pointer flex-col items-center px-2 text-center"
+                aria-controls="ndi-pipeline-detail"
+                className="ndi-board-step"
               >
-                <span
-                  className="ndi-flow-badge"
-                  data-state={isActive ? "1" : isDone ? "2" : "0"}
-                >
+                <span className="ndi-node" data-state={isActive ? "1" : isDone ? "2" : "0"}>
                   <span className="font-mono text-[13px] tracking-[0.1em]">{entry.code}</span>
                 </span>
-                <span
-                  className="mt-4 font-display text-[17px] font-semibold tracking-[-0.02em] transition-colors duration-300 ease-ndi"
-                  style={{ color: isActive ? "var(--text-strong)" : "var(--text-muted)" }}
-                >
+                <span className="ndi-node-title font-display text-[17px] font-semibold tracking-[-0.02em]">
                   {entry.title}
                 </span>
-                <span
-                  className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.16em] transition-colors duration-300 ease-ndi"
-                  style={{ color: isActive ? "var(--text-accent)" : "var(--text-faint)" }}
-                >
+                <span className="ndi-node-tag font-mono text-[10px] uppercase tracking-[0.16em]">
                   {entry.tag}
                 </span>
               </button>
@@ -115,56 +123,37 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
         })}
       </div>
 
-      {/* Detail panel — copy on the left, the three facts as rows on the right. */}
-      <div
-        data-ndi-2col="1"
-        className="mt-[22px] grid grid-cols-1 items-start gap-10 overflow-hidden rounded-2xl border border-grid px-8 py-[30px] min-[901px]:grid-cols-[1.1fr_1fr]"
-        style={{
-          background: "var(--grad-card)",
-          backdropFilter: "blur(18px)",
-          WebkitBackdropFilter: "blur(18px)",
-          boxShadow: "var(--inset-top), 0 18px 44px rgba(0,0,0,0.28)",
-        }}
-      >
-        <div>
-          <div className="flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
-            Step {active.code}
-            <span
-              aria-hidden="true"
-              className="h-px w-10"
-              style={{
-                background: "linear-gradient(90deg, var(--border-strong), transparent)",
-              }}
-            />
-            {active.tag}
-          </div>
-          <div className="mt-3.5 font-display text-[24px] font-semibold tracking-[-0.02em] text-strong">
-            {active.title}
-          </div>
-          <p className="mt-2.5 text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
-            {active.body}
-          </p>
-        </div>
+      {/* The conductor from the live pad down into the panel. */}
+      <div aria-hidden="true" className="ndi-board-gap">
+        <span className="ndi-board-branch" />
+      </div>
 
-        <div className="flex flex-col">
+      {/* The step's name is already on the live pad a few pixels above, so the
+          panel does not repeat it — the branch says which step this is. The
+          heading stays for structure, and for anyone who cannot see the wire. */}
+      <div
+        className="ndi-board-panel rounded-2xl border border-grid px-8 py-[30px]"
+        id="ndi-pipeline-detail"
+      >
+        <h3 className="sr-only">{active.title}</h3>
+        <p className="max-w-[64ch] text-[17px] leading-[1.6] text-body [text-wrap:pretty]">
+          {active.body}
+        </p>
+
+        <dl className="mt-7 grid gap-x-10 gap-y-6 border-t border-subtle pt-6 min-[761px]:grid-cols-3">
           {[
-            ["You bring", active.input, "text-body"],
-            ["Output", active.output, "text-body"],
-            ["Owners", active.owners, "text-muted"],
-          ].map(([label, value, tone], index) => (
-            <div
-              key={label}
-              className={`grid grid-cols-[96px_minmax(0,1fr)] gap-4 py-4 ${
-                index < 2 ? "border-b border-subtle" : ""
-              }`}
-            >
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            ["You bring", active.input],
+            ["Output", active.output],
+            ["Owners", active.owners],
+          ].map(([label, value]) => (
+            <div key={label}>
+              <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
                 {label}
-              </span>
-              <span className={`text-[14px] leading-[1.6] ${tone}`}>{value}</span>
+              </dt>
+              <dd className="mt-2.5 text-[14.5px] leading-[1.55] text-body">{value}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </div>
     </div>
   );

@@ -1381,84 +1381,233 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
    lights up once its step is reached, so the run already travelled reads
    differently from the run ahead, and the segment currently being crossed
    carries a travelling pulse. */
-@keyframes ndiTraceFlow {
-  from { transform: translateX(-190px); }
-  to { transform: translateX(var(--pulse-end, 190px)); }
-}
-.ndi-pipe-pulse {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 1px;
-  width: 190px;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(111, 224, 169, 0.9) 55%, transparent);
-  animation: ndiTraceFlow 2.8s linear infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .ndi-pipe-pulse { display: none; }
-}
-
-/* The badge is the step: number inside a ring, filling as it becomes current. */
-.ndi-flow-badge {
-  display: grid;
-  place-items: center;
-  width: 72px;
-  height: 72px;
-  border-radius: 999px;
-  flex: none;
-  border: 1px solid var(--border-grid);
-  color: var(--text-faint);
-  background: radial-gradient(120% 120% at 30% 20%, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.012));
-  transition:
-    transform 0.32s var(--ease-out),
-    border-color 0.32s var(--ease-out),
-    color 0.32s var(--ease-out),
-    box-shadow 0.32s var(--ease-out),
-    background 0.32s var(--ease-out);
-}
-.ndi-flow-badge[data-state="2"] {
-  border-color: rgba(90, 201, 148, 0.45);
-  color: var(--text-accent);
-  background: radial-gradient(120% 120% at 30% 20%, rgba(90, 201, 148, 0.16), rgba(90, 201, 148, 0.03));
-}
-.ndi-flow-badge[data-state="1"] {
-  border-color: var(--accent);
-  color: var(--text-strong);
-  background: radial-gradient(120% 120% at 30% 20%, rgba(90, 201, 148, 0.34), rgba(90, 201, 148, 0.07));
-  box-shadow: var(--glow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-}
-@media (hover: hover) {
-  .ndi-flow-step:hover .ndi-flow-badge { transform: translateY(-2px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ndi-flow-badge { transition-duration: 0.01ms; }
-  .ndi-flow-step:hover .ndi-flow-badge { transform: none; }
-}
-
-/* Arrow and its two half-lines, centred on the badge. */
-.ndi-flow-link {
+/* The conductor. Same drawing language as the background board in
+   CircuitDefs — 1.6px runs, 45-degree chamfers, a solid via on the jog — so the
+   path reads as part of the same board rather than as a diagram laid over it.
+   Dark ahead of the current step, energised behind it. */
+.ndi-trace {
   display: none;
   flex: 0 0 auto;
-  align-items: center;
-  gap: 6px;
   width: 74px;
-  margin-top: 35px;
-  color: var(--border-strong);
-  transition: color 0.32s var(--ease-out);
+  margin-top: 30px;
+  color: rgba(90, 201, 148, 0.26);
+  transition: color 0.36s var(--ease-glide);
 }
-.ndi-flow-link[data-on="1"] { color: var(--accent); }
-.ndi-flow-line {
-  position: relative;
-  flex: 1;
-  height: 1px;
-  overflow: hidden;
-  background: var(--border-grid);
-  transition: background 0.32s var(--ease-out);
+.ndi-trace[data-on="1"] { color: rgba(90, 201, 168, 0.62); }
+.ndi-trace svg {
+  display: block;
+  width: 74px;
+  height: 24px;
+  overflow: visible;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-.ndi-flow-link[data-on="1"] .ndi-flow-line { background: rgba(90, 201, 148, 0.4); }
+.ndi-trace-via {
+  fill: currentColor;
+  stroke: none;
+}
 @media (min-width: 761px) {
-  .ndi-flow-link { display: flex; }
+  .ndi-trace { display: block; }
+}
+
+/* The pulse rides the path itself, so it takes the chamfers instead of sliding
+   flat across them. 80.6 is the path's length; the dash is the lit run and the
+   gap is long enough that only one crosses at a time. */
+@keyframes ndiTraceRun {
+  from { stroke-dashoffset: 20; }
+  to { stroke-dashoffset: -81; }
+}
+.ndi-trace-pulse {
+  stroke: var(--ndi-mint-bright);
+  stroke-width: 1.6;
+  stroke-dasharray: 20 81;
+  animation: ndiTraceRun 2.4s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-trace-pulse { display: none; }
+}
+
+/* The board: rail, the gap the branch crosses, and the panel. */
+.ndi-board {
+  --link-w: 74px;
+  --n: 4;
+  --i: 0;
+  position: relative;
+}
+.ndi-board-rail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+}
+.ndi-board-step {
+  display: flex;
+  flex: 1;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
+  text-align: center;
+}
+
+/* A junction pad: the page ground punched out of the board, ringed in trace
+   weight. The old medallion was a soft radial gradient, which belongs to a
+   button rather than to a conductor. */
+.ndi-node {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  flex: none;
+  border: 1.6px solid rgba(90, 201, 148, 0.26);
+  background: var(--surface-sunken);
+  color: var(--text-faint);
+  transition:
+    border-color 0.36s var(--ease-glide),
+    color 0.36s var(--ease-glide),
+    box-shadow 0.36s var(--ease-glide);
+}
+.ndi-node[data-state="2"] {
+  border-color: rgba(90, 201, 148, 0.5);
+  color: var(--text-accent);
+}
+/* The live pad gets a clearance ring and its annulus, the way a board keeps
+   copper back from a pad — not a halo pasted behind it. The lift underneath
+   carries an offset and a blur so it reads as depth rather than as a glow. */
+.ndi-node[data-state="1"] {
+  border-color: var(--accent);
+  color: var(--text-strong);
+  box-shadow:
+    0 0 0 4px var(--surface-sunken),
+    0 0 0 5.6px rgba(90, 201, 148, 0.34),
+    0 10px 28px -12px rgba(90, 201, 148, 0.55);
+}
+.ndi-node-title {
+  margin-top: 16px;
+  color: var(--text-muted);
+  transition: color 0.36s var(--ease-glide);
+}
+.ndi-node-tag {
+  margin-top: 6px;
+  color: var(--text-faint);
+  transition: color 0.36s var(--ease-glide);
+}
+.ndi-board-step[aria-current="step"] .ndi-node-title { color: var(--text-strong); }
+.ndi-board-step[aria-current="step"] .ndi-node-tag { color: var(--text-accent); }
+@media (hover: hover) {
+  .ndi-board-step:hover .ndi-node { border-color: rgba(90, 201, 148, 0.5); }
+}
+
+/* The trace continues past the first and last pad and fades at the section
+   edge, so the run reads as cut from a longer one. */
+.ndi-board-lead {
+  display: none;
+  position: absolute;
+  top: 29px;
+  width: clamp(24px, 7%, 74px);
+  height: 1.6px;
+}
+.ndi-board-lead[data-side="in"] {
+  left: 0;
+  background: linear-gradient(90deg, transparent, rgba(90, 201, 148, 0.26));
+}
+.ndi-board-lead[data-side="out"] {
+  right: 0;
+  background: linear-gradient(270deg, transparent, rgba(90, 201, 148, 0.26));
+}
+
+/* The branch into the panel. The element is one step wide, so translating it by
+   whole multiples of its own width lands it on the live pad without anything
+   being measured — the conductor then sits on its centre line. */
+.ndi-board-gap {
+  display: none;
+  position: relative;
+  height: 34px;
+}
+.ndi-board-branch {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc((100% - (var(--n) - 1) * var(--link-w)) / var(--n));
+  transform: translateX(calc(var(--i) * (100% + var(--link-w))));
+  transition: transform 0.46s var(--ease-glide);
+}
+.ndi-board-branch::before {
+  content: "";
+  position: absolute;
+  left: calc(50% - 0.8px);
+  top: 0;
+  width: 1.6px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent), rgba(90, 201, 148, 0.45));
+}
+/* The via it lands on, sitting across the panel's own edge. */
+.ndi-board-branch::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 4.3px);
+  bottom: -4.3px;
+  width: 8.6px;
+  height: 8.6px;
+  border-radius: 999px;
+  border: 1.6px solid var(--accent);
+  background: var(--surface-sunken);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-board-branch { transition-duration: 0.01ms; }
+  .ndi-node { transition-duration: 0.01ms; }
+}
+
+.ndi-board-panel {
+  margin-top: 22px;
+  background: var(--grad-card);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--inset-top), 0 18px 44px rgba(0, 0, 0, 0.28);
+}
+
+@media (min-width: 761px) {
+  .ndi-board-rail {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .ndi-board-lead { display: block; }
+  .ndi-board-gap { display: block; }
+  .ndi-board-panel { margin-top: 0; }
+}
+
+/* Stacked, the pads still sit on a conductor — it just runs down the column
+   instead of across it, with the steps turned on their side so the run has a
+   lane of its own. Centred, the line had to pass straight through every label.
+   The pads carry the ground as their fill, so they punch through the conductor
+   without anything being masked. */
+@media (max-width: 760px) {
+  .ndi-board-rail::before {
+    content: "";
+    position: absolute;
+    left: 29.2px;
+    top: 30px;
+    bottom: 30px;
+    width: 1.6px;
+    background: rgba(90, 201, 148, 0.26);
+  }
+  .ndi-board-step {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+    padding: 0;
+    text-align: left;
+  }
+  .ndi-node-title { margin-top: 0; }
+  .ndi-node-tag {
+    margin-top: 0;
+    margin-left: auto;
+  }
 }
 
 /* ---- "Watch tutorial" arrow nudge -------------------------- */
