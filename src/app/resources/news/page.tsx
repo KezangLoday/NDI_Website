@@ -23,7 +23,7 @@ export default async function NewsPage() {
         <PageHero eyebrow={section.eyebrow} title={section.title} lead={section.description} />
       </PageSection>
 
-      <PageSection className="pb-[104px] pt-6">
+      <PageSection className="pb-[104px] pt-8">
         <NewsIndex stories={stories} notices={notices} />
       </PageSection>
     </>

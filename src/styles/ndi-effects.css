@@ -1938,15 +1938,16 @@ select option { background: #101827; color: #e9eef6; }
   }
 }
 
-/* ---- News index ------------------------------------------
-   A Read surface, so the hover is quiet: the title takes the accent, the
-   photograph lifts a little under its own frame, and the arrow nudges on the
-   shared .ndi-tut rule the rest of the site already uses. No card lift and no
-   cursor-tracked halo — these are rows in an index, not things to click at. */
+/* ---- News index and story ---------------------------------
+   A reading surface, so the hover is quiet: the headline takes the accent, the
+   photograph lifts a little inside its own frame, and the arrow uses the shared
+   .ndi-tut nudge. No card lift and no cursor-tracked halo — these are entries
+   in an index, not things to poke at. */
 .ndi-news-title {
   transition: color 0.28s var(--ease-out);
 }
 .ndi-news-row:hover .ndi-news-title,
+.ndi-news-card:hover .ndi-news-title,
 .ndi-news-lead:hover .ndi-news-title {
   color: var(--accent);
 }
@@ -1955,16 +1956,114 @@ select option { background: #101827; color: #e9eef6; }
 }
 @media (hover: hover) {
   .ndi-news-row:hover .ndi-news-shot img,
+  .ndi-news-card:hover .ndi-news-shot img,
   .ndi-news-lead:hover .ndi-news-shot img {
     transform: scale(1.035);
   }
+  .ndi-news-row:hover { background: var(--ndi-mint-04); }
 }
+.ndi-news-row { transition: background 0.28s var(--ease-out); }
 @media (prefers-reduced-motion: reduce) {
   .ndi-news-shot img { transition: none; }
   .ndi-news-row:hover .ndi-news-shot img,
+  .ndi-news-card:hover .ndi-news-shot img,
   .ndi-news-lead:hover .ndi-news-shot img { transform: none; }
 }
-/* The last row closes the list, so it carries a rule under it too. */
-.ndi-news-row:last-child {
-  border-bottom: 1px solid var(--border-subtle);
+
+/* The category, as a chip. Sits over artwork as often as not, so it carries its
+   own ground rather than relying on what is behind it. */
+.ndi-news-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 201, 148, 0.3);
+  background: rgba(12, 17, 27, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-accent);
 }
+
+/* An archive card with no photograph. The announcements never had one, so the
+   slot carries the label on the page's own gradient instead of a grey box
+   standing in for a picture that does not exist. */
+.ndi-news-plate {
+  background:
+    radial-gradient(120% 140% at 12% 0%, rgba(90, 201, 148, 0.16), transparent 62%),
+    var(--grid-bg),
+    linear-gradient(160deg, rgba(26, 88, 91, 0.3) 0%, rgba(20, 27, 41, 0.5) 70%);
+  background-size: auto, var(--grid-size), auto;
+}
+/* Announcements run in date order with the stories, and the current batch of
+   dates puts several of them together, so the plate cannot read as one flat
+   fill repeated down a row. The board's own grid gives each one texture, and
+   the mint pool sits at a different corner on alternate cards so a run of them
+   does not tile. */
+.ndi-news-card:nth-child(even) .ndi-news-plate {
+  background:
+    radial-gradient(120% 140% at 88% 0%, rgba(90, 201, 148, 0.14), transparent 62%),
+    var(--grid-bg),
+    linear-gradient(200deg, rgba(26, 88, 91, 0.26) 0%, rgba(20, 27, 41, 0.5) 70%);
+  background-size: auto, var(--grid-size), auto;
+}
+
+/* Pagination. */
+.ndi-news-page {
+  display: inline-grid;
+  place-items: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-grid);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  transition: color 0.24s var(--ease-out), border-color 0.24s var(--ease-out),
+    background 0.24s var(--ease-out);
+}
+.ndi-news-page:hover { color: var(--text-strong); border-color: var(--border-strong); }
+.ndi-news-page[aria-current="page"] {
+  color: var(--text-on-mint);
+  border-color: transparent;
+  background: var(--grad-mint);
+}
+
+/* The story rail's tabs: the selected one is simply the one that is lit. */
+.ndi-news-tab {
+  position: relative;
+  padding-bottom: 8px;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  color: var(--text-faint);
+  transition: color 0.24s var(--ease-out);
+}
+.ndi-news-tab:hover { color: var(--text-muted); }
+.ndi-news-tab[aria-selected="true"] { color: var(--text-strong); }
+.ndi-news-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.28s var(--ease-out);
+}
+.ndi-news-tab[aria-selected="true"]::after { transform: scaleX(1); }
+
+/* Back to the index. */
+.ndi-backlink svg { transition: transform 0.28s var(--ease-out); }
+.ndi-backlink:hover { color: var(--text-strong); }
+.ndi-backlink:hover svg { transform: rotate(180deg) translateX(4px); }

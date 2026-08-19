@@ -31,9 +31,24 @@ export interface NewsItem {
   excerpt: string;
   publishedAt: string;
   image: Media;
+  /** Where the story was originally published. The detail route is internal. */
   href: string;
   ctaLabel: string;
   ctaIcon: Extract<IconName, "arrowRight" | "playCircle">;
+  /** Editorial label, shown on the cards and the detail page. */
+  category: string;
+  /**
+   * Editorial ordering for the "Popular" tab, low number first. Nothing here
+   * measures readership, so this is a field for the newsroom to set rather than
+   * something the code should infer — unranked stories simply do not appear.
+   */
+  popularRank?: number;
+  /**
+   * The article itself. Payload will hold richText; Phase 1 has no body copy
+   * for these stories, and inventing it would mean writing claims about real
+   * partners, so the detail page says so rather than filling the space.
+   */
+  body?: string[];
 }
 
 /** Collection: `organizations` — the "Trusted by" tiles. */

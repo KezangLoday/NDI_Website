@@ -20,6 +20,8 @@ export const news: NewsItem[] = [
     href: "#",
     ctaLabel: "Read story",
     ctaIcon: "arrowRight",
+    category: "Partnership",
+    popularRank: 2
   },
   {
     id: "ssi-orbit-podcast",
@@ -37,6 +39,8 @@ export const news: NewsItem[] = [
     href: "#",
     ctaLabel: "Watch episode",
     ctaIcon: "playCircle",
+    category: "Podcast",
+    popularRank: 1
   },
   {
     id: "vitalik-visit",
@@ -49,6 +53,8 @@ export const news: NewsItem[] = [
     href: "#",
     ctaLabel: "Read story",
     ctaIcon: "arrowRight",
+    category: "Ecosystem",
+    popularRank: 3
   },
   {
     id: "ethereum-adoption",
@@ -66,6 +72,7 @@ export const news: NewsItem[] = [
     href: "#",
     ctaLabel: "Read story",
     ctaIcon: "arrowRight",
+    category: "Infrastructure"
   },
   {
     id: "digital-signature-platform",
@@ -83,6 +90,7 @@ export const news: NewsItem[] = [
     href: "#",
     ctaLabel: "Read story",
     ctaIcon: "arrowRight",
+    category: "Product"
   },
   {
     id: "phenix-iden2",
@@ -95,5 +103,6 @@ export const news: NewsItem[] = [
     href: "#",
     ctaLabel: "Read story",
     ctaIcon: "arrowRight",
+    category: "Partnership"
   },
 ];

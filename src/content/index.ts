@@ -125,6 +125,18 @@ export async function getGlossary(): Promise<GlossaryTerm[]> {
   return glossary;
 }
 
+/** One story by slug, for the detail route. */
+export async function getNewsBySlug(slug: string): Promise<NewsItem | undefined> {
+  return news.find((item) => item.slug === slug);
+}
+
+/** Editorially ranked, for the "Popular" tab. Unranked stories are omitted. */
+export async function getPopularNews(): Promise<NewsItem[]> {
+  return news
+    .filter((item) => item.popularRank !== undefined)
+    .sort((a, b) => a.popularRank! - b.popularRank!);
+}
+
 export async function getResourceNews(): Promise<ResourceNews[]> {
   return resourceNews;
 }
