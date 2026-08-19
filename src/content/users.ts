@@ -125,10 +125,10 @@ export const journeyChapters: JourneyChapter[] = [
  * The illustrated strip, 9095×814.
  *
  * The full-resolution original, cut to the same framing the 2000×179 version
- * had. That artwork was the leftmost 64.87% of project/assets/journey-strip.png
- * (14020×814) scaled down; this is that same region at native size, so the
- * aspect ratio is unchanged at 11.17:1 and the chapter anchors below still
- * land on the beats they were measured against.
+ * had. That artwork was the leftmost 64.87% of the 14020×814 original scaled
+ * down; this is that same region at native size, so the aspect ratio is
+ * unchanged at 11.17:1 and the chapter anchors below still land on the beats
+ * they were measured against.
  *
  * The strip is drawn at 114% of the screen's height, so its rendered width is
  * set by its aspect ratio: about 4640px inside a ~648px screen. At 9095px the
