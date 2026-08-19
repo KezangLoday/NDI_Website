@@ -16,11 +16,6 @@ const GLASS_SHADOW =
  * "What you can do today" — the bento of frosted-glass cards, each a link, each
  * carrying the proximity-tracked border glow.
  *
- * The cards that lead somewhere also open on hover: the heading and its text
- * rise, and "Watch tutorial" comes up into the space they leave. The two cards
- * with no tutorial behind them stay still, because a card that lifts to show a
- * way in and then has none is a lie about itself.
- *
  * The 12-column grid and its 232px minimum row are the design's; below 1000px
  * the design collapses each card to a half-width span, and below 700px to a
  * plain stack.
@@ -34,7 +29,6 @@ export function UseCaseCards({ useCases }: { useCases: UserUseCase[] }) {
         <a
           key={useCase.id}
           href={useCase.tutorialHref ?? "#"}
-          data-tut={useCase.tutorialHref ? "" : undefined}
           className="ndi-uc relative flex min-h-[232px] flex-col justify-between gap-7 rounded-[20px] border p-[26px]"
           style={{
             gridArea: useCase.gridArea,
@@ -46,27 +40,23 @@ export function UseCaseCards({ useCases }: { useCases: UserUseCase[] }) {
           }}
         >
           <div className="ndi-glow" />
-          {/* The icon keeps its place above the heading; only the block below it
-              moves. */}
-          <span className="ndi-uc-icon relative inline-flex flex-none items-center text-accent">
+          <span className="relative inline-flex flex-none items-center text-accent">
             <Icon name={useCase.icon} size={24} />
           </span>
-          <div className="ndi-uc-face relative">
+          <div className="relative">
             <h3 className="font-display text-[21px] font-semibold leading-[1.2] tracking-[-0.03em] text-strong [text-wrap:balance]">
               {useCase.title}
             </h3>
             <p className="mt-2.5 text-[14.5px] leading-[1.55] text-muted [text-wrap:pretty]">
               {useCase.description}
             </p>
+            {useCase.tutorialHref ? (
+              <span className="ndi-tut mt-3.5 inline-flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
+                Watch tutorial
+                <Icon name="arrowRight" size={14} strokeWidth={2} />
+              </span>
+            ) : null}
           </div>
-          {/* Out of flow, so the face can rise into the space it leaves. Only
-              the cards that have a tutorial get one, so only those move. */}
-          {useCase.tutorialHref ? (
-            <span className="ndi-uc-cta ndi-tut inline-flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
-              Watch tutorial
-              <Icon name="arrowRight" size={14} strokeWidth={2} />
-            </span>
-          ) : null}
         </a>
       ))}
     </div>
