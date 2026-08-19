@@ -1300,7 +1300,14 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   background: var(--glow-arc);
   background-attachment: fixed, fixed, fixed, scroll;
   opacity: var(--active);
-  transition: opacity 0.3s var(--ease-out);
+  /* --active is a hard 0/1 step from useGlowCards, so this transition is the
+     whole of the fade — and it has to be a curve that starts slowly. --ease-out
+     is front-loaded enough to put the arc at 60% opacity 17ms in (measured),
+     which is not a fade, it is a pop with a tail. Moving between two cards shows
+     it worst, because the arriving card's arc appears at almost full strength
+     while the leaving one is still lit. Symmetric on purpose: the two cards
+     cross-fade through each other. */
+  transition: opacity 0.38s var(--ease-in-out);
   -webkit-mask-image: linear-gradient(#0000, #0000),
     conic-gradient(from calc((var(--start) - var(--spread)) * 1deg), #00000000 0deg, #fff, #00000000 calc(var(--spread) * 2deg));
   mask-image: linear-gradient(#0000, #0000),
