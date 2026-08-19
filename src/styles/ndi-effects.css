@@ -1453,19 +1453,24 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   text-align: center;
 }
 
-/* A junction pad: the page ground punched out of the board, ringed in trace
-   weight. The old medallion was a soft radial gradient, which belongs to a
-   button rather than to a conductor. */
+/* A junction pad, square-cornered on the card's own radius and carrying the
+   card's fill, so the pads and the panel read as cut from one material.
+   --grad-card is translucent, so it sits on the ground rather than replacing
+   it: opaque is what lets a pad punch through the conductor running behind it
+   in the stacked layout, and it puts the fill over the same dark the panel has
+   under it. That also makes the panel's backdrop blur pointless here, so it is
+   not carried over — there is nothing left to see through. */
 .ndi-node {
   display: grid;
   place-items: center;
   width: 60px;
   height: 60px;
-  border-radius: 999px;
+  border-radius: 16px;
   flex: none;
   border: 1.6px solid rgba(90, 201, 148, 0.26);
-  background: var(--surface-sunken);
+  background: var(--grad-card), var(--surface-sunken);
   color: var(--text-faint);
+  box-shadow: var(--inset-top);
   transition:
     border-color 0.36s var(--ease-glide),
     color 0.36s var(--ease-glide),
@@ -1482,6 +1487,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   border-color: var(--accent);
   color: var(--text-strong);
   box-shadow:
+    var(--inset-top),
     0 0 0 4px var(--surface-sunken),
     0 0 0 5.6px rgba(90, 201, 148, 0.34),
     0 10px 28px -12px rgba(90, 201, 148, 0.55);
