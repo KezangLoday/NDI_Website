@@ -495,16 +495,11 @@
    Users benefits row, so they are covered by the entry below. */
 .ndi-spot,
 [data-news-featured],
-[data-gov-card],
 [data-org-tile] {
-  background: linear-gradient(158deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.006) 46%, rgba(90, 201, 148, 0.03) 100%) !important;
+  background: var(--fill-card) !important;
   -webkit-backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
   backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 1px 0 0 rgba(255, 255, 255, 0.04),
-    inset 0 -20px 34px -24px rgba(255, 255, 255, 0.07),
-    0 18px 40px -26px rgba(0, 0, 0, 0.9) !important;
+  box-shadow: var(--shadow-card) !important;
 }
 /* The contact panel surface. The form and the three contact rows beside it are
    one rule, not two that resemble each other: matching the gradient alone still
@@ -542,12 +537,27 @@
   mask-composite: exclude;
 }
 
-/* Governance had three fills across one page — a flat white wash on some cards,
-   a 24px blur with no fill on others, and the shared glass on two. They all wear
-   the shared rule above now. Positioned here rather than at each call site
-   because the lens rim is an inset:0 pseudo-element and needs a containing
-   block; most of these cards are plain flex containers. */
-[data-gov-card] { position: relative; }
+/* Governance ran three fills across one page: a flat white wash on some cards,
+   a 24px blur with no fill on others, and the shared glass on two.
+
+   They share the glass cards' material now, but over an opaque base rather than
+   over the page. Translucency is the reason they looked inconsistent in the
+   first place — a card that samples what is behind it takes a different colour
+   from every patch of background it crosses, and this page runs from flat dark
+   to the mint atmosphere. Measured across it, the same treatment came out
+   rgb(21,27,38) on one card and rgb(33,47,57) on another. On a base they all
+   render the reference tile's colour instead, wherever they sit.
+
+   Nothing to see through means the backdrop filter is only a wasted layer, so
+   it is off. The rim still needs a containing block and most of these are plain
+   flex containers, hence position. */
+[data-gov-card] {
+  position: relative;
+  background: var(--fill-card), var(--ndi-ink-800) !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: var(--shadow-card) !important;
+}
 
 /* ---- News feed -------------------------------------------- */
 .ndi-news-pane { opacity: 0; transition: opacity 0.6s var(--ease-out); }
@@ -572,10 +582,15 @@
 /* ---- Trusted-by scrolling columns -------------------------- */
 [data-org-cols]:hover .ndi-org-track { animation-play-state: paused; }
 
-/* Blur only. The shared glass rule pairs its blur with a saturate and a
-   brightness, which is right where the fill is doing the work — but these tiles
-   were asked to soften what is behind them without tinting it, and now that the
-   filter is live rather than inert that distinction matters. */
+/* Blur only, no saturate and no brightness. Those two amplify whatever happens
+   to be behind the card, so a surface wearing them takes a different tint from
+   every patch of background it crosses — measured across one page, the same
+   card treatment came out rgb(20,27,41) over a dark stretch and rgb(26,35,51)
+   over the mint atmosphere, which reads as a set of cards that were filled
+   inconsistently. Blur alone softens the backdrop without colouring from it, so
+   these all land together at the reference rgb(24,31,44).
+
+*/
 [data-org-tile] {
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);

@@ -68,6 +68,20 @@
     rgba(15, 20, 32, 0.62) 100%
   );
   --surface-glass-strong: rgba(18, 65, 67, 0.55);
+  /* The card material. Two surfaces wear it: the glass cards sample the page
+     through it, and the Governance cards lay it over an opaque base so their
+     fill cannot drift with whatever they happen to sit over. */
+  --fill-card: linear-gradient(
+    158deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.006) 46%,
+    rgba(90, 201, 148, 0.03) 100%
+  );
+  --shadow-card:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 1px 0 0 rgba(255, 255, 255, 0.04),
+    inset 0 -20px 34px -24px rgba(255, 255, 255, 0.07),
+    0 18px 40px -26px rgba(0, 0, 0, 0.9);
 
   /* ---- Text ---------------------------------------------- */
   --text-strong: var(--ndi-000);
