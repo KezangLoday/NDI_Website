@@ -104,46 +104,52 @@ export const userUseCases: UserUseCase[] = [
  * anything inside half a screen-width of an edge (about 0.07 here) resolves to
  * that edge.
  *
- * These are measured off the artwork rather than inherited: the values from the
- * prototype belonged to the older, wider strip, and against the current one
- * they drifted a whole beat out of step — chapter 05, where Dechen downloads
- * the wallet, was landing on her slumped over a laptop with a draining battery,
- * two scenes before the app appears. Re-measure them against any new strip.
+ * These are measured off the artwork rather than inherited, and re-measured
+ * whenever the strip's framing changes — the fractions mean nothing on their
+ * own. The strip now runs to its full 14020px ending, so every value moved:
+ * against the previous 9095px cut they sat about 1.54x too far right, which
+ * would have parked chapter 01 in the middle of the office run.
+ *
+ * Measured by framing the visible window (one screen = 1/11.04 of the strip)
+ * at each candidate and checking what it holds:
+ *   01 the graduation figure · 02 the two application desks · 03 the office
+ *   run into the columned government building · 04 the drained-battery scenes
+ *   with the cost-and-time note · 05 the QR scan and the credential screen ·
+ *   06 the "employment credentials in the wallet" note and the Employee ID
+ *   card · 07 the wallet sharing selected credentials · 08 "THE END"
+ *
+ * 05 to 06 is the long glide, crossing the document-flow and hiring montage
+ * without holding on it. That is deliberate: those frames carry no caption of
+ * their own, and they read well as travel between the two beats that do.
  */
 export const journeyChapters: JourneyChapter[] = [
   { id: "graduation", step: "01", title: "Graduation", anchor: 0.03, caption: "Dechen finishes her degree. Everything that comes next will ask her to prove who she is." },
-  { id: "applications", step: "02", title: "The applications", anchor: 0.14, caption: "Job forms, bank forms, campus forms — the same documents photocopied again and again." },
-  { id: "counters", step: "03", title: "Counter to counter", anchor: 0.36, caption: "Offices across Thimphu, queues and stamps, and a trip back for the one paper she forgot." },
-  { id: "wall", step: "04", title: "The wall", anchor: 0.5, caption: "Weeks lost to verification. Her identity sits in filing cabinets she cannot reach." },
-  { id: "ndi", step: "05", title: "Bhutan NDI", anchor: 0.7, caption: "She downloads the wallet. Her foundational ID is issued to her phone, held only by her." },
-  { id: "issued", step: "06", title: "Credentials, issued", anchor: 0.8, caption: "Degree, census, licence — signed by the issuer, tamper-proof, and stored with her." },
-  { id: "consent", step: "07", title: "Consent, not copies", anchor: 0.885, caption: "A scan and a tap. She shares only the fields a service asks for — and nothing else." },
-  { id: "paperless", step: "08", title: "The end of paperwork", anchor: 0.96, caption: "120+ services, minutes instead of weeks. Dechen’s identity finally belongs to Dechen." },
+  { id: "applications", step: "02", title: "The applications", anchor: 0.10, caption: "Job forms, bank forms, campus forms — the same documents photocopied again and again." },
+  { id: "counters", step: "03", title: "Counter to counter", anchor: 0.225, caption: "Offices across Thimphu, queues and stamps, and a trip back for the one paper she forgot." },
+  { id: "wall", step: "04", title: "The wall", anchor: 0.33, caption: "Weeks lost to verification. Her identity sits in filing cabinets she cannot reach." },
+  { id: "ndi", step: "05", title: "Bhutan NDI", anchor: 0.46, caption: "She downloads the wallet. Her foundational ID is issued to her phone, held only by her." },
+  { id: "issued", step: "06", title: "Credentials, issued", anchor: 0.72, caption: "Degree, census, licence — signed by the issuer, tamper-proof, and stored with her." },
+  { id: "consent", step: "07", title: "Consent, not copies", anchor: 0.825, caption: "A scan and a tap. She shares only the fields a service asks for — and nothing else." },
+  { id: "paperless", step: "08", title: "The end of paperwork", anchor: 0.92, caption: "120+ services, minutes instead of weeks. Dechen’s identity finally belongs to Dechen." },
 ];
 
 /**
- * The illustrated strip, 9095×814.
+ * The illustrated strip, 14020×814 — the complete original.
  *
- * The full-resolution original, cut to the same framing the 2000×179 version
- * had. That artwork was the leftmost 64.87% of the 14020×814 original scaled
- * down; this is that same region at native size, so the aspect ratio is
- * unchanged at 11.17:1 and the chapter anchors below still land on the beats
- * they were measured against.
+ * Earlier cuts stopped at 64.87%, mid-handshake, so the journey never arrived
+ * anywhere: the wallet filling up, the consent hand-off and the "THE END" card
+ * with the NDI mark were all simply absent. This is the whole illustration.
  *
- * The strip is drawn at 114% of the screen's height, so its rendered width is
- * set by its aspect ratio: about 4640px inside a ~648px screen. At 9095px the
- * source now covers that with room to spare instead of being upscaled 2.3x.
- *
- * The original runs on past this crop — three more scenes and a "THE END"
- * card. Extending the strip is a content decision, not a resolution one, and
- * would need the anchors re-measured.
+ * That takes the aspect ratio from 11.17:1 to 17.22:1, so the strip lays out
+ * about 7150px wide inside a ~648px screen. The anchors above are measured
+ * against this width and do not survive a re-crop — see the note there.
  *
  * Served directly rather than through next/image — see DechenJourney.
  */
 export const journeyStrip = media(
   "/media/company/journey-strip.webp",
   "Dechen's journey, from paperwork to a digital wallet",
-  9095,
+  14020,
   814,
 );
 
