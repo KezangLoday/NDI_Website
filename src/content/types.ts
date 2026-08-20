@@ -370,6 +370,15 @@ export interface PressItem {
 }
 
 /** Collection: `jobs` — Careers listings. HR-editable in Phase 2. */
+/** What the contract is, shown as a pill on the vacancy card. */
+export type EmploymentType = "Full time" | "Part time" | "Contract";
+
+/** One numbered clause of the terms of reference. */
+export interface JobSection {
+  heading: string;
+  items: string[];
+}
+
 export interface Job {
   id: string;
   slug: string;
@@ -377,7 +386,17 @@ export interface Job {
   title: string;
   summary: string;
   location: string;
-  href: string;
+  employmentType: EmploymentType;
+  /** How many people are being hired into this role. */
+  slots: number;
+  postedAt: string;
+  closesAt: string;
+  /** Seniority, shown beside the department. */
+  level: string;
+  /** The opening paragraph of the terms of reference. */
+  about: string;
+  /** The body of the ToR: duties, eligibility, what is offered. */
+  sections: JobSection[];
 }
 
 /** Global: the "why work here" cards. */

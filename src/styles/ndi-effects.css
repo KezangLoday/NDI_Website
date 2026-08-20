@@ -1990,6 +1990,9 @@ select option { background: #101827; color: #e9eef6; }
     box-shadow: var(--glow-sm);
   }
   .ndi-backbtn:hover svg { transform: translateX(-4px); }
+  /* The same button pointing the other way, for "apply" on a vacancy: the
+     shape is right, only the direction of travel changes. */
+  .ndi-backbtn[data-dir="forward"]:hover svg { transform: translateX(4px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .ndi-inline-link,
@@ -2151,3 +2154,286 @@ select option { background: #101827; color: #e9eef6; }
 .ndi-backlink svg { transition: transform 0.28s var(--ease-out); }
 .ndi-backlink:hover { color: var(--text-strong); }
 .ndi-backlink:hover svg { transform: rotate(180deg) translateX(4px); }
+
+/* ---- Careers -------------------------------------------------
+   The hero collage stands in for team photography that does not exist yet.
+   Each tile is a slashed frame — the print convention for "picture goes here"
+   — over the same glass the cards wear, so the placeholder belongs to the page
+   rather than looking like a failed image load.
+
+   Geometry is percentages of a fixed-ratio box: the composition scales with
+   the page, tiles bleed off both edges, and nothing is measured in script.
+
+   The entrance is this page's one authored moment. Sixteen tiles settle in
+   sequence, each arriving from flat and unblurring into its own rotation, so
+   the collage assembles itself rather than appearing. It runs on load because
+   the hero is above the fold on every viewport that fits it.
+
+   The animation holds its end state with `forwards`, which would outrank a
+   hover transform on the same element — so the tile owns position, rotation
+   and arrival, and the pane inside it owns the hover. */
+.ndi-collage {
+  position: relative;
+  aspect-ratio: 1200 / 600;
+}
+.ndi-collage-tile {
+  position: absolute;
+  left: calc(var(--x) * 1%);
+  top: calc(var(--y) * 1%);
+  width: calc(var(--w) * 1%);
+  aspect-ratio: var(--ar);
+  transform: rotate(calc(var(--r) * 1deg));
+  opacity: 0;
+  animation: ndiCollageIn 880ms var(--ease-out) forwards;
+  animation-delay: calc(var(--i) * 52ms + 220ms);
+}
+.ndi-collage-tile:hover { z-index: 5; }
+@keyframes ndiCollageIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) rotate(0deg) scale(0.95);
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(calc(var(--r) * 1deg)) scale(1);
+    filter: blur(0);
+  }
+}
+.ndi-collage-pane {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: flex-end;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* Not the shared card material: these are stand-ins for photographs, and a
+     photograph is opaque. At 3% white over the page they read as a rendering
+     fault rather than as frames waiting to be filled, so the fill runs to a
+     near-solid base with the same mint cast the cards carry. */
+  background:
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.075) 0%,
+      rgba(255, 255, 255, 0.02) 46%,
+      rgba(90, 201, 148, 0.07) 100%
+    ),
+    rgba(14, 22, 32, 0.55);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 22px 44px -22px rgba(0, 0, 0, 0.8);
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out);
+}
+.ndi-collage-slash {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  stroke: rgba(255, 255, 255, 0.09);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 0.4s var(--ease-out);
+}
+.ndi-collage-cap {
+  position: relative;
+  max-width: 100%;
+  padding: 0 10px 9px;
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  /* Full strength: at 9px this is already the smallest type on the page, and
+     knocking it back put it under 4.5:1 against the tile. */
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.4s var(--ease-out);
+}
+@media (min-width: 761px) {
+  .ndi-collage-tile[data-bleed="1"] .ndi-collage-cap { display: none; }
+}
+@media (hover: hover) {
+  .ndi-collage-tile:hover .ndi-collage-pane {
+    transform: translateY(-6px) scale(1.03);
+    border-color: rgba(90, 201, 148, 0.34);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 26px 50px -20px rgba(0, 0, 0, 0.85),
+      0 0 0 1px rgba(90, 201, 148, 0.16);
+  }
+  .ndi-collage-tile:hover .ndi-collage-slash { stroke: rgba(90, 201, 148, 0.16); }
+  .ndi-collage-tile:hover .ndi-collage-cap { color: var(--text-accent); }
+}
+/* Sixteen tiles across a phone are postage stamps, so below 760px the
+   composition drops to the first six in a plain grid, rotations kept. */
+@media (max-width: 760px) {
+  .ndi-collage {
+    display: grid;
+    aspect-ratio: auto;
+    /* minmax(0, 1fr), not 1fr: the captions are `nowrap`, so an `auto`
+       minimum sizes every column to its longest caption and the third one
+       leaves the screen. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 4px 0 24px;
+    align-items: start;
+  }
+  .ndi-collage-tile {
+    position: static;
+    width: auto;
+    aspect-ratio: 3 / 4;
+  }
+  /* Dropping one column keeps the stagger the scattered layout had. */
+  .ndi-collage-tile:nth-child(even) { margin-top: 26px; }
+  .ndi-collage-tile:nth-child(n + 7) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-collage-tile {
+    opacity: 1;
+    animation: none;
+  }
+  .ndi-collage-pane,
+  .ndi-collage-slash,
+  .ndi-collage-cap { transition: none; }
+  .ndi-collage-tile:hover .ndi-collage-pane { transform: none; }
+}
+
+/* Vacancy cards. The fill and shadow are the shared card material via
+   data-gov-card; what is added here is the pill row and the hairline that
+   separates the deadline from the affordance. */
+.ndi-vacancy-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ndi-vacancy-pill[data-tone="mint"] {
+  border-color: rgba(90, 201, 148, 0.32);
+  background: var(--ndi-mint-08);
+  color: var(--text-accent);
+}
+/* Fixed-term work is a materially different offer from a permanent post, so it
+   is told apart at a glance rather than being one more mint pill. */
+.ndi-vacancy-pill[data-tone="alt"] {
+  border-color: rgba(240, 184, 102, 0.34);
+  background: rgba(240, 184, 102, 0.09);
+  color: #f0b866;
+}
+.ndi-vacancy-pill[data-tone="plain"] {
+  border-color: var(--border-subtle);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+}
+
+/* Terms-of-reference bullets: a mint rule rather than a disc, matching the
+   hairlines the rest of the site divides with. */
+.ndi-tor-item {
+  position: relative;
+  padding-left: 20px;
+}
+.ndi-tor-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 10px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* Other openings in the rail. */
+.ndi-otherjob { transition: opacity 0.24s var(--ease-out); }
+.ndi-otherjob span:first-child { transition: color 0.24s var(--ease-out); }
+.ndi-otherjob:hover span:first-child { color: var(--text-accent); }
+
+/* The CV field. The native file input cannot be themed in any browser, so it
+   is taken out of the layout — not hidden from the accessibility tree — and
+   the label becomes the control. Clicking the label still opens the picker,
+   and tabbing still lands on the input, which is why this is a clip rather
+   than `display: none`. */
+.ndi-cv-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.ndi-cv-drop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 16px;
+  cursor: pointer;
+  border-radius: 12px;
+  border: 1px dashed var(--border-strong);
+  background: var(--surface-raised);
+  transition: border-color 0.24s var(--ease-out), background 0.24s var(--ease-out),
+    box-shadow 0.24s var(--ease-out);
+}
+.ndi-cv-drop:hover { border-color: var(--accent); background: var(--ndi-mint-08); }
+.ndi-cv-input:focus-visible + .ndi-cv-drop {
+  border-color: var(--accent);
+  box-shadow: var(--ring);
+}
+/* Once a file is attached the field has content, so the dashed "empty" edge
+   would be describing the wrong state. */
+.ndi-cv-drop[data-has-file="1"] {
+  border-style: solid;
+  border-color: rgba(90, 201, 148, 0.42);
+  background: var(--ndi-mint-08);
+}
+.ndi-cv-clear {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--text-faint);
+  transition: color 0.2s var(--ease-out);
+}
+.ndi-cv-clear:hover { color: #f0866b; }
+
+/* The consent checkbox, themed rather than left as the platform default. */
+.ndi-check {
+  appearance: none;
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-raised);
+  transition: background 0.18s var(--ease-out), border-color 0.18s var(--ease-out);
+}
+.ndi-check:hover { border-color: var(--accent); }
+.ndi-check:focus-visible { box-shadow: var(--ring); outline: none; }
+.ndi-check:checked {
+  border-color: var(--accent);
+  background: var(--accent)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306241a' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")
+    center / 12px no-repeat;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ndi-cv-drop,
+  .ndi-cv-clear,
+  .ndi-check,
+  .ndi-otherjob,
+  .ndi-otherjob span:first-child { transition: none; }
+}

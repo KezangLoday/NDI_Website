@@ -18,3 +18,16 @@ export function formatNewsDate(iso: string): string {
   const dayOfMonth = String(date.getUTCDate()).padStart(2, "0");
   return `${day} ${month} ${dayOfMonth} ${date.getUTCFullYear()}`;
 }
+
+/**
+ * A calendar date without the weekday — "12 Sep 2026".
+ *
+ * The newsroom format leads with the day of the week, which is right for a
+ * story ("Mon Jul 06 2026" reads as a dateline) and wrong for a deadline: what
+ * an applicant is working out is how many days are left, and the weekday is
+ * three characters in the way of the number. Same UTC discipline as above.
+ */
+export function formatCalendarDate(iso: string): string {
+  const date = new Date(`${iso}T00:00:00Z`);
+  return `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+}

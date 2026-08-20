@@ -200,6 +200,11 @@ export async function getJobs(): Promise<Job[]> {
   return jobs;
 }
 
+/** One vacancy by slug, for the detail route. */
+export async function getJobBySlug(slug: string): Promise<Job | undefined> {
+  return jobs.find((job) => job.slug === slug);
+}
+
 export async function getCareerValues(): Promise<CareerValue[]> {
   return careerValues;
 }

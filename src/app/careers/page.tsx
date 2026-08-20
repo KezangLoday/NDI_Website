@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 
-import { Emphasis, PageHero, PageSection, SubSectionHeader } from "@/components/layout/PageHero";
-import { Reveal } from "@/components/ui/Reveal";
+import { PageSection } from "@/components/layout/PageHero";
+import { HeroCollage } from "@/components/pages/careers/HeroCollage";
+import { VacancyCard } from "@/components/pages/careers/VacancyCard";
+import { GradientButton } from "@/components/ui/GradientButton";
 import { Icon } from "@/components/ui/icons";
+import { Reveal } from "@/components/ui/Reveal";
 import { getCareerValues, getJobs } from "@/content";
 
 export const metadata: Metadata = {
@@ -11,87 +14,97 @@ export const metadata: Metadata = {
     "We hire engineers, designers and communicators who want their work in the hands of every citizen in Bhutan.",
 };
 
-const ROLE_CARD_BACKGROUND =
-  "radial-gradient(120% 80% at 24% -10%, rgba(111,224,169,0.19) 0%, rgba(90,201,148,0.056) 40%, rgba(90,201,148,0) 66%), " +
-  "radial-gradient(90% 60% at 50% 118%, rgba(18,65,67,0.44) 0%, rgba(18,65,67,0) 70%), " +
-  "linear-gradient(164deg, #0e2c37 0%, #0d1420 68%)";
-
 export default async function CareersPage() {
   const [values, roles] = await Promise.all([getCareerValues(), getJobs()]);
+  const slots = roles.reduce((total, role) => total + role.slots, 0);
 
   return (
     <>
-      <PageSection className="pb-6 pt-44">
-        <PageHero
-          eyebrow="— Careers"
-          title={
-            <>
-              Work on something a whole <Emphasis>country uses</Emphasis>
-            </>
-          }
-          lead="We hire engineers, designers and communicators who want their work in the hands of every citizen in Bhutan."
-          leadWidth={600}
-        />
+      {/* The hero centres, which no other page here does. It earns it: there is
+          no product shot to sit beside, and the collage below wants the axis. */}
+      <PageSection className="pb-0 pt-40 text-center">
+        <div className="mx-auto max-w-[880px]">
+          <h1 className="font-display text-[clamp(38px,5.6vw,64px)] font-semibold leading-[1.04] tracking-[-0.035em] text-strong [text-wrap:balance]">
+            {/* The article and its noun stay on one line: balanced wrapping
+                strands "a" at the end of a line on a phone otherwise. */}
+            Come and do the work a&nbsp;country&nbsp;remembers
+          </h1>
+          <p className="mx-auto mt-6 max-w-[62ch] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
+            Bhutan NDI is built by a small team in Thimphu whose work ends up in the hands of
+            everyone in the country. We hire engineers, designers and communicators who want that
+            kind of proximity between what they make and who uses it.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <GradientButton href="#openings">
+              See open positions
+              <Icon name="arrowRight" size={16} strokeWidth={2} />
+            </GradientButton>
+            <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
+              {roles.length} roles · {slots} positions
+            </span>
+          </div>
+        </div>
+      </PageSection>
 
-        <Reveal className="mt-14 grid grid-cols-1 gap-4 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4">
+      {/* Wider than the 1200px shell every other section sits in, and clipped
+          at the window rather than at a gutter: the outermost tiles are meant
+          to run off both edges, so the picture continues past the page. */}
+      <div className="mt-14 overflow-hidden">
+        <div className="mx-auto w-full max-w-[1560px] px-5 min-[761px]:px-0">
+          <HeroCollage />
+        </div>
+      </div>
+
+      <PageSection className="pt-20">
+        <Reveal className="grid grid-cols-1 gap-x-10 gap-y-9 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4">
           {values.map((value) => (
-            <div
-              key={value.id}
-              className="ndi-spot rounded-2xl border border-grid bg-white/[0.02] p-6"
-            >
-              <div className="ndi-spot-halo" />
-              <div className="ndi-spot-fill" />
-              <div className="font-display text-[16.5px] font-semibold text-strong">
+            /* Not cards. Four short statements under a rule reads as a list of
+               claims the team is making, which is what these are. */
+            <div key={value.id} className="border-t border-grid pt-4">
+              <div className="font-display text-[16.5px] font-semibold tracking-[-0.01em] text-strong">
                 {value.title}
               </div>
-              <p className="mt-2 text-[13.5px] leading-[1.6] text-muted">{value.description}</p>
+              <p className="mt-2 text-[13.5px] leading-[1.6] text-muted [text-wrap:pretty]">
+                {value.description}
+              </p>
             </div>
           ))}
         </Reveal>
       </PageSection>
 
-      <PageSection id="careers" className="pb-[104px] pt-14">
-        <Reveal>
-          <SubSectionHeader
-            eyebrow="— Careers"
-            title="Join the team building trust"
-            lead="We hire engineers, designers and communicators who want their work used by a whole country."
-          />
+      <PageSection id="openings" className="scroll-mt-24 pb-[104px] pt-24">
+        <Reveal className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+          <div className="max-w-[600px]">
+            <h2 className="font-display text-[clamp(28px,3.4vw,40px)] font-semibold leading-[1.1] tracking-[-0.03em] text-strong">
+              Open positions
+            </h2>
+            <p className="mt-4 text-[15.5px] leading-[1.62] text-muted">
+              Every vacancy carries its full terms of reference and takes its application on the
+              same page. Nothing goes to an inbox.
+            </p>
+          </div>
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            Thimphu · on site
+          </span>
         </Reveal>
 
-        <Reveal className="mt-9 grid grid-cols-1 gap-3.5 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-3">
-          {roles.map((role) => (
-            <a
-              key={role.id}
-              href={role.href}
-              className="ndi-role-card relative flex min-h-[230px] flex-col gap-3.5 overflow-hidden rounded-2xl p-[26px]"
-              style={{
-                background: ROLE_CARD_BACKGROUND,
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-              }}
-            >
-              <span className="relative font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
-                — {role.department}
-              </span>
-              <div className="relative flex flex-1 flex-col gap-2">
-                <div className="font-display text-[19px] font-semibold leading-[1.22] tracking-[-0.02em] text-strong [text-wrap:pretty]">
-                  {role.title}
-                </div>
-                <p className="text-[13.5px] leading-[1.6] text-muted [text-wrap:pretty]">
-                  {role.summary}
-                </p>
-              </div>
-              <div className="relative flex items-center justify-between gap-3 border-t border-grid pt-3.5">
-                <span className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint">
-                  {role.location}
-                </span>
-                <span className="inline-flex text-accent">
-                  <Icon name="arrowRightLong" size={18} strokeWidth={2} />
-                </span>
-              </div>
-            </a>
-          ))}
-        </Reveal>
+        {roles.length ? (
+          <Reveal
+            delay={0.05}
+            className="mt-9 grid grid-cols-1 gap-3.5 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-3"
+          >
+            {roles.map((role) => (
+              <VacancyCard key={role.id} job={role} />
+            ))}
+          </Reveal>
+        ) : (
+          <Reveal delay={0.05} className="mt-9 border-t border-grid pt-8">
+            <p className="max-w-[54ch] text-[15px] leading-[1.62] text-muted">
+              Nothing is open right now. New vacancies are posted here first, and announced on the
+              newsroom the same day.
+            </p>
+          </Reveal>
+        )}
       </PageSection>
     </>
   );
