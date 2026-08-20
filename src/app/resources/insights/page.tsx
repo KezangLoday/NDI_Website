@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { PageHero, PageSection } from "@/components/layout/PageHero";
-import { InsightsPanel } from "@/components/pages/resources/InsightsPanel";
+import { InsightsIndex } from "@/components/pages/resources/InsightsIndex";
 import { Reveal } from "@/components/ui/Reveal";
 import { getInsights } from "@/content";
 import { resourceSections } from "@/content/resourceSections";
@@ -24,7 +24,7 @@ export default async function InsightsPage() {
 
       <PageSection className="pb-[104px] pt-4">
         <Reveal>
-          <InsightsPanel insights={insights} />
+          <InsightsIndex insights={insights} />
         </Reveal>
       </PageSection>
     </>

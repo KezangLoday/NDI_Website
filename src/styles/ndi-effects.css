@@ -1945,6 +1945,17 @@ select option { background: #101827; color: #e9eef6; }
   }
 }
 
+/* ---- Filter strip on narrow screens -----------------------
+   The tab row is wider than a phone. It scrolls rather than wrapping, since a
+   wrapped row of pills changes height and shifts the grid under it. The bar is
+   hidden because the pills themselves are the affordance. */
+.ndi-tabscroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior-x: contain;
+}
+.ndi-tabscroll::-webkit-scrollbar { display: none; }
+
 /* ---- Story page: inline links and the way back -------------
    The article is running copy on the page rather than in a panel, so its links
    need to read as links without a box to sit in: underlined at a distance from

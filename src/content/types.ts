@@ -253,11 +253,22 @@ export interface Webinar {
 
 export interface Insight {
   id: string;
+  slug: string;
+  /** Which tab this sits under, and the chip shown when the tab is "All". */
+  category: InsightCategory;
+  /** The specific form, e.g. "Research paper" or "Field note". Shown on the card. */
   type: string;
   title: string;
   description: string;
-  href: string;
+  publishedAt: string;
+  image: Media;
+  readingMinutes: number;
+  body?: NewsBlock[];
+  /** Set when the canonical version lives elsewhere, e.g. a journal PDF. */
+  href?: string;
 }
+
+export type InsightCategory = "research" | "case-studies" | "blogs";
 
 /** Collection: `glossary`. */
 export interface GlossaryTerm {
@@ -349,7 +360,11 @@ export interface PressItem {
   category: string;
   title: string;
   publishedAt: string;
+  /** Always the outlet's own page. This collection has no detail route: the
+   *  point of press coverage is to read it where it was published. */
   href: string;
+  excerpt: string;
+  image: Media;
   /** Not present in the design, but a real press page needs it. */
   outlet?: string;
 }

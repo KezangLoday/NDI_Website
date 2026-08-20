@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Icon } from "@/components/ui/icons";
+import { ArticleCard } from "@/components/pages/resources/ArticleCard";
 import { NewsRow } from "@/components/pages/resources/NewsRow";
 import { Reveal } from "@/components/ui/Reveal";
 import type { NewsItem, ResourceNews } from "@/content/types";
@@ -72,58 +73,24 @@ function LeadStory({ item }: { item: NewsItem }) {
   );
 }
 
-/** An archive card. Stories lead with their photograph, notices with a label. */
+/**
+ * An archive entry as the shared newsroom card.
+ *
+ * Both shapes carry a category and a date; only the story has artwork and a
+ * slug, which is the only place the union needs narrowing.
+ */
 function ArchiveCard({ entry }: { entry: Entry }) {
   const { item } = entry;
-  /* Both shapes carry a category and a date; only the story has artwork and a
-     slug, which is the only place the union needs narrowing. */
-  const href = entry.kind === "story" ? `/resources/news/${entry.item.slug}` : entry.item.href;
-
   return (
-    <Link
-      href={href}
-      data-gov-card="1"
-      className="ndi-news-card group flex flex-col overflow-hidden rounded-2xl border border-grid"
-    >
-      {entry.kind === "story" ? (
-        <div className="ndi-news-shot relative aspect-[16/10] overflow-hidden border-b border-grid">
-          <Image
-            src={mediaUrl(entry.item.image)}
-            alt=""
-            fill
-            sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 360px"
-            className="object-cover"
-          />
-          <span className="ndi-news-chip absolute left-3.5 top-3.5">{item.category}</span>
-        </div>
-      ) : (
-        /* No artwork, and none was ever written for these. The label carries
-           the card instead of a placeholder standing in for a photograph. */
-        <div className="ndi-news-plate relative flex aspect-[16/10] items-end border-b border-grid p-5">
-          <span className="font-display text-[26px] font-semibold leading-[1.1] tracking-[-0.03em] text-strong/70">
-            {item.category}
-          </span>
-        </div>
-      )}
-
-      <div className="flex flex-1 flex-col p-5">
-        <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-faint">
-          {formatNewsDate(item.publishedAt)}
-        </span>
-        <h3 className="ndi-news-title mt-2.5 font-display text-[16.5px] font-semibold leading-[1.3] tracking-[-0.02em] text-strong [text-wrap:balance]">
-          {item.title}
-        </h3>
-        {item.excerpt ? (
-          <p className="mt-2.5 text-[13.5px] leading-[1.6] text-muted [text-wrap:pretty]">
-            {item.excerpt}
-          </p>
-        ) : null}
-        <span className="ndi-tut mt-auto inline-flex items-center gap-2 pt-4 font-mono text-[9.5px] uppercase tracking-[0.16em] text-accent">
-          Read more
-          <Icon name="arrowRight" size={13} strokeWidth={2} />
-        </span>
-      </div>
-    </Link>
+    <ArticleCard
+      href={entry.kind === "story" ? `/resources/news/${entry.item.slug}` : entry.item.href}
+      external={entry.kind !== "story"}
+      category={item.category}
+      title={item.title}
+      publishedAt={item.publishedAt}
+      excerpt={item.excerpt}
+      image={entry.kind === "story" ? entry.item.image : undefined}
+    />
   );
 }
 

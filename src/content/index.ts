@@ -149,6 +149,10 @@ export async function getInsights(): Promise<Insight[]> {
   return insights;
 }
 
+export async function getInsightBySlug(slug: string): Promise<Insight | undefined> {
+  return insights.find((item) => item.slug === slug);
+}
+
 export async function getOrgServices(): Promise<OrgService[]> {
   return orgServices;
 }

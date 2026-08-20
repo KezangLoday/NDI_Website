@@ -1,16 +1,25 @@
 import type { Metadata } from "next";
 
 import { PageHero, PageSection, Emphasis } from "@/components/layout/PageHero";
+import { ArticleCard } from "@/components/pages/resources/ArticleCard";
 import { Reveal } from "@/components/ui/Reveal";
-import { Icon } from "@/components/ui/icons";
 import { getPress } from "@/content";
 
 export const metadata: Metadata = {
   title: "Media Coverage — Bhutan NDI",
   description:
-    "Reporting, interviews and features on Bhutan's national digital identity — at home and internationally.",
+    "Reporting, interviews and features on Bhutan's national digital identity, at home and internationally.",
 };
 
+/**
+ * Press coverage, on the newsroom card.
+ *
+ * Every card leaves the site. There is no detail route here and there should
+ * not be: the article belongs to the outlet that published it, and a local page
+ * restating someone else's reporting would be both redundant and presumptuous.
+ * The card says what was written and hands the reader to the source, which is
+ * why the link carries the outbound arrow rather than "read more".
+ */
 export default async function MediaCoveragePage() {
   const items = await getPress();
 
@@ -24,51 +33,31 @@ export default async function MediaCoveragePage() {
               Bhutan NDI in the <Emphasis>press</Emphasis>
             </>
           }
-          lead="Reporting, interviews and features on Bhutan's national digital identity — at home and internationally."
+          lead="Reporting, interviews and features on Bhutan's national digital identity, at home and internationally."
           leadWidth={600}
         />
       </PageSection>
 
       <PageSection id="media" className="pb-[104px] pt-8">
-        <Reveal
-          data-ndi-2col="1"
-          className="mt-2 grid grid-cols-1 gap-3.5 min-[901px]:grid-cols-2"
-        >
+        <Reveal className="grid grid-cols-1 gap-5 min-[701px]:grid-cols-2 min-[1101px]:grid-cols-3">
           {items.map((item) => (
-            <a
+            <ArticleCard
               key={item.id}
               href={item.href}
-              className="ndi-spot ndi-press-card flex flex-col gap-3.5 rounded-2xl border border-grid p-[26px]"
-              style={{
-                background: "var(--grad-card)",
-                backdropFilter: "blur(18px)",
-                WebkitBackdropFilter: "blur(18px)",
-                boxShadow: "var(--inset-top)",
-              }}
-            >
-              <div className="ndi-spot-halo" />
-              <div className="ndi-spot-fill" />
-              <div className="flex items-center justify-between gap-4">
-                <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
-                  {item.category}
-                </span>
-                <span className="text-faint">
-                  <Icon name="arrowUpRight" size={16} strokeWidth={2} />
-                </span>
-              </div>
-              <div className="font-display text-[19px] font-semibold leading-[1.24] tracking-[-0.02em] text-strong">
-                {item.title}
-              </div>
-              <div className="font-mono text-[10.5px] tracking-[0.14em] text-faint">
-                {item.publishedAt}
-              </div>
-            </a>
+              external
+              ctaLabel="View coverage"
+              category={item.category}
+              title={item.title}
+              publishedAt={item.publishedAt}
+              excerpt={item.excerpt}
+              image={item.image}
+            />
           ))}
         </Reveal>
 
-        <div className="mt-[18px] font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint">
-          — Media inquiries:{" "}
-          <a href="mailto:media@bhutanndi.com" className="text-accent">
+        <div className="mt-8 font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint">
+          Media inquiries:{" "}
+          <a href="mailto:media@bhutanndi.com" className="ndi-inline-link">
             media@bhutanndi.com
           </a>
         </div>
