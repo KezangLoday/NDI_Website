@@ -72,15 +72,20 @@ export function InsightsIndex({ insights }: { insights: Insight[] }) {
   return (
     <>
       <div className="flex flex-wrap items-center gap-4">
-        {/* Four tabs measure wider than a phone. They wrap rather than scroll:
-            a scrolling strip cut the first and last tab mid-word at rest, which
-            read as a rendering fault rather than as an invitation to swipe. */}
+        {/* Four tabs on one row at 375px.
+            The width comes from dropping the icon on the inactive tabs: the
+            label is what identifies a filter, and three redundant glyphs cost
+            about 70px that the words needed. The active tab keeps its icon, so
+            the selected filter reads as selected by tint, border and mark
+            together rather than by tint alone.
+            `flex-wrap` stays as the floor: if a longer label ever arrives the
+            row breaks to a second line instead of clipping a word. */}
         <div
           className="ndi-tabwrap w-full min-[901px]:w-auto min-[901px]:flex-none"
           style={{ opacity: searching ? 0.45 : 1, transition: "opacity 0.22s var(--ease-out)" }}
         >
         <div
-          className="flex flex-wrap items-center gap-1 rounded-xl border border-grid bg-white/[0.02] p-1 min-[901px]:inline-flex min-[901px]:h-12 min-[901px]:flex-nowrap"
+          className="flex flex-wrap items-center gap-0.5 rounded-xl border border-grid bg-white/[0.02] p-1 min-[641px]:gap-1 min-[901px]:inline-flex min-[901px]:h-12 min-[901px]:flex-nowrap"
           role="tablist"
           aria-label="Publication type"
         >
@@ -96,9 +101,17 @@ export function InsightsIndex({ insights }: { insights: Insight[] }) {
                 setTab(entry.id);
                 setQuery("");
               }}
-              className="inline-flex h-10 flex-none cursor-pointer items-center gap-2 rounded-[9px] border border-transparent bg-transparent px-3.5 font-display text-[14px] font-semibold text-muted transition-[background,color,border-color] duration-[220ms] min-[901px]:h-full min-[901px]:px-4 min-[901px]:text-[14.5px]"
+              className="inline-flex h-11 flex-none cursor-pointer items-center gap-1.5 rounded-[9px] border border-transparent bg-transparent px-2.5 font-display text-[13.5px] font-semibold text-muted transition-[background,color,border-color] duration-[220ms] min-[641px]:gap-2 min-[641px]:px-3.5 min-[641px]:text-[14px] min-[901px]:h-full min-[901px]:px-4 min-[901px]:text-[14.5px]"
             >
-              <Icon name={entry.icon} size={15} />
+              {/* Shown on the selected tab at every width, and on all four once
+                  there is room for them. */}
+              {tab === entry.id ? (
+                <Icon name={entry.icon} size={15} />
+              ) : (
+                <span className="hidden min-[901px]:inline-flex">
+                  <Icon name={entry.icon} size={15} />
+                </span>
+              )}
               {entry.label}
             </button>
           ))}

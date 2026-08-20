@@ -337,7 +337,7 @@ export function SiteHeader() {
           transform: `translateY(${mobileOpen ? "0" : "-8px"})`,
         }}
       >
-        <nav className="flex flex-col px-5 pb-12 pt-1" aria-label="Mobile">
+        <nav className="ndi-menu-scroll flex flex-col px-5" aria-label="Mobile">
           {mobilePrimary.map((link) => {
             const isActive = link.navKey
               ? activeKey === link.navKey

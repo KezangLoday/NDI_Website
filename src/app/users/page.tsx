@@ -105,20 +105,22 @@ export default async function UsersPage() {
           /* The desktop row needs about 825px for three stats at a 150px gap, so
              it wraps to two lines on a tablet. Three across holds until the
              desktop layout actually fits. */
-          className="mt-14 grid grid-cols-3 items-start gap-x-4 text-center min-[901px]:mt-[100px] min-[901px]:flex min-[901px]:flex-wrap min-[901px]:justify-center min-[901px]:gap-x-[150px] min-[901px]:gap-y-10 min-[901px]:text-left"
+          /* The row reaches past the section gutter on a phone and closes the
+             column gap to 8px. "0 passwords" needs about 100px to hold one
+             line, and the default gutter plus a 16px gap left only 101px, so it
+             broke. Pulling 12px off each side and halving the gap buys the
+             width instead of shrinking the number to nothing. */
+          className="-mx-3 mt-14 grid grid-cols-3 items-start gap-x-2 text-center min-[641px]:mx-0 min-[641px]:gap-x-4 min-[901px]:mt-[100px] min-[901px]:flex min-[901px]:flex-wrap min-[901px]:justify-center min-[901px]:gap-x-[150px] min-[901px]:gap-y-10 min-[901px]:text-left"
         >
           {stats.map((stat) => (
             <div key={stat.id}>
-              {/* Two of the three values are two words ("1 wallet",
-                  "0 passwords") and cannot hold one line in a third of a phone.
-                  Rather than shrink the number until they do, the box reserves
-                  the second line so every label starts at the same height. Left
-                  to wrap freely, the third column pushed its label down and the
-                  row read as broken. */}
-              <div className="min-h-[2.25em] font-display text-[clamp(19px,5.2vw,30px)] font-semibold leading-[1.12] tracking-[-0.02em] text-strong min-[901px]:min-h-0 min-[901px]:text-[34px] min-[901px]:leading-normal">
+              {/* One line each, so the three read as one set. Two of the values
+                  are two words, so the type comes down and `nowrap` holds them
+                  together; the row above found the width to make that fit. */}
+              <div className="whitespace-nowrap font-display text-[clamp(15px,4.2vw,30px)] font-semibold leading-[1.15] tracking-[-0.03em] text-strong min-[641px]:tracking-[-0.02em] min-[901px]:text-[34px]">
                 {stat.value}
               </div>
-              <div className="mt-1.5 font-mono text-[9px] uppercase leading-[1.35] tracking-[0.1em] text-faint min-[641px]:text-[10.5px] min-[901px]:mt-2 min-[901px]:text-[11.5px] min-[901px]:tracking-[0.16em]">
+              <div className="mt-1.5 font-mono text-[8.5px] uppercase leading-[1.35] tracking-[0.08em] text-faint min-[641px]:text-[10.5px] min-[641px]:tracking-[0.1em] min-[901px]:mt-2 min-[901px]:text-[11.5px] min-[901px]:tracking-[0.16em]">
                 {stat.label}
               </div>
             </div>

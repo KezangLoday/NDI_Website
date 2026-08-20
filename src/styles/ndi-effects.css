@@ -51,6 +51,13 @@
   -webkit-text-fill-color: transparent;
   animation: ndiWave 6.5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
 }
+/* A one-word emphasis needs the ramp pulled in, or it shows a single flat
+   band of the gradient rather than the sweep. Still wider than the span, so
+   the shimmer has somewhere to travel. */
+.ndi-wave-tight {
+  background-size: 138% 100%;
+}
+
 .ndi-rotator {
   opacity: 0;
   transform: translateY(115%);
@@ -1114,30 +1121,53 @@
   transition: opacity 0.28s var(--ease-out), visibility 0s linear 0s;
 }
 .ndi-menu-panel {
-  /* Full bleed under the bar, not a card.
-     The rows are the design's own format: a large label, a hairline under it,
-     edge to edge. Wrapped in a rounded bordered panel they became a floating
-     sheet and the rules stopped reading as rules. Derived from the header's box
-     (16px inset, 64px tall) so the two never drift apart. */
+  /* Full screen, behind the bar.
+     It used to start under the header and stop at the layout viewport, so on a
+     phone it read as a panel with a visible bottom edge floating above the
+     browser chrome. It now covers the whole viewport: the bar sits on top of it
+     (z-60 against z-56), and the rows are padded clear of it instead of the
+     panel starting below it.
+
+     Height is 100dvh so it tracks the visual viewport as the browser's toolbars
+     collapse; with `inset: 0` alone the last rows hid behind the address bar.
+     Derived from the header's box (16px inset, 64px tall) so the two never
+     drift apart. */
   --ndi-header-inset: 16px;
   --ndi-header-height: 64px;
   position: fixed;
   left: 0;
   right: 0;
-  top: calc(var(--ndi-header-inset) + var(--ndi-header-height) + 8px);
-  bottom: 0;
+  top: 0;
+  height: 100dvh;
   z-index: 56;
   overflow-y: auto;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0)),
-    rgba(11, 15, 24, 0.97);
+    rgba(11, 15, 24, 0.985);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   transition:
     opacity 0.26s var(--ease-out),
     transform 0.26s var(--ease-out),
     visibility 0s linear 0s;
+}
+
+/* The rows clear the bar at the top and the browser's own chrome at the foot.
+   The bottom fade says the list continues rather than ending in a hard cut. */
+.ndi-menu-scroll {
+  padding-top: calc(var(--ndi-header-inset) + var(--ndi-header-height) + 14px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 88px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 56px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 56px), transparent 100%);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .ndi-menu-panel {
+    background: #0b0f18;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 .ndi-menu-label {

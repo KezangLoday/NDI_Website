@@ -30,7 +30,7 @@ export default async function MediaCoveragePage() {
           eyebrow="— Media coverage"
           title={
             <>
-              Bhutan NDI in the <Emphasis>press</Emphasis>
+              Bhutan NDI in the <Emphasis tight>press</Emphasis>
             </>
           }
           lead="Reporting, interviews and features on Bhutan's national digital identity, at home and internationally."

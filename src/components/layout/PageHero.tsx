@@ -4,8 +4,23 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 
 /** The animated mint gradient applied to the emphasised words in a heading. */
-export function Emphasis({ children }: { children: ReactNode }) {
-  return <span className="ndi-wave-text">{children}</span>;
+export function Emphasis({
+  children,
+  tight = false,
+}: {
+  children: ReactNode;
+  /**
+   * Compresses the gradient for a short phrase.
+   *
+   * The ramp is sized to the span, so a one-word emphasis shows only a sliver
+   * of it and reads as flat mint: "press" is 87px wide against a 220% ramp,
+   * where "country remembers" has the room to travel the whole way. Tight
+   * pulls the ramp in so the full sweep lands inside the word, keeping enough
+   * overflow for the shimmer to still move.
+   */
+  tight?: boolean;
+}) {
+  return <span className={tight ? "ndi-wave-text ndi-wave-tight" : "ndi-wave-text"}>{children}</span>;
 }
 
 /**
