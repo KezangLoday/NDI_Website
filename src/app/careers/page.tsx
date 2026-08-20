@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import { PageSection } from "@/components/layout/PageHero";
+import { Emphasis, PageSection } from "@/components/layout/PageHero";
+import { Eyebrow } from "@/components/ui/SectionHeader";
 import { HeroCollage } from "@/components/pages/careers/HeroCollage";
 import { VacancyCard } from "@/components/pages/careers/VacancyCard";
 import { GradientButton } from "@/components/ui/GradientButton";
@@ -23,10 +24,14 @@ export default async function CareersPage() {
           no product shot to sit beside, and the collage below wants the axis. */}
       <PageSection className="pb-0 pt-40 text-center">
         <div className="mx-auto max-w-[880px]">
-          <h1 className="font-display text-[clamp(38px,5.6vw,64px)] font-semibold leading-[1.04] tracking-[-0.035em] text-strong [text-wrap:balance]">
+          {/* Every other page labels itself before the headline; this one opened
+              cold. */}
+          <Eyebrow>— Careers</Eyebrow>
+          <h1 className="mt-5 font-display text-[clamp(38px,5.6vw,64px)] font-semibold leading-[1.04] tracking-[-0.035em] text-strong [text-wrap:balance]">
             {/* The article and its noun stay on one line: balanced wrapping
                 strands "a" at the end of a line on a phone otherwise. */}
-            Come and do the work a&nbsp;country&nbsp;remembers
+            Come and do the work a&nbsp;
+            <Emphasis>country&nbsp;remembers</Emphasis>
           </h1>
           <p className="mx-auto mt-6 max-w-[62ch] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
             Bhutan NDI is built by a small team in Thimphu whose work ends up in the hands of

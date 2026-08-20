@@ -1841,16 +1841,12 @@ select option { background: #101827; color: #e9eef6; }
   }
 }
 
-/* ---- Filter strip on narrow screens -----------------------
-   The tab row is wider than a phone. It scrolls rather than wrapping, since a
-   wrapped row of pills changes height and shifts the grid under it. The bar is
-   hidden because the pills themselves are the affordance. */
-.ndi-tabscroll {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  overscroll-behavior-x: contain;
-}
-.ndi-tabscroll::-webkit-scrollbar { display: none; }
+/* ---- Filter strip ----------------------------------------
+   The tabs wrap on a phone rather than scrolling. A scrolling strip left the
+   first and last tab sliced in half at rest, which reads as a broken render
+   rather than as something to swipe; a taller wrapped block is honest about
+   how many filters there are. */
+.ndi-tabwrap { min-width: 0; }
 
 /* ---- Story page: inline links and the way back -------------
    The article is running copy on the page rather than in a panel, so its links

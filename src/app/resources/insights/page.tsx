@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { HeroTitle } from "@/components/layout/HeroTitle";
 import { PageHero, PageSection } from "@/components/layout/PageHero";
 import { InsightsIndex } from "@/components/pages/resources/InsightsIndex";
 import { Reveal } from "@/components/ui/Reveal";
@@ -19,7 +20,13 @@ export default async function InsightsPage() {
   return (
     <>
       <PageSection className="pb-6 pt-44">
-        <PageHero eyebrow={section.eyebrow} title={section.title} lead={section.description} />
+        <PageHero
+          eyebrow={section.eyebrow}
+          /* The emphasised phrase carries the gradient the other subpage heroes
+             use; these three were plain white while every sibling had it. */
+          title={<HeroTitle title={section.title} emphasis={section.emphasis} />}
+          lead={section.lead}
+        />
       </PageSection>
 
       <PageSection className="pb-[104px] pt-4">

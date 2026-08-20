@@ -72,14 +72,15 @@ export function InsightsIndex({ insights }: { insights: Insight[] }) {
   return (
     <>
       <div className="flex flex-wrap items-center gap-4">
-        {/* Four tabs measure wider than a phone, and the strip must not be
-            allowed to push the page sideways, so it scrolls on its own. */}
+        {/* Four tabs measure wider than a phone. They wrap rather than scroll:
+            a scrolling strip cut the first and last tab mid-word at rest, which
+            read as a rendering fault rather than as an invitation to swipe. */}
         <div
-          className="ndi-tabscroll -mx-1 max-w-full flex-none overflow-x-auto px-1"
+          className="ndi-tabwrap w-full min-[901px]:w-auto min-[901px]:flex-none"
           style={{ opacity: searching ? 0.45 : 1, transition: "opacity 0.22s var(--ease-out)" }}
         >
         <div
-          className="inline-flex h-12 items-center gap-1 rounded-xl border border-grid bg-white/[0.02] p-1"
+          className="flex flex-wrap items-center gap-1 rounded-xl border border-grid bg-white/[0.02] p-1 min-[901px]:inline-flex min-[901px]:h-12 min-[901px]:flex-nowrap"
           role="tablist"
           aria-label="Publication type"
         >
@@ -95,7 +96,7 @@ export function InsightsIndex({ insights }: { insights: Insight[] }) {
                 setTab(entry.id);
                 setQuery("");
               }}
-              className="inline-flex h-full flex-none cursor-pointer items-center gap-2 rounded-[9px] border border-transparent bg-transparent px-4 font-display text-[14.5px] font-semibold text-muted transition-[background,color,border-color] duration-[220ms]"
+              className="inline-flex h-10 flex-none cursor-pointer items-center gap-2 rounded-[9px] border border-transparent bg-transparent px-3.5 font-display text-[14px] font-semibold text-muted transition-[background,color,border-color] duration-[220ms] min-[901px]:h-full min-[901px]:px-4 min-[901px]:text-[14.5px]"
             >
               <Icon name={entry.icon} size={15} />
               {entry.label}
