@@ -81,11 +81,17 @@ export function InsightsIndex({ insights }: { insights: Insight[] }) {
             `flex-wrap` stays as the floor: if a longer label ever arrives the
             row breaks to a second line instead of clipping a word. */}
         <div
-          className="ndi-tabwrap w-full min-[901px]:w-auto min-[901px]:flex-none"
+          className="ndi-tabwrap w-full min-[641px]:w-auto min-[641px]:flex-none"
           style={{ opacity: searching ? 0.45 : 1, transition: "opacity 0.22s var(--ease-out)" }}
         >
         <div
-          className="flex flex-wrap items-center gap-0.5 rounded-xl border border-grid bg-white/[0.02] p-1 min-[641px]:gap-1 min-[901px]:inline-flex min-[901px]:h-12 min-[901px]:flex-nowrap"
+          /* Phones only distribute. At 375px the four tabs very nearly fill
+                 the row, so sizing them to content bunched them left behind 33px
+                 of dead space; the spare width belongs in the gaps. From 641px
+                 the control goes inline and hugs its tabs instead: distributing
+                 there pushed them 117px apart, which stops reading as one
+                 control. */
+              className="flex flex-wrap items-center justify-between gap-0.5 rounded-xl border border-grid bg-white/[0.02] p-1 min-[641px]:inline-flex min-[641px]:flex-nowrap min-[641px]:justify-start min-[641px]:gap-1 min-[901px]:h-12"
           role="tablist"
           aria-label="Publication type"
         >
@@ -103,12 +109,14 @@ export function InsightsIndex({ insights }: { insights: Insight[] }) {
               }}
               className="inline-flex h-11 flex-none cursor-pointer items-center gap-1.5 rounded-[9px] border border-transparent bg-transparent px-2.5 font-display text-[13.5px] font-semibold text-muted transition-[background,color,border-color] duration-[220ms] min-[641px]:gap-2 min-[641px]:px-3.5 min-[641px]:text-[14px] min-[901px]:h-full min-[901px]:px-4 min-[901px]:text-[14.5px]"
             >
-              {/* Shown on the selected tab at every width, and on all four once
-                  there is room for them. */}
+              {/* The selected tab keeps its mark at every width. The other three
+                  drop theirs only on phones, where those glyphs are the 70px
+                  that stands between four tabs and one row; from 641px the
+                  control is content-width and has room for all four. */}
               {tab === entry.id ? (
                 <Icon name={entry.icon} size={15} />
               ) : (
-                <span className="hidden min-[901px]:inline-flex">
+                <span className="hidden min-[641px]:inline-flex">
                   <Icon name={entry.icon} size={15} />
                 </span>
               )}
