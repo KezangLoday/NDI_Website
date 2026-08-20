@@ -1,23 +1,10 @@
-/**
- * CMS accounts.
- *
- * The security-critical detail here is not the collection-level access — it is
- * the field-level rule on `roles`. Any user may edit their own document, which
- * is what makes the account page work; without a field rule, "edit your own
- * document" would include "add superadmin to your own roles", and every other
- * access rule in the CMS would be decoration.
- */
+/** CMS accounts. */
 import type { CollectionConfig, FieldAccess } from "payload";
 
 import { readUsers, ROLE_LABELS, ROLES, superadminOnly, updateUsers } from "../access";
 import { isSuperadmin, type Role } from "../access/roles";
 
-/**
- * Only a superadmin may read or write the roles array.
- *
- * Field access rules receive the same request as collection rules but return a
- * plain boolean — there is no row to constrain, only a column to allow or deny.
- */
+/** Only a superadmin may read or write the roles array. */
 const superadminField: FieldAccess = ({ req }) => {
   const user = req.user;
   if (!user || typeof user !== "object" || !("roles" in user)) return false;
@@ -28,16 +15,9 @@ const superadminField: FieldAccess = ({ req }) => {
 export const Users: CollectionConfig = {
   slug: "users",
   auth: {
-    /**
-     * Tokens last a working day. Long enough that an editor is not signed out
-     * mid-article, short enough that a session left open on a shared machine
-     * does not stay valid overnight.
-     */
+    /** Tokens last a working day. */
     tokenExpiration: 60 * 60 * 8,
-    /**
-     * Five attempts, then a ten-minute lock. This is the only endpoint in the
-     * CMS an unauthenticated stranger can usefully hammer.
-     */
+    /** Five attempts, then a ten-minute lock. */
     maxLoginAttempts: 5,
     lockTime: 10 * 60 * 1000,
   },

@@ -1,25 +1,4 @@
-/**
- * Seeds the CMS with the content the site was built against.
- *
- * The requirements ask for a seed mechanism for the configurable categories.
- * This does that, and then goes further and seeds the content too, because the
- * alternative is handing over a CMS whose every page renders an empty state —
- * which is a poor way to evaluate whether the CMS works, and a poor first
- * afternoon for whoever has to fill it.
- *
- * Three properties worth knowing about:
- *
- *  - **Idempotent.** Every step looks for the document before creating it, and
- *    skips it if it is there. Running the seed twice is a no-op, which matters
- *    because the second run is usually someone adding a step to it.
- *  - **Never destructive.** Nothing here deletes or overwrites. A seed that
- *    truncates tables is one keystroke away from being run against production.
- *    Editors' changes survive a re-run; the price is that a fixture edited in
- *    the fixture file will not update a document already created from it.
- *  - **Published.** Seeded content is published, not draft, because the point is
- *    a site that renders. The one thing left as a draft would be a lie about
- *    what the seed did.
- */
+/** Seeds the CMS with the content the site was built against. */
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -84,15 +63,7 @@ export async function seed(payload: Payload): Promise<SeedReport> {
 
 /* ---- Users ------------------------------------------------------ */
 
-/**
- * The first superadmin, plus one HR and one PR account.
- *
- * The two role accounts exist so the permission model can be seen working
- * without anyone hand-building users first — sign in as the HR account and the
- * newsroom is not there. They share the superadmin's password from the
- * environment, which is fine for a development seed and is exactly why the
- * README says to change all three before anyone else has the URL.
- */
+/** The first superadmin, plus one HR and one PR account. */
 async function seedUsers(payload: Payload, tally: Tally): Promise<void> {
   const { email, password } = seedSuperadmin();
 
@@ -190,19 +161,7 @@ async function seedCategories(payload: Payload, tally: Tally): Promise<CategoryI
   return index;
 }
 
-/**
- * Resolves an editorial label to a category id.
- *
- * The category is a required field on every collection that has one, so this has
- * to return an id. A label with no matching record falls back to the first
- * category in that taxonomy and warns — one mislabelled fixture should not stop
- * the other forty being seeded, and a warning naming the label is precise enough
- * to fix in the admin panel afterwards.
- *
- * Throws only if the taxonomy has no categories at all, which would mean
- * `SEED_CATEGORIES` and the fixtures had diverged badly enough that carrying on
- * would produce nonsense.
- */
+/** Resolves an editorial label to a category id. */
 function categoryId(
   index: CategoryIndex,
   taxonomy: Taxonomy,
@@ -230,19 +189,7 @@ function categoryId(
 /** Maps a `/media/...` path from the fixtures to the created upload's id. */
 type MediaIndex = Map<string, number>;
 
-/**
- * Uploads the images the fixtures reference from `public/`.
- *
- * Read off disk and pushed through `payload.create` with a `file`, which means
- * they go through the real upload path — the optimisation pipeline runs, the
- * `imageSizes` variants are generated, and the storage adapter in force writes
- * them wherever it writes things. So the seed also exercises the whole media
- * pipeline, which is a useful thing for it to do.
- *
- * A missing file is a warning, not a failure. These fixtures reference artwork
- * recovered from a design tool, and a checkout without it should still get a
- * working CMS with text content and no pictures.
- */
+/** Uploads the images the fixtures reference from `public/`. */
 async function seedMedia(payload: Payload, tally: Tally): Promise<MediaIndex> {
   const index: MediaIndex = new Map();
   const wanted = collectMediaReferences();
@@ -276,13 +223,7 @@ async function seedMedia(payload: Payload, tally: Tally): Promise<MediaIndex> {
     const created = await payload.create({
       collection: "media",
       data: {
-        /*
-         * `alt` is required, and some fixtures carry an empty one on purpose —
-         * artwork that sits beside a heading which already names it, where a
-         * described image would be read out twice. A single space is the
-         * conventional way to say "deliberately decorative" rather than
-         * "forgotten", and it is what the collection's own guidance asks for.
-         */
+        /* `alt` is required, and some fixtures carry an empty one on purpose. */
         alt: asset.alt.trim().length > 0 ? asset.alt : " ",
       },
       file: {
@@ -300,13 +241,7 @@ async function seedMedia(payload: Payload, tally: Tally): Promise<MediaIndex> {
   return index;
 }
 
-/**
- * The filename without its extension.
- *
- * Payload rewrites the stored filename — the optimisation pipeline converts a
- * PNG to WebP, and a collision gets a numeric suffix — so a lookup by exact
- * filename would never match on a second run. The stem is what survives.
- */
+/** The filename without its extension. */
 function stemOf(filename: string): string {
   const dot = filename.lastIndexOf(".");
   return dot > 0 ? filename.slice(0, dot) : filename;
@@ -384,8 +319,7 @@ async function seedNews(
         image: mediaIds.get(item.image.url) ?? null,
         body: blocksToLexical(item.body),
         popularRank: item.popularRank ?? null,
-        /* The newest story leads the newsroom unless an editor says otherwise;
-           the seed does not pick a favourite. */
+        /* The newest story leads the newsroom unless an editor says otherwise; the seed does not pick a favourite. */
         featured: false,
         source:
           item.href && item.href !== "#"
@@ -416,17 +350,11 @@ async function seedNews(
         format: "notice",
         title: item.title,
         slug,
-        /*
-         * The fixtures leave most notices without a standfirst; the field is
-         * required, so the title stands in. That is honest — a one-line notice
-         * genuinely has no summary distinct from its headline — and an editor
-         * replaces it when there is more to say.
-         */
+        /* The fixtures leave most notices without a standfirst; the field is required, so the title stands in. */
         excerpt: item.excerpt ?? item.title,
         publishedAt: item.publishedAt,
         category: categoryId(categories, "news", item.category, tally),
-        /* `#` in the fixtures means "no destination supplied", which becomes a
-           notice with its own page rather than a link to nowhere. */
+        /* `#` in the fixtures means "no destination supplied", which becomes a notice with its own page rather than a link to nowhere. */
         externalUrl: item.href && item.href !== "#" ? item.href : null,
         _status: "published",
       },
@@ -482,14 +410,7 @@ async function seedWebinars(
   }
 }
 
-/**
- * `"2026-08-21 · 14:00 BTT"` to an ISO timestamp.
- *
- * The fixtures store the session time as the string the design printed. Bhutan
- * is UTC+6, so the wall-clock time is shifted back to UTC on the way in — which
- * is what makes the frontend's formatter print the same wall-clock time back
- * out.
- */
+/** `"2026-08-21 · 14:00 BTT"` to an ISO timestamp. */
 function parseSessionTime(when: string | undefined): string | undefined {
   if (!when) return undefined;
   const match = /(\d{4})-(\d{2})-(\d{2}).*?(\d{2}):(\d{2})/.exec(when);
@@ -561,11 +482,7 @@ async function seedGlossary(payload: Payload, tally: Tally): Promise<void> {
 }
 
 async function seedFaqs(payload: Payload, tally: Tally, categories: CategoryIndex): Promise<void> {
-  /*
-   * FAQs have no slug, so existence is checked on the question. That is the
-   * right key: two FAQs with the same question are a duplicate whatever else
-   * differs between them.
-   */
+  /* FAQs have no slug, so existence is checked on the question. */
   let order = 0;
   for (const faq of faqs) {
     order += 10;
@@ -663,11 +580,7 @@ async function seedJobs(payload: Payload, tally: Tally): Promise<void> {
         postedAt: job.postedAt,
         closesAt: job.closesAt,
         recruitmentStatus: "open",
-        /*
-         * The eligibility clauses in these fixtures name Class X, Class XII and
-         * a degree, so the document requirements match — which is the point of
-         * the requirement being per-job rather than global.
-         */
+        /* The eligibility clauses in these fixtures name Class X, Class XII and a degree, so the document requirements match. */
         requiredDocuments: ["cv", "class-10", "class-12", "higher-education"],
         optionalDocuments: ["cover-letter", "experience"],
         allowResubmission: true,
@@ -693,11 +606,7 @@ async function seedMediaCoverage(
       continue;
     }
 
-    /*
-     * `url` is required and validated, so a fixture without a real destination
-     * cannot be seeded. Warning and skipping is right — inventing a URL would
-     * put a broken link on a public page.
-     */
+    /* `url` is required and validated, so a fixture without a real destination cannot be seeded. */
     if (!item.href || item.href === "#" || !/^https?:\/\//.test(item.href)) {
       tally.warn(`Media coverage “${item.title}” has no external URL; skipped.`);
       continue;
@@ -722,13 +631,7 @@ async function seedMediaCoverage(
   }
 }
 
-/**
- * Points the upcoming-event card at the seeded upcoming session.
- *
- * Explicitly, rather than leaving it to the fallback, so the global's own
- * mechanism is exercised — and so an editor opening it sees what a configured
- * card looks like rather than an empty field.
- */
+/** Points the upcoming-event card at the seeded upcoming session. */
 async function seedUpcomingEvents(payload: Payload, tally: Tally): Promise<void> {
   const existing = await payload.findGlobal({ slug: "upcoming-events", depth: 0 });
   if (Array.isArray(existing.featured) && existing.featured.length > 0) {

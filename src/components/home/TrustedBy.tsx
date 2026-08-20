@@ -61,11 +61,7 @@ export async function TrustedBy() {
         </p>
       </Reveal>
 
-      {/* The window's fade lives on the tiles now, one slice of it each — see
-          useOrgTileFade. A mask here would make this element a backdrop root
-          and leave the tiles' own glass with nothing to sample, which is what
-          sent the blur out to a pool behind the whole section and into the gaps
-          between the cards. */}
+      {/* The window's fade lives on the tiles now, one slice of it each — see useOrgTileFade. */}
       <div className="relative mx-auto mt-[34px] max-w-[1200px]">
         <OrgTileFade />
         <div

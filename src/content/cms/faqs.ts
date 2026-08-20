@@ -1,10 +1,4 @@
-/**
- * FAQs and their audience tabs.
- *
- * The two audiences the requirements name are seeded category records rather
- * than a union in the code, so a third can be added in the admin panel. The
- * tabs come from the categories that have published questions under them.
- */
+/** FAQs and their audience tabs. */
 import type { Category, Faq as PayloadFaq } from "@/payload-types";
 import type { FaqAudience, FaqItem } from "@/content/types";
 import { getPayloadClient } from "@/payload/lib/client";
@@ -34,14 +28,7 @@ export async function queryFaqs(): Promise<FaqItem[]> {
   return docs.map(toFaqItem);
 }
 
-/**
- * The audience tabs.
- *
- * Read from the FAQ documents' own categories rather than from the `categories`
- * collection, so a category with nothing published under it does not render a
- * tab that opens onto nothing. Ordering follows the category's `order`, which
- * is why the documents are fetched with their categories populated.
- */
+/** The audience tabs. */
 export async function queryFaqAudiences(): Promise<FaqAudience[]> {
   const payload = await getPayloadClient();
   const { docs } = await payload.find({

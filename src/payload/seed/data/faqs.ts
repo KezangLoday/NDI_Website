@@ -1,12 +1,6 @@
 import type { SeedFaq } from "./types";
 
-/**
- * Prospective Payload collection: `faqs` — 26 entries.
- *
- * `audience` drives the two-tab segmented control. The search on the page
- * deliberately spans both tabs, so this is one collection with a facet
- * rather than two separate ones.
- */
+/** Prospective Payload collection: `faqs` — 26 entries. */
 export const faqs: SeedFaq[] = [
   {
     id: "what-is-bhutan-ndi",

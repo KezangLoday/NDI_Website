@@ -1,23 +1,6 @@
 import type { CSSProperties } from "react";
 
-/**
- * The Careers hero collage: photographs of the team, scattered.
- *
- * Bhutan NDI has no team photography yet, so every tile here is a placeholder
- * carrying the shot it is waiting for. The slashed frame is the print
- * convention for exactly that, which is worth more than a grey box: someone in
- * comms can read this page and know what sixteen pictures to go and take.
- *
- * The arrangement is deliberately uneven — mixed crops, small rotations, and
- * tiles running off both edges — because a tidy grid of photographs reads as a
- * stock gallery, and the point of the picture is that these are real people
- * caught mid-week.
- *
- * Positions are percentages inside a fixed-ratio box, so the whole composition
- * scales with the page and nothing has to be measured. Below 760px it falls
- * back to a plain grid of the first six: sixteen tiles across a phone would be
- * postage stamps.
- */
+/** The Careers hero collage: photographs of the team, scattered. */
 
 interface Tile {
   /** Percent of the container. Negative and >100 values bleed off the edge. */
@@ -29,11 +12,7 @@ interface Tile {
   rotate: number;
   /** The photograph this tile is holding space for. */
   caption: string;
-  /**
-   * Runs off the edge of the window in the scattered layout, so its caption is
-   * suppressed there — a clipped half-word reads as a bug. The caption comes
-   * back in the phone grid, where the tile is whole.
-   */
+  /** Runs off the edge of the window in the scattered layout, so its caption is suppressed there — a clipped half-word reads as a bug. */
   bleed?: boolean;
 }
 
@@ -76,8 +55,7 @@ export function HeroCollage() {
           }
         >
           <div className="ndi-collage-pane">
-            {/* preserveAspectRatio="none" lands the diagonals on the corners
-                whatever crop the tile happens to be. */}
+            {/* preserveAspectRatio="none" lands the diagonals on the corners whatever crop the tile happens to be. */}
             <svg
               className="ndi-collage-slash"
               viewBox="0 0 100 100"

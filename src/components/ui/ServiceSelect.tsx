@@ -13,13 +13,7 @@ interface ServiceSelectProps {
   placeholder?: string;
 }
 
-/**
- * The contact form's "Service or product of interest" control.
- *
- * A listbox rather than a native <select>, because the design styles the
- * panel. The prototype was mouse-only; this adds the keyboard and ARIA
- * behaviour a real listbox needs (arrows, Home/End, Enter, Escape).
- */
+/** The contact form's "Service or product of interest" control. */
 export function ServiceSelect({
   options,
   value,
@@ -114,10 +108,7 @@ export function ServiceSelect({
       >
         <span
           className="overflow-hidden text-ellipsis whitespace-nowrap"
-          // The unselected placeholder sits on the raised field fill, which is
-          // lighter than the page, so even the lifted faint token only reaches
-          // 4.02:1 there. Muted clears 5.15:1 and is the right weight for a
-          // placeholder anyway.
+          // The unselected placeholder sits on the raised field fill, which is lighter than the page, so even the lifted faint token only reaches 4.02:1 there.
           style={{ color: value ? "var(--text-strong)" : "var(--text-muted)" }}
         >
           {value || placeholder}

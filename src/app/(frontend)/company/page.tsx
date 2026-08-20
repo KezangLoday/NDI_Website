@@ -14,20 +14,12 @@ export const metadata: Metadata = {
     "Keeping security, privacy, and consent at the heart of Bhutan NDI — our story, vision and mission, and the people building the platform.",
 };
 
-/**
- * Revalidate daily as a floor. Only the team section is CMS-managed; publishing
- * a team member revalidates this route on demand.
- */
+/** Revalidate daily as a floor. */
 export const revalidate = 86_400;
 
 const HERO_PILLS = ["Security", "Privacy", "Consent"];
 
-/**
- * The leading verb of each story bullet, used as its heading.
- *
- * Taken from the copy rather than written fresh: the four bullets already open
- * on a verb, and lifting it gives the grid a heading without inventing one.
- */
+/** The leading verb of each story bullet, used as its heading. */
 const BULLET_KICKERS = ["Empowers", "Allows", "Inspires", "Supports"];
 
 /** Initials stand in until the client supplies a portrait. */
@@ -100,24 +92,19 @@ export default async function CompanyPage() {
 
   return (
     <>
-      {/* ============ HERO ============
-          Centred under a lit arc, with the story photograph carried below the
-          copy as a wide panel rather than squeezed into a second column. */}
-      {/* `data-circuit-hero` puts the Home page's circuit field behind this
-          section — see Atmosphere and measureMask. */}
+      {/* ============ HERO ============ */}
+      {/* Centred under a lit arc, with the story photograph carried below the copy as a wide panel rather than squeezed into a second column. */}
+      {/* `data-circuit-hero` puts the Home page's circuit field behind this section — see Atmosphere and measureMask. */}
       <PageSection
         id="about"
         data-circuit-hero=""
         className="relative pb-[72px] pt-[168px]"
       >
         <Reveal className="relative text-center">
-          {/* The shared eyebrow, not a dotted pill: every other section on the
-              site labels itself with the dash form, and one page wearing a
-              different badge reads as a different site. */}
+          {/* The shared eyebrow, not a dotted pill: every other section on the site labels itself with the dash form, and one page wearing a different badge reads as a different site. */}
           <Eyebrow>— About Bhutan NDI</Eyebrow>
 
-          {/* Two lines, the second in the accent — the move all three
-              references share, and what gives the headline its shape. */}
+          {/* Two lines, the second in the accent — the move all three references share, and what gives the headline its shape. */}
           <h1 className="mx-auto mt-6 max-w-[900px] font-display text-[clamp(38px,5.4vw,62px)] font-semibold leading-[1.06] tracking-[-0.03em] text-strong">
             We enhance and improve
             <br />
@@ -145,9 +132,7 @@ export default async function CompanyPage() {
           </div>
         </Reveal>
 
-        {/* The three facts, divided rather than boxed — the hero has no panel
-            to carry them now, and a bordered band would fight the traces
-            behind it. */}
+        {/* The three facts, divided rather than boxed. */}
         <Reveal
           delay={0.08}
           className="mt-16 grid grid-cols-1 gap-px overflow-hidden min-[641px]:grid-cols-3"
@@ -182,12 +167,7 @@ export default async function CompanyPage() {
           </p>
         </Reveal>
 
-        {/* Thesis: this is prose, and prose needs measure. Four columns gave
-            each sentence roughly 24 characters a line and six lines to fall
-            down, which is unreadable however it is decorated. Full width with a
-            hanging number puts every sentence on two lines at a comfortable
-            measure, and the numerals — set large and faint in the gutter — are
-            what carries the rhythm the columns were trying to supply. */}
+        {/* Thesis: this is prose, and prose needs measure. */}
         <div className="mt-10 flex max-w-[880px] flex-col">
           {story.bullets.map((bullet, index) => (
             <Reveal key={bullet} delay={0.06 * (index + 1)}>
@@ -208,12 +188,8 @@ export default async function CompanyPage() {
         </div>
       </PageSection>
 
-      {/* ============ VISION ============
-          One composition, not three boxes and a caption. The statement is the
-          vision; the three principles are what it rests on, so they sit beside
-          it as a supporting column rather than as equal cards above it. The
-          artwork is the asset here and was being shrunk inside mostly-empty
-          panels — unboxed it can run at a size worth looking at. */}
+      {/* ============ VISION ============ */}
+      {/* One composition, not three boxes and a caption. */}
       <PageSection className="py-14">
         <Reveal className="max-w-[760px]">
           <Eyebrow>— Our vision</Eyebrow>
@@ -226,8 +202,7 @@ export default async function CompanyPage() {
           data-ndi-2col="1"
           className="mt-14 flex flex-col items-start gap-14 min-[901px]:flex-row min-[901px]:items-center min-[901px]:gap-16"
         >
-          {/* flex-none rather than a grid column: a fraction column is far
-              wider than three short labels and left a gulf before the quote. */}
+          {/* flex-none rather than a grid column: a fraction column is far wider than three short labels and left a gulf before the quote. */}
           <div className="flex flex-none flex-col gap-10">
             {vision.map((pillar, index) => (
               <Reveal key={pillar.id} delay={0.06 * (index + 1)}>
@@ -257,12 +232,8 @@ export default async function CompanyPage() {
         </div>
       </PageSection>
 
-      {/* ============ MISSION ============
-          Four declarations, set as declarations. A card each made them look
-          like four comparable products; with the mark beside the sentence and
-          space instead of a border, they read as things the organisation is
-          committing to. No rules either — the story section above already uses
-          those, and repeating them would flatten the two into one texture. */}
+      {/* ============ MISSION ============ */}
+      {/* Four declarations, set as declarations. */}
       <PageSection className="py-14">
         <Reveal className="max-w-[760px]">
           <Eyebrow>— Our mission</Eyebrow>

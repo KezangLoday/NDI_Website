@@ -1,15 +1,4 @@
-/**
- * The categories the CMS starts with.
- *
- * The two FAQ audiences are the only ones the requirements name explicitly, and
- * they are the only ones anything depends on: `FaqBrowser` maps their slugs to
- * icons. The rest are read off the content being seeded, so the site opens with
- * a working set of filters rather than an empty dropdown on every entry form.
- *
- * None of these are hard-coded in the frontend. They are a starting point for
- * an editor to rename, reorder or delete — which is the whole point of them
- * being records.
- */
+/** The categories the CMS starts with. */
 import type { Taxonomy } from "../fields/taxonomy";
 
 export interface SeedCategory {
@@ -36,11 +25,7 @@ export const SEED_CATEGORIES: readonly SeedCategory[] = [
   { taxonomy: "webinar", name: "Wallet walkthrough", slug: "wallet-walkthrough", order: 20 },
   { taxonomy: "webinar", name: "Talk", slug: "talk", order: 30 },
 
-  /*
-   * Insights — the three the index page used to hard-code, with the slugs the
-   * tab icons are keyed to. Renaming one keeps its icon; deleting it removes
-   * the tab, which is correct.
-   */
+  /* Insights — the three the index page used to hard-code, with the slugs the tab icons are keyed to. */
   { taxonomy: "insight", name: "Research", slug: "research", order: 10 },
   { taxonomy: "insight", name: "Case studies", slug: "case-studies", order: 20 },
   { taxonomy: "insight", name: "Blogs", slug: "blogs", order: 30 },
@@ -57,22 +42,11 @@ export const SEED_CATEGORIES: readonly SeedCategory[] = [
   { taxonomy: "media-coverage", name: "Podcast", slug: "podcast", order: 50 },
   { taxonomy: "media-coverage", name: "Report", slug: "report", order: 60 },
 
-  /*
-   * Glossary — one starter grouping. The page does not group terms yet, and the
-   * category is optional on a term, so this exists to be there when it does
-   * rather than to be filled in now.
-   */
+  /* Glossary — one starter grouping. */
   { taxonomy: "glossary", name: "Core concepts", slug: "core-concepts", order: 10 },
 ];
 
-/**
- * Maps an editorial label from the seed fixtures onto a category slug.
- *
- * The fixtures carry display strings — "Public notice", "Case study" — because
- * that is what they render. Slugifying them would work for most and break on
- * the ones where the plural differs ("Case study" → `case-studies`), so the
- * mapping is explicit.
- */
+/** Maps an editorial label from the seed fixtures onto a category slug. */
 export function categorySlugFor(taxonomy: Taxonomy, label: string): string {
   const overrides: Record<string, string> = {
     "case study": "case-studies",

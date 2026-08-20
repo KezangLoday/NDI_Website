@@ -1,16 +1,4 @@
-/**
- * Media Coverage: reporting about Bhutan NDI, published by other people.
- *
- * Every entry links off-site, and there is no detail route — which is a
- * deliberate decision the existing site already made and this preserves. The
- * article belongs to the outlet that published it; a local page restating
- * someone else's reporting would be redundant, and worse, would look like the
- * programme claiming the coverage as its own. The card says what was written and
- * hands the reader to the source.
- *
- * The consequence for the schema is that `url` is required and validated. It is
- * the only thing the card does.
- */
+/** Media Coverage: reporting about Bhutan NDI, published by other people. */
 import type { CollectionConfig } from "payload";
 
 import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
@@ -54,14 +42,7 @@ export const MediaCoverage: CollectionConfig = {
       required: true,
       admin: { description: "The headline as the outlet published it." },
     },
-    /**
-     * A slug, despite there being no detail route.
-     *
-     * It costs a column and it means the entry has a stable, readable
-     * identifier — for a future "/company/media-coverage/…" page, for an
-     * anchor link into the grid, or simply for an editor confirming they are
-     * looking at the right record. Unique, so it can be relied on later.
-     */
+    /** A slug, despite there being no detail route. */
     slugField({ from: "title" }),
     {
       name: "url",

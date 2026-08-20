@@ -9,27 +9,13 @@ export function Emphasis({
   tight = false,
 }: {
   children: ReactNode;
-  /**
-   * Compresses the gradient for a short phrase.
-   *
-   * The ramp is sized to the span, so a one-word emphasis shows only a sliver
-   * of it and reads as flat mint: "press" is 87px wide against a 220% ramp,
-   * where "country remembers" has the room to travel the whole way. Tight
-   * pulls the ramp in so the full sweep lands inside the word, keeping enough
-   * overflow for the shimmer to still move.
-   */
+  /** Compresses the gradient for a short phrase. */
   tight?: boolean;
 }) {
   return <span className={tight ? "ndi-wave-text ndi-wave-tight" : "ndi-wave-text"}>{children}</span>;
 }
 
-/**
- * The hero every subpage opens with: eyebrow, a display heading with one
- * emphasised phrase, and a lead paragraph.
- *
- * The page owns its own <section> and padding, since the design varies the
- * bottom gap per page.
- */
+/** The hero every subpage opens with: eyebrow, a display heading with one emphasised phrase, and a lead paragraph. */
 export function PageHero({
   eyebrow,
   title,
@@ -51,8 +37,7 @@ export function PageHero({
   return (
     <Reveal className="max-w-[820px]">
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      {/* The design keeps the headline's 20px top margin even on Glossary,
-          where there is no eyebrow above it. */}
+      {/* The design keeps the headline's 20px top margin even on Glossary, where there is no eyebrow above it. */}
       <h1
         className="mt-5 font-display font-semibold leading-[1.04] tracking-[-0.03em] text-strong [text-wrap:pretty]"
         style={{ fontSize: size }}
@@ -70,14 +55,7 @@ export function PageHero({
   );
 }
 
-/**
- * Section heading used across the subpages.
- *
- * The design does not run one scale for these: it picks a clamp per section,
- * from 30px flat on Governance up to `clamp(30px, 3.6vw, 44px)` on the Users
- * and Organizations service sections. `size` carries that per-section value, so
- * each call site states the design's own figure.
- */
+/** Section heading used across the subpages. */
 export function SubSectionHeader({
   eyebrow,
   title,

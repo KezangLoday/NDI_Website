@@ -1,14 +1,5 @@
-/* ============================================================
-   Bhutan NDI — signature effects.
-
-   Ported from project/ndi-site.css plus the inline <style> block at the
-   top of project/Bhutan NDI Home.dc.html (the "glass / lens rim" pass).
-
-   These are the pieces with no Tailwind utility equivalent:
-   @property-animated conic-gradient borders, mask-composite lens rims,
-   multi-layer radial masks and cursor-tracked spotlights. Everything
-   else on the page is plain Tailwind.
-   ============================================================ */
+/* ============================================================ */
+/* Bhutan NDI — signature effects. */
 
 /* ---- Keyframes ------------------------------------------- */
 @keyframes ndiFloat {
@@ -51,9 +42,7 @@
   -webkit-text-fill-color: transparent;
   animation: ndiWave 6.5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
 }
-/* A one-word emphasis needs the ramp pulled in, or it shows a single flat
-   band of the gradient rather than the sweep. Still wider than the span, so
-   the shimmer has somewhere to travel. */
+/* A one-word emphasis needs the ramp pulled in, or it shows a single flat band of the gradient rather than the sweep. */
 .ndi-wave-tight {
   background-size: 138% 100%;
 }
@@ -69,10 +58,7 @@
   .ndi-rotator { transition-duration: 0.01ms; }
 }
 
-/* Hero entrance.
-   Driven by CSS animations rather than JS so the content is never left hidden
-   if scripting is slow or unavailable — `backwards` holds the from-state
-   through the delay, and the reduced-motion rule collapses them to a snap. */
+/* Hero entrance. */
 @keyframes ndiHeroIn {
   from { transform: translateY(20px); filter: blur(14px); opacity: 0; }
   to { transform: none; filter: blur(0); opacity: 1; }
@@ -92,17 +78,15 @@
 .ndi-clip {
   animation: ndiClipIn 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.22s backwards;
 }
-/* Reduced motion keeps the stagger's timing but drops the blur and the slide,
-   so the hero still arrives in order without anything moving. */
+/* Reduced motion keeps the stagger's timing but drops the blur and the slide, so the hero still arrives in order without anything moving. */
 @media (prefers-reduced-motion: reduce) {
   .ndi-hero-in,
   .ndi-clip,
   #ndiHeroPhones { animation: none; }
 }
 
-/* ---- Hero layout ------------------------------------------------
-   Kept as raw CSS because the design's hero rules key off viewport
-   *height* as well as width, which Tailwind has no variant for. */
+/* ---- Hero layout ------------------------------------------------ */
+/* Raw CSS because the hero rules key off viewport height as well as width, which Tailwind has no variant for. */
 [data-hero-grid] {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
@@ -165,10 +149,8 @@
   #ndiHeroPhones { --ph-max: 106%; }
 }
 
-/* ---- Scroll reveal ---------------------------------------------
-   The prototype commits opacity to 1 on mount and animates the
-   transform only, so content is never left hidden if a transition is
-   throttled. Reproduced exactly: slide up, no fade. */
+/* ---- Scroll reveal --------------------------------------------- */
+/* The prototype commits opacity to 1 on mount and animates the transform only, so content is never left hidden if a transition is throttled. */
 [data-reveal] {
   transform: translateY(26px);
   transition: transform 0.7s var(--ease-out);
@@ -183,10 +165,7 @@
   width: 180px;
   justify-content: center;
   box-sizing: border-box;
-  /* Transform runs fast, the glow slowly. Both were 0.5s, which meant the
-     press — the one moment the user is watching for a response — took half a
-     second to register. Displacement is feedback and belongs in the 100-160ms
-     band; the glow is atmosphere and can take its time. */
+  /* Transform runs fast, the glow slowly. */
   transition: transform 0.16s var(--ease-out), box-shadow 0.5s var(--ease-out), border-color 0.5s var(--ease-out);
 }
 .ndi-store:hover {
@@ -218,9 +197,7 @@
 
 /* Same sweep + glow, for the full-width CTA submit button */
 .ndi-sweepbtn { transition: transform 0.16s var(--ease-out), box-shadow 0.5s var(--ease-out); }
-/* Download arrow: dips and returns while hovered, miming the action. Runs only
-   on hover, so it is not perpetual motion competing for attention, and it
-   moves on transform alone. */
+/* Download arrow: dips and returns while hovered, miming the action. */
 @keyframes ndiDownloadBob {
   0%, 62%, 100% { transform: translateY(0); }
   28% { transform: translateY(3px); }
@@ -234,19 +211,8 @@
 .ndi-sweepbtn:hover .ndi-store-sweep { transform: translateX(100%); }
 .ndi-sweepbtn:hover .ndi-store-glow { opacity: 1; }
 
-/* ---- ShinyButton — see components/ui/ShinyButton.tsx --------
-   The shadcn ShinyButton, themed to NDI mint.
-
-   These rules are global rather than a <style jsx> block inside the
-   component for two reasons: @property is a global at-rule that styled-jsx
-   cannot scope, and registering --gradient-angle as an <angle> is precisely
-   what makes it animatable — an unregistered custom property would jump
-   rather than interpolate, which is the difference between a shine that
-   glides and one that stutters. Keeping it here also means the four
-   registrations happen once, not once per mounted button.
-
-   Palette, size and typography are all custom properties, so a caller
-   restyles the button from the outside without touching this file. */
+/* ---- ShinyButton — see components/ui/ShinyButton.tsx -------- */
+/* The shadcn ShinyButton, themed to NDI mint. */
 @property --gradient-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
 @property --gradient-angle-offset { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
 @property --gradient-percent { syntax: "<percentage>"; initial-value: 5%; inherits: false; }
@@ -263,13 +229,9 @@
   --shiny-cta-py: 1.25rem;
   --shiny-cta-fs: 1.125rem;
   --shiny-cta-fw: 600;
-  /* Hover glow strength. The upstream component uses 1, which suits its
-     ~60px-tall default; at nav size the inset glow floods the pill and the
-     shine is lost, so compact instances dial it back. */
+  /* Hover glow strength. */
   --shiny-cta-glow: 1;
-  /* How far the hover glow overhangs the label. Upstream adds 1rem on both
-     axes, which at its size lands the glow well inside the pill; at nav size
-     the box is barely wider than the words, so it needs more horizontally. */
+  /* How far the hover glow overhangs the label. */
   --shiny-cta-glow-x: 3.4rem;
   --shiny-cta-glow-y: 1.6rem;
   --animation: gradient-angle linear infinite;
@@ -345,13 +307,7 @@
   justify-content: center;
   gap: 8px;
 }
-/* The hover glow.
-   Upstream draws it as a square-cornered box with a heavily spread inset
-   shadow. An inset shadow is clipped to its own box, so the box edge is always
-   a hard cut — harmless when the box is much smaller than the surrounding
-   pill, but at nav size it sat as a visible green slab with square corners
-   inside the rounded button. Rounding it to the pill and dropping the spread
-   turns it back into a glow at any size. */
+/* The hover glow. */
 .shiny-cta span::before {
   width: calc(100% + var(--shiny-cta-glow-x));
   height: calc(100% + var(--shiny-cta-glow-y));
@@ -416,8 +372,7 @@
 .ndi-va:hover::before { opacity: 0.85; filter: blur(17px); }
 .ndi-va svg { transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
 .ndi-va:hover svg { transform: translateX(5px); }
-/* The design turned this outline mint on hover; by request it stays exactly as
-   it is at rest, leaving the fill, glow and inner light to carry the state. */
+/* The design turned this outline mint on hover. */
 .ndi-va:hover {
   background: #20303a !important;
   color: #eafff4 !important;
@@ -426,10 +381,8 @@
   .ndi-va::before { animation: none; }
 }
 
-/* ---- Capability cards: cursor-tracked spotlight border ------
-   --bsz stays 1px so the ring reads as a hairline; --rad tracks the
-   card's 16px radius. --gx/--gy are viewport coords written once per
-   frame by usePointerVars(). */
+/* ---- Capability cards: cursor-tracked spotlight border ------ */
+/* --bsz stays 1px so the ring reads as a hairline. */
 .ndi-spot { --bsz: 1px; --rad: 16px; --spot: 250px; position: relative; }
 .ndi-spot::before,
 .ndi-spot::after,
@@ -477,13 +430,7 @@
 .ndi-spot-halo::before { inset: -4px; border-width: 4px; border-radius: calc(var(--rad) + 4px); }
 .ndi-spot > *:not(.ndi-spot-halo):not(.ndi-spot-fill) { position: relative; }
 
-/* ---- Glass + lens rim pass (Home's inline <style> block) ----
-   These cards carry no fill of their own — just a blurred, lightly
-   brightened view of the atmosphere behind, plus a conic lens rim.
-
-   The "What you can do" cards used to have their own class here. They are
-   plain `.ndi-spot` cards now, wearing the same cursor-tracked ring as the
-   Users benefits row, so they are covered by the entry below. */
+/* ---- Glass + lens rim pass (Home's inline <style> block) ---- These cards carry no fill of their own. */
 .ndi-spot,
 [data-news-featured],
 [data-org-tile] {
@@ -492,10 +439,7 @@
   backdrop-filter: blur(12px) saturate(140%) brightness(1.03);
   box-shadow: var(--shadow-card) !important;
 }
-/* The contact panel surface. The form and the three contact rows beside it are
-   one rule, not two that resemble each other: matching the gradient alone still
-   left the rows flat, because most of what lifts this surface is the blur and
-   the inner top light, not the fill. */
+/* The contact panel surface. */
 [data-cta-form],
 .ndi-contact-row {
   background: var(--fill-panel);
@@ -507,8 +451,7 @@
     inset 0 -20px 34px -24px rgba(255, 255, 255, 0.07),
     0 18px 40px -26px rgba(0, 0, 0, 0.9);
 }
-/* The spotlight ring owns ::before/::after on .ndi-spot, so the lens rim
-   only goes on cards that have those pseudo-elements free. */
+/* The spotlight ring owns ::before/::after on .ndi-spot, so the lens rim only goes on cards that have those pseudo-elements free. */
 [data-news-featured]::after,
 [data-cta-form]::after,
 [data-gov-card]::after,
@@ -528,22 +471,11 @@
   mask-composite: exclude;
 }
 
-/* Governance ran three fills across one page: a flat white wash on some cards,
-   a 24px blur with no fill on others, and the shared glass on two.
-
-   They all wear the glass cards' material now, and stay glass: the page still
-   shows through, softened, as it does through the Trusted-by tiles.
-
-   The rim needs a containing block and most of these are plain flex
-   containers, hence position. */
+/* Governance ran three fills across one page: a flat white wash on some cards, a 24px blur with no fill on others, and the shared glass on two. */
 [data-gov-card] {
   position: relative;
   background: var(--fill-card) !important;
-  /* Blur only, the same as the Trusted-by tiles. The shared rule pairs its blur
-     with a saturate and a brightness, and those amplify whatever is behind the
-     card — which is what had the same treatment reading rgb(21,27,38) on one
-     card here and rgb(33,47,57) on another. Blur alone softens the page behind
-     the glass without taking colour from it. */
+  /* Blur only, the same as the Trusted-by tiles. */
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   box-shadow: var(--shadow-card) !important;
@@ -572,15 +504,7 @@
 /* ---- Trusted-by scrolling columns -------------------------- */
 [data-org-cols]:hover .ndi-org-track { animation-play-state: paused; }
 
-/* Blur only, no saturate and no brightness. Those two amplify whatever happens
-   to be behind the card, so a surface wearing them takes a different tint from
-   every patch of background it crosses — measured across one page, the same
-   card treatment came out rgb(20,27,41) over a dark stretch and rgb(26,35,51)
-   over the mint atmosphere, which reads as a set of cards that were filled
-   inconsistently. Blur alone softens the backdrop without colouring from it, so
-   these all land together at the reference rgb(24,31,44).
-
-*/
+/* Blur only, no saturate and no brightness. */
 [data-org-tile] {
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
@@ -621,20 +545,15 @@
   opacity: 0;
   transform: translate3d(0, -20%, 0);
   filter: blur(6px);
-  /* Exits are still ease-out. ease-in starts slow, holding the outgoing logo
-     on screen exactly while the incoming one is arriving. */
+  /* Exits are still ease-out. ease-in starts slow, holding the outgoing logo on screen exactly while the incoming one is arriving. */
   transition: opacity 0.3s var(--ease-out), filter 0.3s var(--ease-out), transform 0.3s var(--ease-out);
 }
 .ndi-lc-col { width: var(--slot-w); height: var(--slot-h); }
 
-/* Phones: each group takes the full width and its logos sit three across.
-   At a fixed 92px slot plus a 20px gap, three needed 316px inside a 311px
-   column, so the fourth logo wrapped and the set read as two ragged rows with
-   a hole beside them. As a grid the row divides the space it actually has. */
+/* Phones: each group takes the full width and its logos sit three across. */
 @media (max-width: 700px) {
   .ndi-lc-group { flex: 1 1 100%; width: 100%; }
-  /* Three across, left aligned. Each group divides the row it has, and with
-     three slots per group there is no remainder to strand. */
+  /* Three across, left aligned. */
   .ndi-lc-grid {
     display: flex;
     flex-wrap: wrap;
@@ -646,10 +565,7 @@
 
 .ndi-lc-item img { filter: brightness(0) invert(1); opacity: 0.82; transition: opacity 0.35s var(--ease-out); }
 .ndi-lc-col:hover .ndi-lc-item img { opacity: 1; }
-/* Marks whose owners do not permit recolouring. Set from `preserveColor` in
-   the content, not from the filename, so the rule travels with the record into
-   Payload. The dimming goes too: it is part of the same normalising treatment,
-   and it is the other thing a brand guideline objects to. */
+/* Marks whose owners do not permit recolouring. */
 .ndi-lc-item[data-full-color] img,
 .ndi-lc-col:hover .ndi-lc-item[data-full-color] img { filter: none; opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
@@ -695,8 +611,7 @@
 
 /* Surface comes from the shared panel rule above; this is only the hover. */
 .ndi-contact-row { transition: border-color var(--dur), background var(--dur); }
-/* Layered over the fill rather than replacing it, so hover is the same lift it
-   always was and not a different surface. */
+/* Layered over the fill rather than replacing it, so hover is the same lift it always was and not a different surface. */
 .ndi-contact-row:hover {
   border-color: var(--border-strong);
   background: linear-gradient(0deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.045)),
@@ -708,29 +623,19 @@
 .ndi-plainlink:hover { color: var(--text-strong); }
 
 /* Organizations service cards */
-/* ---- Capabilities: the wallet, annotated ---------------------
-   The phone leads and the six capabilities are labels attached to it. Geometry
-   is here rather than in utilities because it is the section's subject: three
-   named regions, hairlines that cross the gutter, and copy that turns to face
-   the device.
-
-   Narrow: one column, phone first. */
+/* ---- Capabilities: the wallet, annotated --------------------- */
+/* The phone leads and the six capabilities are labels attached to it. */
 .ndi-cap-stage {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 26px;
-  /* Scroll progress, published by CapabilityStage. Every part of the entrance
-     is a function of it. The default is the finished state, so with no
-     JavaScript the section is simply in place. */
+  /* Scroll progress, published by CapabilityStage. */
   --p: 1;
 }
 
-/* Above the entries, so they pass behind it rather than across it. The fade
-   does the rest: the image carries transparent margin at its edges, and text
-   crossing that is still text on a photograph. */
+/* Above the entries, so they pass behind it rather than across it. */
 .ndi-cap-phone { position: relative; z-index: 2; }
-/* The device sits in light rather than on the page. Behind the image, so the
-   hand's cut edge is lit from behind instead of outlined. */
+/* The device sits in light rather than on the page. */
 .ndi-cap-halo {
   position: absolute;
   left: 50%;
@@ -747,22 +652,7 @@
     rgba(90, 201, 148, 0) 66%
   );
 }
-/* The supplied cutout runs off two edges of the frame, not one: mid-forearm at
-   the bottom, and again at the right where the wrist crosses it. On a dark page
-   both read as a cut limb, so the arm dissolves toward each. Two gradients
-   intersected rather than one corner-anchored radial, so each edge is tuned to
-   what actually crosses it.
-
-   Both stops clear the device. The bottom bezel sits at 88% of the crop's
-   height and the right bezel at 73% of its width, so the phone itself never
-   softens — only the hand does, and only where it was being severed.
-
-   The ramps hold full opacity through the hand and then dissolve over a long
-   tail. A blurred copy of the image used to carry that tail, and it was wrong:
-   a wide field of half-transparent blurred skin over a dark page reads as a
-   milky blue haze, and the mask box it was clipped to gave that haze straight
-   edges. Alpha alone fades to whatever is actually behind at that point, which
-   is what blending with the background means — no colour is assumed anywhere. */
+/* The supplied cutout runs off two edges of the frame, not one: mid-forearm at the bottom, and again at the right where the wrist crosses it. */
 .ndi-cap-phone img {
   -webkit-mask-image:
     linear-gradient(to bottom, #000 0%, #000 84%, rgba(0, 0, 0, 0.72) 90%, rgba(0, 0, 0, 0.3) 96%, transparent 100%),
@@ -774,9 +664,7 @@
   mask-composite: intersect;
 }
 
-/* The node centres on the entry rather than sitting at its top: the entry is
-   one object — a mark and the two lines that name it — and top-aligning the
-   mark to the heading leaves it hanging above a block it belongs to. */
+/* The node centres on the entry rather than sitting at its top: the entry is one object — a mark and the two lines that name it. */
 .ndi-cap-item { position: relative; display: flex; align-items: center; gap: 14px; }
 .ndi-cap-node {
   display: inline-flex;
@@ -810,37 +698,22 @@
     --phone-w: clamp(300px, 31vw, 392px);
     --gutter: clamp(26px, 3vw, 46px);
     --rgap: clamp(34px, 4vw, 60px);
-    /* Where the entries come from: the middle of the device.
-
-       Across, that is the gutter plus half the phone. Down, it is one row
-       pitch — and the pitch is not the entry's own height, because the phone
-       spans all three rows and is taller than they are, so the grid stretches
-       the three tracks equally to fit it. The track is therefore the phone's
-       height less the two gaps, divided by three. The phone's height follows
-       from its width and the crop's ratio, which is the one number here that
-       is tied to the asset. */
+    /* Where the entries come from: the middle of the device. */
     --phone-ar: 1.589;
     --emit: calc(var(--gutter) + var(--phone-w) / 2);
     --track: calc((var(--phone-w) * var(--phone-ar) - 2 * var(--rgap)) / 3);
     --pitch: calc(var(--track) + var(--rgap));
-    /* An entry is top-aligned in its track and shorter than it, so its own
-       middle sits above the track's. This is the difference — half the track
-       less half the entry, the percentage resolving against the entry itself —
-       and it is what puts the cluster on the device's centre rather than a
-       constant distance above it. */
+    /* An entry is top-aligned in its track and shorter than it, so its own middle sits above the track's. */
     --ey-mid: calc(var(--track) / 2 - 50%);
     grid-template-columns: minmax(0, 1fr) var(--phone-w) minmax(0, 1fr);
     grid-template-rows: repeat(3, auto);
     column-gap: var(--gutter);
     row-gap: var(--rgap);
-    /* Top-aligned, not centred: the pair at each height has to share a baseline
-       for the row to read as a pair, and centring drops whichever entry has the
-       shorter description by half the difference. */
+    /* Top-aligned, not centred: the pair at each height has to share a baseline for the row to read as a pair, and centring drops whichever entry has the shorter description by half the difference. */
     align-items: start;
   }
   .ndi-cap-phone { grid-area: 1 / 2 / 4 / 3; width: auto; align-self: center; }
-  /* The phone is the stage's first child, so the entries are 2 through 7:
-     reading order down the left column, then down the right. */
+  /* The phone is the stage's first child, so the entries are 2 through 7: reading order down the left column, then down the right. */
   .ndi-cap-stage > .ndi-cap-item:nth-child(2) { grid-area: 1 / 1; }
   .ndi-cap-stage > .ndi-cap-item:nth-child(3) { grid-area: 2 / 1; }
   .ndi-cap-stage > .ndi-cap-item:nth-child(4) { grid-area: 3 / 1; }
@@ -848,30 +721,18 @@
   .ndi-cap-stage > .ndi-cap-item:nth-child(6) { grid-area: 2 / 3; }
   .ndi-cap-stage > .ndi-cap-item:nth-child(7) { grid-area: 3 / 3; }
 
-  /* Each side turns to face the device: the node takes the inner edge and the
-     copy runs away from it. Without this the left column reads as a list that
-     happens to sit near a photo. */
+  /* Each side turns to face the device: the node takes the inner edge and the copy runs away from it. */
   .ndi-cap-item[data-side="left"] { flex-direction: row-reverse; text-align: right; }
   .ndi-cap-item[data-side="left"] .ndi-cap-copy { align-items: flex-end; }
 
-  /* The entries bow around the device instead of ruling up in two straight
-     columns. The hand is widest at the middle row, so that one sits furthest
-     out and the rows above and below tuck in toward the phone, which is what
-     turns two lists into annotations on a shape.
-
-     Margin, not transform: transform is spoken for by the entrance, and a
-     negative margin on a grid item widens it past its track rather than moving
-     a painted copy of it, so the wire anchored to its inner edge comes along. */
+  /* The entries bow around the device instead of ruling up in two straight columns. */
   .ndi-cap-stage { --tuck: clamp(14px, 2.1vw, 34px); --bow: clamp(10px, 1.6vw, 24px); }
   .ndi-cap-item[data-side="left"] { margin-right: calc(var(--tuck) * -1); }
   .ndi-cap-item[data-side="right"] { margin-left: calc(var(--tuck) * -1); }
   .ndi-cap-stage > .ndi-cap-item:nth-child(3) { margin-right: var(--bow); }
   .ndi-cap-stage > .ndi-cap-item:nth-child(6) { margin-left: var(--bow); }
 
-  /* The hairline crosses the gutter, brightest at the node and fading as it
-     reaches the device — the attachment is asserted, not drawn all the way in
-     over the photograph. Now that the bow has moved the nodes, the middle row
-     starts further out and needs a longer line to arrive at the same place. */
+  /* The hairline crosses the gutter, brightest at the node and fading as it reaches the device. */
   .ndi-cap-wire {
     display: block;
     position: absolute;
@@ -893,16 +754,7 @@
   .ndi-cap-stage > .ndi-cap-item:nth-child(3),
   .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --wire: clamp(30px, 3.8vw, 54px); }
 
-  /* Entries start at the middle of the device, small, and travel out to their
-     place as the section scrolls up — and back into it on the way down again.
-
-     Each row takes its own slice of the range, so they leave one after another
-     rather than together. `--q` is this entry's own 0-to-1 within its slice.
-
-     The fade is held back until the entry is most of the way out. It starts on
-     the phone, and text sitting over a photograph of a phone looks like a
-     mistake however well it is placed; the phone also paints above the entries,
-     so most of that journey is spent genuinely behind it. */
+  /* Entries start at the middle of the device, small, and travel out to their place as the section scrolls up. */
   .ndi-cap-stage > .ndi-cap-item {
     --span: 0.62;
     --q: clamp(0, calc((var(--p) - var(--t, 0)) / var(--span)), 1);
@@ -921,24 +773,19 @@
   .ndi-cap-stage > .ndi-cap-item:nth-child(5) { --ey: calc(var(--ey-mid) + var(--pitch)); }
   .ndi-cap-stage > .ndi-cap-item:nth-child(4),
   .ndi-cap-stage > .ndi-cap-item:nth-child(7) { --ey: calc(var(--ey-mid) - var(--pitch)); }
-  /* The middle rows are bowed outward, so they start that much further from the
-     centre than the rows above and below and need it back. */
+  /* The middle rows are bowed outward, so they start that much further from the centre than the rows above and below and need it back. */
   .ndi-cap-stage > .ndi-cap-item:nth-child(3) { --ex: calc(var(--emit) + var(--bow)); }
   .ndi-cap-stage > .ndi-cap-item:nth-child(6) { --ex: calc((var(--emit) + var(--bow)) * -1); }
 }
 
-/* ---- Choreography -------------------------------------------
-   One gesture from one observer: the device resolves out of a blur, the
-   annotations step out of it, their hairlines draw last. Transform-only on the
-   text, as everywhere else here, so nothing is left hidden if a transition is
-   dropped. */
+/* ---- Choreography ------------------------------------------- */
+/* One gesture from one observer: the device resolves out of a blur, the annotations step out of it, their hairlines draw last. */
 /* The device settles as the section arrives, a beat ahead of the entries. */
 .ndi-cap-phone {
   transform: translateY(calc((1 - clamp(0, calc(var(--p) / 0.45), 1)) * 18px))
     scale(calc(0.982 + 0.018 * clamp(0, calc(var(--p) / 0.45), 1)));
 }
-/* Narrow has no device to come out of — no sides, no gutter, no wire — so the
-   entries simply rise and fade on the same progress. */
+/* Narrow has no device to come out of — no sides, no gutter, no wire — so the entries simply rise and fade on the same progress. */
 @media (max-width: 1100px) {
   .ndi-cap-stage > .ndi-cap-item {
     --q: clamp(0, calc(var(--p) / 0.7), 1);
@@ -952,34 +799,17 @@
   .ndi-cap-wire { transform: none; opacity: 1; }
 }
 
-/* ---- Bento cards (Organizations solutions) -----------------
-   The face lifts to make room and the value rises into it. --bento-lift is
-   the value block's height, so the two move as one piece rather than the face
-   sliding a fixed distance and hoping the value fits under it.
-   Only transform and opacity animate. */
-/* Fallback only — BentoGrid.tsx measures the value block and overwrites this
-   per card, so a value that wraps to three lines in a narrow column still
-   clears the face. */
+/* ---- Bento cards (Organizations solutions) ----------------- */
+/* The face lifts to make room and the value rises into it. --bento-lift is the value block's height, so the two move as one piece rather than the face sliding a fixed distance and hoping the value fits under it. */
+/* Fallback only. */
 .ndi-bento { --bento-lift: 92px; }
 
-/* The arc sits on the card's border, the way it does on the Users use-case
-   cards, rather than ringing it from 2px outside.
-
-   Two things had to change together for that. The offset: this host has no
-   border of its own, so its padding box already is its border box and
-   --glow-out: 0 lands the arc where .ndi-uc's -1px/0 pair lands it there. And
-   the stacking: .ndi-glow is a sibling of the card face and comes before it in
-   the DOM, so with both positioned the face painted over the arc — which is why
-   the arc was outside the box in the first place. z-index lifts it back over.
-   The face's overflow clip never applied here: it clips its own descendants,
-   and the glow is not one. */
+/* The arc sits on the card's border, the way it does on the Users use-case cards, rather than ringing it from 2px outside. */
 .ndi-bento .ndi-glow { --glow-out: 0px; z-index: 2; }
 .ndi-bento-face,
 .ndi-bento-value,
 .ndi-bento-icon {
-  /* Leaving is quicker than arriving and does not bounce: the card is putting
-     itself away, and something that wobbles on its way out reads as unstable
-     rather than playful. */
+  /* Leaving is quicker than arriving and does not bounce: the card is putting itself away, and something that wobbles on its way out reads as unstable rather than playful. */
   transition: transform 0.34s var(--ease-glide), opacity 0.22s linear;
 }
 .ndi-bento-value {
@@ -988,28 +818,17 @@
   pointer-events: none;
 }
 @media (hover: hover) {
-  /* ~90px of body text has to be rasterised once and moved as a texture. Left
-     unpromoted it is re-rasterised at a new subpixel offset every frame, which
-     is the shimmer that reads as jitter — and it is what made the icon's
-     strokes crawl as it scaled. Promoted, the icon is rasterised once at full
-     size and the layer is scaled down, which downsamples cleanly. */
+  /* ~90px of body text has to be rasterised once and moved as a texture. */
   .ndi-bento-face,
   .ndi-bento-value,
   .ndi-bento-icon { will-change: transform; }
 
   .ndi-bento:hover .ndi-bento-face { transform: translateY(calc(var(--bento-lift) * -1)); }
   .ndi-bento:hover .ndi-bento-value { transform: none; opacity: 1; }
-  /* 0.82 took a 34px glyph down to 28px, which nobody reads as a change. At
-     0.62 it lands at 21px — the same step the icon takes between a heading and
-     a list item, so the shrink is legible as a change of role. It scales from
-     its left edge, so it stays on the text's margin as it goes. */
+  /* 0.82 took a 34px glyph down to 28px, which nobody reads as a change. */
   .ndi-bento:hover .ndi-bento-icon { transform: scale(0.62); }
 
-  /* Arriving overshoots and settles back. The face and the value carry the
-     same curve and the same duration so the gap between them never changes —
-     they are one moving object, not two things that happen to bounce.
-     The value's fade trails the lift by a beat, so the pair reads as the face
-     making room and the value moving into it rather than as a crossfade. */
+  /* Arriving overshoots and settles back. */
   .ndi-bento:hover .ndi-bento-face,
   .ndi-bento:hover .ndi-bento-icon {
     transition-duration: 0.52s;
@@ -1019,8 +838,7 @@
     transition: transform 0.52s var(--ease-bounce), opacity 0.3s linear 0.08s;
   }
 }
-/* No pointer means no hover, and Value is content rather than decoration — so
-   it is simply present, with the face sitting above it in normal flow. */
+/* No pointer means no hover, and Value is content rather than decoration. */
 @media (hover: none) {
   .ndi-bento-inner { justify-content: flex-start; }
   .ndi-bento-value { position: static; transform: none; opacity: 1; padding-top: 0; }
@@ -1088,8 +906,7 @@
 }
 
 /* Mobile sheet */
-/* Swipeable journey strip. The bar is hidden because the picture itself is the
-   affordance, and momentum makes the pan feel native. */
+/* Swipeable journey strip. */
 .ndi-journey-swipe {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -1098,19 +915,14 @@
 }
 .ndi-journey-swipe::-webkit-scrollbar { display: none; }
 
-/* ---- Circuit field: pointer devices only -------------------
-   The field exists to react to the cursor. Without one it is a static texture
-   behind the copy, paid for with a document-tall stack of masked SVG, so it is
-   dropped rather than left running. The depth gradient and ambient pools remain. */
+/* ---- Circuit field: pointer devices only ------------------- */
+/* The field exists to react to the cursor. */
 @media (hover: none), (pointer: coarse) {
   .ndi-circuit { display: none !important; }
 }
 
-/* ---- Mobile menu ------------------------------------------
-   Opens under the header instead of sliding in as its own surface. The header
-   keeps the logo and the control that opened the menu, so the panel only has to
-   carry the navigation. Top and height are derived from the header's own box
-   (24px inset, 64px tall) so the two never drift apart. */
+/* ---- Mobile menu ------------------------------------------ */
+/* Opens under the header instead of sliding in as its own surface. */
 .ndi-menu-scrim {
   position: fixed;
   inset: 0;
@@ -1121,17 +933,7 @@
   transition: opacity 0.28s var(--ease-out), visibility 0s linear 0s;
 }
 .ndi-menu-panel {
-  /* Full screen, behind the bar.
-     It used to start under the header and stop at the layout viewport, so on a
-     phone it read as a panel with a visible bottom edge floating above the
-     browser chrome. It now covers the whole viewport: the bar sits on top of it
-     (z-60 against z-56), and the rows are padded clear of it instead of the
-     panel starting below it.
-
-     Height is 100dvh so it tracks the visual viewport as the browser's toolbars
-     collapse; with `inset: 0` alone the last rows hid behind the address bar.
-     Derived from the header's box (16px inset, 64px tall) so the two never
-     drift apart. */
+  /* Full screen, behind the bar. */
   --ndi-header-inset: 16px;
   --ndi-header-height: 64px;
   position: fixed;
@@ -1154,8 +956,7 @@
     visibility 0s linear 0s;
 }
 
-/* The rows clear the bar at the top and the browser's own chrome at the foot.
-   The bottom fade says the list continues rather than ending in a hard cut. */
+/* The rows clear the bar at the top and the browser's own chrome at the foot. */
 .ndi-menu-scroll {
   padding-top: calc(var(--ndi-header-inset) + var(--ndi-header-height) + 14px);
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 88px);
@@ -1223,11 +1024,7 @@
   box-shadow: var(--glow-sm);
 }
 
-/* Touch targets in the footer.
-   The links are a single 14.5px line, so their box was 23px tall against a
-   44px guideline. Padding rather than a taller font: the type scale is the
-   design's, the reachable area is not. Applied only where the pointer is
-   coarse, so the desktop footer keeps its tighter rhythm. */
+/* Touch targets in the footer. */
 @media (pointer: coarse) {
   .ndi-fl { padding-block: 7px; }
 }
@@ -1236,10 +1033,7 @@
 .ndi-fl { transition: transform 0.28s var(--ease-out), color 0.28s var(--ease-out); will-change: transform; }
 .ndi-fl:hover { transform: translateX(8px); color: var(--text-strong); }
 
-/* Band height for the sticky curtain.
-   `--foot-h` is measured from the footer's own content on mount; these are the
-   floor, and the value the server renders with before that runs. The prototype
-   hard-codes 430px at every width, which clips the copyright bar. */
+/* Band height for the sticky curtain. */
 .ndi-footer-curtain { --foot-min: 430px; --foot-h: var(--foot-min); }
 @media (max-width: 900px) {
   .ndi-footer-curtain { --foot-min: 560px; }
@@ -1247,8 +1041,7 @@
 @media (max-width: 560px) {
   .ndi-footer-curtain { --foot-min: 720px; }
 }
-/* A footer taller than the viewport cannot be revealed by scrolling the page
-   off it, so it lays out as an ordinary block instead. */
+/* A footer taller than the viewport cannot be revealed by scrolling the page off it, so it lays out as an ordinary block instead. */
 .ndi-footer-curtain[data-mode="static"] {
   height: auto !important;
   clip-path: none !important;
@@ -1284,22 +1077,14 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   transform: translateY(-2px);
 }
 
-/* ============================================================
-   Subpage effects — ported from project/ndi-site.css.
-   Layout helpers from that file are deliberately not carried over;
-   layout is expressed in Tailwind, as on the home page.
-   ============================================================ */
+/* ============================================================ */
+/* Subpage effects — ported from project/ndi-site.css. */
 
-/* This card is the card — it carries the border the arc is meant to trace, so
-   the arc moves onto its border box and sits on that border rather than ringing
-   it from outside. Anywhere else the default applies. */
+/* This card is the card. */
 .ndi-uc .ndi-glow { --glow-inset: -1px; --glow-out: 0px; }
 
-/* ---- Bento use-case cards ------------------------------------
-   The 12-column grid and its 232px minimum row are the design's. At 900px it
-   drops every card to a half-width span; the stack below 640px is ours, since
-   the design leaves that width unspecified and two columns of this card become
-   unreadable there. */
+/* ---- Bento use-case cards ------------------------------------ */
+/* The 12-column grid and its 232px minimum row are the design's. */
 [data-uc-grid] {
   grid-template-columns: repeat(12, 1fr);
   grid-auto-rows: minmax(232px, auto);
@@ -1311,21 +1096,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   [data-uc-grid] > a { grid-column: span 12 !important; }
 }
 
-/* Cursor-tracked conic glow border.
-
-   `inset: -1px` puts this on the card's border box, not its padding box. An
-   absolutely positioned child insets from the padding box, so at `inset: 0`
-   this sat *inside* the card's 1px border and the arc was drawn a border-width
-   away from the edge it was meant to trace — with a radius inherited from the
-   border box on top of that, so the two curves disagreed at the corners and
-   left a visible gap there. On the border box the arc and the border are the
-   same ring at the same radius.
-
-   Two hosts wear this and they want the ring in different places, so the offset
-   is a pair of variables rather than a constant. The default puts the ring
-   wholly outside the host, which is what the bento wrapper needs — its visible
-   card is a child that would otherwise paint over half of it. A host that is
-   itself the card overrides both and takes the ring on its own border. */
+/* Cursor-tracked conic glow border. */
 .ndi-glow {
   position: absolute;
   inset: var(--glow-inset, 0);
@@ -1333,39 +1104,12 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   pointer-events: none;
   --start: 0;
   --active: 0;
-  /* Half-width of the lit arc, in degrees. Wider carries further round the
-     card, which is most of what makes it read at a glance. */
+  /* Half-width of the lit arc, in degrees. */
   --spread: 58;
   --bw: 2px;
   --glow-inset: 0;
   --glow-out: calc(-1 * var(--bw));
-  /* One definition, worn twice: sharp on ::after, blurred on ::before. The
-     conic used to pass through #124143, a near-black teal, which put a dead
-     segment in every revolution — the arc dimmed to nothing a fifth of the
-     time. Every stop is lit now, and every stop is on the brand ramp: the first
-     fix for that dead segment reached for #c6ffe2 and a near-white radial,
-     which lit the arc by draining the colour out of it. The peak here is a
-     bright mint, not a pale one.
-
-     The arc is a gradient along its own length — light mint at its leading
-     edge, running down to the deeper teal-mint of the send button at its tail.
-     That only reads because the conic shares the mask's origin: both start at
-     `(--start - --spread)`, so the ramp is pinned to the lit window and travels
-     with it instead of sliding underneath it. The last stop returns to the
-     first at 360deg, which keeps the seam out of the arc no matter where the
-     cursor puts it. The lightest stop is at `--spread` for a reason: that is
-     where the mask peaks, and it falls to nothing at both ends, so whatever
-     colour lands at that angle is the only one ever seen at full strength. Put
-     the deeper mint anywhere near it and the arc loses brightness it cannot
-     spare — the ramp has to be arranged around that crest, not through it.
-
-     The three radials stay on the viewport (see background-attachment below) —
-     they are ambient, a light in the room rather than a light on this card, and
-     every card that shares the screen catches the same one. The conic is the
-     opposite and has to be anchored to the card: on the viewport its centre is
-     off-screen for most cards, so the whole ring samples a few degrees of the
-     ramp and comes out one flat colour. That is what made the earlier attempt
-     at this invisible. */
+  /* One definition, worn twice: sharp on ::after, blurred on ::before. */
   --glow-arc:
     radial-gradient(circle, rgba(111, 224, 169, 0.95) 10%, rgba(111, 224, 169, 0) 20%),
     radial-gradient(circle at 40% 40%, rgba(90, 201, 148, 0.95) 5%, rgba(90, 201, 148, 0) 15%),
@@ -1379,9 +1123,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
       var(--ndi-mint-bright) 360deg
     );
 }
-/* ::before is the same ring, blurred, so the arc has a bloom around it rather
-   than being a hairline you have to look for. It sits under ::after, which
-   keeps the sharp edge on the card. */
+/* ::before is the same ring, blurred, so the arc has a bloom around it rather than being a hairline you have to look for. */
 .ndi-glow::before,
 .ndi-glow::after {
   content: "";
@@ -1392,13 +1134,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   background: var(--glow-arc);
   background-attachment: fixed, fixed, fixed, scroll;
   opacity: var(--active);
-  /* --active is a hard 0/1 step from useGlowCards, so this transition is the
-     whole of the fade — and it has to be a curve that starts slowly. --ease-out
-     is front-loaded enough to put the arc at 60% opacity 17ms in (measured),
-     which is not a fade, it is a pop with a tail. Moving between two cards shows
-     it worst, because the arriving card's arc appears at almost full strength
-     while the leaving one is still lit. Symmetric on purpose: the two cards
-     cross-fade through each other. */
+  /* --active is a hard 0/1 step from useGlowCards, so this transition is the whole of the fade. */
   transition: opacity 0.38s var(--ease-in-out);
   -webkit-mask-image: linear-gradient(#0000, #0000),
     conic-gradient(from calc((var(--start) - var(--spread)) * 1deg), #00000000 0deg, #fff, #00000000 calc(var(--spread) * 2deg));
@@ -1411,8 +1147,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
 }
 .ndi-glow::before {
   filter: blur(6px);
-  /* Lower than the sharp ring: the two overlap, and light on light composites
-     toward white, which is the other half of how the arc lost its hue. */
+  /* Lower than the sharp ring: the two overlap, and light on light composites toward white, which is the other half of how the arc lost its hue. */
   opacity: calc(var(--active) * 0.62);
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1437,15 +1172,9 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
 }
 [data-tabbtn]:hover { color: var(--text-strong); }
 
-/* ---- Integration pipeline (Organizations) ------------------
-   A flow of medallions joined by arrows. The link either side of an arrow
-   lights up once its step is reached, so the run already travelled reads
-   differently from the run ahead, and the segment currently being crossed
-   carries a travelling pulse. */
-/* The conductor. Same drawing language as the background board in
-   CircuitDefs — 1.6px runs, 45-degree chamfers, a solid via on the jog — so the
-   path reads as part of the same board rather than as a diagram laid over it.
-   Dark ahead of the current step, energised behind it. */
+/* ---- Integration pipeline (Organizations) ------------------ */
+/* A flow of medallions joined by arrows. */
+/* The conductor. */
 .ndi-trace {
   display: none;
   flex: 0 0 auto;
@@ -1473,9 +1202,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   .ndi-trace { display: block; }
 }
 
-/* The pulse rides the path itself, so it takes the chamfers instead of sliding
-   flat across them. 80.6 is the path's length; the dash is the lit run and the
-   gap is long enough that only one crosses at a time. */
+/* The pulse rides the path itself, so it takes the chamfers instead of sliding flat across them. 80.6 is the path's length. */
 @keyframes ndiTraceRun {
   from { stroke-dashoffset: 20; }
   to { stroke-dashoffset: -81; }
@@ -1514,14 +1241,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   text-align: center;
 }
 
-/* A junction pad, square-cornered on the card's own radius and carrying the
-   panel's material exactly: the same translucent fill over the same blurred
-   backdrop. Backing it with an opaque --surface-sunken instead came out
-   measurably darker and flatter — rgb(22,32,45) against the panel's
-   rgb(21,44,55) — because what sits behind the panel is the atmosphere, not
-   the ground colour, and because the blur is doing as much of the lift as the
-   fill is. Translucent is also why the stacked conductor is drawn gap by gap
-   rather than as one line behind the pads: there is nothing left to hide it. */
+/* A junction pad, square-cornered on the card's own radius and carrying the panel's material exactly: the same translucent fill over the same blurred backdrop. */
 .ndi-node {
   display: grid;
   place-items: center;
@@ -1544,9 +1264,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   border-color: rgba(90, 201, 148, 0.5);
   color: var(--text-accent);
 }
-/* The live pad gets a clearance ring and its annulus, the way a board keeps
-   copper back from a pad — not a halo pasted behind it. The lift underneath
-   carries an offset and a blur so it reads as depth rather than as a glow. */
+/* The live pad gets a clearance ring and its annulus, the way a board keeps copper back from a pad — not a halo pasted behind it. */
 .ndi-node[data-state="1"] {
   border-color: var(--accent);
   color: var(--text-strong);
@@ -1572,8 +1290,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   .ndi-board-step:hover .ndi-node { border-color: rgba(90, 201, 148, 0.5); }
 }
 
-/* The trace continues past the first and last pad and fades at the section
-   edge, so the run reads as cut from a longer one. */
+/* The trace continues past the first and last pad and fades at the section edge, so the run reads as cut from a longer one. */
 .ndi-board-lead {
   display: none;
   position: absolute;
@@ -1590,9 +1307,7 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   background: linear-gradient(270deg, transparent, rgba(90, 201, 148, 0.26));
 }
 
-/* The branch into the panel. The element is one step wide, so translating it by
-   whole multiples of its own width lands it on the live pad without anything
-   being measured — the conductor then sits on its centre line. */
+/* The branch into the panel. */
 .ndi-board-gap {
   display: none;
   position: relative;
@@ -1650,15 +1365,9 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   .ndi-board-panel { margin-top: 0; }
 }
 
-/* Stacked, the pads still sit on a conductor — it just runs down the column
-   instead of across it, with the steps turned on their side so the run has a
-   lane of its own. Centred, the line had to pass straight through every label.
-   The pads carry the ground as their fill, so they punch through the conductor
-   without anything being masked. */
+/* Stacked, the pads still sit on a conductor. */
 @media (max-width: 760px) {
-  /* One segment per gap. A single line down the column would run behind the
-     pads, and they are translucent. Every step but the first is preceded by a
-     hidden connector, which is what the sibling selector picks out. */
+  /* One segment per gap. */
   .ndi-trace + .ndi-board-step::before {
     content: "";
     position: absolute;
@@ -1683,20 +1392,14 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   }
 }
 
-/* ---- "Watch tutorial" arrow nudge --------------------------
-   Keyed on the enclosing link as well as the label itself. Where this sits in a
-   card — the news lead, the archive cards, the use-case bento — the whole card
-   is the hover target, so nudging only when the pointer reached the words made
-   the arrow look broken for most of the card's area. Where the label *is* the
-   link, the second rule is the one that fires. */
+/* ---- "Watch tutorial" arrow nudge -------------------------- */
+/* Keyed on the enclosing link as well as the label itself. */
 .ndi-tut svg { transition: transform 0.28s var(--ease-out); }
 .ndi-tut:hover svg,
 a:hover .ndi-tut svg { transform: translateX(5px); }
 
-/* ---- Send icon on the two enquiry forms -------------------
-   The same nudge the tutorial and view-all arrows use, on its own class rather
-   than on `.ndi-sweepbtn svg`: that button is also the Governance download,
-   whose icon already owns its transform for the bob. */
+/* ---- Send icon on the two enquiry forms ------------------- */
+/* The same nudge the tutorial and view-all arrows use, on its own class rather than on `.ndi-sweepbtn svg`: that button is also the Governance download, whose icon already owns its transform for the bob. */
 .ndi-sendnudge { transition: transform 0.28s var(--ease-out); }
 .ndi-sweepbtn:hover .ndi-sendnudge { transform: translateX(5px); }
 
@@ -1707,13 +1410,8 @@ select option { background: #101827; color: #e9eef6; }
 .ndi-lift { transition: transform var(--dur), box-shadow var(--dur); }
 .ndi-lift:hover { transform: translateY(-3px); }
 
-/* ---- Hover motion on touch --------------------------------
-   A tap on a touch screen applies :hover and leaves it applied until you tap
-   something else, so every hover-only displacement sticks: cards stay lifted,
-   footer links stay shifted, arrows stay nudged. Neutralised where the pointer
-   is coarse. Only displacement is undone — colour, glow and the one-shot
-   sweeps still fire, because those read as tap feedback rather than as a state
-   the element is stuck in. */
+/* ---- Hover motion on touch -------------------------------- */
+/* A tap on a touch screen applies :hover and leaves it applied until you tap something else, so every hover-only displacement sticks: cards stay lifted, footer links stay shifted, arrows stay nudged. */
 @media (hover: none) {
   .ndi-store:hover,
   .ndi-sweepbtn:hover,
@@ -1731,22 +1429,15 @@ select option { background: #101827; color: #e9eef6; }
 .ndi-role-card { transition: transform var(--dur), box-shadow var(--dur); }
 .ndi-role-card:hover {
   transform: translateY(-4px);
-  /* !important only to outrank the shared glass rule's own, which these cards
-     now wear on Governance. Without it the lift would happen with no rim. */
+  /* !important only to outrank the shared glass rule's own, which these cards now wear on Governance. */
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
     0 10px 26px -8px rgba(90, 201, 148, 0.4),
     0 0 0 1px rgba(90, 201, 148, 0.18) !important;
 }
 
-/* ---- Users hero: credential fan ----------------------------
-   The fan's resting rotation and offset come in as custom properties so the
-   hover state can compose on top of them — writing `transform` directly would
-   mean the hover rule had to restate each card's rotation, and an inline
-   transform would win over this class anyway.
-
-   Hover raises the card on Y and nothing else: no scale, and no change to
-   stacking or opacity, so a card never climbs over its neighbour. */
+/* ---- Users hero: credential fan ---------------------------- */
+/* The fan's resting rotation and offset come in as custom properties so the hover state can compose on top of them. */
 .ndi-credential {
   --card-rotate: 0deg;
   --card-shift: 0px;
@@ -1761,17 +1452,9 @@ select option { background: #101827; color: #e9eef6; }
 }
 .ndi-credential-img { width: var(--card-w); }
 
-/* The fan on a phone.
-   Three cards at their desktop width do not fit, and as flex children they were
-   silently shrunk to 118px, which put the hero's picture below its own caption
-   in the visual order. They keep a usable size and overlap into a deck instead. */
+/* The fan on a phone. */
 @media (max-width: 640px) {
-  /* The width is overridden here, not the variable behind it: `--card-w` is an
-     inline style from the component, and no stylesheet rule can outrank that.
-     Overriding the `width` property itself sidesteps it.
-
-     Overlap is a share of the card rather than a percentage margin, which would
-     resolve against the container and drift as the viewport changes. */
+  /* The width is overridden here, not the variable behind it: `--card-w` is an inline style from the component, and no stylesheet rule can outrank that. */
   .ndi-credential { flex: none; --card-w-m: clamp(126px, 38vw, 168px); }
   .ndi-credential-img { width: var(--card-w-m); }
   .ndi-credential + .ndi-credential { margin-left: calc(var(--card-w-m) * -0.42); }
@@ -1793,26 +1476,14 @@ select option { background: #101827; color: #e9eef6; }
 .ndi-why-row { transition: background var(--dur); }
 .ndi-why-row:hover { background: rgba(90, 201, 148, 0.04); }
 
-/* ---- Mega-menu icons ---------------------------------------
-   The design's nav icons are inline SVGs sitting in a text line box, so their
-   wrapper is taller than the glyph — 30px around a 22px icon. Tailwind's
-   preflight sets `svg { display: block; vertical-align: middle }`, which
-   collapsed that box and left every mega-menu card and list row ~8px short of
-   the design. Sitting the icon back on the baseline is what grows the line box
-   upward again. */
+/* ---- Mega-menu icons --------------------------------------- */
+/* The design's nav icons are inline SVGs sitting in a text line box, so their wrapper is taller than the glyph. */
 .ndi-navicon > svg { display: inline; vertical-align: baseline; }
 
 
-/* ---- Organizations hero -----------------------------------
-   A full-screen opening: the section is sized to the viewport less the nav, so
-   nothing of the next section shows above the fold, and the two layers are
-   centred in whatever height that leaves.
-
-   Stacked first, because below 1101px there is no room to overlap anything and
-   the copy has to lead. */
-/* 100svh, not 100vh: on mobile browsers vh is the tallest the viewport ever
-   gets, so 100vh leaves the section overflowing while the toolbars are out.
-   The padding clears the fixed nav, which is its own height plus its offset. */
+/* ---- Organizations hero ----------------------------------- */
+/* A full-screen opening: the section is sized to the viewport less the nav, so nothing of the next section shows above the fold, and the two layers are centred in whatever height that leaves. */
+/* 100svh, not 100vh: on mobile browsers vh is the tallest the viewport ever gets, so 100vh leaves the section overflowing while the toolbars are out. */
 .ndi-orghero-section {
   display: flex;
   min-height: 100svh;
@@ -1837,10 +1508,7 @@ select option { background: #101827; color: #e9eef6; }
     align-items: center;
     min-height: min(660px, calc(100svh - 220px));
   }
-  /* Both layers in one cell. The artwork is second in the DOM and sits above,
-     which is the point — the fan crosses the copy column. It cannot swallow the
-     button's clicks, so the layer is inert and only the picture inside it is
-     painted. */
+  /* Both layers in one cell. */
   .ndi-orghero-art,
   .ndi-orghero-copy {
     grid-area: 1 / 1;
@@ -1848,16 +1516,9 @@ select option { background: #101827; color: #e9eef6; }
   .ndi-orghero-art {
     z-index: 2;
     width: 68%;
-    /* Capped against the viewport as well as the container, so a short window
-       cannot push the button below the fold: the artwork's height is its width
-       over 1.171, and 210px is the nav and the section's own padding. Without
-       this the picture keeps its 68% at any height and the section outgrows the
-       screen it was sized to fill. */
+    /* Capped against the viewport as well as the container, so a short window cannot push the button below the fold: the artwork's height is its width over 1.171, and 210px is the nav and the section's own padding. */
     max-width: min(820px, calc((100svh - 210px) * 1.171));
-    /* Flush with the container's gutter, not bled past it. Breaking out by 5%
-       put the phone 57px left of the line every other section starts on, and at
-       1280 that left only 15px between it and the window edge — below about
-       1240 it clipped. */
+    /* Flush with the container's gutter, not bled past it. */
     justify-self: start;
     align-self: center;
     pointer-events: none;
@@ -1871,22 +1532,12 @@ select option { background: #101827; color: #e9eef6; }
   }
 }
 
-/* ---- Filter strip ----------------------------------------
-   The tabs wrap on a phone rather than scrolling. A scrolling strip left the
-   first and last tab sliced in half at rest, which reads as a broken render
-   rather than as something to swipe; a taller wrapped block is honest about
-   how many filters there are. */
+/* ---- Filter strip ---------------------------------------- */
+/* The tabs wrap on a phone rather than scrolling. */
 .ndi-tabwrap { min-width: 0; }
 
-/* ---- Story page: inline links and the way back -------------
-   The article is running copy on the page rather than in a panel, so its links
-   need to read as links without a box to sit in: underlined at a distance from
-   the baseline so descenders stay legible, taking the accent on hover.
-
-   The foot action is sized as a real button. It is the only thing to do once
-   the article ends, so it should not have to be hunted for the way the small
-   "view all" pill would be — and its arrow travels left, toward where it goes,
-   rather than borrowing the forward nudge. */
+/* ---- Story page: inline links and the way back ------------- */
+/* The article is running copy on the page rather than in a panel, so its links need to read as links without a box to sit in: underlined at a distance from the baseline so descenders stay legible, taking the accent on hover. */
 .ndi-inline-link {
   color: var(--accent);
   text-decoration: underline;
@@ -1912,8 +1563,7 @@ select option { background: #101827; color: #e9eef6; }
     box-shadow: var(--glow-sm);
   }
   .ndi-backbtn:hover svg { transform: translateX(-4px); }
-  /* The same button pointing the other way, for "apply" on a vacancy: the
-     shape is right, only the direction of travel changes. */
+  /* The same button pointing the other way, for "apply" on a vacancy: the shape is right, only the direction of travel changes. */
   .ndi-backbtn[data-dir="forward"]:hover svg { transform: translateX(4px); }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1923,11 +1573,8 @@ select option { background: #101827; color: #e9eef6; }
   .ndi-backbtn:hover svg { transform: none; }
 }
 
-/* ---- News index and story ---------------------------------
-   A reading surface, so the hover is quiet: the headline takes the accent, the
-   photograph lifts a little inside its own frame, and the arrow uses the shared
-   .ndi-tut nudge. No card lift and no cursor-tracked halo — these are entries
-   in an index, not things to poke at. */
+/* ---- News index and story --------------------------------- */
+/* A reading surface, so the hover is quiet: the headline takes the accent, the photograph lifts a little inside its own frame, and the arrow uses the shared .ndi-tut nudge. */
 .ndi-news-title {
   transition: color 0.28s var(--ease-out);
 }
@@ -1955,8 +1602,7 @@ select option { background: #101827; color: #e9eef6; }
   .ndi-news-lead:hover .ndi-news-shot img { transform: none; }
 }
 
-/* The category, as a chip. Sits over artwork as often as not, so it carries its
-   own ground rather than relying on what is behind it. */
+/* The category, as a chip. */
 .ndi-news-chip {
   display: inline-flex;
   align-items: center;
@@ -1973,9 +1619,7 @@ select option { background: #101827; color: #e9eef6; }
   color: var(--text-accent);
 }
 
-/* An archive card with no photograph. The announcements never had one, so the
-   slot carries the label on the page's own gradient instead of a grey box
-   standing in for a picture that does not exist. */
+/* An archive card with no photograph. */
 .ndi-news-plate {
   background:
     radial-gradient(120% 140% at 12% 0%, rgba(90, 201, 148, 0.16), transparent 62%),
@@ -1983,11 +1627,7 @@ select option { background: #101827; color: #e9eef6; }
     linear-gradient(160deg, rgba(26, 88, 91, 0.3) 0%, rgba(20, 27, 41, 0.5) 70%);
   background-size: auto, var(--grid-size), auto;
 }
-/* Announcements run in date order with the stories, and the current batch of
-   dates puts several of them together, so the plate cannot read as one flat
-   fill repeated down a row. The board's own grid gives each one texture, and
-   the mint pool sits at a different corner on alternate cards so a run of them
-   does not tile. */
+/* Announcements run in date order with the stories, and the current batch of dates puts several of them together, so the plate cannot read as one flat fill repeated down a row. */
 .ndi-news-card:nth-child(even) .ndi-news-plate {
   background:
     radial-gradient(120% 140% at 88% 0%, rgba(90, 201, 148, 0.14), transparent 62%),
@@ -1996,9 +1636,7 @@ select option { background: #101827; color: #e9eef6; }
   background-size: auto, var(--grid-size), auto;
 }
 
-/* Pagination. Ghost by default; the current page is the only outlined one, the
-   way the reference has it — an outline reads as "you are here" without the
-   filled pill shouting over the row. */
+/* Pagination. */
 .ndi-page {
   display: inline-flex;
   align-items: center;
@@ -2077,23 +1715,8 @@ select option { background: #101827; color: #e9eef6; }
 .ndi-backlink:hover { color: var(--text-strong); }
 .ndi-backlink:hover svg { transform: rotate(180deg) translateX(4px); }
 
-/* ---- Careers -------------------------------------------------
-   The hero collage stands in for team photography that does not exist yet.
-   Each tile is a slashed frame — the print convention for "picture goes here"
-   — over the same glass the cards wear, so the placeholder belongs to the page
-   rather than looking like a failed image load.
-
-   Geometry is percentages of a fixed-ratio box: the composition scales with
-   the page, tiles bleed off both edges, and nothing is measured in script.
-
-   The entrance is this page's one authored moment. Sixteen tiles settle in
-   sequence, each arriving from flat and unblurring into its own rotation, so
-   the collage assembles itself rather than appearing. It runs on load because
-   the hero is above the fold on every viewport that fits it.
-
-   The animation holds its end state with `forwards`, which would outrank a
-   hover transform on the same element — so the tile owns position, rotation
-   and arrival, and the pane inside it owns the hover. */
+/* ---- Careers ------------------------------------------------- */
+/* The hero collage stands in for team photography that does not exist yet. */
 .ndi-collage {
   position: relative;
   aspect-ratio: 1200 / 600;
@@ -2131,10 +1754,7 @@ select option { background: #101827; color: #e9eef6; }
   overflow: hidden;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  /* Not the shared card material: these are stand-ins for photographs, and a
-     photograph is opaque. At 3% white over the page they read as a rendering
-     fault rather than as frames waiting to be filled, so the fill runs to a
-     near-solid base with the same mint cast the cards carry. */
+  /* Not the shared card material: these are stand-ins for photographs, and a photograph is opaque. */
   background:
     linear-gradient(
       158deg,
@@ -2169,8 +1789,7 @@ select option { background: #101827; color: #e9eef6; }
   letter-spacing: 0.13em;
   line-height: 1.2;
   text-transform: uppercase;
-  /* Full strength: at 9px this is already the smallest type on the page, and
-     knocking it back put it under 4.5:1 against the tile. */
+  /* Full strength: at 9px this is already the smallest type on the page, and knocking it back put it under 4.5:1 against the tile. */
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -2192,15 +1811,12 @@ select option { background: #101827; color: #e9eef6; }
   .ndi-collage-tile:hover .ndi-collage-slash { stroke: rgba(90, 201, 148, 0.16); }
   .ndi-collage-tile:hover .ndi-collage-cap { color: var(--text-accent); }
 }
-/* Sixteen tiles across a phone are postage stamps, so below 760px the
-   composition drops to the first six in a plain grid, rotations kept. */
+/* Sixteen tiles across a phone are postage stamps, so below 760px the composition drops to the first six in a plain grid, rotations kept. */
 @media (max-width: 760px) {
   .ndi-collage {
     display: grid;
     aspect-ratio: auto;
-    /* minmax(0, 1fr), not 1fr: the captions are `nowrap`, so an `auto`
-       minimum sizes every column to its longest caption and the third one
-       leaves the screen. */
+    /* minmax(0, 1fr), not 1fr: the captions are `nowrap`, so an `auto` minimum sizes every column to its longest caption and the third one leaves the screen. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
     padding: 4px 0 24px;
@@ -2226,9 +1842,7 @@ select option { background: #101827; color: #e9eef6; }
   .ndi-collage-tile:hover .ndi-collage-pane { transform: none; }
 }
 
-/* Vacancy cards. The fill and shadow are the shared card material via
-   data-gov-card; what is added here is the pill row and the hairline that
-   separates the deadline from the affordance. */
+/* Vacancy cards. */
 .ndi-vacancy-pill {
   display: inline-flex;
   align-items: center;
@@ -2253,8 +1867,7 @@ select option { background: #101827; color: #e9eef6; }
   color: var(--text-muted);
 }
 
-/* Terms-of-reference bullets: a mint rule rather than a disc, matching the
-   hairlines the rest of the site divides with. */
+/* Terms-of-reference bullets: a mint rule rather than a disc, matching the hairlines the rest of the site divides with. */
 .ndi-tor-item {
   position: relative;
   padding-left: 20px;
@@ -2275,11 +1888,7 @@ select option { background: #101827; color: #e9eef6; }
 .ndi-otherjob span:first-child { transition: color 0.24s var(--ease-out); }
 .ndi-otherjob:hover span:first-child { color: var(--text-accent); }
 
-/* The CV field. The native file input cannot be themed in any browser, so it
-   is taken out of the layout — not hidden from the accessibility tree — and
-   the label becomes the control. Clicking the label still opens the picker,
-   and tabbing still lands on the input, which is why this is a clip rather
-   than `display: none`. */
+/* The CV field. */
 .ndi-cv-input {
   position: absolute;
   width: 1px;
@@ -2309,8 +1918,7 @@ select option { background: #101827; color: #e9eef6; }
   border-color: var(--accent);
   box-shadow: var(--ring);
 }
-/* Once a file is attached the field has content, so the dashed "empty" edge
-   would be describing the wrong state. */
+/* Once a file is attached the field has content, so the dashed "empty" edge would be describing the wrong state. */
 .ndi-cv-drop[data-has-file="1"] {
   border-style: solid;
   border-color: rgba(90, 201, 148, 0.42);

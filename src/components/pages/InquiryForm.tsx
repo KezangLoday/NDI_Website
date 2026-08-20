@@ -7,22 +7,7 @@ import { FIELD_BLOCK_CLASS, FIELD_CLASS, LABEL_CLASS } from "@/components/ui/for
 import { Icon } from "@/components/ui/icons";
 import type { ServiceOption } from "@/content/types";
 
-/**
- * Business inquiry form. Presentational in Phase 1, as in the prototype.
- *
- * Laid out like Home's contact form — same field treatment, same mono labels
- * above each field, same worked-example placeholders — because it is the same
- * form asked on a different page, and the two reading differently made the
- * site look like two sites.
- *
- * The labels were previously `sr-only`, leaving the placeholder as the only
- * visible name for each field. That is the one form pattern that fails as soon
- * as anyone starts typing: the label disappears exactly when it is needed to
- * check the answer.
- *
- * There is no card shell here. The design places this bare on the CTA panel,
- * which supplies the surround.
- */
+/** Business inquiry form. */
 export function InquiryForm({ services }: { services: ServiceOption[] }) {
   const [service, setService] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -46,8 +31,7 @@ export function InquiryForm({ services }: { services: ServiceOption[] }) {
           className={`${FIELD_CLASS} h-12`}
         />
       </label>
-      {/* Required here, unlike Home's: an integration inquiry that does not say
-          who is asking cannot be scoped or routed. */}
+      {/* Required here, unlike Home's: an integration inquiry that does not say who is asking cannot be scoped or routed. */}
       <label className={FIELD_BLOCK_CLASS}>
         <span className={LABEL_CLASS}>Organization</span>
         <input
@@ -71,9 +55,7 @@ export function InquiryForm({ services }: { services: ServiceOption[] }) {
 
       <div className={`${FIELD_BLOCK_CLASS} min-[561px]:col-span-2`}>
         <span className={LABEL_CLASS}>Service or product of interest</span>
-        {/* The design's wording, "Service of interest — select one", was the
-            field's only name while the label was hidden. With the label back
-            the instruction is redundant, so this takes the shared default. */}
+        {/* The design's wording, "Service of interest — select one", was the field's only name while the label was hidden. */}
         <ServiceSelect options={services} value={service} onChange={setService} />
       </div>
 

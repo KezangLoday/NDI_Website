@@ -12,14 +12,7 @@ const GLASS_SHADOW =
   "inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px rgba(255,255,255,0.03), " +
   "0 22px 52px rgba(0,0,0,0.38)";
 
-/**
- * "What you can do today" — the bento of frosted-glass cards, each a link, each
- * carrying the proximity-tracked border glow.
- *
- * The 12-column grid and its 232px minimum row are the design's; below 1000px
- * the design collapses each card to a half-width span, and below 700px to a
- * plain stack.
- */
+/** "What you can do today" — the bento of frosted-glass cards, each a link, each carrying the proximity-tracked border glow. */
 export function UseCaseCards({ useCases }: { useCases: UserUseCase[] }) {
   useGlowCards();
 

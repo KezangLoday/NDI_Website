@@ -2,16 +2,7 @@ import { media } from "../media";
 
 import type { SeedTeamMember } from "./types";
 
-/**
- * Prospective Payload collection: `team`.
- *
- * `tier` separates the three leadership cards from the wider team grid, which
- * the design renders at different sizes.
- *
- * Only nine photographs exist — they were recovered from the design tool's
- * sidecar, where they lived as base64 rather than as files. The remaining
- * thirteen members render a monogram until the client supplies portraits.
- */
+/** Prospective Payload collection: `team`. */
 export const team: SeedTeamMember[] = [
   {
     id: "jacques-von-benecke",

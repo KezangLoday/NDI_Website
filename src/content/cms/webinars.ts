@@ -1,11 +1,4 @@
-/**
- * Webinars, and the upcoming-event card.
- *
- * The interesting part is `queryUpcomingEvent`, which resolves three separate
- * pieces of configuration into one answer so the component does not have to:
- * the global's chosen session, the fallback rule, and whether the chosen
- * session has already happened.
- */
+/** Webinars, and the upcoming-event card. */
 import type { Webinar as PayloadWebinar } from "@/payload-types";
 import type {
   UpcomingEventSlot,
@@ -122,12 +115,7 @@ export async function queryWebinars(): Promise<Webinar[]> {
 
   const webinars = withSlug(docs).map(toWebinar);
 
-  /*
-   * Upcoming sessions sort ascending — the next one first, because that is what
-   * a reader wants — while recordings sort descending, newest first. One SQL
-   * sort cannot do both, and the list is small enough that doing it here is
-   * cheaper than two queries.
-   */
+  /* Upcoming sessions sort ascending — the next one first, because that is what a reader wants. */
   return webinars.sort((a, b) => {
     if (a.sessionStatus !== b.sessionStatus) {
       return a.sessionStatus === "upcoming" ? -1 : 1;
@@ -150,21 +138,7 @@ export async function queryWebinarBySlug(slug: string): Promise<Webinar | undefi
   return doc ? toWebinar(doc) : undefined;
 }
 
-/**
- * What the "Upcoming session" card should show.
- *
- * Resolution order, and why:
- *
- *  1. The sessions an editor picked in the global, in their order — an explicit
- *     choice beats any rule.
- *  2. Anything whose start time has already passed is dropped. This is what
- *     stops a forgotten card advertising last month's webinar, and it is why
- *     the check is here rather than left to whoever remembers to update the
- *     global.
- *  3. If nothing survives and the fallback is on, the soonest upcoming
- *     published session stands in.
- *  4. Otherwise the empty state, in the editor's own words.
- */
+/** What the "Upcoming session" card should show. */
 export async function queryUpcomingEvent(now: Date = new Date()): Promise<UpcomingEventSlot> {
   const payload = await getPayloadClient();
   const global = await payload.findGlobal({ slug: "upcoming-events", depth: 1 });
@@ -204,10 +178,6 @@ function isStillAhead(webinar: Webinar, now: Date): boolean {
   if (webinar.sessionStatus !== "upcoming") return false;
   const starts = new Date(webinar.startsAt);
   if (Number.isNaN(starts.getTime())) return false;
-  /*
-   * An hour's grace. A session that started twenty minutes ago is still the
-   * thing to show someone arriving on the page — the registration link may well
-   * still let them in — whereas one from yesterday is not.
-   */
+  /* An hour's grace. */
   return starts.getTime() + 60 * 60_000 > now.getTime();
 }

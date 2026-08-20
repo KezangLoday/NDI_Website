@@ -62,10 +62,7 @@ export async function ContactSection() {
               label="Email"
               value={contact.email}
             />
-            {/* One number, two ways to use it. The row used to be labelled
-                "Phone · WhatsApp" while only offering tel:, so on a desktop —
-                where tel: usually goes nowhere — WhatsApp was named but
-                unreachable. */}
+            {/* One number, two ways to use it. */}
             <ContactRow
               href={contact.phoneHref}
               icon="phone"

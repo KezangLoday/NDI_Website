@@ -1,25 +1,4 @@
-/**
- * Job postings, and the configuration that governs applying for them.
- *
- * The job is the central entity in the recruitment system: applications hang
- * off it, HR reads its count to know what is coming in, and it — not the
- * application form — is what decides whether an application may be submitted at
- * all. Three independent conditions have to hold, and all three are checked on
- * the server when a submission arrives:
- *
- *   `_status === 'published'`  ·  `recruitmentStatus === 'open'`  ·  deadline in the future
- *
- * The Apply button being absent from the page is a courtesy, not a control.
- *
- * The terms of reference are a `sections` array rather than a fixed set of
- * "Responsibilities" / "Qualifications" / "Skills" fields. That is a considered
- * choice: a real vacancy notice varies in what it needs — one post needs a
- * Competencies clause, another a Remuneration one, a consultancy needs
- * Deliverables — and a fixed schema would leave HR either padding an irrelevant
- * heading or hiding a needed clause inside another. The default value below
- * pre-fills the headings the requirements name, so the structure is there
- * without being a cage.
- */
+/** Job postings, and the configuration that governs applying for them. */
 import type { CollectionConfig } from "payload";
 
 import { hrEditable, publishedOrSignedIn, superadminOnly } from "../access";
@@ -283,15 +262,7 @@ export const Jobs: CollectionConfig = {
               },
             },
             {
-              /**
-               * The count, and the way into the applications for this post.
-               *
-               * A `join` rather than a computed number: it gives HR the actual
-               * list, filterable and sortable, inside the job they are looking
-               * at — which is the workflow the requirements describe. The count
-               * comes along with it for free, and no denormalised total can
-               * drift out of step with reality.
-               */
+              /** The count, and the way into the applications for this post. */
               name: "applications",
               type: "join",
               collection: "job-applications",
@@ -324,14 +295,7 @@ export const Jobs: CollectionConfig = {
   timestamps: true,
 };
 
-/**
- * Whether a job may accept an application right now.
- *
- * Exported because three callers need to agree on it exactly: the submission
- * endpoint that refuses a late application, the frontend that decides whether
- * to render the form, and the tests. A second implementation of this rule is a
- * second answer to the question.
- */
+/** Whether a job may accept an application right now. */
 export interface ApplicabilityInput {
   readonly status: string | null | undefined;
   readonly recruitmentStatus: string | null | undefined;
@@ -347,17 +311,7 @@ export function applicability(job: ApplicabilityInput, now: Date = new Date()): 
   if (job.recruitmentStatus !== "open") return { open: false, reason: "closed" };
   if (!job.closesAt) return { open: false, reason: "no-deadline" };
 
-  /*
-   * The deadline is inclusive and expressed as a calendar day, so it lapses at
-   * the end of that day rather than at the moment it was stored. An applicant
-   * submitting at 21:00 on the closing date is on time; treating the stored
-   * midnight timestamp as the cut-off would have quietly closed the vacancy a
-   * day early.
-   *
-   * UTC throughout, matching how every other date on the site is formatted.
-   * Bhutan is UTC+6, so this is in fact six hours of grace rather than a day
-   * lost — the forgiving direction to err in.
-   */
+  /* The deadline is inclusive and expressed as a calendar day, so it lapses at the end of that day rather than at the moment it was stored. */
   const deadline = new Date(job.closesAt);
   if (Number.isNaN(deadline.getTime())) return { open: false, reason: "no-deadline" };
   const endOfDay = Date.UTC(

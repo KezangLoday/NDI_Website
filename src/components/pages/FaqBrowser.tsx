@@ -6,13 +6,7 @@ import { ProseBody } from "@/content/cms/richText";
 import { Icon } from "@/components/ui/icons";
 import type { FaqAudience, FaqItem } from "@/content/types";
 
-/**
- * Icons for the audience tabs, keyed by category slug.
- *
- * The two the site needs are seeded records rather than a union in the code, so
- * a third added in the admin panel gets the generic mark and still works. The
- * page does not break waiting for a developer to pick an icon.
- */
+/** Icons for the audience tabs, keyed by category slug. */
 const TAB_ICON: Record<string, "user" | "building2"> = {
   "for-users": "user",
   "for-organizations": "building2",
@@ -20,14 +14,7 @@ const TAB_ICON: Record<string, "user" | "building2"> = {
 
 const DEFAULT_TAB_ICON = "building2" as const;
 
-/**
- * Tabs plus live search over the FAQ list.
- *
- * The search deliberately spans both audiences: while a query is present the
- * tab filter is bypassed and the tabs dim, so a citizen searching "sandbox"
- * still finds the answer filed under organizations. Clearing happens by
- * picking a tab, which matches the prototype.
- */
+/** Tabs plus live search over the FAQ list. */
 export function FaqBrowser({
   items,
   audiences,
@@ -35,8 +22,7 @@ export function FaqBrowser({
   items: FaqItem[];
   audiences: FaqAudience[];
 }) {
-  /* The first CMS audience is the default tab, so reordering the categories in
-     the admin panel changes which one opens first. */
+  /* The first CMS audience is the default tab, so reordering the categories in the admin panel changes which one opens first. */
   const [audience, setAudience] = useState<string>(audiences[0]?.slug ?? "");
   const [query, setQuery] = useState("");
 
@@ -48,9 +34,7 @@ export function FaqBrowser({
       const inTab = q ? true : item.audience === audience;
       if (!inTab) return false;
       if (!q) return true;
-      /* `searchText` is the answer flattened to plain text on the server —
-         a Lexical tree cannot be searched with `includes`, and flattening it
-         per keystroke in the browser would be wasteful. */
+      /* `searchText` is the answer flattened to plain text on the server. */
       return `${item.question} ${item.searchText}`.toLowerCase().includes(q);
     });
   }, [items, audience, query]);

@@ -10,13 +10,7 @@ export function Eyebrow({ children }: { children: ReactNode }) {
   );
 }
 
-/**
- * The "View all →" pill on the right of a section header.
- *
- * The outline is fainter than the design's slate divider and holds steady on
- * hover, rather than turning mint. The fill, the mint glow beneath, the inner
- * bottom light and the arrow slide carry the hover state on their own.
- */
+/** The "View all →" pill on the right of a section header. */
 export function ViewAllLink({ href, children }: { href: string; children: ReactNode }) {
   return (
     <Link

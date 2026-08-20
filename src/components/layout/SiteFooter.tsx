@@ -12,41 +12,21 @@ import { Icon } from "../ui/icons";
 
 const { footer, contact, social } = siteSettings;
 
-/**
- * Sticky "curtain" footer: the page scrolls away to reveal it, and its content
- * scales up from 0.86 as more of the band comes into view.
- *
- * The 430px band height is a CSS variable rather than a constant because the
- * footer content needs more room once the columns stack — the prototype's
- * fixed height clipped them on narrow screens.
- */
+/** Sticky "curtain" footer: the page scrolls away to reveal it, and its content scales up from 0.86 as more of the band comes into view. */
 export function SiteFooter() {
   const curtainRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
 
-  /**
-   * Size the curtain band to the footer's own content, and fall back to a
-   * normal block when it cannot fit.
-   *
-   * The band was three hard-coded values before; once the columns stack, the
-   * content outgrows all of them and `overflow:hidden` cuts the copyright bar
-   * off. The CSS values now act as a floor and the real height is measured.
-   *
-   * The curtain also only works while the footer is shorter than the viewport:
-   * it reveals the band by scrolling the page off it, so a footer taller than
-   * the screen has nothing to be revealed against and `top` would go negative.
-   * Below that threshold the footer lays out as an ordinary block.
-   */
+  /** Size the curtain band to the footer's own content, and fall back to a normal block when it cannot fit. */
   useEffect(() => {
     const curtain = curtainRef.current;
     const footer = footerRef.current;
     if (!curtain || !footer) return;
 
     const measure = () => {
-      // offsetHeight, not a bounding rect: it is the settled layout height, so
-      // the columns' entrance transform cannot inflate the band mid-animation.
+      // offsetHeight, not a bounding rect: it is the settled layout height, so the columns' entrance transform cannot inflate the band mid-animation.
       const height = footer.offsetHeight;
       curtain.style.setProperty("--foot-h", `${height}px`);
       curtain.dataset.mode = height <= window.innerHeight - 40 ? "curtain" : "static";
@@ -67,17 +47,7 @@ export function SiteFooter() {
     };
   }, []);
 
-  /**
-   * Zoom scrubbed by how much of the band has been revealed, and the columns'
-   * staggered entrance.
-   *
-   * Both hang off the same scroll signal. The entrance used to be driven by an
-   * IntersectionObserver on the footer, which never fired inside the clipped,
-   * sticky curtain — so `.ndi-foot-in` was never applied and the columns and
-   * copyright bar sat permanently 30px low, spilling past the band's bottom
-   * edge and being clipped there. The scrub already knows when the band is in
-   * view, so it flips the class too.
-   */
+  /** Zoom scrubbed by how much of the band has been revealed, and the columns' staggered entrance. */
   useEffect(() => {
     const zoom = zoomRef.current;
     const curtain = curtainRef.current;
@@ -194,8 +164,7 @@ export function SiteFooter() {
             <div
               ref={zoomRef}
               data-foot-zoom=""
-              // flex-auto, not flex-1: a 0 basis would collapse this box and let
-              // its content spill out of the band instead of growing it.
+              // flex-auto, not flex-1: a 0 basis would collapse this box and let its content spill out of the band instead of growing it.
               className="relative z-[1] flex flex-auto flex-col opacity-0"
               style={{ transform: "scale(0.86)" }}
             >

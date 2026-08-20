@@ -1,30 +1,4 @@
-/**
- * Application reference numbers: `APP-2026-00001`.
- *
- * Two properties matter. It has to be unique, because HR quotes it to
- * candidates and searches on it. And it must not encode anything — the
- * requirement is explicit that the database id is not to be used as the public
- * reference, and the reason is that a sequential primary key tells an applicant
- * how many people applied and lets them enumerate other people's records if any
- * endpoint ever takes an id.
- *
- * Uniqueness is guaranteed by the unique index on the column, not by this
- * function. That distinction is the whole design:
- *
- *   - `nextReference` reads the highest reference for the year and adds one.
- *     Two simultaneous submissions can and will read the same value.
- *   - The insert then fails for one of them on the unique index, and
- *     `createWithReference` retries with a freshly read number.
- *
- * The alternative — an atomic counter row, or a Postgres sequence — would be
- * race-free on the first attempt but would mean reaching past Payload's public
- * API into the Drizzle instance and the request's transaction. At the volume a
- * national programme's vacancy attracts, a retry loop is both correct and much
- * less to go wrong.
- *
- * The zero padding is what makes `sort: '-reference'` a numeric sort: `00010`
- * orders after `00009` as a string, where `10` would not.
- */
+/** Application reference numbers: `APP-2026-00001`. */
 import type { Payload, PayloadRequest } from "payload";
 
 const PREFIX = "APP";
@@ -34,12 +8,7 @@ export function formatReference(year: number, sequence: number): string {
   return `${PREFIX}-${year}-${String(sequence).padStart(DIGITS, "0")}`;
 }
 
-/**
- * Pulls the sequence back out of a reference.
- *
- * Returns null for anything that does not match the format, which is how a
- * hand-edited or legacy value is kept from poisoning the next number.
- */
+/** Pulls the sequence back out of a reference. */
 export function parseReference(reference: string): { year: number; sequence: number } | null {
   const match = /^APP-(\d{4})-(\d+)$/.exec(reference);
   if (!match) return null;
@@ -68,12 +37,7 @@ export async function nextReference({
     limit: 1,
     depth: 0,
     select: { reference: true },
-    /*
-     * The numbering has to see every application, including ones the caller
-     * cannot read — and the caller here is often the public submission
-     * endpoint, which has no user at all. Only the maximum is read; nothing
-     * about any application is returned to anyone.
-     */
+    /* The numbering has to see every application, including ones the caller cannot read. */
     overrideAccess: true,
     ...(req ? { req } : {}),
   });
@@ -83,12 +47,7 @@ export async function nextReference({
   return formatReference(year, (parsed?.sequence ?? 0) + 1);
 }
 
-/**
- * Postgres' unique-violation code.
- *
- * Matched on the code rather than the message so it survives a locale change or
- * a Payload error-wrapping change.
- */
+/** Postgres' unique-violation code. */
 const UNIQUE_VIOLATION = "23505";
 
 /** Whether a thrown error is a collision on the reference column. */

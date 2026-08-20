@@ -1,10 +1,4 @@
-/**
- * News & Updates, from the CMS.
- *
- * Two shapes in one collection — see `format` — and the mapper's main job is
- * resolving where a card links: a story to its own page, a notice out to the
- * circular it announces, or to its own page when it has nowhere else to go.
- */
+/** News & Updates, from the CMS. */
 import type { News as PayloadNews } from "@/payload-types";
 import type { NewsItem, NewsSource } from "@/content/types";
 import {
@@ -19,16 +13,7 @@ import {
 import { getPayloadClient } from "@/payload/lib/client";
 import { DETAIL_DEPTH, LISTING_DEPTH, LISTING_LIMIT, published, withSlug } from "./queries";
 
-/**
- * The fields `toNewsItem` reads.
- *
- * Spelled out rather than taking the whole document, because the listing query
- * uses `select` to skip the article body — and Payload types a selected result
- * as exactly the fields asked for. Writing the mapper's input as "these are
- * required, the rest may be absent" is what lets one mapper serve both the
- * listing and the detail query, and it makes a `select` that forgets a field a
- * type error rather than a blank chip on a card.
- */
+/** The fields `toNewsItem` reads. */
 export type NewsDoc = Pick<
   PayloadNews,
   "id" | "slug" | "format" | "title" | "excerpt" | "publishedAt" | "category"
@@ -72,14 +57,7 @@ function toSource(source: PayloadNews["source"]): NewsSource | undefined {
   };
 }
 
-/**
- * The whole newsroom, newest first.
- *
- * One query for both formats, because the archive grid interleaves them by
- * date. `body` is excluded: it is the largest field in the collection and no
- * card renders a word of it, so fetching it for a listing of forty stories
- * would be tens of kilobytes of Lexical JSON thrown away.
- */
+/** The whole newsroom, newest first. */
 export async function queryNews(): Promise<NewsItem[]> {
   const payload = await getPayloadClient();
   const { docs } = await payload.find({
@@ -120,13 +98,7 @@ export async function queryNewsBySlug(slug: string): Promise<NewsItem | undefine
   return doc ? toNewsItem(doc) : undefined;
 }
 
-/**
- * Slugs for `generateStaticParams`.
- *
- * A notice that links off-site has no page of its own, so it is excluded —
- * prerendering a route nothing links to is wasted build time, and the route
- * still works if someone types it.
- */
+/** Slugs for `generateStaticParams`. */
 export async function queryNewsSlugs(): Promise<string[]> {
   const payload = await getPayloadClient();
   const { docs } = await payload.find({

@@ -4,19 +4,7 @@ import { Icon } from "@/components/ui/icons";
 import type { UpcomingEventSlot, Webinar } from "@/content/types";
 import { mediaUrl } from "@/lib/media";
 
-/**
- * The webinars page: the upcoming session as a banner, recordings as a grid.
- *
- * The banner takes a resolved `UpcomingEventSlot` rather than filtering the list
- * itself. That is the point of the slot type: whether a session is featured, and
- * whether the featured one has already happened, are decisions made on the
- * server from the CMS global — so this component either has an event or has the
- * empty-state copy, and cannot accidentally advertise last month's webinar.
- *
- * A session with no registration link still renders, without a button. That is
- * the honest shape for "this is happening, details to follow", and it is better
- * than a button pointing nowhere.
- */
+/** The webinars page: the upcoming session as a banner, recordings as a grid. */
 export function WebinarsPanel({
   webinars,
   upcoming,
@@ -87,9 +75,7 @@ export function WebinarsPanel({
           ) : null}
         </div>
       ) : (
-        /* No banner, no empty card outline — a bordered box containing an
-           apology draws more attention to the absence than the absence does.
-           The note sits as plain copy where the banner would have been. */
+        /* No banner, no empty card outline — a bordered box containing an apology draws more attention to the absence than the absence does. */
         <p className="max-w-[62ch] text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
           {upcoming.emptyStateNote}
         </p>
@@ -106,14 +92,7 @@ export function WebinarsPanel({
   );
 }
 
-/**
- * One recording.
- *
- * Rendered as a link only when there is something to watch. A recorded session
- * whose video has not been posted yet is still worth listing — it tells someone
- * the session happened — but a card that looks clickable and does nothing is
- * worse than one that plainly is not.
- */
+/** One recording. */
 function RecordingCard({ webinar }: { webinar: Webinar }) {
   const inner = (
     <>
@@ -130,8 +109,7 @@ function RecordingCard({ webinar }: { webinar: Webinar }) {
             className="object-cover"
           />
         ) : null}
-        {/* The play mark sits over the artwork where there is some, and over the
-            design's gradient where there is not. */}
+        {/* The play mark sits over the artwork where there is some, and over the design's gradient where there is not. */}
         <span className="relative text-accent/60">
           <Icon name="playCircle" size={34} />
         </span>

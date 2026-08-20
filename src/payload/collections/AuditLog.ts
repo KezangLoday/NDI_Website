@@ -1,15 +1,4 @@
-/**
- * The recruitment audit log.
- *
- * Append-only by construction: `create` is closed to every API caller, so the
- * only writes are the ones `writeAudit` makes from inside the operation being
- * recorded, and `update` is closed to everyone including superadmin. A log that
- * can be edited by the people it records is not a log.
- *
- * Deletion is superadmin-only and exists for one reason: data-retention. An
- * applicant's data is kept for a stated period and then removed, and the log
- * lines naming them have to go with it.
- */
+/** The recruitment audit log. */
 import type { CollectionConfig } from "payload";
 
 import { noOne, recruitmentAccess, superadminOnly } from "../access";
@@ -58,15 +47,7 @@ export const AuditLog: CollectionConfig = {
       },
     },
     {
-      /**
-       * The document, as a slug and a stringified id rather than a
-       * relationship.
-       *
-       * A relationship would cascade to null when the application is deleted,
-       * which is precisely when the log line matters most — "who deleted this,
-       * and when" has to survive the deletion. The reference number below is
-       * what makes the orphaned line still readable.
-       */
+      /** The document, as a slug and a stringified id rather than a relationship. */
       name: "collectionSlug",
       type: "text",
       required: true,

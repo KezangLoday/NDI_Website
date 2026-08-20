@@ -15,15 +15,7 @@ export const metadata: Metadata = {
     "We hire engineers, designers and communicators who want their work in the hands of every citizen in Bhutan.",
 };
 
-/**
- * Revalidate hourly rather than daily.
- *
- * This page is the one whose staleness has a deadline attached: a vacancy
- * closes at the end of its closing day, and after that it must stop being
- * listed. Publishing and closing both revalidate on demand, so the hourly floor
- * is only covering the case nothing triggers — a deadline lapsing with no
- * editor action at all.
- */
+/** Revalidate hourly rather than daily. */
 export const revalidate = 3600;
 
 export default async function CareersPage() {
@@ -31,16 +23,13 @@ export default async function CareersPage() {
 
   return (
     <>
-      {/* The hero centres, which no other page here does. It earns it: there is
-          no product shot to sit beside, and the collage below wants the axis. */}
+      {/* The hero centres, which no other page here does. */}
       <PageSection className="pb-0 pt-40 text-center">
         <div className="mx-auto max-w-[880px]">
-          {/* Every other page labels itself before the headline; this one opened
-              cold. */}
+          {/* Every other page labels itself before the headline; this one opened cold. */}
           <Eyebrow>— Careers</Eyebrow>
           <h1 className="mt-5 font-display text-[clamp(38px,5.6vw,64px)] font-semibold leading-[1.04] tracking-[-0.035em] text-strong [text-wrap:balance]">
-            {/* The article and its noun stay on one line: balanced wrapping
-                strands "a" at the end of a line on a phone otherwise. */}
+            {/* The article and its noun stay on one line: balanced wrapping strands "a" at the end of a line on a phone otherwise. */}
             Come and do the work a&nbsp;
             <Emphasis>country&nbsp;remembers</Emphasis>
           </h1>
@@ -58,9 +47,7 @@ export default async function CareersPage() {
         </div>
       </PageSection>
 
-      {/* Wider than the 1200px shell every other section sits in, and clipped
-          at the window rather than at a gutter: the outermost tiles are meant
-          to run off both edges, so the picture continues past the page. */}
+      {/* Wider than the 1200px shell every other section sits in, and clipped at the window rather than at a gutter: the outermost tiles are meant to run off both edges, so the picture continues past the page. */}
       <div className="mt-14 overflow-hidden">
         <div className="mx-auto w-full max-w-[1560px] px-5 min-[761px]:px-0">
           <HeroCollage />
@@ -70,8 +57,7 @@ export default async function CareersPage() {
       <PageSection className="pt-20">
         <Reveal className="grid grid-cols-1 gap-x-10 gap-y-9 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-4">
           {values.map((value) => (
-            /* Not cards. Four short statements under a rule reads as a list of
-               claims the team is making, which is what these are. */
+            /* Not cards. */
             <div key={value.id} className="border-t border-grid pt-4">
               <div className="font-display text-[16.5px] font-semibold tracking-[-0.01em] text-strong">
                 {value.title}

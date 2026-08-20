@@ -1,31 +1,7 @@
-/**
- * Builds Lexical documents for the seed.
- *
- * The seed fixtures were written as plain strings and simple block arrays, which
- * is the right shape for content someone typed by hand. Payload stores Lexical's
- * node tree. This converts between them.
- *
- * Hand-built rather than driven through Lexical's headless editor, and that is a
- * considered trade: the headless route means instantiating an editor, importing
- * the same feature set the field is configured with, and keeping the two in
- * step. For a seed that produces paragraphs, headings, and one trailing link per
- * paragraph, the node shapes are stable, documented, and about forty lines.
- *
- * Every node carries `version: 1` and the format/indent/direction fields
- * Lexical expects. Omitting them produces a document the editor loads but
- * cannot serialise back, which fails at the moment an editor tries to save —
- * long after the seed has been declared a success.
- */
+/** Builds Lexical documents for the seed. */
 import type { SeedBlock } from "./data/types";
 
-/**
- * The shape Payload's `richText` column holds.
- *
- * A type alias rather than an interface, deliberately: TypeScript gives object
- * type aliases an implicit index signature and interfaces none, and Payload's
- * generated rich-text type carries `[k: string]: unknown`. As an interface this
- * would not be assignable to it, which is a distinction with no meaning here.
- */
+/** The shape Payload's `richText` column holds. */
 export type LexicalDocument = {
   root: {
     type: "root";
@@ -37,13 +13,7 @@ export type LexicalDocument = {
   };
 };
 
-/**
- * A Lexical node.
- *
- * `type` and `version` are required because Payload's generated rich-text type
- * requires them on every child — which is a useful constraint to inherit rather
- * than widen away, since a node missing either is one the editor cannot load.
- */
+/** A Lexical node. */
 type LexicalNode = { type: string; version: number; [key: string]: unknown };
 
 function root(children: LexicalNode[]): LexicalDocument {
@@ -62,8 +32,7 @@ function root(children: LexicalNode[]): LexicalDocument {
 function text(value: string): LexicalNode {
   return {
     type: "text",
-    /* A bitmask: 0 is unformatted. Bold is 1, italic 2, and so on — nothing the
-       seed produces needs any of them. */
+    /* A bitmask: 0 is unformatted. */
     format: 0,
     detail: 0,
     mode: "normal",
@@ -81,11 +50,7 @@ function link(label: string, href: string): LexicalNode {
     format: "",
     indent: 0,
     version: 3,
-    /*
-     * `linkType: "custom"` with a URL, rather than an internal document
-     * reference. Every link in the seed points off-site — to a partner's
-     * announcement or a journal — so there is nothing in the CMS to reference.
-     */
+    /* `linkType: "custom"` with a URL, rather than an internal document reference. */
     fields: {
       linkType: "custom",
       newTab: true,
@@ -139,8 +104,7 @@ export function blocksToLexical(blocks: SeedBlock[] | undefined): LexicalDocumen
       if (block.kind === "heading") return heading(block.text);
       const children: LexicalNode[] = [text(block.text)];
       if (block.link) {
-        /* The lead-in wording lives in the block's text, so the link needs a
-           space before it or the sentence runs into the anchor. */
+        /* The lead-in wording lives in the block's text, so the link needs a space before it or the sentence runs into the anchor. */
         children.push(text(" "), link(block.link.label, block.link.href));
       }
       return paragraph(children);

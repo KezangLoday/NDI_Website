@@ -1,11 +1,4 @@
-/**
- * Team members.
- *
- * The mapper surfaces exactly the three fields the page renders. The collection
- * holds more — department, biography, email, social links — and none of it
- * comes through here: adding a field to a public page should be a deliberate
- * change to this mapper, not something that happens because HR filled a box in.
- */
+/** Team members. */
 import type { TeamMember as PayloadTeamMember } from "@/payload-types";
 import type { TeamMember } from "@/content/types";
 import { getPayloadClient } from "@/payload/lib/client";

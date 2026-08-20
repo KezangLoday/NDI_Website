@@ -2,13 +2,7 @@ import { media } from "@/lib/media";
 
 import type { Organization } from "./types";
 
-/**
- * Prospective Payload collection: `organizations` — the "Trusted by" tiles.
- *
- * `column` places a tile in one of the three vertically-scrolling columns.
- * The tiles are duplicated at render time for the seamless -50% loop, so the
- * duplication is a presentation concern and stays out of the data.
- */
+/** Prospective Payload collection: `organizations` — the "Trusted by" tiles. */
 export const organizations: Organization[] = [
   {
     id: "royal-government-of-bhutan",

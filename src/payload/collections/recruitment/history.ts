@@ -1,25 +1,4 @@
-/**
- * The status history, and the audit trail behind it.
- *
- * HR needs to answer "what happened to this application, and who did it" — for
- * their own coordination, and because a recruitment decision in a public body
- * is a decision that can be asked about later. Storing only the current status
- * makes that unanswerable.
- *
- * Two mechanisms, deliberately:
- *
- *  - **`statusHistory` on the application** is the timeline HR reads. It lives
- *    on the document, so it is right there when the application is open, and it
- *    is read-only in the admin — appended by the hook below, never typed.
- *
- *  - **The `audit-log` collection** is the wider record: assignments, note
- *    additions, jobs being closed. Separate because it spans documents and
- *    collections, and because an append-only log is a different thing from a
- *    field on a row.
- *
- * Neither is a general-purpose event-sourcing system, which the requirements
- * explicitly do not want. They record the handful of actions that matter.
- */
+/** The status history, and the audit trail behind it. */
 import type {
   CollectionAfterChangeHook,
   CollectionBeforeChangeHook,
@@ -62,17 +41,7 @@ export function statusHistoryField(): Field {
   };
 }
 
-/**
- * Appends to the timeline whenever the status changes.
- *
- * Runs on `beforeChange` so the new entry is written in the same operation as
- * the status itself: there is no window in which the status has moved and the
- * timeline has not, and no second write to fail independently.
- *
- * The reason is taken from `statusChangeNote`, a transient field HR fills in
- * when moving someone along. It is cleared afterwards so the box is empty for
- * the next change rather than repeating the last one.
- */
+/** Appends to the timeline whenever the status changes. */
 export const recordStatusChange: CollectionBeforeChangeHook = ({
   data,
   operation,
@@ -85,8 +54,7 @@ export const recordStatusChange: CollectionBeforeChangeHook = ({
   const previousStatus =
     operation === "update" && typeof originalDoc?.status === "string" ? originalDoc.status : undefined;
 
-  // Nothing moved. The commonest update by far — HR adding a note, or assigning
-  // someone — and it must not litter the timeline.
+  // Nothing moved.
   if (operation === "update" && previousStatus === nextStatus) {
     return { ...data, statusChangeNote: null };
   }
@@ -101,12 +69,7 @@ export const recordStatusChange: CollectionBeforeChangeHook = ({
     from: previousStatus ?? null,
     to: nextStatus,
     changedAt: new Date().toISOString(),
-    /*
-     * Null on the initial submission, which is correct: the applicant made that
-     * change and the applicant is not a CMS user. An entry attributing it to
-     * nobody is more honest than one attributing it to whoever happens to be
-     * signed in.
-     */
+    /* Null on the initial submission, which is correct: the applicant made that change and the applicant is not a CMS user. */
     changedBy: req.user?.id ?? null,
     note: typeof data.statusChangeNote === "string" && data.statusChangeNote.length > 0
       ? data.statusChangeNote
@@ -120,14 +83,7 @@ export const recordStatusChange: CollectionBeforeChangeHook = ({
   };
 };
 
-/**
- * The transient "why" box that sits next to the status select.
- *
- * Not stored: `recordStatusChange` moves its value into the timeline entry and
- * nulls it. Keeping it as a real field rather than a UI component means it
- * arrives through the API too, so a status change made programmatically can
- * carry its reason.
- */
+/** The transient "why" box that sits next to the status select. */
 export function statusChangeNoteField(): Field {
   return {
     name: "statusChangeNote",
@@ -163,14 +119,7 @@ export interface AuditEntry {
   readonly reference?: string;
 }
 
-/**
- * Writes one line to the audit log.
- *
- * Failures are swallowed and logged. An audit entry that could not be written
- * must never roll back the thing it was recording — refusing to accept an
- * application because the log write failed would be a far worse outcome than an
- * incomplete log, and the application itself is the record that matters.
- */
+/** Writes one line to the audit log. */
 export async function writeAudit(req: PayloadRequest, entry: AuditEntry): Promise<void> {
   try {
     await req.payload.create({
@@ -184,8 +133,7 @@ export async function writeAudit(req: PayloadRequest, entry: AuditEntry): Promis
         actor: req.user?.id ?? null,
         occurredAt: new Date().toISOString(),
       },
-      /* The log is append-only and nobody may write to it directly, so the
-       * write has to come from inside the operation being recorded. */
+      /* The log is append-only and nobody may write to it directly, so the write has to come from inside the operation being recorded. */
       overrideAccess: true,
       req,
     });
@@ -197,14 +145,7 @@ export async function writeAudit(req: PayloadRequest, entry: AuditEntry): Promis
   }
 }
 
-/**
- * `afterChange` on job applications, logging the things HR would want to look
- * back at.
- *
- * Deliberately not "log every field that changed". A diff of an entire
- * application on every save is noise that buries the four events anybody
- * actually asks about: it arrived, it moved, it was assigned, it was annotated.
- */
+/** `afterChange` on job applications, logging the things HR would want to look back at. */
 export const auditApplicationChange: CollectionAfterChangeHook = async ({
   doc,
   operation,
@@ -265,13 +206,7 @@ function jobLabel(doc: Record<string, unknown>): string {
   return "an unnamed vacancy";
 }
 
-/**
- * A relationship field's id, whether Payload returned it populated or not.
- *
- * `depth` decides which, and it differs between the admin panel and an API
- * call — so comparing the raw values would report a spurious change whenever
- * the two sides of a comparison were populated differently.
- */
+/** A relationship field's id, whether Payload returned it populated or not. */
 function idOf(value: unknown): string | null {
   if (value === null || value === undefined) return null;
   if (typeof value === "string" || typeof value === "number") return String(value);

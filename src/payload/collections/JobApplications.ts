@@ -1,25 +1,4 @@
-/**
- * Job applications — the internal recruitment record.
- *
- * The most sensitive collection in the CMS. Everything in it is either personal
- * data an applicant gave in confidence or an internal assessment of them, so
- * the access model is the opposite of the editorial collections': closed by
- * default, opened only to HR and superadmin, and never to the public under any
- * configuration.
- *
- * `create` is `noOne` on purpose. Applications arrive through
- * `submitApplication`, a Payload endpoint that validates the job is genuinely
- * open, checks the documents against what the job requires, and only then
- * creates the record with access control overridden. Leaving `create` open —
- * even to authenticated users — would mean an anonymous POST to
- * `/api/job-applications` could invent an application against a closed
- * vacancy, skipping every one of those checks.
- *
- * The layout is tabbed rather than one long form, because the requirement is
- * that HR can open an application and understand it. Five tabs in the order a
- * recruiter reads: who they are, what they have studied, what they have done,
- * what they sent, and what we think.
- */
+/** Job applications — the internal recruitment record. */
 import type { CollectionConfig } from "payload";
 
 import { noOne, recruitmentAccess, recruitmentDelete } from "../access";
@@ -40,10 +19,7 @@ export const JobApplications: CollectionConfig = {
   labels: { singular: "Application", plural: "Applications" },
   admin: {
     useAsTitle: "reference",
-    /**
-     * The columns a recruiter scans down a list of 124 applications: who, for
-     * what, where in the pipeline, whose desk it is on, and when it arrived.
-     */
+    /** The columns a recruiter scans down a list of 124 applications: who, for what, where in the pipeline, whose desk it is on, and when it arrived. */
     defaultColumns: ["reference", "applicantName", "job", "status", "assignedTo", "createdAt"],
     group: "Recruitment",
     description:
@@ -64,19 +40,9 @@ export const JobApplications: CollectionConfig = {
     beforeChange: [recordStatusChange],
     afterChange: [auditApplicationChange],
   },
-  /**
-   * `POST /api/job-applications/submit` — the public submission route.
-   *
-   * A collection endpoint rather than a Next route handler, so it sits inside
-   * Payload's own request lifecycle: it gets a `req` with the payload instance,
-   * a transaction and a logger already attached, and it lives next to the
-   * collection whose rules it is enforcing.
-   */
+  /** `POST /api/job-applications/submit` — the public submission route. */
   endpoints: [submitApplicationEndpoint],
-  /**
-   * The list HR filters most: applications for one job, in one status. A
-   * compound index turns that from two index scans and an intersection into one.
-   */
+  /** The list HR filters most: applications for one job, in one status. */
   indexes: [{ fields: ["job", "status"] }],
   fields: [
     /* ---- Sidebar: the identifiers and the pipeline ------------- */
@@ -111,12 +77,7 @@ export const JobApplications: CollectionConfig = {
       relationTo: "users",
       label: "Assigned to",
       index: true,
-      /**
-       * Only people who can actually open an application may be assigned one.
-       * Without this filter the dropdown would offer PR users, and assigning to
-       * one would produce an application nobody is working on that looks
-       * handled.
-       */
+      /** Only people who can actually open an application may be assigned one. */
       filterOptions: () => ({ roles: { in: ["hr", "superadmin"] } }),
       admin: {
         position: "sidebar",
@@ -137,13 +98,7 @@ export const JobApplications: CollectionConfig = {
       },
     },
     {
-      /**
-       * The job title as it stood when the application was made.
-       *
-       * A vacancy can be retitled, and it can be deleted. Either way, "which
-       * post was this person applying for" has to stay answerable, and a
-       * relationship alone does not guarantee that.
-       */
+      /** The job title as it stood when the application was made. */
       name: "jobTitleSnapshot",
       type: "text",
       label: "Job title at submission",
@@ -374,11 +329,7 @@ export const JobApplications: CollectionConfig = {
               ],
             },
             {
-              /**
-               * Room for HR to add a file of their own — an interview
-               * scoresheet, a reference reply — without it being mistaken for
-               * something the applicant sent.
-               */
+              /** Room for HR to add a file of their own — an interview scoresheet, a reference reply. */
               name: "internalDocuments",
               type: "array",
               label: "Documents added by HR",
@@ -422,10 +373,7 @@ export const JobApplications: CollectionConfig = {
                   type: "relationship",
                   relationTo: "users",
                   admin: { readOnly: true },
-                  /*
-                   * Stamped rather than chosen. A note whose author is a
-                   * dropdown is a note whose attribution means nothing.
-                   */
+                  /* Stamped rather than chosen. */
                   hooks: {
                     beforeChange: [
                       ({ req, value }) => value ?? req.user?.id ?? null,
@@ -531,13 +479,7 @@ export const JobApplications: CollectionConfig = {
       },
     },
     {
-      /**
-       * The consent recorded at submission.
-       *
-       * Kept because it is the lawful basis for holding everything else on this
-       * record. Read-only: it is a fact about what the applicant agreed to, not
-       * a setting.
-       */
+      /** The consent recorded at submission. */
       name: "consent",
       type: "group",
       label: "Consent",
@@ -556,12 +498,7 @@ export const JobApplications: CollectionConfig = {
   timestamps: true,
 };
 
-/**
- * Whether a user may reassign applications.
- *
- * HR can pick up work and hand it on; only a superadmin can take something off
- * someone else's desk. Exported for the endpoint and the tests to share.
- */
+/** Whether a user may reassign applications. */
 export function canReassign(user: { id: number | string; roles?: Role[] | null } | null): boolean {
   return isSuperadmin(user);
 }

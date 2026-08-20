@@ -7,29 +7,7 @@ import type { PipelineStep } from "@/content/types";
 
 const STEP_MS = 5200;
 
-/**
- * The four-step integration path, drawn as a conductor on a board.
- *
- * The site's whole visual world is circuit trace — orthogonal runs with 45°
- * chamfers, ground-filled junction pads, solid vias, everything at 1.6px (see
- * CircuitDefs). This section used to opt out of it and draw a row of numbered
- * medallions joined by arrow glyphs, which is the shape every stepper takes and
- * says nothing about this product. An integration path already is a trace, so
- * it is drawn as one: the run behind the current step is energised, the run
- * ahead is dark, and the segment being crossed carries a pulse travelling the
- * chamfers rather than a gradient sliding along a straight line.
- *
- * The one structural move is the branch. The live pad drops a conductor into
- * the detail panel and lands on a via at its edge, so the rail and the panel
- * are one circuit instead of a widget sitting above a card. It is placed by
- * translating a step-width element by whole multiples of its own width, so
- * nothing has to be measured for it to track the step.
- *
- * The panel's own layout is the one it has always had, kept on request.
- *
- * Auto-advances every 5.2s, and pauses on hover, while the tab is hidden, and
- * whenever the rail is scrolled out of view.
- */
+/** The four-step integration path, drawn as a conductor on a board. */
 export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
   const [step, setStep] = useState(0);
   const [hovered, setHovered] = useState(false);
@@ -74,8 +52,7 @@ export function IntegrationPipeline({ steps }: { steps: PipelineStep[] }) {
       onMouseLeave={() => setHovered(false)}
     >
       <div ref={railRef} data-pipe-rail="1" className="ndi-board-rail">
-        {/* The trace runs off both edges: this is a detail of a larger board,
-            not a diagram that begins and ends with the first and last step. */}
+        {/* The trace runs off both edges: this is a detail of a larger board, not a diagram that begins and ends with the first and last step. */}
         <span aria-hidden="true" className="ndi-board-lead" data-side="in" />
         <span aria-hidden="true" className="ndi-board-lead" data-side="out" />
 

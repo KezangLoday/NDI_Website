@@ -1,16 +1,4 @@
-/**
- * News & Updates.
- *
- * One collection, two shapes, because the newsroom page renders two: a story
- * has artwork, a standfirst and an article behind it; a notice is a dated line
- * announcing a maintenance window or a milestone. They share a category
- * vocabulary, a date, an archive grid and a publishing workflow, which is most
- * of what a collection is — so splitting them would have meant two of
- * everything to keep in step for the sake of four fields.
- *
- * `format` drives which fields the admin shows, and the frontend keeps the two
- * apart at render time exactly as it does today.
- */
+/** News & Updates. */
 import type { CollectionConfig } from "payload";
 
 import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
@@ -119,14 +107,7 @@ export const News: CollectionConfig = {
       },
     },
     {
-      /**
-       * Where a notice sends the reader.
-       *
-       * Notices are usually pointers — a circular on another site, a partner's
-       * announcement — and the design links them straight out. A notice with no
-       * external link instead gets its own page, so an announcement that has no
-       * home elsewhere still has somewhere to live.
-       */
+      /** Where a notice sends the reader. */
       name: "externalUrl",
       type: "text",
       label: "External link",
@@ -183,13 +164,7 @@ export const News: CollectionConfig = {
       },
     },
     {
-      /**
-       * Editorial ranking for the "Popular" rail.
-       *
-       * Nothing here measures readership, so this is a judgement for the
-       * newsroom to make rather than something the code should invent. Stories
-       * left unranked simply do not appear in that rail.
-       */
+      /** Editorial ranking for the "Popular" rail. */
       name: "popularRank",
       type: "number",
       label: "Popular rank",

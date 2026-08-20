@@ -1,16 +1,6 @@
 import type { SeedGlossaryTerm } from "./types";
 
-/**
- * Prospective Payload collection: `glossary` — 71 terms.
- *
- * The A–Z index on the page is derived from this array rather than hard-coded,
- * so letters with no entries dim automatically. (The prototype hard-coded the
- * index alongside data-driven groups, which meant the two could drift.)
- *
- * Known content issue carried over from the design: the API entry's
- * definition actually describes authentication. Flagged rather than silently
- * rewritten, since this is client copy.
- */
+/** Prospective Payload collection: `glossary` — 71 terms. */
 export const glossary: SeedGlossaryTerm[] = [
   { id: "account-based-identity", term: "Account-Based Identity", definition: "The user establishes an identity by registering an account (typically a username and password) with a website, service, or application." },
   { id: "acquired-trust", term: "Acquired Trust", definition: "Trust gained through direct experience." },

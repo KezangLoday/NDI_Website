@@ -8,21 +8,7 @@ export const userHeroStats: HeroStat[] = [
   { id: "passwords", value: "0 passwords", label: "To remember" },
 ];
 
-/**
- * The credential fan in the hero.
- *
- * Fan geometry is per-card data straight from the design: the middle card is
- * wider, sits fully opaque and stacks above the two flanking cards, which are
- * rotated outward, pulled inward to overlap, and held slightly back at 0.85.
- *
- * The artwork carries its own rounded corners in its alpha channel, and they are
- * a squircle rather than a circle, so nothing here should try to round the cards
- * in CSS: a border-radius large enough to trace that shape overshoots it along
- * the straight edges, and one that matches the edges leaves the corners
- * unclipped. Let the alpha do it. (A flattened, white-matted copy of this
- * artwork briefly made that a live problem — worth knowing if these files are
- * ever re-exported.)
- */
+/** The credential fan in the hero. */
 export const credentialCards = [
   {
     id: "drivers-license",
@@ -53,12 +39,7 @@ export const credentialCards = [
   },
 ];
 
-/**
- * Prospective Payload collection: `userUseCases`.
- *
- * `gridArea` is the bento placement from the design — layout is per-item data
- * here, so it travels with the record rather than being hard-coded in the page.
- */
+/** Prospective Payload collection: `userUseCases`. */
 export const userUseCases: UserUseCase[] = [
   {
     id: "bank-account",
@@ -104,32 +85,7 @@ export const userUseCases: UserUseCase[] = [
   },
 ];
 
-/**
- * The pinned "Dechen's journey" scrollytelling chapters.
- *
- * `anchor` is the horizontal position along the strip, 0–1, that this chapter
- * settles on — placed at the centre of the screen, and clamped at both ends, so
- * anything inside half a screen-width of an edge (about 0.07 here) resolves to
- * that edge.
- *
- * These are measured off the artwork rather than inherited, and re-measured
- * whenever the strip's framing changes — the fractions mean nothing on their
- * own. The strip now runs to its full 14020px ending, so every value moved:
- * against the previous 9095px cut they sat about 1.54x too far right, which
- * would have parked chapter 01 in the middle of the office run.
- *
- * Measured by framing the visible window (one screen = 1/11.04 of the strip)
- * at each candidate and checking what it holds:
- *   01 the graduation figure · 02 the two application desks · 03 the office
- *   run into the columned government building · 04 the drained-battery scenes
- *   with the cost-and-time note · 05 the QR scan and the credential screen ·
- *   06 the "employment credentials in the wallet" note and the Employee ID
- *   card · 07 the wallet sharing selected credentials · 08 "THE END"
- *
- * 05 to 06 is the long glide, crossing the document-flow and hiring montage
- * without holding on it. That is deliberate: those frames carry no caption of
- * their own, and they read well as travel between the two beats that do.
- */
+/** The pinned "Dechen's journey" scrollytelling chapters. */
 export const journeyChapters: JourneyChapter[] = [
   { id: "graduation", step: "01", title: "Graduation", anchor: 0.03, caption: "Dechen finishes her degree. Everything that comes next will ask her to prove who she is." },
   { id: "applications", step: "02", title: "The applications", anchor: 0.10, caption: "Job forms, bank forms, campus forms — the same documents photocopied again and again." },
@@ -141,19 +97,7 @@ export const journeyChapters: JourneyChapter[] = [
   { id: "paperless", step: "08", title: "The end of paperwork", anchor: 0.92, caption: "120+ services, minutes instead of weeks. Dechen’s identity finally belongs to Dechen." },
 ];
 
-/**
- * The illustrated strip, 14020×814 — the complete original.
- *
- * Earlier cuts stopped at 64.87%, mid-handshake, so the journey never arrived
- * anywhere: the wallet filling up, the consent hand-off and the "THE END" card
- * with the NDI mark were all simply absent. This is the whole illustration.
- *
- * That takes the aspect ratio from 11.17:1 to 17.22:1, so the strip lays out
- * about 7150px wide inside a ~648px screen. The anchors above are measured
- * against this width and do not survive a re-crop — see the note there.
- *
- * Served directly rather than through next/image — see DechenJourney.
- */
+/** The illustrated strip, 14020×814 — the complete original. */
 export const journeyStrip = media(
   "/media/company/journey-strip.webp",
   "Dechen's journey, from paperwork to a digital wallet",

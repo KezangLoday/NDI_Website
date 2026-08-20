@@ -12,35 +12,9 @@ import { getNews, getNewsBySlug, getNewsSlugs, getPopularNews } from "@/content"
 import { formatFileSize, formatNewsDate } from "@/lib/format";
 import { mediaUrl } from "@/lib/media";
 
-/**
- * A single story.
- *
- * Three quarters article, one quarter rail — the rail sticks, so the rest of
- * the newsroom stays reachable however long the read is.
- *
- * The article sets straight onto the page rather than inside a panel: a card is
- * a thing to pick out of a grid, and a body of running copy is the page's whole
- * purpose here, so framing it only narrows the measure and boxes the reading.
- *
- * Where a story has no body the same holds — the note says so in plain copy
- * rather than in a card pretending to be an article. That is not a placeholder
- * waiting to be filled: a press release whose canonical text lives on a
- * partner's site is a real editorial case, and the honest page for it is the
- * headline, the standfirst, the artwork and a link out.
- *
- * The body is Lexical rich text from the CMS, rendered through `ArticleBody`,
- * which maps its nodes onto this page's own typography.
- */
+/** A single story. */
 
-/**
- * Revalidate daily as a floor.
- *
- * The real mechanism is on-demand: publishing in the CMS calls
- * `revalidatePath` for this route (see `src/payload/hooks/revalidate.ts`), so an
- * editor sees their change within seconds rather than within a day. This is the
- * backstop for the case that misses — a direct database change, or a hook that
- * threw — so the site cannot serve a stale page indefinitely.
- */
+/** Revalidate daily as a floor. */
 export const revalidate = 86_400;
 
 type Params = { params: Promise<{ slug: string }> };
@@ -150,9 +124,7 @@ export default async function NewsStoryPage({ params }: Params) {
             )}
           </Reveal>
 
-          {/* The source link, for a story published here in full whose canonical
-              version is still someone else's. Shown under the article rather
-              than in place of it. */}
+          {/* The source link, for a story published here in full whose canonical version is still someone else's. */}
           {hasRichText(item.body) && item.source ? (
             <Reveal delay={0.05} className="mt-9 max-w-[66ch]">
               <a

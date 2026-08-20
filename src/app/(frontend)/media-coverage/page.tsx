@@ -11,22 +11,11 @@ export const metadata: Metadata = {
     "Reporting, interviews and features on Bhutan's national digital identity, at home and internationally.",
 };
 
-/**
- * Revalidate daily as a floor; publishing revalidates this route on demand.
- * See `src/payload/hooks/revalidate.ts`.
- */
+/** Revalidate daily as a floor; publishing revalidates this route on demand. */
 export const revalidate = 86_400;
 
 
-/**
- * Press coverage, on the newsroom card.
- *
- * Every card leaves the site. There is no detail route here and there should
- * not be: the article belongs to the outlet that published it, and a local page
- * restating someone else's reporting would be both redundant and presumptuous.
- * The card says what was written and hands the reader to the source, which is
- * why the link carries the outbound arrow rather than "read more".
- */
+/** Press coverage, on the newsroom card. */
 export default async function MediaCoveragePage() {
   const items = await getPress();
 
@@ -63,9 +52,7 @@ export default async function MediaCoveragePage() {
             ))}
           </Reveal>
         ) : (
-          /* Nothing published. Said in a sentence under a rule rather than in a
-             box: an empty grid with a bordered "no results" card draws more
-             attention to the absence than the absence does. */
+          /* Nothing published. */
           <Reveal className="border-t border-grid pt-8">
             <p className="max-w-[54ch] text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
               Coverage is added here as it is published. For press enquiries, or to tell us about a

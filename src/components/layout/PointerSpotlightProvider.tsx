@@ -2,19 +2,7 @@
 
 import { useEffect } from "react";
 
-/**
- * Publishes the pointer position on :root as `--gx` / `--gy`, in viewport
- * pixels, for the `.ndi-spot` cards.
- *
- * One shared listener rather than one per card. Every consumer of these values
- * anchors its gradient to the viewport, so the numbers are identical for all of
- * them — publishing once on :root and letting them inherit is both equivalent
- * and far cheaper than each card tracking the pointer itself.
- *
- * One style write per frame. A raw pointermove handler fires far more often
- * than the display refreshes, and every write repaints each spotlight layer —
- * that backlog is what reads as the glow lagging behind the cursor.
- */
+/** Publishes the pointer position on :root as `--gx` / `--gy`, in viewport pixels, for the `.ndi-spot` cards. */
 export function PointerSpotlightProvider() {
   useEffect(() => {
     let x = 0;

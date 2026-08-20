@@ -4,11 +4,7 @@ import { useEffect, useRef } from "react";
 
 const MASK = "radial-gradient(125% 120% at 74% 20%, #000 30%, transparent 68%)";
 
-/**
- * Scatter 4–6 filled cells, capped at two per row and two per column so they
- * never line up into a straight run. Grid coordinates and the opacity range are
- * the prototype's.
- */
+/** Scatter 4–6 filled cells, capped at two per row and two per column so they never line up into a straight run. */
 function scatter(): string {
   const count = 4 + Math.floor(Math.random() * 3);
   const used = new Set<string>();
@@ -40,19 +36,7 @@ function scatter(): string {
   return html;
 }
 
-/**
- * The skewed wireframe decoration inside each mega-menu card, which slides up
- * on hover.
- *
- * The prototype scatters these cells with Math.random() in componentDidMount,
- * so every page load draws a different arrangement. That happens here too, plus
- * a re-scatter whenever `reroll` changes — the header bumps it on each menu
- * open, which in a single-page app is the equivalent beat.
- *
- * The cells are written straight into the DOM rather than rendered: they are
- * random, so server and client would disagree, and React never needs to
- * reconcile them.
- */
+/** The skewed wireframe decoration inside each mega-menu card, which slides up on hover. */
 export function GridPattern({ reroll = 0 }: { reroll?: number }) {
   const ref = useRef<HTMLDivElement>(null);
 

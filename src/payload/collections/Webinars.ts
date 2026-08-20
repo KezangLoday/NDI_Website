@@ -1,13 +1,4 @@
-/**
- * Webinars: sessions to come, and recordings of the ones that have been.
- *
- * `status` is the field the page is built around — upcoming sessions render as
- * a banner with a registration action, recordings as a grid of thumbnails — so
- * it is a required radio rather than something inferred from the date. A session
- * whose date has passed is not automatically a recording: the recording has to
- * be published first, and until it is, the honest state is that the session
- * happened and there is nothing to watch yet.
- */
+/** Webinars: sessions to come, and recordings of the ones that have been. */
 import type { CollectionConfig } from "payload";
 
 import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
@@ -45,18 +36,7 @@ export const Webinars: CollectionConfig = {
   },
   fields: [
     {
-      /**
-       * Named `sessionStatus` rather than `status` for two reasons.
-       *
-       * The visible one: this collection also has a publication status, and an
-       * admin panel with two fields both labelled "Status" is a panel where
-       * somebody eventually publishes a recording by accident.
-       *
-       * The one that forced it: Payload derives a Postgres enum name from the
-       * field name, and `status` collides with the `_status` column that drafts
-       * add — same enum, so `upcoming` and `recorded` would be silently
-       * replaced by `draft` and `published`.
-       */
+      /** Named `sessionStatus` rather than `status` for two reasons. */
       name: "sessionStatus",
       type: "radio",
       required: true,
@@ -81,13 +61,7 @@ export const Webinars: CollectionConfig = {
     },
     categoryField({ taxonomy: "webinar" }),
     {
-      /**
-       * The session's start, as a real timestamp.
-       *
-       * With a time of day, unlike every other date in the CMS — because this
-       * is the one date a reader acts on. "21 August, 14:00 BTT" is the
-       * information; a day alone is not enough to attend.
-       */
+      /** The session's start, as a real timestamp. */
       name: "startsAt",
       type: "date",
       label: "Starts",

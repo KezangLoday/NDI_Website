@@ -14,40 +14,19 @@ import { mediaUrl } from "@/lib/media";
 
 const PER_PAGE = 6;
 
-/**
- * The news index: a lead story beside the top reads, then the archive as a
- * paginated grid.
- *
- * Pagination is client state rather than a `?page=` search param. Reading a
- * search param opts the route out of static generation, and every other page on
- * this site prerenders; with two pages of six the trade is a deep link nobody
- * would send for an instant page turn and a route that stays static. Worth
- * revisiting when the archive is long enough that people link into it.
- *
- * Announcements sit in the same archive as the stories. They carry no artwork —
- * they never did — so their card leads with the category set large instead of a
- * grey box apologising for a missing photograph.
- *
- * Both shapes are now one collection with a `format` field, so the union this
- * file used to carry is gone: the card reads `item.href` and `item.external`,
- * which the mapper has already resolved. That is a real simplification — the
- * decision about where a notice links belongs with the data, not in a ternary
- * inside a card.
- */
+/** The news index: a lead story beside the top reads, then the archive as a paginated grid. */
 
 /** The lead: newest story, given the room to open the page. */
 function LeadStory({ item }: { item: NewsItem }) {
   return (
     <article>
       <Link href={item.href} className="ndi-news-lead group block">
-        {/* A lead story with no artwork falls back to the category plate the
-            archive cards use, rather than an empty framed box. */}
+        {/* A lead story with no artwork falls back to the category plate the archive cards use, rather than an empty framed box. */}
         {item.image ? (
           <div className="ndi-news-shot relative aspect-[16/10] overflow-hidden rounded-2xl border border-grid">
             <Image
               src={mediaUrl(item.image)}
-              /* The headline beside this is the link's name; a described
-                 photograph inside the same link would only read it out twice. */
+              /* The headline beside this is the link's name; a described photograph inside the same link would only read it out twice. */
               alt=""
               fill
               priority
@@ -100,21 +79,7 @@ function ArchiveCard({ item }: { item: NewsItem }) {
   );
 }
 
-/**
- * Page numbers with a previous and a next.
- *
- * Built on this project's own primitives rather than the shadcn pagination the
- * shape came from: that one needs lucide-react, radix-ui,
- * class-variance-authority, tw-animate-css and a `cn` helper, plus a second
- * token set (--primary, --accent, --ring, --destructive-foreground) beside the
- * NDI one. This repo has three dependencies in total and hand-authored icon
- * paths. Six packages and a parallel design system for one control on one page
- * is the wrong trade; the shape is the part worth having.
- *
- * The window keeps the first page, the last, and the current with a neighbour
- * either side, collapsing the gaps to an ellipsis. Two pages never sees it, but
- * the archive is the one list on this site that grows on its own.
- */
+/** Page numbers with a previous and a next. */
 function pageWindow(page: number, pages: number): (number | "gap")[] {
   if (pages <= 7) return Array.from({ length: pages }, (_, i) => i + 1);
   const keep = new Set([1, pages, page, page - 1, page + 1]);
@@ -196,12 +161,7 @@ export function NewsIndex({ items }: { items: NewsItem[] }) {
 
   const dated = byDate(items);
 
-  /*
-   * The lead: whichever story an editor flagged, or the newest one.
-   *
-   * Only a story can lead — a notice has no artwork and no standfirst, and the
-   * lead slot is a 16:10 picture with three lines of copy under it.
-   */
+  /* The lead: whichever story an editor flagged, or the newest one. */
   const stories = dated.filter((item) => item.format === "story");
   const lead = stories.find((item) => item.featured) ?? stories[0];
 
@@ -210,8 +170,7 @@ export function NewsIndex({ items }: { items: NewsItem[] }) {
     .sort((a, b) => (a.popularRank ?? 0) - (b.popularRank ?? 0))
     .slice(0, 3);
 
-  /* Everything except the lead, newest first. The top reads stay in the archive
-     too — leaving them out would put holes in a chronology. */
+  /* Everything except the lead, newest first. */
   const archive = dated.filter((item) => item.id !== lead?.id);
 
   const pages = Math.max(1, Math.ceil(archive.length / PER_PAGE));

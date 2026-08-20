@@ -1,13 +1,4 @@
-/**
- * The shapes the seed data is written in.
- *
- * These used to be the site's own content types, and they moved here when the
- * CMS took over the collections they describe. Keeping them separate from
- * `src/content/types.ts` is deliberate: those types now describe what a
- * *rendered page* needs, and this data is what goes *into* the database. Tying
- * the two together would mean a change to a card's props rippling into the seed
- * fixtures, which is backwards.
- */
+/** The shapes the seed data is written in. */
 
 /** A file under `public/`, to be uploaded into the Media collection. */
 export interface SeedMedia {
@@ -17,13 +8,7 @@ export interface SeedMedia {
   height: number;
 }
 
-/**
- * A block of article copy.
- *
- * The seed converts these to Lexical before writing them — see
- * `seed/lexical.ts`. A paragraph may carry one trailing link, which is how the
- * "To learn more, visit:" lines read in the source releases.
- */
+/** A block of article copy. */
 export type SeedBlock =
   | { kind: "heading"; text: string }
   | { kind: "paragraph"; text: string; link?: { label: string; href: string } };

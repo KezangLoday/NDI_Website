@@ -7,31 +7,7 @@ import { Icon } from "@/components/ui/icons";
 import type { DocumentRequirement, Job } from "@/content/types";
 import { formatCalendarDate, formatFileSize } from "@/lib/format";
 
-/**
- * The application form.
- *
- * It asks for exactly what the vacancy asks about and nothing beyond it. The
- * document slots are not hard-coded: they come from the job's own
- * `requiredDocuments` and `optionalDocuments`, so a post that needs a Class X
- * certificate shows a Class X field and a consultancy that needs only a CV
- * shows only that. A recruitment form is the one place on a government site
- * where every extra box is a small act of data collection, so each one here is
- * present because a stated criterion needs it.
- *
- * Files are checked in the browser for type before they are accepted, because
- * finding out after filling in eleven fields is the worst version of this form.
- * That check is a courtesy: the server verifies each file's actual bytes against
- * its claimed type, and the browser cannot be trusted about either.
- *
- * There is deliberately no size limit. The CMS imposes none, the optimisation
- * pipeline handles size better than an applicant guessing at an export setting,
- * and a limit here would mostly punish someone whose only scanner produces
- * 12-megapixel JPEGs.
- *
- * Submission posts multipart form data to Payload's own endpoint rather than
- * going through a Server Action, because a Server Action body is capped at 1MB
- * by default — which a perfectly ordinary set of scanned certificates exceeds.
- */
+/** The application form. */
 
 /** Payload mounts collection endpoints under the collection's REST path. */
 const SUBMIT_URL = "/api/job-applications/submit";
@@ -124,8 +100,7 @@ export function ApplicationForm({ job }: { job: Job }) {
     }
 
     const form = new FormData(event.currentTarget);
-    /* The file inputs are visually hidden and carry their own names; the state
-       above is the source of truth, so the raw inputs are replaced with it. */
+    /* The file inputs are visually hidden and carry their own names. */
     for (const slot of slots) form.delete(inputName(slot.kind));
     for (const [kind, file] of Object.entries(files)) form.append(`document:${kind}`, file);
     form.set("job", job.id);
@@ -314,13 +289,7 @@ export function ApplicationForm({ job }: { job: Job }) {
   );
 }
 
-/**
- * One document slot.
- *
- * A styled label over a visually hidden input: the native control renders a
- * different widget in every browser and none of them can be themed, so the
- * button is ours and the input stays the input.
- */
+/** One document slot. */
 function FileSlot({
   slot,
   file,
@@ -395,14 +364,7 @@ function FileSlot({
   );
 }
 
-/**
- * The receipt.
- *
- * Four things, because they are the four things an applicant needs: it arrived,
- * what it is called, what they applied for, and what happens next. Nothing about
- * how they will be assessed — the endpoint does not return it and this would not
- * show it if it did.
- */
+/** The receipt. */
 function Confirmation({ receipt }: { receipt: Receipt }) {
   return (
     <div
@@ -462,9 +424,7 @@ function Confirmation({ receipt }: { receipt: Receipt }) {
 /** A rule and a name for each run of fields, so the form reads as three asks. */
 function FieldGroup({ label, note }: { label: string; note?: string }) {
   return (
-    /* More room above the rule than below it, so each heading reads as
-       belonging to the fields that follow rather than floating between two
-       groups. The first one takes the form's own top edge. */
+    /* More room above the rule than below it, so each heading reads as belonging to the fields that follow rather than floating between two groups. */
     <div className="mt-4 min-[601px]:col-span-2 first:mt-0">
       <div className="flex items-center gap-3.5">
         <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">{label}</span>
@@ -480,15 +440,7 @@ function inputName(kind: string): string {
   return `file-${kind}`;
 }
 
-/**
- * The error message from a failed submission.
- *
- * The endpoint returns a considered sentence for every refusal it makes — the
- * deadline has passed, a document is missing, this file is not what it claims —
- * so showing it is better than a generic apology. Anything unrecognised falls
- * back, because an unparsed response is not a message to put in front of
- * someone.
- */
+/** The error message from a failed submission. */
 function errorMessageOf(payload: unknown): string {
   if (typeof payload === "object" && payload !== null && "error" in payload) {
     const message = (payload as { error?: unknown }).error;

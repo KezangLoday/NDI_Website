@@ -1,21 +1,7 @@
 import type { SiteSettings } from "./types";
 
-/**
- * Prospective Payload global: `siteSettings`.
- *
- * Centralising nav, footer, contact details and social links here means the
- * two places the prototype disagreed with itself — the phone number and the
- * contact email — now have one source of truth.
- */
-/**
- * The single contact number, in the three shapes the site needs it: what a
- * reader sees, what a dialer needs, and what wa.me needs. Declared once so a
- * change lands everywhere — the same digits appear in the contact rows, the
- * footer, the Organizations page and the social row.
- *
- * wa.me takes international format with no punctuation; a tel: URI must not
- * contain spaces.
- */
+/** Prospective Payload global: `siteSettings`. */
+/** The single contact number, in the three shapes the site needs it: what a reader sees, what a dialer needs, and what wa.me needs. */
 const PHONE_DISPLAY = "+975 17112086";
 const PHONE_HREF = "tel:+97517112086";
 const WHATSAPP_HREF = "https://wa.me/97517112086";
@@ -104,11 +90,7 @@ export const siteSettings: SiteSettings = {
             description: "Live view of national ID usage",
             icon: "dashboard",
           },
-          // Deliberate deviation from the design, which also listed an "Admin
-          // Login" here. The CMS console serves a handful of internal staff who
-          // will have it bookmarked — in Phase 2 Payload serves it from /admin —
-          // and advertising an admin entry point on a national identity site
-          // invites credential-stuffing traffic for no public benefit.
+          // Deliberate deviation from the design, which also listed an "Admin Login" here.
         ],
       },
     ],
@@ -144,28 +126,13 @@ export const siteSettings: SiteSettings = {
     phoneDisplay: PHONE_DISPLAY,
     phoneHref: PHONE_HREF,
     whatsappHref: WHATSAPP_HREF,
-    // There is one number, so the office fields point at it too rather than
-    // holding a second copy that can drift out of sync.
+    // There is one number, so the office fields point at it too rather than holding a second copy that can drift out of sync.
     officePhoneDisplay: PHONE_DISPLAY,
     officePhoneHref: PHONE_HREF,
     location: "Thimphu, Bhutan",
     responseTime: "Replies within 2 business days",
   },
-  /**
-   * The live channels, ordered the way the site orders its audiences.
-   *
-   * WhatsApp leads because it is the only two-way channel here — the others
-   * broadcast, this one answers. LinkedIn follows as the organizational
-   * channel, then Facebook, Instagram and YouTube as the citizen-facing feeds.
-   * Spacing is even across the row.
-   *
-   * LinkedIn points at the public company page. The URL supplied was the
-   * admin feed (/admin/feed/posts/?feedType=following), which only members of
-   * the page can open — everyone else gets a redirect or a permission error.
-   *
-   * WhatsApp uses wa.me with the number in international format and no
-   * punctuation, which is the only shape the deep link accepts.
-   */
+  /** The live channels, ordered the way the site orders its audiences. */
   social: [
     { label: "WhatsApp", href: WHATSAPP_HREF, icon: "whatsapp" },
     { label: "LinkedIn", href: "https://www.linkedin.com/company/96956149/", icon: "linkedin" },
@@ -181,11 +148,7 @@ export const siteSettings: SiteSettings = {
       icon: "youtube",
     },
   ],
-  /**
-   * The mobile sheet shows four. The design's fourth was X, for which no
-   * account was supplied, so the set is simply the first four above — one
-   * ordering to maintain rather than two. YouTube is the one left behind.
-   */
+  /** The mobile sheet shows four. */
   mobileSocial: [
     { label: "WhatsApp", href: WHATSAPP_HREF, icon: "whatsapp" },
     { label: "LinkedIn", href: "https://www.linkedin.com/company/96956149/", icon: "linkedin" },
@@ -198,11 +161,7 @@ export const siteSettings: SiteSettings = {
   ],
 };
 
-/**
- * Which nav item highlights for a given route. Mirrors the prototype's
- * grouping: Resources covers FAQs and Glossary; Company covers Careers and
- * Media Coverage.
- */
+/** Which nav item highlights for a given route. */
 export const navGroups: Record<string, string[]> = {
   users: ["/users"],
   orgs: ["/organizations"],

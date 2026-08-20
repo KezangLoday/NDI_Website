@@ -1,14 +1,4 @@
-/**
- * Careers.
- *
- * The mapper's real work is `toApplicationWindow`: it collapses three
- * independent conditions — published, recruitment status, deadline — into the
- * one thing the page needs to know, and it does so using the same
- * `applicability` function the submission endpoint enforces with. That shared
- * function is the point. A page that decided for itself whether to show the form
- * would eventually disagree with the server that accepts the submission, and the
- * failure mode is an applicant filling in eleven fields and then being refused.
- */
+/** Careers. */
 import type { Job as PayloadJob } from "@/payload-types";
 import type {
   ApplicationWindow,
@@ -23,12 +13,7 @@ import { applicability } from "@/payload/collections/Jobs";
 import { isoDate, nonEmpty, toAttachment, toAttachments, toSeo } from "./common";
 import { DETAIL_DEPTH, LISTING_DEPTH, LISTING_LIMIT, published, withSlug } from "./queries";
 
-/**
- * Stored values to display labels.
- *
- * The collection stores `full-time` because an enum value with a space in it is
- * a nuisance in a query string and a URL; the card has always read "Full time".
- */
+/** Stored values to display labels. */
 const EMPLOYMENT_LABELS: Record<PayloadJob["employmentType"], EmploymentType> = {
   "full-time": "Full time",
   "part-time": "Part time",
@@ -39,13 +24,7 @@ const DOCUMENT_LABELS = new Map<string, string>(
   DOCUMENT_KINDS.map((kind) => [kind.value, kind.label]),
 );
 
-/**
- * How near a deadline has to be to be worth warning about.
- *
- * Two weeks: long enough that someone can still gather certificates, short
- * enough that the warning means something. A banner that says "closing soon"
- * for two months trains people to ignore it.
- */
+/** How near a deadline has to be to be worth warning about. */
 const CLOSING_SOON_DAYS = 14;
 
 /** The fields `toJob` reads. See the note on `NewsDoc` in `news.ts`. */
@@ -97,8 +76,7 @@ function toSections(rows: JobDoc["sections"]): JobSection[] {
     const items = (row.items ?? [])
       .map((item) => item.text)
       .filter((text): text is string => typeof text === "string" && text.trim().length > 0);
-    /* A clause with a heading and no points is an unfinished draft, not a
-       section — rendering it would leave a heading over nothing. */
+    /* A clause with a heading and no points is an unfinished draft, not a section — rendering it would leave a heading over nothing. */
     if (items.length === 0) return [];
     return [{ heading: row.heading, items }];
   });
@@ -159,13 +137,7 @@ function toRequirements(
   }));
 }
 
-/**
- * Whole days until the deadline, counting the closing day itself.
- *
- * Matches how the endpoint treats the deadline — inclusive, ending at the close
- * of that UTC day — so "1 day remaining" is true right up until the vacancy
- * actually shuts.
- */
+/** Whole days until the deadline, counting the closing day itself. */
 function daysUntil(closesAt: string | null | undefined, now: Date): number | undefined {
   if (!closesAt) return undefined;
   const deadline = new Date(closesAt);
@@ -184,14 +156,7 @@ function daysUntil(closesAt: string | null | undefined, now: Date): number | und
   return remaining < 0 ? 0 : Math.ceil(remaining / 86_400_000);
 }
 
-/**
- * Open vacancies, newest posting first.
- *
- * Only jobs that are actually accepting applications appear on the careers
- * page. A closed vacancy stays published so its notice remains readable at its
- * own URL — which is what people who were sent the link expect — but listing it
- * among the openings would waste the reader's time.
- */
+/** Open vacancies, newest posting first. */
 export async function queryJobs(): Promise<Job[]> {
   const payload = await getPayloadClient();
   const { docs } = await payload.find({
@@ -218,13 +183,7 @@ export async function queryJobs(): Promise<Job[]> {
       optionalDocuments: true,
       applicationInstructions: true,
       meta: true,
-      /*
-       * `_status` is read by `toApplicationWindow`, which decides whether the
-       * vacancy is accepting applications. Leaving it out of the select does
-       * not fail — it arrives as `undefined`, `applicability` reads that as
-       * unpublished, and every vacancy is silently filtered out of the listing.
-       * The careers page comes back empty with nothing in the logs.
-       */
+      /* `_status` is read by `toApplicationWindow`, which decides whether the vacancy is accepting applications. */
       _status: true,
     },
   });
@@ -232,21 +191,13 @@ export async function queryJobs(): Promise<Job[]> {
   const now = new Date();
   const jobs = withSlug(docs).map((doc) => toJob(doc, now));
 
-  /* A lapsed deadline closes a vacancy without anyone touching it, so the
-     listing filters on the resolved window rather than on the stored status. */
+  /* A lapsed deadline closes a vacancy without anyone touching it, so the listing filters on the resolved window rather than on the stored status. */
   return jobs
     .filter((job) => job.applications.state !== "closed")
     .sort((a, b) => Number(b.featured) - Number(a.featured) || b.postedAt.localeCompare(a.postedAt));
 }
 
-/**
- * One vacancy, whatever its state.
- *
- * Unlike the listing, this does not filter on recruitment status: a closed
- * notice still has to render at its own URL, with a closed message where the
- * form was. Draft jobs are still excluded — an unpublished vacancy is not a
- * page.
- */
+/** One vacancy, whatever its state. */
 export async function queryJobBySlug(slug: string): Promise<Job | undefined> {
   const payload = await getPayloadClient();
   const { docs } = await payload.find({

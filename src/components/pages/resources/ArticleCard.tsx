@@ -22,17 +22,7 @@ export interface ArticleCardProps {
   size?: "regular" | "feature";
 }
 
-/**
- * The newsroom card: artwork, category, date, headline, standfirst, read-more.
- *
- * Extracted from the news archive so the insights index and the press page use
- * the same object rather than three near-copies drifting apart. The only thing
- * the caller varies is scale and where the link goes.
- *
- * Stories without artwork fall back to a label plate. A placeholder graphic
- * standing in for a photograph that was never taken says less than the category
- * set large.
- */
+/** The newsroom card: artwork, category, date, headline, standfirst, read-more. */
 export function ArticleCard({
   href,
   category,

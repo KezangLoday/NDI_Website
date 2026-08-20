@@ -1,14 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 
-/**
- * Icon registry.
- *
- * The paths are lifted verbatim from the prototypes rather than pulled from an
- * icon package: the design's set is Lucide-*style* but several glyphs are
- * hand-trimmed (the two fingerprint variants differ, the two locks have
- * different corner radii), so copying the exact paths is what keeps the port
- * pixel-accurate.
- */
+/** Icon registry. */
 
 const STROKE_ICONS = {
   // "What you can do" cards

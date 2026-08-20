@@ -1,10 +1,4 @@
-/**
- * Payload's REST API, and the file route that serves uploads.
- *
- * This is what enforces access control on an applicant document: a request for
- * `/api/applicant-documents/file/<name>` is handled here, and Payload runs the
- * collection's `read` rule before returning a byte.
- */
+/** Payload's REST API, and the file route that serves uploads. */
 import config from "@payload-config";
 import {
   REST_DELETE,

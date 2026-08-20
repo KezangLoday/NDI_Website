@@ -1,13 +1,4 @@
-/**
- * The people on the Company page.
- *
- * The frontend shows three things — photograph, name, role — and that is all it
- * should show; a national identity programme's team page is not a place to
- * publish personal contact details by default. So the fields beyond those three
- * exist, because the requirements ask for the schema to be ready for them, but
- * nothing reads them yet and each is marked as such. Adding one to the page
- * later is a change to a component, not a migration.
- */
+/** The people on the Company page. */
 import type { CollectionConfig } from "payload";
 
 import { hrEditable, publishedOrSignedIn, superadminOnly } from "../access";
@@ -68,13 +59,7 @@ export const TeamMembers: CollectionConfig = {
       },
     },
     {
-      /**
-       * Where the crop sits inside the frame.
-       *
-       * Portraits are shot at every framing and the cards are a fixed aspect
-       * ratio, so a face lands off-centre often enough to need this. It is a
-       * CSS `object-position` value, carried over from the design tool.
-       */
+      /** Where the crop sits inside the frame. */
       name: "photoPosition",
       type: "text",
       label: "Photo focus",

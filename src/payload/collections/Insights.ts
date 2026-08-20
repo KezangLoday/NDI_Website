@@ -1,12 +1,4 @@
-/**
- * Insights & Publications: research papers, case studies, reports and writing
- * from the team.
- *
- * The distinguishing feature of this collection is that the *document* is often
- * the point — a reader has come for the PDF, and the page around it is a
- * summary and a download. So `document` sits alongside the body rather than
- * under an attachments array, and the detail page leads with it.
- */
+/** Insights & Publications: research papers, case studies, reports and writing from the team. */
 import type { CollectionConfig } from "payload";
 
 import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
@@ -55,14 +47,7 @@ export const Insights = {
     },
     categoryField({ taxonomy: "insight" }),
     {
-      /**
-       * The specific form, printed on the card next to the category.
-       *
-       * Free text rather than a second taxonomy: "Field note", "Technical
-       * report", "Working paper" is a vocabulary that grows as the team writes,
-       * and gating a new one behind a category record would mean an editor
-       * cannot publish until someone with delete rights has added it.
-       */
+      /** The specific form, printed on the card next to the category. */
       name: "kind",
       type: "text",
       label: "Type",
@@ -119,13 +104,7 @@ export const Insights = {
       ],
     },
     {
-      /**
-       * Where the canonical version lives, when it is not here.
-       *
-       * A paper published in a journal should be cited from the journal. The
-       * card still summarises it; the link sends the reader to the version of
-       * record.
-       */
+      /** Where the canonical version lives, when it is not here. */
       name: "canonicalUrl",
       type: "text",
       label: "Published elsewhere at",

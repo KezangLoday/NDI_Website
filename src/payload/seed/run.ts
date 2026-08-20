@@ -1,11 +1,4 @@
-/**
- * `pnpm seed` — the CLI wrapper around `seed()`.
- *
- * Run through `payload run`, which loads the config, the environment and the
- * TypeScript for us. The separation between this file and `seed()` is what lets
- * the integration tests call the same seed against a test database without
- * spawning a process.
- */
+/** `pnpm seed` — the CLI wrapper around `seed()`. */
 import configPromise from "@payload-config";
 import { getPayload } from "payload";
 
@@ -27,9 +20,5 @@ if (report.warnings.length > 0) {
   payload.logger.warn(`${report.warnings.length} warning(s):\n${report.warnings.map((line) => `  - ${line}`).join("\n")}`);
 }
 
-/*
- * The Postgres pool keeps the process alive, and `payload run` does not close it
- * for us. Exiting explicitly is what makes `pnpm seed` terminate rather than
- * hang after printing its summary.
- */
+/* The Postgres pool keeps the process alive, and `payload run` does not close it for us. */
 process.exit(0);

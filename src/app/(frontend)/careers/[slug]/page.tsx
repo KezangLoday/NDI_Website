@@ -9,39 +9,15 @@ import { Reveal } from "@/components/ui/Reveal";
 import { getJobBySlug, getJobSlugs, getJobs } from "@/content";
 import { formatCalendarDate, formatFileSize } from "@/lib/format";
 
-/**
- * One vacancy: the terms of reference, then the form.
- *
- * Both on one page and in that order, because they are one task. A listing
- * that sends an applicant to a second page — or worse, to an email address —
- * loses the people who were reading on a phone between two other things.
- *
- * The facts an applicant checks first (type, slots, closing date, location)
- * are pulled out of the prose into a summary block at the top, and repeated
- * nowhere. The prose is then free to be prose.
- *
- * Whether the form appears at all is decided by `job.applications.state`, which
- * the server resolved from three separate conditions using the same function the
- * submission endpoint enforces with. That sharing is the point: a page that
- * decided for itself would eventually disagree with the endpoint, and the
- * failure mode is somebody filling in eleven fields and then being refused.
- */
+/** One vacancy: the terms of reference, then the form. */
 
-/**
- * Revalidate hourly.
- *
- * Same reasoning as the listing: a deadline lapses on its own, with no editor
- * action to trigger an on-demand revalidation, and this page has to stop
- * offering the form when it does.
- */
+/** Revalidate hourly. */
 export const revalidate = 3600;
 
 type Params = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  /* Every published vacancy, including closed ones: the notice stays readable
-     at its own URL long after applications shut, which is what people who were
-     sent the link expect. */
+  /* Every published vacancy, including closed ones: the notice stays readable at its own URL long after applications shut, which is what people who were sent the link expect. */
   const slugs = await getJobSlugs();
   return slugs.map((slug) => ({ slug }));
 }
@@ -121,9 +97,7 @@ export default async function VacancyPage({ params }: Params) {
               </span>
             )}
 
-            {/* The signed notice, where HR has uploaded one. An applicant
-                gathering documents wants the document of record, not a web
-                page. */}
+            {/* The signed notice, where HR has uploaded one. */}
             {job.torDocument ? (
               <a
                 href={job.torDocument.url}
@@ -138,8 +112,7 @@ export default async function VacancyPage({ params }: Params) {
             ) : null}
           </div>
 
-          {/* A closing date only warrants a warning when it is near. Saying
-              "closing soon" for two months trains people to ignore it. */}
+          {/* A closing date only warrants a warning when it is near. */}
           {job.applications.state === "closing-soon" ? (
             <p className="mt-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
               {job.applications.daysRemaining === 0
@@ -194,9 +167,7 @@ export default async function VacancyPage({ params }: Params) {
                     </div>
                   </>
                 ) : (
-                  /* Closed. The notice stays, the form goes — and the backend
-                     refuses a submission regardless, so this is the courtesy
-                     rather than the control. */
+                  /* Closed. */
                   <div className="mt-3 max-w-[62ch]">
                     <p className="text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
                       {job.applications.closedReason} The notice above remains here for reference.

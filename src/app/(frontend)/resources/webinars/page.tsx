@@ -14,21 +14,12 @@ export const metadata: Metadata = {
   description: section.description,
 };
 
-/**
- * Revalidate daily as a floor.
- *
- * The real mechanism is on demand: publishing in the CMS calls `revalidatePath`
- * for this route, so an editor sees their change in seconds. This is the
- * backstop for the case that misses — a direct database change, or a hook that
- * threw — so the page cannot serve stale content indefinitely.
- */
+/** Revalidate daily as a floor. */
 export const revalidate = 86_400;
 
 
 export default async function WebinarsPage() {
-  /* The upcoming-event card is resolved on the server — the global's choice,
-     the fallback rule and the has-it-happened check all applied — so the panel
-     either has a session or has the empty-state copy. */
+  /* The upcoming-event card is resolved on the server. */
   const [webinars, upcoming] = await Promise.all([getWebinars(), getUpcomingEvent()]);
 
   return (
@@ -36,8 +27,7 @@ export default async function WebinarsPage() {
       <PageSection className="pb-6 pt-44">
         <PageHero
           eyebrow={section.eyebrow}
-          /* The emphasised phrase carries the gradient the other subpage heroes
-             use; these three were plain white while every sibling had it. */
+          /* The emphasised phrase carries the gradient the other subpage heroes use; these three were plain white while every sibling had it. */
           title={<HeroTitle title={section.title} emphasis={section.emphasis} />}
           lead={section.lead}
         />

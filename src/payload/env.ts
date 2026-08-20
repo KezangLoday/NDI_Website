@@ -1,17 +1,4 @@
-/**
- * Server-only environment access for the CMS.
- *
- * Every credential, connection string and storage switch the CMS needs is read
- * here and nowhere else, so there is exactly one place to look when an
- * environment is misconfigured and exactly one place a new secret gets added.
- *
- * Nothing here may be imported from a Client Component — the S3 secret would
- * end up in the browser bundle. The usual guard for that is `import
- * "server-only"`, which cannot be used in this module: `payload.config.ts`
- * imports it and the Payload CLI loads that file through plain Node rather than
- * Next's bundler, where the specifier does not resolve. The runtime check below
- * fails loudly in a browser instead.
- */
+/** Server-only environment access for the CMS. */
 if (typeof window !== "undefined") {
   throw new Error(
     "src/payload/env.ts was imported into client code. It reads CMS credentials and must stay on the server.",
@@ -43,28 +30,7 @@ function flag(name: string, fallback: boolean): boolean {
 export const isProduction = process.env.NODE_ENV === "production";
 export const isTest = process.env.NODE_ENV === "test";
 
-/**
- * Which storage adapter uploads go to.
- *
- * Resolved from configuration rather than from `NODE_ENV`, and the difference
- * matters: `next build` runs with `NODE_ENV=production`, so keying off it means
- * a production build cannot be produced without live S3 credentials in the
- * build environment. Building is not running, and requiring a bucket to compile
- * is the wrong constraint.
- *
- * So:
- *
- *  1. `MEDIA_STORAGE` wins if set. An explicit `s3` with no credentials still
- *     throws, which is right — it is a request that cannot be honoured.
- *  2. Otherwise S3 if a bucket is configured. Setting `S3_BUCKET` is an
- *     unambiguous statement of intent.
- *  3. Otherwise local disk.
- *
- * A production deployment that resolves to local disk is almost certainly a
- * mistake — a container's filesystem is ephemeral, so uploads would vanish on
- * the next deploy — so `warnIfMisconfigured` says so loudly at startup rather
- * than letting it be discovered later.
- */
+/** Which storage adapter uploads go to. */
 export type StorageDriver = "local" | "s3";
 
 export function storageDriver(): StorageDriver {
@@ -73,13 +39,7 @@ export function storageDriver(): StorageDriver {
   return optional("S3_BUCKET") !== undefined ? "s3" : "local";
 }
 
-/**
- * Shouts about a production deployment writing uploads to local disk.
- *
- * A warning rather than a thrown error, because the same code path is what makes
- * `next build`, a smoke test and a bucket-less staging environment work. The
- * message is deliberately hard to miss in a log.
- */
+/** Shouts about a production deployment writing uploads to local disk. */
 export function storageWarning(): string | undefined {
   if (!isProduction || storageDriver() === "s3") return undefined;
   return (
@@ -101,12 +61,7 @@ export interface S3Env {
   readonly privateBucket: string;
   readonly publicPrefix: string;
   readonly privatePrefix: string;
-  /**
-   * ACL for public media. Buckets created with Object Ownership set to
-   * "bucket owner enforced" reject ACLs outright — those need this set to
-   * `none` and a bucket policy or CloudFront OAC granting read on the public
-   * prefix instead.
-   */
+  /** ACL for public media. */
   readonly publicAcl: "public-read" | "private" | "none";
 }
 
@@ -139,13 +94,7 @@ export function payloadSecret(): string {
   return required("PAYLOAD_SECRET");
 }
 
-/**
- * Absolute origin, shared with the frontend's `metadataBase`.
- *
- * Payload needs it to build absolute file and preview URLs; keeping it on the
- * same variable the site already uses means one origin to change per
- * environment rather than two that can drift apart.
- */
+/** Absolute origin, shared with the frontend's `metadataBase`. */
 export function serverURL(): string {
   return optional("NEXT_PUBLIC_SITE_URL") ?? "http://localhost:3000";
 }
@@ -158,13 +107,7 @@ export function seedSuperadmin(): { email: string; password: string } {
   };
 }
 
-/**
- * Whether Payload pushes schema changes straight to the database.
- *
- * On in development so a field added to a collection appears without a
- * migration round-trip; off in production, where `payload migrate` owns the
- * schema and an accidental push could drop a column.
- */
+/** Whether Payload pushes schema changes straight to the database. */
 export function databasePush(): boolean {
   return flag("DATABASE_PUSH", !isProduction);
 }

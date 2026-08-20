@@ -1,22 +1,4 @@
-/**
- * The upcoming-event card.
- *
- * A global rather than a flag on the webinar, because "which event are we
- * promoting" is a decision about the site, not a property of the session — and
- * a flag would let two people set it on two records and leave the page showing
- * whichever sorted first.
- *
- * `featured` is `hasMany` from the outset even though the design shows one
- * banner. That is the extensibility the requirement asks for: supporting two
- * upcoming events later becomes a change to a component, not a schema
- * migration and a data backfill.
- *
- * Staleness is handled in two layers. `fallback` covers the common failure —
- * nobody remembered to update the card — by promoting the next scheduled
- * session automatically. And whatever ends up selected, the frontend drops
- * anything whose start time has passed, so a forgotten card degrades to the
- * empty state rather than advertising last month's webinar.
- */
+/** The upcoming-event card. */
 import type { GlobalConfig } from "payload";
 
 import { anyone, prEditable } from "../access";
@@ -44,11 +26,7 @@ export const UpcomingEvents: GlobalConfig = {
       relationTo: "webinars",
       hasMany: true,
       label: "Featured sessions",
-      /**
-       * Only sessions that are still upcoming can be featured. A recording has
-       * nothing to register for, and offering one here is how a "Register to
-       * attend" button ends up pointing at a video.
-       */
+      /** Only sessions that are still upcoming can be featured. */
       filterOptions: () => ({ sessionStatus: { equals: "upcoming" } }),
       admin: {
         description:

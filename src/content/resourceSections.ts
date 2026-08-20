@@ -1,26 +1,17 @@
 import type { IconName } from "@/components/ui/icons";
 
-/**
- * The three resource sections, now three routes rather than three tabs.
- *
- * Tabs hid two thirds of the content behind a click, gave the sections no URL
- * of their own, and meant the nav's deep links had to *select* a panel rather
- * than simply navigate. As pages each one is linkable, indexable and can carry
- * its own title and description.
- */
+/** The three resource sections, now three routes rather than three tabs. */
 export interface ResourceSection {
   id: "news" | "webinars" | "insights";
   href: string;
   label: string;
-  /** The index card's blurb. Deliberately terse: it sits under a heading in a
-   *  grid of three, where a sentence would crowd its neighbours. */
+  /** The index card's blurb. */
   description: string;
   /** The page's own headline, which can be longer than the card label. */
   title: string;
   /** The phrase inside `title` that carries the gradient. */
   emphasis: string;
-  /** The page's lead. Longer than `description`, which was standing in for it
-   *  and left each hero with a four-word sentence under a 58px headline. */
+  /** The page's lead. */
   lead: string;
   eyebrow: string;
   icon: IconName;

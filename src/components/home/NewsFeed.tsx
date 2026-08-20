@@ -14,13 +14,7 @@ const FEATURED_BACKGROUND =
   "radial-gradient(115% 78% at 26% -6%, rgba(111,224,169,0.20) 0%, rgba(90,201,148,0.06) 42%, rgba(90,201,148,0) 68%), " +
   "linear-gradient(162deg, #103440 0%, #101827 64%)";
 
-/**
- * Featured pane plus a selectable list.
- *
- * A row selects its story on hover, focus or click; the caption's own link is
- * the navigation. The pane also advances on its own until the pointer enters
- * the section.
- */
+/** Featured pane plus a selectable list. */
 export function NewsFeed({ items }: { items: NewsItem[] }) {
   const { index, select, pause, resume } = useNewsCarousel(items.length);
 
@@ -56,9 +50,7 @@ export function NewsFeed({ items }: { items: NewsItem[] }) {
                 className="ndi-news-pane absolute inset-0"
                 data-active={i === index ? "true" : "false"}
               >
-                {/* A story with no artwork keeps the pane's own gradient rather
-                    than showing an empty frame. The homepage only ever features
-                    stories, which have artwork, so this is a floor. */}
+                {/* A story with no artwork keeps the pane's own gradient rather than showing an empty frame. */}
                 {item.image ? (
                   <Image
                     src={mediaUrl(item.image)}

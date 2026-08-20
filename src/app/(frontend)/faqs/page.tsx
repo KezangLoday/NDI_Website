@@ -13,20 +13,12 @@ export const metadata: Metadata = {
     "Registration, credentials, consent and recovery for citizens — and the protocol questions integration teams ask.",
 };
 
-/**
- * Revalidate daily as a floor.
- *
- * The real mechanism is on demand: publishing in the CMS calls `revalidatePath`
- * for this route, so an editor sees their change in seconds. This is the
- * backstop for the case that misses — a direct database change, or a hook that
- * threw — so the page cannot serve stale content indefinitely.
- */
+/** Revalidate daily as a floor. */
 export const revalidate = 86_400;
 
 
 export default async function FaqsPage() {
-  /* The audience tabs are CMS categories, not a constant — the two the site
-     needs are seeded, and a third can be added in the admin panel. */
+  /* The audience tabs are CMS categories, not a constant. */
   const [items, audiences] = await Promise.all([getFaqs(), getFaqAudiences()]);
 
   return (

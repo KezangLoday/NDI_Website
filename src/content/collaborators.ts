@@ -8,37 +8,16 @@ export const collaboratorGroups: CollaboratorGroup[] = [
   { id: "international-partners", label: "International partners" },
 ];
 
-/**
- * Prospective Payload collection: `collaborators`.
- *
- * Logos sharing a slot occupy the same box and cross-fade between each other.
- * Slot order is significant: the carousel's per-column timing table is indexed
- * by it, which is what keeps the columns off the same beat.
- *
- * Four boxes for the seven international partners, one for the two service
- * providers.
- *
- * All four international boxes draw on the same list rather than owning two
- * logos each. Seven logos do not divide into four boxes without leaving one
- * box holding a single logo, which would sit frozen while its neighbours
- * turned; sharing the list gives every box all seven to cycle through, and the
- * exclusivity rule — which applies to boxes whose lists are identical — keeps
- * the same mark off the row twice at once.
- */
+/** Prospective Payload collection: `collaborators`. */
 export const collaborators: Collaborator[] = [
   {
     id: "aws",
     name: "Amazon Web Services",
-    // Supplied at 978x621, of which 55% of the width and half the height were
-    // transparent margin; trimmed to the mark so the optical sizing below means
-    // what it says rather than sizing a mostly-empty canvas.
+    // Supplied at 978x621, of which 55% of the width and half the height were transparent margin.
     logo: media("/media/logos/collab/aws.png", "Powered by AWS", 440, 317),
     group: "service-providers",
     slots: [0],
-    // Sized down against the row rather than against the box. At 92% it filled
-    // 9,500px² where nothing else passed 7,700 — a two-line lockup reads bigger
-    // than its bounding box already, and full colour among monochrome adds to
-    // that. 74% puts it at ~6,200px², in the band the rest of the row occupies.
+    // Sized down against the row rather than against the box.
     maxWidth: "74%",
     maxHeight: "70%",
     // AWS does not permit its mark to be recoloured; the smile stays orange.

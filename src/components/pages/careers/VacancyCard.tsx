@@ -4,18 +4,7 @@ import { Icon } from "@/components/ui/icons";
 import type { Job } from "@/content/types";
 import { formatCalendarDate } from "@/lib/format";
 
-/**
- * One open position.
- *
- * The card previously carried department, title, summary and a location, and
- * linked nowhere. What an applicant actually decides on is missing from that
- * list: whether the job is permanent, how many are being hired, and how long
- * they have to apply. Those three now sit on the face of the card, and the
- * whole card is the link to the terms of reference.
- *
- * The closing date turns amber inside a fortnight. A deadline that only ever
- * reads as grey metadata is the one piece of a listing people miss.
- */
+/** One open position. */
 export function VacancyCard({ job }: { job: Job }) {
   const closes = new Date(`${job.closesAt}T00:00:00Z`);
   const daysLeft = Math.ceil((closes.getTime() - Date.now()) / 86_400_000);

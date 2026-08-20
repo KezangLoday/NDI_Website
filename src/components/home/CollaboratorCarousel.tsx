@@ -15,16 +15,13 @@ interface CollaboratorCarouselProps {
 }
 
 export function CollaboratorCarousel({ groups, collaborators }: CollaboratorCarouselProps) {
-  // Logos are bucketed by slot; each slot is one box that cross-fades between
-  // the logos assigned to it. A logo may sit in several slots.
+  // Logos are bucketed by slot; each slot is one box that cross-fades between the logos assigned to it.
   const slotIds = Array.from(new Set(collaborators.flatMap((item) => item.slots))).sort(
     (a, b) => a - b,
   );
   const slots = slotIds.map((id) => collaborators.filter((item) => item.slots.includes(id)));
 
-  // Slots drawing on an identical list of logos must not show the same one at
-  // once; deriving the key from the list itself means that applies wherever it
-  // is true, without anyone having to declare it.
+  // Slots drawing on an identical list of logos must not show the same one at once.
   const exclusiveKeys = slots.map((items) => items.map((item) => item.id).join("|"));
   const shared = new Set(
     exclusiveKeys.filter((key, index) => exclusiveKeys.indexOf(key) !== index),
@@ -69,13 +66,7 @@ export function CollaboratorCarousel({ groups, collaborators }: CollaboratorCaro
                   <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
                     {group.label}
                   </span>
-                  {/* `flex-1` alone has a 0% basis, so it contributes nothing to
-                      the group's max-content width. That is invisible while a
-                      group is wider than its own label — the partners' four
-                      boxes leave plenty for the rule to grow into — but the
-                      single service-provider box is narrower than the words
-                      above it, so there was no free space and the rule
-                      collapsed to nothing. A floor gives every group a rule. */}
+                  {/* `flex-1` alone has a 0% basis, so it contributes nothing to the group's max-content width. */}
                   <span
                     aria-hidden="true"
                     className="h-px min-w-[72px] flex-1"
@@ -92,9 +83,7 @@ export function CollaboratorCarousel({ groups, collaborators }: CollaboratorCaro
                       <div
                         key={slot.id}
                         className="ndi-lc-col relative flex-none overflow-hidden"
-                        /* Dimensions as properties, not inline width/height: the
-                           set becomes a three-column grid on a phone and an
-                           inline style cannot be overridden by a media query. */
+                        /* Dimensions as properties, not inline width/height: the set becomes a three-column grid on a phone and an inline style cannot be overridden by a media query. */
                         style={
                           {
                             "--slot-w": "clamp(92px, 9.5vw, 150px)",

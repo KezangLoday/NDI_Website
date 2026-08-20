@@ -31,11 +31,7 @@ export const visionPillars: VisionPillar[] = [
   { id: "consent", label: "Consent", icon: media("/media/company/vision-consent.png", "", 176, 173) },
 ];
 
-/**
- * Mission statements carry inline emphasis in the design. Modelled as text
- * segments rather than an HTML string so the emphasis survives the move to a
- * Payload richText field without anyone hand-parsing markup.
- */
+/** Mission statements carry inline emphasis in the design. */
 export const missionStatements: MissionStatement[] = [
   {
     id: "build",

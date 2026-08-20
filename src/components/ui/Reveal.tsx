@@ -11,18 +11,7 @@ interface RevealProps {
   id?: string;
 }
 
-/**
- * Slide-up-on-scroll wrapper.
- *
- * Matches the prototype's observer settings exactly (threshold 0.1, an -8%
- * bottom margin, unobserve after firing) and animates the transform only —
- * content is fully opaque from first paint, so nothing is ever left invisible
- * if a transition is dropped. The transition itself lives in ndi-effects.css.
- *
- * The revealed flag is written straight to the DOM rather than held in state:
- * it is a one-way visual toggle driven by an external observer, and routing it
- * through a re-render would buy nothing.
- */
+/** Slide-up-on-scroll wrapper. */
 export function Reveal({ children, className, style, delay = 0, id }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 

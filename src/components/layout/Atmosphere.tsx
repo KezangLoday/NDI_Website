@@ -11,32 +11,17 @@ import { CircuitDefs } from "./CircuitDefs";
 const BAND_FADE =
   "linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%)";
 
-/** Routes that carry the full circuit field behind their hero, not just the
- *  cursor reveal. */
+/** Routes that carry the full circuit field behind their hero, not just the cursor reveal. */
 const CIRCUIT_FIELD = new Set(["/", "/company"]);
 
-/**
- * The fixed decorative background: a depth gradient, a dim field of circuit
- * traces, a brighter copy of the same traces revealed under the cursor, and a
- * set of ambient edge pools.
- *
- * The two trace layers span the whole document rather than the viewport, which
- * is why the glow spotlight tracks page coordinates — see useCircuitGlow.
- *
- * Both trace layers are dropped where there is no cursor to reveal them. The
- * whole point of the field is what happens under the pointer, and on a phone it
- * is a static texture behind the copy that costs a tall stack of masked SVG to
- * draw. The depth gradient and the ambient pools stay: those are the ground.
- */
+/** The fixed decorative background: a depth gradient, a dim field of circuit traces, a brighter copy of the same traces revealed under the cursor, and a set of ambient edge pools. */
 export function Atmosphere() {
   const baseRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const { bands, documentHeight } = useCircuitBands();
   const pathname = usePathname();
 
-  // These pages show the dim base traces and the ambient roaming glow; the
-  // rest reveal traces only under the cursor. Both need a hero to measure the
-  // mask against — `[data-hero-grid]` or `[data-circuit-hero]`.
+  // These pages show the dim base traces and the ambient roaming glow; the rest reveal traces only under the cursor.
   const variant = CIRCUIT_FIELD.has(pathname) ? "home" : "subpage";
 
   useCircuitGlow(baseRef, glowRef, variant);

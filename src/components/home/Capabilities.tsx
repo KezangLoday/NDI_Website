@@ -8,29 +8,7 @@ import { Icon } from "@/components/ui/icons";
 import { getCapabilities, walletInHand } from "@/content";
 import { mediaUrl } from "@/lib/media";
 
-/**
- * Six capabilities, annotated onto the wallet itself.
- *
- * Thesis: the phone leads. This is the only place on Home where the product
- * appears at scale in a hand, and the six capabilities are things *it* does —
- * so they are labels attached to a device, not six equivalent cells in a grid.
- * Three attach on each side, each on a hairline crossing the gutter, and each
- * side's copy turns to face the centre so the whole composition reads inward.
- *
- * That also fixes what the grid could not: in a row of identical boxes nothing
- * leads and the eye has no path. Here the path is the device, then outward.
- *
- * Three layouts, not one that shrinks. Wide: annotations either side of the
- * phone, hairlines drawn. Intermediate: the phone takes the full width and the
- * six become two columns beneath it — there is no gutter left for a hairline to
- * cross, so the hairlines go rather than shrink to a stub. Narrow: one column.
- *
- * The motion is one gesture, choreographed from a single observer on the stage
- * rather than one Reveal per element: the device arrives out of a blur, then the
- * annotations step outward from it and their hairlines draw last. Geometry and
- * choreography both live in ndi-effects.css, because here the layout is the
- * section's subject rather than an arrangement of it.
- */
+/** Six capabilities, annotated onto the wallet itself. */
 export async function Capabilities() {
   const capabilities = await getCapabilities();
   const perSide = Math.ceil(capabilities.length / 2);
@@ -60,8 +38,7 @@ export async function Capabilities() {
 
         {capabilities.map((capability, index) => {
           const side = index < perSide ? "left" : "right";
-          /* The two sides start together and step down in parallel, so the pair
-             at each height arrives as a pair. */
+          /* The two sides start together and step down in parallel, so the pair at each height arrives as a pair. */
           const row = index % perSide;
           return (
             <div

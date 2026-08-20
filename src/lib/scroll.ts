@@ -1,7 +1,4 @@
-/**
- * Smooth-scrolls to the contact section, clearing the fixed nav pill.
- * The −24px offset matches the prototype.
- */
+/** Smooth-scrolls to the contact section, clearing the fixed nav pill. */
 export function scrollToContact() {
   const element = document.getElementById("contact");
   if (!element) return;

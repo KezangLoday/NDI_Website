@@ -1,12 +1,4 @@
-/**
- * Recruitment vocabularies that more than one module needs.
- *
- * These live here rather than on the collection that displays them because the
- * collection imports its own submission endpoint, and the endpoint needs to
- * validate against the same lists — which through the collection would be a
- * cycle. A vocabulary is not owned by the form that renders it, so this is
- * where it belongs anyway.
- */
+/** Recruitment vocabularies that more than one module needs. */
 
 /** Highest level of education an applicant may declare. */
 export const EDUCATION_LEVELS = [

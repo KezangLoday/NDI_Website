@@ -1,15 +1,4 @@
-/**
- * The read-only record of what the optimisation pipeline did to a file.
- *
- * Worth storing rather than just logging, for two reasons. An editor who
- * uploads a 40MB scan and sees it listed at 3MB should be able to find out why
- * without asking a developer — and if a strategy ever declines a file it should
- * have handled, the note on the row is how that gets noticed.
- *
- * Populated from `req.context`, which is where the `beforeOperation` hook left
- * it: that hook runs early enough to replace the file but too early to
- * contribute to the document, so the two halves meet here.
- */
+/** The read-only record of what the optimisation pipeline did to a file. */
 import type { CollectionBeforeChangeHook, Field } from "payload";
 
 import { OPTIMIZATION_CONTEXT_KEY, type OptimizationReport } from "../optimize";
@@ -47,11 +36,7 @@ export const applyOptimizationReport: CollectionBeforeChangeHook = ({ data, req 
   };
 };
 
-/**
- * `req.context` is an open bag of unknowns, so the value coming back out of it
- * is checked rather than asserted — a cast here would be a lie the moment
- * anything else writes to the same key.
- */
+/** `req.context` is an open bag of unknowns, so the value coming back out of it is checked rather than asserted. */
 function isReport(value: unknown): value is OptimizationReport {
   if (typeof value !== "object" || value === null) return false;
   const candidate = value as Record<string, unknown>;

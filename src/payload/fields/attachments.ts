@@ -1,12 +1,4 @@
-/**
- * The two ways content carries files: extra images, and documents to download.
- *
- * Both are arrays rather than a `hasMany` upload field, because both need a
- * label per item. A gallery image needs its own caption — the `alt` on the
- * media document describes the picture, which is a different job from saying
- * what it is doing in this article — and a document needs a link title, since
- * "Download 2026-ar-final-v3.pdf" is not a link anyone should be shown.
- */
+/** The two ways content carries files: extra images, and documents to download. */
 import type { Field } from "payload";
 
 export function galleryField(description: string): Field {

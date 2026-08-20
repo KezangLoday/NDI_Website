@@ -27,15 +27,7 @@ export const metadata: Metadata = {
     "Verify identity, authenticate users and sign documents on government-backed digital identity infrastructure. One integration, every service.",
 };
 
-/**
- * The bento slots: a tall centre column flanked by two short cards a side.
- *
- * The reference runs three rows with the centre spanning all of them. That
- * cannot work here: the short cards need ~312px to hold their content and the
- * revealed value, and three rows of that make the centre 968px tall carrying
- * one card's worth of copy. Two rows keeps the silhouette and halves the
- * empty space.
- */
+/** The bento slots: a tall centre column flanked by two short cards a side. */
 const BENTO_SLOTS = [
   "min-[901px]:col-start-1 min-[901px]:col-end-2 min-[901px]:row-start-1 min-[901px]:row-end-2",
   "min-[901px]:col-start-2 min-[901px]:col-end-3 min-[901px]:row-start-1 min-[901px]:row-end-3",
@@ -74,19 +66,7 @@ export default async function OrganizationsPage() {
   return (
     <>
       {/* ============ HERO ============ */}
-      {/* One cell, two layers. The artwork and the copy are both in grid
-          area 1/1 and overlap: the credentials fan out of the top-right of the
-          picture and cross over the copy column, so the wallet can be large
-          without the text being pushed into a narrow lane beside it.
-
-          The overlap is safe rather than lucky. Measured on the asset, the
-          right 40% of it carries only the fan and nothing below 40% of its
-          height — the phone is entirely in the left 60% — so the copy, anchored
-          to the bottom of the cell, sits in a region of the picture that is
-          pure transparency. The cards pass over it; no glyph is ever behind
-          one.
-
-          Below 1101px the two unstack into ordinary rows and the copy leads. */}
+      {/* One cell, two layers. */}
       <PageSection className="ndi-orghero-section pb-14">
         <div className="ndi-orghero">
           <Reveal className="ndi-orghero-copy">
@@ -106,12 +86,7 @@ export default async function OrganizationsPage() {
             </div>
           </Reveal>
 
-          {/* The device treatment is the home hero's, not a new one: two soft
-              mint pools behind the subject, and a dark lift and a mint rim as
-              drop shadows on the artwork itself. The home hero's float is left
-              off — that one has two phones drifting against each other, which
-              is what makes the motion read; a single object bobbing on its own
-              just looks loose. */}
+          {/* The device treatment is the home hero's, not a new one: two soft mint pools behind the subject, and a dark lift and a mint rim as drop shadows on the artwork itself. */}
           <Reveal delay={0.08} className="ndi-orghero-art">
             <span
               aria-hidden="true"

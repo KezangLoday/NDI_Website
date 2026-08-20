@@ -1,11 +1,4 @@
-/**
- * Circuit-trace definitions for the atmosphere background.
- *
- * Three trace variants (A/B/C) declared once and stacked down the page by
- * <Atmosphere/> via <use href>, so the whole background costs one copy of the
- * geometry regardless of document height. Transcoded verbatim from the
- * prototype's hidden <svg><defs> block.
- */
+/** Circuit-trace definitions for the atmosphere background. */
 export function CircuitDefs() {
   return (
     <svg aria-hidden="true" width="0" height="0" className="absolute">

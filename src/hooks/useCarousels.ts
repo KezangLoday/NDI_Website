@@ -17,13 +17,7 @@ export function useRotatingPhrase(count: number, interval = 4200): number {
   return index;
 }
 
-/**
- * News feed selector.
- *
- * Auto-advances every 5200ms, pauses while the pointer is anywhere inside the
- * section, and switches off entirely under reduced motion — all as per the
- * prototype's `setupNewsFeed()`.
- */
+/** News feed selector. */
 export function useNewsCarousel(count: number, interval = 5200) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -43,14 +37,7 @@ export function useNewsCarousel(count: number, interval = 5200) {
   };
 }
 
-/**
- * Collaborator logo carousel.
- *
- * Each slot runs on its own period and start offset — deliberately
- * non-multiples, so no two slots ever swap on the same beat. A swap is a
- * two-stage handoff: the outgoing logo animates out for 300ms with nothing
- * active, then the incoming one is marked active.
- */
+/** Collaborator logo carousel. */
 const SLOT_PERIODS = [3400, 3100, 3700, 4300, 3900];
 const SLOT_OFFSETS = [900, 1500, 2100, 400, 2700];
 const HANDOFF_MS = 300;
@@ -61,15 +48,9 @@ interface SlotState {
   pending: number;
 }
 
-/**
- * @param itemCounts how many logos each slot holds
- * @param exclusiveKeys optional per-slot key. Slots sharing a key are showing
- *   the same list of logos, so the carousel keeps their indices distinct — two
- *   columns drawn from one set never display the same mark at the same time.
- */
+/** @param itemCounts how many logos each slot holds @param exclusiveKeys optional per-slot key. */
 export function useLogoCarousel(itemCounts: number[], exclusiveKeys?: (string | undefined)[]) {
-  // Slot composition is fixed by the content, so the joined counts are a
-  // stable identity for the timer set.
+  // Slot composition is fixed by the content, so the joined counts are a stable identity for the timer set.
   const key = itemCounts.join(",");
   const counts = useMemo(() => key.split(",").map(Number), [key]);
 
@@ -79,8 +60,7 @@ export function useLogoCarousel(itemCounts: number[], exclusiveKeys?: (string | 
     keysRef.current = exclusiveKeys;
   }, [exclusiveKeys]);
 
-  // Slots sharing a list start on different logos, so the rule holds from the
-  // first paint rather than only from the first swap.
+  // Slots sharing a list start on different logos, so the rule holds from the first paint rather than only from the first swap.
   const [slots, setSlots] = useState<SlotState[]>(() => {
     const seenPerKey = new Map<string, number>();
     return counts.map((count, index) => {
@@ -115,8 +95,7 @@ export function useLogoCarousel(itemCounts: number[], exclusiveKeys?: (string | 
           const current = next[slot];
           const from = current.active ?? current.pending;
 
-          // Whatever a sibling slot drawing on the same list is showing (or is
-          // mid-handoff toward) is off limits.
+          // Whatever a sibling slot drawing on the same list is showing (or is mid-handoff toward) is off limits.
           const mine = keysRef.current?.[slot];
           const taken = new Set<number>();
           if (mine) {

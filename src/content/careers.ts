@@ -1,14 +1,6 @@
 import type { CareerValue } from "./types";
 
-/**
- * The "why work here" cards on the careers page.
- *
- * Static, and deliberately so. These are four claims the organisation is making
- * about itself — they change when the organisation does, not when a vacancy
- * opens — and they belong to the page's design rather than to a collection HR
- * maintains. The vacancies themselves are CMS-managed; see the `jobs`
- * collection.
- */
+/** The "why work here" cards on the careers page. */
 export const careerValues: CareerValue[] = [
   {
     id: "national-impact",

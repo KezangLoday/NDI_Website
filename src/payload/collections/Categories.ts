@@ -1,17 +1,4 @@
-/**
- * The shared taxonomy for every section that needs configurable categories.
- *
- * `taxonomy` partitions the collection; `slug` identifies a category within its
- * partition. So "Research" can exist under both Insights and News without
- * collision, which a single global uniqueness constraint would have prevented
- * for no good reason.
- *
- * Uniqueness is enforced twice, on purpose. The compound index is the guarantee
- * — it holds against concurrent writes and against anything that bypasses the
- * hooks. The `beforeValidate` check exists so that the ordinary case produces
- * "There is already a News category called Announcement" in the field the
- * editor is looking at, rather than a database constraint violation.
- */
+/** The shared taxonomy for every section that needs configurable categories. */
 import type { CollectionConfig, Where } from "payload";
 
 import { anyone, hrOrPrEditable, superadminOnly } from "../access";
@@ -32,24 +19,14 @@ export const Categories: CollectionConfig = {
   },
   /** Grouped by section, then by the editor's chosen order within it. */
   defaultSort: ["taxonomy", "order", "name"],
-  /**
-   * The guarantee. A partial unique index on (taxonomy, slug) — two categories
-   * in the same section cannot share a slug, and the database is what says so.
-   */
+  /** The guarantee. */
   indexes: [{ fields: ["taxonomy", "slug"], unique: true }],
   access: {
     /** Category names are printed on public pages, so they are public data. */
     read: anyone,
     create: hrOrPrEditable,
     update: hrOrPrEditable,
-    /**
-     * Deleting is superadmin-only.
-     *
-     * Not caution for its own sake: a category is referenced by every document
-     * filed under it, and Payload nulls those references rather than refusing.
-     * An editor tidying up a list should not be able to strip the category off
-     * forty published articles by accident.
-     */
+    /** Deleting is superadmin-only. */
     delete: superadminOnly,
   },
   hooks: {
@@ -76,19 +53,14 @@ export const Categories: CollectionConfig = {
           where,
           limit: 1,
           depth: 0,
-          /*
-           * The check has to see rows the caller may not be allowed to read,
-           * or a duplicate would slip past whenever the two categories were
-           * visible to different people. It reports only that a name is taken.
-           */
+          /* The check has to see rows the caller may not be allowed to read, or a duplicate would slip past whenever the two categories were visible to different people. */
           overrideAccess: true,
           req,
         });
 
         if (existing.totalDocs > 0) {
           const match = TAXONOMY_OPTIONS.find((option) => option.value === taxonomy);
-          /* `label` is typed loosely enough to be a component or a translation
-             record, so it is narrowed rather than interpolated blindly. */
+          /* `label` is typed loosely enough to be a component or a translation record, so it is narrowed rather than interpolated blindly. */
           const section = typeof match?.label === "string" ? match.label : taxonomy;
           throw new Error(`There is already a ${section} category using the name “${name}”.`);
         }

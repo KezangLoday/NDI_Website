@@ -1,13 +1,6 @@
 import type { ServiceOption } from "./types";
 
-/**
- * Prospective Payload collection: `services` — the contact form's
- * "Service or product of interest" dropdown.
- *
- * Note for Phase 2: the Organizations prototype carries a slightly different
- * 11-item list for the same field. Both forms should be driven from this one
- * collection once the canonical taxonomy is confirmed.
- */
+/** Prospective Payload collection: `services` — the contact form's "Service or product of interest" dropdown. */
 export const services: ServiceOption[] = [
   { id: "wallet", label: "NDI Wallet — for citizens" },
   { id: "remote-onboarding", label: "Remote onboarding & account opening" },

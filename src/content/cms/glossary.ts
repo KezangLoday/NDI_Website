@@ -1,10 +1,4 @@
-/**
- * The glossary.
- *
- * Definitions are rich text but the page searches them in the browser, so each
- * term also carries its definition flattened to plain text. That flattening
- * happens once on the server rather than per keystroke in the client.
- */
+/** The glossary. */
 import type { Glossary as PayloadGlossary } from "@/payload-types";
 import type { GlossaryRef, GlossaryTerm } from "@/content/types";
 import { getPayloadClient } from "@/payload/lib/client";
@@ -28,8 +22,7 @@ function toRefs(value: PayloadGlossary["relatedTerms"]): GlossaryRef[] {
   if (!Array.isArray(value)) return [];
   return value.flatMap((entry) => {
     const doc = related(entry);
-    /* A cross-reference is rendered as a link, so a term with no slug is not
-       one — dropping it beats rendering a link to nowhere. */
+    /* A cross-reference is rendered as a link, so a term with no slug is not one — dropping it beats rendering a link to nowhere. */
     if (!doc?.slug) return [];
     return [{ id: String(doc.id), slug: doc.slug, term: doc.term }];
   });

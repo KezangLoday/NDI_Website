@@ -1,18 +1,7 @@
 import { media } from "../media";
 import type { SeedInsight, SeedNotice, SeedWebinar } from "./types";
 
-/**
- * Resources content.
- *
- * The requirement docs merged Publications and Blogs into a single "Insights
- * and Publications" bucket because the categories overlap. That points at one
- * `posts` collection in Phase 2 with a `category` (news | webinar | insight)
- * and a `type` sub-field, rather than three separate collections — the three
- * arrays here are shaped so they can collapse into that.
- *
- * The featured story and the three webinar thumbnails have no artwork: those
- * image slots were left empty in the design and need supplying by the client.
- */
+/** Resources content. */
 
 export const resourceNews: SeedNotice[] = [
   {

@@ -13,22 +13,7 @@ interface DechenJourneyProps {
   strip: Media;
 }
 
-/**
- * The pinned "Dechen's journey" section.
- *
- * A tall outer section supplies the scroll distance; an inner sticky pane
- * holds a two-column layout — the illustrated strip playing inside a laptop
- * screen on the left, and a stepper with the chapter captions on the right.
- *
- * Scroll drives the strip horizontally *within the screen*, so the travel is
- * measured against the screen's width rather than the viewport's. Position
- * interpolates between the eight per-chapter anchors, which is what makes it
- * hold on a scene and then glide to the next one.
- *
- * The strip offset and the rail fill change every frame, so they are written
- * straight to the DOM; only the active chapter goes through state, and that
- * changes at most eight times.
- */
+/** The pinned "Dechen's journey" section. */
 export function DechenJourney({ chapters, strip }: DechenJourneyProps) {
   const outerRef = useRef<HTMLElement>(null);
   const stripRef = useRef<HTMLImageElement>(null);
@@ -52,9 +37,7 @@ export function DechenJourney({ chapters, strip }: DechenJourneyProps) {
   );
 
   useEffect(() => {
-    /* The pinned version only exists above 900px. Below that the section is a
-       swipeable strip with the chapters listed under it, so none of the
-       measuring or the scroll listener below has anything to drive. */
+    /* The pinned version only exists above 900px. */
     if (!window.matchMedia("(min-width: 901px)").matches) return;
 
     const outer = outerRef.current;
@@ -148,9 +131,7 @@ export function DechenJourney({ chapters, strip }: DechenJourneyProps) {
     <section
       ref={outerRef}
       id="in-action"
-      /* The 560vh of scroll distance is what drives the pinned strip, and it
-         only applies where the strip is pinned. On a phone the section is its
-         own height and the picture is swiped by hand. */
+      /* The 560vh of scroll distance is what drives the pinned strip, and it only applies where the strip is pinned. */
       className="relative h-auto scroll-mt-[110px] min-[901px]:h-[560vh]"
       aria-label="Bhutan NDI in action — Dechen's journey"
     >
@@ -167,8 +148,7 @@ export function DechenJourney({ chapters, strip }: DechenJourneyProps) {
           Swipe the strip to follow Dechen from paperwork to a wallet, or read the stages below.
         </p>
 
-        {/* A real scroll container: the picture is 17:1, so it is panned by
-            hand rather than by hijacking the page's own scroll. */}
+        {/* A real scroll container: the picture is 17:1, so it is panned by hand rather than by hijacking the page's own scroll. */}
         <div
           className="ndi-journey-swipe mt-6 overflow-x-auto rounded-[14px] border p-2"
           style={{
@@ -176,9 +156,7 @@ export function DechenJourney({ chapters, strip }: DechenJourneyProps) {
             background: "linear-gradient(168deg, #1a2333 0%, #0d1320 60%, #0a0f1a 100%)",
           }}
         >
-          {/* `w-max`, and no clipping here: the strip is 17:1, so the element has
-              to be as wide as the picture for the scroll container above to have
-              anything to scroll. */}
+          {/* `w-max`, and no clipping here: the strip is 17:1, so the element has to be as wide as the picture for the scroll container above to have anything to scroll. */}
           <div className="w-max rounded-lg" style={{ background: "#f4f8f6" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -244,10 +222,7 @@ export function DechenJourney({ chapters, strip }: DechenJourneyProps) {
                     "inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 2px 22px rgba(0,0,0,0.35)",
                 }}
               >
-                {/* Served directly, not through next/image: the optimiser caps
-                    at 3840px, which is half the width this renders at, and the
-                    asset is already a 75KB webp. The element is hand-positioned
-                    besides. */}
+                {/* Served directly, not through next/image: the optimiser caps at 3840px, which is half the width this renders at, and the asset is already a 75KB webp. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   ref={stripRef}

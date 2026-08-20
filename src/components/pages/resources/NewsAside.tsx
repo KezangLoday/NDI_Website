@@ -5,18 +5,7 @@ import { useState } from "react";
 import { NewsRow } from "@/components/pages/resources/NewsRow";
 import type { NewsItem } from "@/content/types";
 
-/**
- * The detail page's right-hand rail: the rest of the newsroom, as Latest or
- * Popular.
- *
- * Two tabs over one list rather than two stacked lists — the whole point of the
- * rail is that it stays beside the article, and stacking both would push the
- * second below the fold of a long read.
- *
- * "Popular" is an editorial order held in the content (`popularRank`), not a
- * measurement. Nothing on this site counts reads, and a tab that claims to rank
- * by readership while sorting by date would be a lie in the interface.
- */
+/** The detail page's right-hand rail: the rest of the newsroom, as Latest or Popular. */
 export function NewsAside({ latest, popular }: { latest: NewsItem[]; popular: NewsItem[] }) {
   const [tab, setTab] = useState<"latest" | "popular">("latest");
   const list = tab === "latest" ? latest : popular;

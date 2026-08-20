@@ -1,15 +1,7 @@
 import { media } from "@/lib/media";
 import type { OrgService, PipelineStep, ServiceOption, WhyPartnerRow } from "./types";
 
-/**
- * The hero's product shot: the wallet's credential list, with the credentials
- * themselves fanning out of it.
- *
- * Cropped from a 2000x2000 export whose subject occupied 27% of the canvas —
- * the rest was transparent padding, which would have made the layout box square
- * and the sizing guesswork. Trimmed to the alpha bounding box plus 6px, so the
- * element's box is the picture.
- */
+/** The hero's product shot: the wallet's credential list, with the credentials themselves fanning out of it. */
 export const orgHeroImage = media(
   "/media/org-hero-credentials.webp",
   "The Bhutan NDI wallet's credential list, with issued credentials fanning out of it",
@@ -17,13 +9,7 @@ export const orgHeroImage = media(
   1600,
 );
 
-/**
- * Prospective Payload collection: `orgServices`.
- *
- * The requirement docs asked for Organizations and Value Added Services to be
- * merged and each entry restructured as Service → Use case → Benefit, which is
- * exactly this shape. `tier` keeps the core and advanced groupings.
- */
+/** Prospective Payload collection: `orgServices`. */
 export const orgServices: OrgService[] = [
   {
     id: "remote-onboarding",
@@ -185,13 +171,7 @@ export const pipeline: PipelineStep[] = [
   },
 ];
 
-/**
- * The inquiry form's dropdown.
- *
- * NOTE: this differs from the home page's list — that one offers the citizen
- * wallet and developer APIs, this one ends with "Not sure yet". Both should be
- * driven from one canonical `services` collection once the taxonomy is agreed.
- */
+/** The inquiry form's dropdown. */
 export const orgServiceOptions: ServiceOption[] = [
   ...orgServices.map((service) => ({ id: service.id, label: service.title })),
   { id: "not-sure", label: "Not sure yet — advise us" },

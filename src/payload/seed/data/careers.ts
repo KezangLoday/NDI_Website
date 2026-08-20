@@ -1,21 +1,6 @@
 import type { SeedJob } from "./types";
 
-/**
- * Prospective Payload collection: `jobs`.
- *
- * The requirement docs assign vacancy management to an HR role, so this is
- * the collection that needs its own access rules in Phase 2.
- *
- * The design carried only department, title, summary and location, with the
- * card linking nowhere. A listing needs more than that to be usable, so the
- * shape now covers the employment type, how many people are being hired, the
- * dates, and the terms of reference the detail route renders.
- *
- * The terms of reference below are illustrative. The eligibility bars in
- * particular — the Class X and XII marks, the degree percentage — are a worked
- * example of the shape, not Bhutan NDI's actual hiring criteria, and HR should
- * replace every one before this goes near a real applicant.
- */
+/** Prospective Payload collection: `jobs`. */
 export const jobs: SeedJob[] = [
   {
     id: "senior-backend-engineer",

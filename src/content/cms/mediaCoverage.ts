@@ -1,11 +1,4 @@
-/**
- * Media coverage.
- *
- * Every entry links off-site, so `href` is the outlet's URL and nothing else.
- * There is no detail route and there should not be: the article belongs to
- * whoever published it, and a local page restating someone else's reporting
- * would be both redundant and presumptuous.
- */
+/** Media coverage. */
 import type { MediaCoverage as PayloadMediaCoverage } from "@/payload-types";
 import type { PressItem } from "@/content/types";
 import { getPayloadClient } from "@/payload/lib/client";

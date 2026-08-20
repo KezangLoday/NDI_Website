@@ -1,12 +1,4 @@
-/**
- * The optimisation pipeline's contract.
- *
- * A strategy takes an uploaded file and either returns a replacement for it or
- * declines. Declining is the default and the safe answer: the requirement is to
- * optimise where there is a reliable mechanism, which means every file type
- * without one passes through byte-for-byte rather than being run through
- * something hopeful.
- */
+/** The optimisation pipeline's contract. */
 
 export interface UploadedFile {
   readonly name: string;
@@ -36,14 +28,7 @@ export interface OptimizationResult {
 }
 
 export interface OptimizationContext {
-  /**
-   * How much integrity matters relative to size.
-   *
-   * `lossy` is right for site artwork, where a smaller WebP that looks the same
-   * is a straight win. `lossless` is right for anything an applicant uploads:
-   * a certificate that has been re-encoded is a certificate whose authenticity
-   * is now arguable, and no saving is worth that.
-   */
+  /** How much integrity matters relative to size. */
   readonly integrity: "lossy" | "lossless";
 }
 

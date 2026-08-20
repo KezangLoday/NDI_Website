@@ -1,5 +1,4 @@
-/* Payload's own 404, so an unknown /admin path does not fall through to the
-   site's not-found page and its full chrome. */
+/* Payload's own 404, so an unknown /admin path does not fall through to the site's not-found page and its full chrome. */
 import type { Metadata } from "next";
 
 import config from "@payload-config";

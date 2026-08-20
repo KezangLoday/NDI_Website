@@ -16,10 +16,7 @@ import { ShinyButton } from "../ui/ShinyButton";
 
 const { nav, contact, mobileSocial } = siteSettings;
 
-/**
- * Entrance stagger in the prototype's order — logo, nav links, then every
- * button — as a CSS animation delay, so nothing depends on a mount render.
- */
+/** Entrance stagger in the prototype's order — logo, nav links, then every button. */
 const entrance = (index: number): CSSProperties => ({
   animationDelay: `${60 + index * 75}ms`,
 });
@@ -69,8 +66,7 @@ function MegaListLink({ card }: { card: MegaMenuCard }) {
       className="ndi-fill flex items-center justify-between gap-3 rounded-xl border border-white/[0.14] bg-white/[0.02] px-4 py-[17px] text-body transition-[background,border-color] duration-[220ms]"
     >
       <div className="min-w-0">
-        {/* Explicit sizes, not text-sm/text-xs: those bundle a line-height and
-            the design leaves these inheriting the body's 1.62. */}
+        {/* Explicit sizes, not text-sm/text-xs: those bundle a line-height and the design leaves these inheriting the body's 1.62. */}
         <div className="font-display text-[14px] font-semibold text-strong">{card.label}</div>
         <div className="mt-0.5 text-[12px] text-body">{card.description}</div>
       </div>
@@ -92,8 +88,7 @@ export function SiteHeader() {
 
   const activeKey = activeNavKey(pathname);
 
-  /* Home is reachable from the logo, which is not obvious on a phone where the
-     logo reads as branding. The mobile list says so explicitly. */
+  /* Home is reachable from the logo, which is not obvious on a phone where the logo reads as branding. */
   const mobilePrimary = [{ label: "Home", href: "/", navKey: undefined as string | undefined }, ...nav.primary];
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
@@ -119,14 +114,12 @@ export function SiteHeader() {
 
   const open = (key: string) => {
     clearTimeout(closeTimer.current);
-    // Each opening re-scatters the cards' wireframe grids, the way a fresh page
-    // load does in the prototype.
+    // Each opening re-scatters the cards' wireframe grids, the way a fresh page load does in the prototype.
     if (openMenu !== key) setReroll((n) => n + 1);
     setOpenMenu(key);
   };
 
-  // Delayed close so moving from the trigger into the centred panel — which
-  // leaves a horizontal dead zone below each trigger — doesn't dismiss it.
+  // Delayed close so moving from the trigger into the centred panel — which leaves a horizontal dead zone below each trigger.
   const scheduleClose = () => {
     clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setOpenMenu(null), 70);
@@ -262,9 +255,7 @@ export function SiteHeader() {
           {nav.menus.map((menu, index) => renderMenu(menu, nav.primary.length + 1 + index))}
         </nav>
 
-        {/* The entrance animation sits on this wrapper, not on the button:
-            both would set `animation` on the same element, and the later rule
-            would replace the shine's rotation outright. */}
+        {/* The entrance animation sits on this wrapper, not on the button: both would set `animation` on the same element, and the later rule would replace the shine's rotation outright. */}
         <div
           className="ndi-nav-in relative z-[1] ml-4 hidden flex-none min-[901px]:block"
           style={entrance(nav.primary.length + nav.menus.length + 1)}
@@ -310,12 +301,7 @@ export function SiteHeader() {
         </button>
       </header>
 
-      {/* Mobile menu.
-          Anchored under the header rather than sliding in as its own surface:
-          the header already carries the logo and the control that opened this,
-          so a sheet with a second logo and a second close button restated both
-          and moved them while it did. The bar stays where it was and the menu
-          opens beneath it. */}
+      {/* Mobile menu. */}
       <div
         className="ndi-menu-scrim min-[901px]:hidden"
         onClick={closeMobile}
@@ -362,10 +348,7 @@ export function SiteHeader() {
           {nav.menus.map((menu) => {
             const groupActive = activeKey === menu.key;
             return (
-              /* Native disclosure rather than a measured height. `name` makes the
-                 set exclusive in the browsers that support it, and the element
-                 sizes itself, which a grid row set to 1fr does not do inside an
-                 auto-height container. */
+              /* Native disclosure rather than a measured height. */
               <details
                 key={menu.key}
                 name="ndi-mobile-menu-section"
@@ -385,8 +368,7 @@ export function SiteHeader() {
                     className="ndi-menu-caret flex-none opacity-50"
                   />
                 </summary>
-                {/* Sub-items sat at 15px under a 30px heading, which read as
-                    fine print rather than as the section's contents. */}
+                {/* Sub-items sat at 15px under a 30px heading, which read as fine print rather than as the section's contents. */}
                 <div className="flex flex-col gap-0.5 py-2 pb-4 pl-1">
                   {[...menu.cards, ...menu.links].map((item) => {
                     const itemActive = pathname === item.href.split("#")[0];

@@ -11,10 +11,7 @@ export const metadata: Metadata = {
     "Key terms across decentralized identity, verifiable credentials and digital trust, explained plainly.",
 };
 
-/**
- * Revalidate daily as a floor; publishing revalidates this route on demand.
- * See `src/payload/hooks/revalidate.ts`.
- */
+/** Revalidate daily as a floor; publishing revalidates this route on demand. */
 export const revalidate = 86_400;
 
 

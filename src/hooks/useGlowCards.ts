@@ -2,17 +2,7 @@
 
 import { useEffect } from "react";
 
-/**
- * Proximity-tracked conic border glow on the `.ndi-glow` cards.
- *
- * Every card within 64px of the pointer lights up, and its glow arc rotates to
- * face the cursor — the angle chases the target at 0.12 per frame, taking the
- * shorter way round so a card never spins the long way when the pointer crosses
- * behind it. Ported from the prototype's `setupGlowCards()`.
- *
- * Angles and the active flag are custom properties written straight to the DOM;
- * nothing here belongs in React state.
- */
+/** Proximity-tracked conic border glow on the `.ndi-glow` cards. */
 export function useGlowCards() {
   useEffect(() => {
     const cards = Array.from(document.querySelectorAll<HTMLElement>(".ndi-glow"));

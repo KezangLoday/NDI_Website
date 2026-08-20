@@ -9,13 +9,7 @@ import type { GlossaryTerm } from "@/content/types";
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-/**
- * Live search plus an A–Z index over the glossary.
- *
- * Both the index and the letter groups are derived from the same data, so a
- * letter with no terms dims automatically. (The prototype hard-coded the
- * index next to data-driven groups, which let the two drift apart.)
- */
+/** Live search plus an A–Z index over the glossary. */
 export function GlossaryBrowser({ terms }: { terms: GlossaryTerm[] }) {
   const [query, setQuery] = useState("");
 
@@ -23,8 +17,7 @@ export function GlossaryBrowser({ terms }: { terms: GlossaryTerm[] }) {
     const q = query.trim().toLowerCase();
     if (!q) return terms;
     return terms.filter((term) =>
-      /* `searchText` is the definition flattened on the server; the
-         abbreviation is searched too, so "VC" finds "Verifiable Credential". */
+      /* `searchText` is the definition flattened on the server; the abbreviation is searched too, so "VC" finds "Verifiable Credential". */
       `${term.term} ${term.abbreviation ?? ""} ${term.searchText}`.toLowerCase().includes(q),
     );
   }, [terms, query]);
@@ -74,8 +67,7 @@ export function GlossaryBrowser({ terms }: { terms: GlossaryTerm[] }) {
         </label>
       </div>
 
-      {/* One bordered strip holds the whole A–Z, as in the design. Letters with
-          no terms stay in place but dim, rather than being dropped. */}
+      {/* One bordered strip holds the whole A–Z, as in the design. */}
       <nav
         aria-label="Jump to letter"
         className="mt-[30px] flex flex-wrap gap-1 [@media(hover:none)]:gap-2 rounded-[14px] border border-grid bg-white/[0.02] px-3 py-2.5"

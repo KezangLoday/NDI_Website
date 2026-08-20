@@ -1,49 +1,12 @@
-/**
- * The view types the components render.
- *
- * These sit between Payload and the components on purpose, and the boundary is
- * worth keeping rather than passing generated document types straight through:
- *
- *  - **Payload's types describe storage; these describe a rendered page.** A
- *    news story's `category` is a relationship in the database and a word on a
- *    chip on screen. Resolving that once, in a mapper, is better than every
- *    component learning to cope with `number | Category`.
- *  - **Optionality means different things on each side.** Almost every Payload
- *    field is nullable because a draft can be half-finished; by the time a
- *    published document reaches a component, the required things are required.
- *  - **Dates stay plain `YYYY-MM-DD` strings.** `formatNewsDate` is hand-rolled
- *    and UTC-based so the server render and the client hydration are
- *    byte-identical, and Payload returns full ISO timestamps — so the mappers
- *    narrow them rather than every caller remembering to.
- *
- * Anything not managed by the CMS — the home page, the users and organizations
- * pages, governance, site settings — still comes from the modules in this
- * directory and keeps its shape here unchanged.
- */
+/** The view types the components render. */
 
 import type { News as PayloadNews } from "@/payload-types";
 import type { IconName } from "@/components/ui/icons";
 
-/**
- * A Lexical document, as Payload stores it.
- *
- * Derived from a generated field type rather than restated, so the renderer
- * cannot drift from what the editor actually produces. Payload emits the Lexical
- * shape inline on each `richText` field rather than as a named type, so one
- * field stands in for all of them — they are structurally identical. Rendered with `ArticleBody` or
- * `ProseBody`; tested for emptiness with `hasRichText`, because Lexical's empty
- * value is a populated tree rather than null.
- */
+/** A Lexical document, as Payload stores it. */
 export type RichTextContent = NonNullable<PayloadNews["body"]>;
 
-/**
- * An image or document from the CMS.
- *
- * `url` is relative when the local storage adapter is in force and absolute
- * when S3 is; `mediaUrl()` handles both. `width` and `height` come from
- * Payload's own probe of the stored file, which is what lets `next/image`
- * reserve the right space and avoid a layout shift.
- */
+/** An image or document from the CMS. */
 export interface Media {
   url: string;
   alt: string;
@@ -69,13 +32,7 @@ export interface Attachment {
   mimeType?: string;
 }
 
-/**
- * Collection: `news` — a story or a notice.
- *
- * One type for both shapes, because the archive grid renders them side by side
- * and the difference is which optional fields are filled. `format` is what a
- * component narrows on.
- */
+/** Collection: `news` — a story or a notice. */
 export interface NewsItem {
   id: string;
   slug: string;
@@ -88,21 +45,11 @@ export interface NewsItem {
   category: string;
   /** Absent on notices, and on a story whose artwork has not been supplied. */
   image?: MediaVariants;
-  /**
-   * Where the card links.
-   *
-   * A story always links to its own page. A notice links out when it carries an
-   * external URL, and to its own page when it does not — so an announcement
-   * with no home elsewhere still has somewhere to live.
-   */
+  /** Where the card links. */
   href: string;
   /** True when `href` leaves the site, which changes the link's affordances. */
   external: boolean;
-  /**
-   * The full formal headline, for the story page where there is room. Cards
-   * keep the shorter `title` — a press-release headline set at card size wraps
-   * to five lines and buries everything under it.
-   */
+  /** The full formal headline, for the story page where there is room. */
   headline?: string;
   /** The article. Empty on a notice, and on a story held elsewhere. */
   body?: RichTextContent;
@@ -113,11 +60,7 @@ export interface NewsItem {
   source?: NewsSource;
   /** Lead the newsroom with this story. */
   featured: boolean;
-  /**
-   * Editorial ordering for the "Popular" rail, low number first. Nothing here
-   * measures readership, so this is a field for the newsroom to set rather than
-   * something the code should infer — unranked stories simply do not appear.
-   */
+  /** Editorial ordering for the "Popular" rail, low number first. */
   popularRank?: number;
   seo: SeoView;
 }
@@ -135,12 +78,7 @@ export interface GalleryImage {
   caption?: string;
 }
 
-/**
- * Resolved SEO for a page.
- *
- * The fallbacks are applied in the mapper, not in the page, so a component
- * never has to know that a blank meta title means "use the headline".
- */
+/** Resolved SEO for a page. */
 export interface SeoView {
   title: string;
   description: string;
@@ -165,23 +103,12 @@ export interface Collaborator {
   name: string;
   logo: Media;
   group: CollaboratorGroupId;
-  /**
-   * Which display slots this logo appears in. Logos sharing a slot cross-fade
-   * between each other; a logo may appear in more than one slot, in which case
-   * the carousel guarantees two slots never show it simultaneously.
-   */
+  /** Which display slots this logo appears in. */
   slots: number[];
   /** Per-logo optical sizing, carried over from the prototype. */
   maxWidth: string;
   maxHeight: string;
-  /**
-   * Render the mark as supplied instead of flattening it to white.
-   *
-   * The row is monochrome by default so a dozen unrelated brands read as one
-   * set. Some owners do not permit that — AWS requires its smile to stay
-   * orange — so those opt out and are also shown at full opacity, since the
-   * dimming is part of the same normalising treatment.
-   */
+  /** Render the mark as supplied instead of flattening it to white. */
   preserveColor?: boolean;
 }
 
@@ -220,13 +147,7 @@ export interface ServiceOption {
   label: string;
 }
 
-/**
- * Collection: `faqs`.
- *
- * `audience` is a category slug rather than a fixed union: the two the site
- * needs are seeded records, and a third can be added in the admin panel without
- * a deployment. {@link FaqAudience} is what the tabs are built from.
- */
+/** Collection: `faqs`. */
 export interface FaqItem {
   id: string;
   audience: string;
@@ -313,18 +234,10 @@ export interface PipelineStep {
   owners: string;
 }
 
-/* ---- Resources -------------------------------------------------
-   Modelled as three arrays now, but shaped to collapse into one `posts`
-   collection with a category facet in Phase 2 — the requirement docs
-   explicitly merged Publications and Blogs because the types overlap. */
+/* ---- Resources ------------------------------------------------- */
+/* Modelled as three arrays now, but shaped to collapse into one `posts` collection with a category facet in Phase 2. */
 
-/**
- * Collection: `webinars`.
- *
- * `sessionStatus` decides which of two very different cards renders: an
- * upcoming session is a banner with a registration button, a recording is a
- * thumbnail in a grid.
- */
+/** Collection: `webinars`. */
 export interface Webinar {
   id: string;
   slug: string;
@@ -368,13 +281,7 @@ export interface WebinarRecording {
   durationMinutes?: number;
 }
 
-/**
- * What the "Upcoming session" card shows.
- *
- * A resolved answer rather than a list to filter: the global's selection, the
- * fallback rule and the "has it already happened" check are all applied in the
- * mapper, so the component either has a session or renders the empty state.
- */
+/** What the "Upcoming session" card shows. */
 export interface UpcomingEvent {
   webinar: Webinar;
 }
@@ -385,14 +292,7 @@ export interface UpcomingEventSlot {
   emptyStateNote: string;
 }
 
-/**
- * Collection: `insights` — research, case studies, reports, blogs.
- *
- * `category` is the tab and the chip; `kind` is the specific form printed
- * beside it ("Research paper", "Field note"). Both come from the CMS, and
- * neither is a fixed list in the frontend any more — which is why the index
- * page derives its tabs from the data rather than from a constant.
- */
+/** Collection: `insights` — research, case studies, reports, blogs. */
 export interface Insight {
   id: string;
   slug: string;
@@ -438,14 +338,7 @@ export interface GlossaryTerm {
   slug: string;
   term: string;
   definition: RichTextContent;
-  /**
-   * The definition as plain text.
-   *
-   * The page searches across terms and definitions in the browser, and rich
-   * text cannot be searched with `includes`. Flattening it once on the server
-   * keeps the search instant and keeps the Lexical tree out of the client
-   * bundle's hot path.
-   */
+  /** The definition as plain text. */
   searchText: string;
   abbreviation?: string;
   category?: string;
@@ -458,9 +351,8 @@ export interface GlossaryRef {
   term: string;
 }
 
-/* ---- Governance ------------------------------------------------
-   Statutory section references (§5–§10) render as inline mono chips, so
-   they are a field rather than punctuation inside the prose. */
+/* ---- Governance ------------------------------------------------ */
+/* Statutory section references (§5–§10) render as inline mono chips, so they are a field rather than punctuation inside the prose. */
 
 export interface GovernanceBullet {
   text: string;
@@ -498,16 +390,7 @@ export interface GovernanceChapter {
   title: string;
 }
 
-/**
- * Collection: `team-members` — the people on the Company page.
- *
- * The page shows three things and this type carries three things. The extra
- * fields the collection holds — department, biography, email, social links —
- * are deliberately not surfaced here: adding one to the page later means
- * widening this type and the mapper, which is a change someone makes on
- * purpose rather than data appearing on a public page because it was in the
- * database.
- */
+/** Collection: `team-members` — the people on the Company page. */
 export interface TeamMember {
   id: string;
   name: string;
@@ -544,13 +427,7 @@ export interface StoryStat {
   label: string;
 }
 
-/**
- * Collection: `media-coverage`.
- *
- * Every entry links off-site and there is no detail route, which is deliberate:
- * the article belongs to the outlet that published it. `href` is therefore
- * always external and always required.
- */
+/** Collection: `media-coverage`. */
 export interface PressItem {
   id: string;
   slug: string;
@@ -566,14 +443,7 @@ export interface PressItem {
   language?: string;
 }
 
-/**
- * Collection: `jobs` — a vacancy and its terms of reference.
- *
- * `applications` carries the resolved answer to "may this be applied for right
- * now", worked out on the server from three separate conditions. The form and
- * the deadline notice both read it; neither re-derives it, because a second
- * implementation of that rule is a second answer.
- */
+/** Collection: `jobs` — a vacancy and its terms of reference. */
 export type EmploymentType = "Full time" | "Part time" | "Contract";
 
 /** One numbered clause of the terms of reference. */
@@ -608,12 +478,7 @@ export interface Job {
   seo: SeoView;
 }
 
-/**
- * Whether and how this vacancy can be applied for.
- *
- * `state` drives what the page says: an open form, a "closing soon" warning
- * above it, or a closed notice in place of it.
- */
+/** Whether and how this vacancy can be applied for. */
 export interface ApplicationWindow {
   state: "open" | "closing-soon" | "closed";
   /** Why it is closed, in words an applicant can act on. */

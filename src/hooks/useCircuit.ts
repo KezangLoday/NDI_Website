@@ -12,23 +12,7 @@ export interface CircuitBand {
 
 const VARIANTS = ["#ndiTA", "#ndiTB", "#ndiTC"];
 
-/**
- * Tiles the circuit-trace SVG variants down the full page height.
- *
- * Band height scales with viewport width exactly as the prototype does, and
- * the set is recomputed on resize and again after layout settles, because
- * fonts and images keep growing the page after first paint.
- *
- * Height comes from the flow content, not `document.scrollHeight`. The band
- * layers are absolutely positioned, so they count toward the document's own
- * height — measuring that would let them hold the page open at the tallest
- * size it had ever been, which left dead scroll space below the footer after
- * navigating from a long page to a short one.
- *
- * A ResizeObserver on that content covers every way the page changes height:
- * client-side navigation, an accordion opening, a tab switching, images
- * arriving.
- */
+/** Tiles the circuit-trace SVG variants down the full page height. */
 export function useCircuitBands() {
   const [bands, setBands] = useState<CircuitBand[]>([]);
   const [documentHeight, setDocumentHeight] = useState(0);
@@ -85,11 +69,7 @@ interface CircuitMask {
   textHole: string;
 }
 
-/**
- * Layout-only geometry. `getBoundingClientRect` would bake in the hero's
- * entrance transform, so the offset chain is walked by hand instead — the
- * mask is then correct whenever it happens to be measured.
- */
+/** Layout-only geometry. */
 function documentBox(element: HTMLElement) {
   let x = 0;
   let y = 0;
@@ -103,8 +83,7 @@ function documentBox(element: HTMLElement) {
 }
 
 function measureMask(): CircuitMask {
-  // `[data-hero-grid]` is Home's; `[data-circuit-hero]` lets any other page
-  // opt into the same treatment without inheriting Home's hero layout rules.
+  // `[data-hero-grid]` is Home's.
   const hero = document.querySelector<HTMLElement>("[data-hero-grid], [data-circuit-hero]");
   const heroBox = hero ? documentBox(hero) : { top: 0, height: 700, left: 0, width: 0 };
   const heroTop = heroBox.top;
@@ -124,8 +103,7 @@ function measureMask(): CircuitMask {
     const buttonBox = storeButton ? documentBox(storeButton) : headingBox;
     const top = headingBox.top;
     const bottom = Math.max(buttonBox.top + buttonBox.height, headingBox.top + headingBox.height);
-    // Home's headline is left-aligned, so the hole sits left of its midpoint
-    // to follow the text. A centred headline wants the hole centred with it.
+    // Home's headline is left-aligned, so the hole sits left of its midpoint to follow the text.
     const centred = getComputedStyle(heading).textAlign === "center";
     holeX = headingBox.left + headingBox.width * (centred ? 0.5 : 0.42);
     holeY = (top + bottom) / 2;
@@ -172,22 +150,8 @@ function setMask(element: HTMLElement, layers: string) {
   element.style.maskComposite = "intersect";
 }
 
-/**
- * The cursor-reactive circuit glow.
- *
- * The dim base layer is masked so traces never run through the headline. The
- * bright layer is additionally masked to a spotlight that follows the cursor
- * in page coordinates — the layers span the whole document, so page coords
- * keep the spotlight glued to the pointer at any scroll depth. When the cursor
- * has been still for a moment a softer spotlight drifts on its own, so the
- * effect is discoverable without hovering.
- */
-/**
- * Subpages use a plainer treatment than the home page: the dim base layer is
- * hidden entirely so only the cursor-revealed traces show, the fade is a fixed
- * gradient rather than one measured off the hero, and there is no ambient
- * roaming — the glow returns to nothing when the pointer leaves the document.
- */
+/** The cursor-reactive circuit glow. */
+/** Subpages use a plainer treatment than the home page: the dim base layer is hidden entirely so only the cursor-revealed traces show, the fade is a fixed gradient rather than one measured off the hero, and there is no ambient roaming — the glow returns to nothing when the pointer leaves the document. */
 const SUBPAGE_FADE =
   "linear-gradient(to bottom, transparent 0, transparent 480px, #000 780px, #000 100%)";
 
@@ -199,9 +163,7 @@ export function useCircuitGlow(
   const reduced = useReducedMotion();
 
   useEffect(() => {
-    /* The layers are hidden on touch devices (see .ndi-circuit), so none of the
-       measuring, the pointer tracking or the roaming loop below has anything to
-       act on. Bail before installing any of it. */
+    /* The layers are hidden on touch devices (see .ndi-circuit), so none of the measuring, the pointer tracking or the roaming loop below has anything to act on. */
     if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
 
     if (variant === "subpage") {
@@ -211,8 +173,7 @@ export function useCircuitGlow(
         base.style.webkitMaskImage = SUBPAGE_FADE;
         base.style.maskImage = SUBPAGE_FADE;
       }
-      // The glow keeps the mask the previous route left on it until the pointer
-      // next moves, which on a subpage would briefly show traces above the fade.
+      // The glow keeps the mask the previous route left on it until the pointer next moves, which on a subpage would briefly show traces above the fade.
       if (glowRef.current) glowRef.current.style.opacity = "0";
 
       const applySpot = (x: number, y: number) => {
@@ -241,10 +202,7 @@ export function useCircuitGlow(
       };
     }
 
-    // Undo what the subpage branch wrote. Atmosphere lives in the layout, so
-    // these layers are the same DOM nodes across a client-side navigation, and
-    // the inline `opacity: 0` a subpage sets outlives the route that set it —
-    // arriving here from one left the base traces invisible until a reload.
+    // Undo what the subpage branch wrote.
     if (baseRef.current) baseRef.current.style.opacity = "1";
 
     let mask: CircuitMask | null = null;
@@ -266,8 +224,7 @@ export function useCircuitGlow(
 
     remeasure();
 
-    // Entrance transforms mean first-paint geometry is wrong; re-measure once
-    // things settle, on load, and after fonts swap.
+    // Entrance transforms mean first-paint geometry is wrong; re-measure once things settle, on load, and after fonts swap.
     let resizeTimer: ReturnType<typeof setTimeout>;
     const onResize = () => {
       clearTimeout(resizeTimer);

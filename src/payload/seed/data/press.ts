@@ -2,18 +2,7 @@ import { media } from "../media";
 
 import type { SeedPressItem } from "./types";
 
-/**
- * Prospective Payload collection: `press` — the Media Coverage cards.
- *
- * There is no detail route for this collection and there should not be. Press
- * coverage belongs to the outlet that published it: the card's job is to say
- * what was written and hand the reader straight to the source, so every `href`
- * points off-site.
- *
- * Note for Phase 2: the design has no field for the publishing outlet, which a
- * real press page will want. Added here as optional so the layout can start
- * showing it as soon as the content exists.
- */
+/** Prospective Payload collection: `press` — the Media Coverage cards. */
 export const press: SeedPressItem[] = [
   {
     id: "global-attention",

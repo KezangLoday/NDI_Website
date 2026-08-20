@@ -1,42 +1,9 @@
-/**
- * The public job-application endpoint.
- *
- * This is the only path by which an unauthenticated request causes a write, so
- * it is the security boundary of the recruitment system and it does the work
- * that boundary implies. In order:
- *
- *   1. The job is loaded and checked — published, open, deadline in the future.
- *      All three, server-side, because a hidden Apply button is not a control.
- *   2. The applicant's fields are validated.
- *   3. Each file's declared type is verified against its actual bytes, and the
- *      set of files is checked against what *this* job requires.
- *   4. Duplicates are detected and either flagged or refused, per the job.
- *   5. Documents are stored privately, then the application is created with a
- *      unique reference — and if that create fails, the documents just written
- *      are cleaned up rather than left orphaned.
- *
- * It is an endpoint rather than a Server Action for one concrete reason: a
- * Server Action body goes through Next's `bodySizeLimit`, which defaults to 1MB
- * and would reject a perfectly ordinary set of scanned certificates. This route
- * streams multipart form data with no such ceiling.
- *
- * The response deliberately carries the reference number, the job title and the
- * submission date, and nothing else. No id, no status, no internal field — an
- * applicant learns what they need to follow up and nothing about how they will
- * be assessed.
- */
+/** The public job-application endpoint. */
 import { APIError, type Endpoint, type PayloadRequest, type Where } from "payload";
 
 import type { ApplicantDocument, Job, JobApplication } from "@/payload-types";
 
-/**
- * Document id types, taken from the generated types rather than assumed.
- *
- * Payload's Postgres adapter is configured with serial ids, so these are
- * numbers today — but writing `number` here would silently become wrong if the
- * adapter were switched to UUIDs, and this file would keep compiling while
- * failing at runtime.
- */
+/** Document id types, taken from the generated types rather than assumed. */
 type ApplicantDocumentID = ApplicantDocument["id"];
 type ApplicationID = JobApplication["id"];
 
@@ -195,11 +162,7 @@ async function handleSubmission(req: PayloadRequest): Promise<SubmissionReceipt>
           name: doc.filename,
           size: doc.data.byteLength,
         },
-        /*
-         * The collection's `create` is closed to every caller, including this
-         * one. Overriding it here is the point: the checks above are what earn
-         * the write, and they have all now passed.
-         */
+        /* The collection's `create` is closed to every caller, including this one. */
         overrideAccess: true,
         req,
       });
@@ -229,11 +192,7 @@ async function handleSubmission(req: PayloadRequest): Promise<SubmissionReceipt>
       duplicate: existing !== null,
     };
   } catch (error) {
-    /*
-     * Documents written before the failure would otherwise sit in storage
-     * attached to nothing — unreachable through the admin panel, and still
-     * personal data the programme is responsible for. They go.
-     */
+    /* Documents written before the failure would otherwise sit in storage attached to nothing. */
     await Promise.allSettled(
       storedIds.map((id) =>
         req.payload.delete({
@@ -258,14 +217,7 @@ const REFUSAL_MESSAGES: Record<"unpublished" | "closed" | "expired" | "no-deadli
 
 /* ---- Reading the job ------------------------------------------- */
 
-/**
- * Loads the job including its draft status.
- *
- * `overrideAccess` and a direct query rather than `findByID`, because the
- * decision to refuse an unpublished job has to be made here, from the real
- * `_status` — and a request that respected access control would simply not see
- * a draft job at all, which is indistinguishable from a mistyped id.
- */
+/** Loads the job including its draft status. */
 async function loadJob(req: PayloadRequest, id: string): Promise<Job> {
   const { docs } = await req.payload.find({
     collection: "jobs",
@@ -308,20 +260,8 @@ async function findExistingApplication(
 
 /* ---- Creating the application --------------------------------- */
 
-/**
- * Creates the application, retrying if the reference was taken.
- *
- * See `reference.ts` for why the collision is expected rather than prevented.
- * The retry re-reads the highest reference each time, so two racing submissions
- * settle on consecutive numbers rather than fighting over one.
- */
-/**
- * The application as this endpoint builds it, before the reference is attached.
- *
- * Derived from the generated `JobApplication` type rather than declared
- * independently, so a field renamed in the collection config becomes a type
- * error here instead of a silently-dropped value.
- */
+/** Creates the application, retrying if the reference was taken. */
+/** The application as this endpoint builds it, before the reference is attached. */
 type NewApplication = Omit<
   JobApplication,
   "id" | "reference" | "createdAt" | "updatedAt" | "sizes" | "statusHistory"
@@ -384,14 +324,7 @@ function required(form: FormData, key: string, label: string): string {
   return value;
 }
 
-/**
- * Email validation, kept deliberately loose.
- *
- * A strict pattern rejects valid addresses — the grammar allows far more than
- * people expect — and the cost of a wrong rejection here is an applicant who
- * cannot apply at all. So this checks the shape and leaves proving it
- * deliverable to the moment someone is contacted.
- */
+/** Email validation, kept deliberately loose. */
 const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface ApplicantData {
@@ -440,13 +373,7 @@ function readEducation(form: FormData): NonNullable<JobApplication["education"]>
   };
 }
 
-/**
- * The declared education level, or null.
- *
- * A value the collection does not recognise is discarded rather than rejected:
- * it is a secondary field, and refusing an entire application because a select
- * arrived with an unexpected option would be a poor trade.
- */
+/** The declared education level, or null. */
 function readEducationLevel(form: FormData): EducationLevel | null {
   const value = text(form, "highestLevel");
   return isEducationLevel(value) ? value : null;
@@ -461,14 +388,7 @@ function readExperience(form: FormData): NonNullable<JobApplication["experience"
   };
 }
 
-/**
- * Reads and verifies every attached file.
- *
- * The MIME type is checked twice over, against different things: the allow-list
- * catches a type nobody asked for, and `verifyFileType` catches a file whose
- * contents are not what its name claims. The second is the one that matters —
- * the first is only as trustworthy as the browser that sent it.
- */
+/** Reads and verifies every attached file. */
 async function readDocuments(form: FormData): Promise<SubmittedDocument[]> {
   const documents: SubmittedDocument[] = [];
 

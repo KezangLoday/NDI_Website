@@ -64,10 +64,7 @@ export default async function UsersPage() {
                   "--card-shift": card.translateX,
                   "--card-opacity": card.opacity,
                   "--card-z": card.z,
-                  // Width lives on the wrapper as a property rather than on the
-                  // image as an inline style: the fan needs to narrow the cards
-                  // and overlap them on a phone, and an inline width cannot be
-                  // overridden by a media query.
+                  // Width lives on the wrapper as a property rather than on the image as an inline style: the fan needs to narrow the cards and overlap them on a phone, and an inline width cannot be overridden by a media query.
                   "--card-w": card.width,
                 } as React.CSSProperties
               }
@@ -77,19 +74,12 @@ export default async function UsersPage() {
                 alt={card.image.alt}
                 width={card.image.width}
                 height={card.image.height}
-                // `sizes` is what makes the 1500px artwork worth having. Without
-                // it next/image builds a 1x/2x srcset off the `width` prop and
-                // would ship a ~1920px derivative for a 370px slot; with it the
-                // browser asks for the ~750px one a 2x display actually needs.
+                // `sizes` is what makes the 1500px artwork worth having.
                 sizes="(max-width: 732px) 205px, (max-width: 1321px) 28vw, 370px"
-                // Fine text at small size, so the second generation of loss is
-                // worth avoiding even though the source is now downscaled
-                // rather than upscaled.
+                // Fine text at small size, so the second generation of loss is worth avoiding even though the source is now downscaled rather than upscaled.
                 quality={95}
                 priority
-                // No border-radius here: the artwork carries its own rounded
-                // corners in its alpha channel, and they are a squircle, which
-                // no CSS radius reproduces.
+                // No border-radius here: the artwork carries its own rounded corners in its alpha channel, and they are a squircle, which no CSS radius reproduces.
                 className="ndi-credential-img block h-auto"
                 style={{ boxShadow: "0 26px 54px -22px rgba(0,0,0,0.85)" }}
               />
@@ -97,26 +87,16 @@ export default async function UsersPage() {
           ))}
         </Reveal>
 
-        {/* Three across on every width. At a 150px column gap each stat took a
-            row of its own on a phone, so the trio ran 325px tall and the eye
-            read three unrelated facts instead of one set. */}
+        {/* Three across on every width. */}
         <Reveal
           delay={0.1}
-          /* The desktop row needs about 825px for three stats at a 150px gap, so
-             it wraps to two lines on a tablet. Three across holds until the
-             desktop layout actually fits. */
-          /* The row reaches past the section gutter on a phone and closes the
-             column gap to 8px. "0 passwords" needs about 100px to hold one
-             line, and the default gutter plus a 16px gap left only 101px, so it
-             broke. Pulling 12px off each side and halving the gap buys the
-             width instead of shrinking the number to nothing. */
+          /* The desktop row needs about 825px for three stats at a 150px gap, so it wraps to two lines on a tablet. */
+          /* The row reaches past the section gutter on a phone and closes the column gap to 8px. */
           className="-mx-3 mt-14 grid grid-cols-3 items-start gap-x-2 text-center min-[641px]:mx-0 min-[641px]:gap-x-4 min-[901px]:mt-[100px] min-[901px]:flex min-[901px]:flex-wrap min-[901px]:justify-center min-[901px]:gap-x-[150px] min-[901px]:gap-y-10 min-[901px]:text-left"
         >
           {stats.map((stat) => (
             <div key={stat.id}>
-              {/* One line each, so the three read as one set. Two of the values
-                  are two words, so the type comes down and `nowrap` holds them
-                  together; the row above found the width to make that fit. */}
+              {/* One line each, so the three read as one set. */}
               <div className="whitespace-nowrap font-display text-[clamp(15px,4.2vw,30px)] font-semibold leading-[1.15] tracking-[-0.03em] text-strong min-[641px]:tracking-[-0.02em] min-[901px]:text-[34px]">
                 {stat.value}
               </div>
@@ -159,8 +139,7 @@ export default async function UsersPage() {
           </h2>
         </Reveal>
 
-        {/* Five across at desktop, as designed; stepped down so the cards stay
-            readable on the widths the design leaves unspecified. */}
+        {/* Five across at desktop, as designed; stepped down so the cards stay readable on the widths the design leaves unspecified. */}
         <Reveal
           delay={0.05}
           className="mt-10 grid grid-cols-1 gap-[18px] min-[561px]:grid-cols-2 min-[901px]:grid-cols-3 min-[1101px]:grid-cols-5"

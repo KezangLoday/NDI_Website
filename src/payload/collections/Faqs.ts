@@ -1,14 +1,4 @@
-/**
- * FAQs.
- *
- * The two audiences the site needs — citizens and integrating organisations —
- * are category records rather than a hard-coded pair, which is what makes a
- * third ("For developers", say) an afternoon's work in the admin panel instead
- * of a deployment. The seed creates the two the requirements name.
- *
- * The page's search deliberately spans both audiences, which is why this is one
- * collection with a facet rather than two collections.
- */
+/** FAQs. */
 import type { CollectionConfig } from "payload";
 
 import { hrOrPrEditable, publishedOrSignedIn, superadminOnly } from "../access";
@@ -31,12 +21,7 @@ export const Faqs: CollectionConfig = {
   versions: draftPublish,
   access: {
     read: publishedOrSignedIn,
-    /**
-     * Both editorial roles. FAQs straddle the line — the registration and
-     * recovery answers are HR-adjacent support content, the integration answers
-     * are PR's — and making either role wait on the other to fix a wrong answer
-     * would be worse than sharing the collection.
-     */
+    /** Both editorial roles. */
     create: hrOrPrEditable,
     update: hrOrPrEditable,
     delete: superadminOnly,

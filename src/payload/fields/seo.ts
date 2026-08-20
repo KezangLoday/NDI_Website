@@ -1,16 +1,4 @@
-/**
- * SEO fields, as one collapsible group.
- *
- * Every field here is optional and every one falls back to the editorial
- * field it shadows — meta title to the title, meta description to the
- * summary, OG image to the featured image. That fallback lives in the frontend
- * mappers rather than in a hook, so an editor who later improves the title also
- * improves the search result without having to remember to clear an override.
- *
- * The character counts in the descriptions are the point at which Google
- * truncates, not a hard limit; they are guidance for the person writing, so
- * they are `admin.description` rather than `maxLength`.
- */
+/** SEO fields, as one collapsible group. */
 import type { Field } from "payload";
 
 export interface SeoFieldOptions {

@@ -12,23 +12,9 @@ import { getInsightBySlug, getInsightSlugs, getInsights } from "@/content";
 import { formatFileSize, formatNewsDate } from "@/lib/format";
 import { mediaUrl } from "@/lib/media";
 
-/**
- * A single publication.
- *
- * One column rather than the newsroom's article-plus-rail: a research paper is
- * read end to end, and a sticky list of other papers beside it competes with
- * the thing the reader came for. What is related goes underneath, after the
- * argument has finished.
- *
- * The category chip used to come from a hard-coded map of three values. It is
- * now whatever the CMS category is called, which is what makes a fourth
- * category an editorial act rather than a deployment.
- */
+/** A single publication. */
 
-/**
- * Daily revalidation as a floor; publishing revalidates this route on demand.
- * See the same note on the news detail route.
- */
+/** Daily revalidation as a floor; publishing revalidates this route on demand. */
 export const revalidate = 86_400;
 
 type Params = { params: Promise<{ slug: string }> };
@@ -89,8 +75,7 @@ export default async function InsightPage({ params }: Params) {
             <span className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint">
               {item.kind}
             </span>
-            {/* Reading time is optional: a 60-page report does not have one, and
-                an invented number is worse than none. */}
+            {/* Reading time is optional: a 60-page report does not have one, and an invented number is worse than none. */}
             {item.readingMinutes ? (
               <span className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint">
                 {item.readingMinutes} min read
@@ -116,8 +101,7 @@ export default async function InsightPage({ params }: Params) {
             </p>
           ) : null}
 
-          {/* The document is often the point of the page, so it goes above the
-              summary's fold rather than at the foot with the appendices. */}
+          {/* The document is often the point of the page, so it goes above the summary's fold rather than at the foot with the appendices. */}
           {item.document ? (
             <a
               href={item.document.url}

@@ -7,27 +7,14 @@ import type {
   TocEntry,
 } from "./types";
 
-/**
- * Governance content.
- *
- * The requirement docs are explicit that this page's content is mandated and
- * must not be reworded — "No content changes, government content is mandated
- * and includes the NDI act." It is reproduced verbatim, and in Phase 2 this
- * should be a locked-down or non-editable collection.
- */
+/** Governance content. */
 
 export const governanceIntro =
   "Bhutan NDI Governance Framework is a family of legislative documents. The National Digital Identity Act of Bhutan 2023 is the mother of legislation for the framework.";
 
 export const governanceStatus = ["In force 2023-07-24", "13 chapters · 160 sections"];
 
-/**
- * The full Act.
- *
- * NOTE for Phase 2: this points at the old Amplify **staging** S3 bucket. It
- * will break when that stack is decommissioned — the PDF should be re-hosted
- * as a CMS media asset.
- */
+/** The full Act. */
 export const actPdfUrl =
   "https://ndi-website-17-07-2023-storage-4b404e2160703-staging.s3.ap-southeast-1.amazonaws.com/public/governance-framework/National-Digital-Identity-Act-of-Bhutan-2023.pdf";
 

@@ -1,13 +1,4 @@
-/**
- * The glossary.
- *
- * The smallest collection in the CMS and the one most likely to grow sideways,
- * so the shape is deliberately open: a term, a definition, an optional
- * category, and related terms as real relationships. Everything the
- * requirements list as "optional metadata for future expansion" is a field
- * added later without touching what is here — which is the point of not
- * cramming acronyms, translations and sources into the definition text now.
- */
+/** The glossary. */
 import type { CollectionConfig } from "payload";
 
 import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
@@ -76,14 +67,7 @@ export const Glossary: CollectionConfig = {
       description: "Optional. Groups terms on the page once there are enough to need grouping.",
     }),
     {
-      /**
-       * Related terms, as a relationship to this same collection.
-       *
-       * A relationship rather than a list of strings, so a renamed term stays
-       * linked and a deleted one does not leave a dead cross-reference. The
-       * requirement is explicit about not storing relationships as arbitrary
-       * strings, and a glossary is where that goes wrong fastest.
-       */
+      /** Related terms, as a relationship to this same collection. */
       name: "relatedTerms",
       type: "relationship",
       relationTo: "glossary",

@@ -1,15 +1,4 @@
-/**
- * The three CMS roles, and the predicates every access rule is built from.
- *
- * Roles are a `hasMany` select rather than a single value, because the three
- * are responsibilities and not a hierarchy: a small communications team may
- * well have one person who is both HR and PR, and modelling that as a third
- * combined role would mean a fourth the moment another pair overlaps.
- *
- * Superadmin is not "HR plus PR" either — it additionally owns user management
- * and configuration — so it is checked separately rather than expanded into the
- * other two at assignment time.
- */
+/** The three CMS roles, and the predicates every access rule is built from. */
 export const ROLES = ["superadmin", "hr", "pr"] as const;
 
 export type Role = (typeof ROLES)[number];
@@ -20,14 +9,7 @@ export const ROLE_LABELS: Record<Role, string> = {
   pr: "PR",
 };
 
-/**
- * The authenticated user as access rules see it.
- *
- * Payload types `req.user` as the generated `User` union, which is wider than
- * anything an access rule needs. Narrowing to this shape keeps the rules
- * readable and means they do not have to be regenerated when unrelated fields
- * are added to the collection.
- */
+/** The authenticated user as access rules see it. */
 export interface RoleBearer {
   readonly id: number | string;
   readonly roles?: Role[] | null;

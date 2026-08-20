@@ -1,22 +1,4 @@
-/**
- * File-type verification by content, not by claim.
- *
- * The MIME type on an upload comes from the browser, which took it from the
- * file extension. It is a hint, and an attacker controls it completely — so the
- * `mimeTypes` allow-list on the collection stops an honest mistake and nothing
- * more. This reads the first bytes of the file and checks they are what the type
- * says they are.
- *
- * What that buys, concretely: `payload.pdf.exe` renamed to `payload.pdf` no
- * longer reaches storage, and neither does an HTML file dressed as a JPEG —
- * which matters because a stored HTML file served from the site's own origin is
- * a script running as the site.
- *
- * What it does not claim to be is malware scanning. It verifies that a file is
- * the format it says it is; whether a genuine PDF contains something hostile is
- * a question for a scanner, and that is flagged as a deployment decision rather
- * than pretended away here.
- */
+/** File-type verification by content, not by claim. */
 
 /** Longest signature below, plus the largest offset. */
 const HEADER_BYTES = 32;
@@ -51,13 +33,7 @@ const SIGNATURES: readonly Signature[] = [
     offset: 4,
   },
   {
-    /*
-     * A .docx is a ZIP. So is a .jar, an .xlsx and an .apk — the signature only
-     * establishes "this is a ZIP container", which is as far as a header check
-     * can go. Payload's extension and MIME allow-list is what narrows it to a
-     * Word document, and the pair together are what stop an executable being
-     * renamed.
-     */
+    /* A .docx is a ZIP. */
     label: "ZIP container (DOCX)",
     mimeTypes: ["application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
     magic: [0x50, 0x4b, 0x03, 0x04],
@@ -75,13 +51,7 @@ export interface FileTypeCheck {
   readonly reason?: string;
 }
 
-/**
- * Verifies a buffer's contents against its declared MIME type.
- *
- * Returns `ok` for a type with no signature on file — an unknown-but-allowed
- * type is the collection's decision to make, and failing closed here would mean
- * that adding a MIME type to a collection silently stopped working.
- */
+/** Verifies a buffer's contents against its declared MIME type. */
 export function verifyFileType(data: Buffer, declaredMimeType: string): FileTypeCheck {
   const expected = SIGNATURES.filter((signature) => signature.mimeTypes.includes(declaredMimeType));
   if (expected.length === 0) return { ok: true };
@@ -104,24 +74,10 @@ function matches(data: Buffer, signature: Signature): boolean {
   return signature.magic.every((byte, index) => byte === null || data[offset + index] === byte);
 }
 
-/**
- * Control characters and DEL, which have no business in a displayed name.
- *
- * Built from escapes via the constructor rather than written as a literal, so
- * the source of this file stays printable.
- */
+/** Control characters and DEL, which have no business in a displayed name. */
 const CONTROL_CHARS = new RegExp("[\\u0000-\\u001f\\u007f]", "g");
 
-/**
- * Reduces a submitted filename to something safe to store and to show.
- *
- * Payload generates the filename it actually writes to disk, so this is not
- * what prevents path traversal — it is what stops a hostile filename being
- * *displayed* to HR in the admin panel, and what keeps the original name
- * readable in a list. Control characters and path separators go; the rest of
- * the name, including non-Latin scripts, is left alone, because
- * "Kinley_Dorji_CV" is the part that makes a document identifiable.
- */
+/** Reduces a submitted filename to something safe to store and to show. */
 export function safeDisplayFilename(name: string): string {
   const withoutPath = name.split(/[\\/]/).pop() ?? name;
   const cleaned = withoutPath

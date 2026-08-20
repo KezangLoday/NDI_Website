@@ -1,23 +1,4 @@
-/**
- * The recruitment pipeline.
- *
- * This file is the single place a status is defined. Adding "Second interview"
- * means adding one entry below and nothing else — the select options, the
- * admin filters, the status-history labels and the terminal-state logic are all
- * derived from this list.
- *
- * A note on why these are a typed constant rather than a `recruitment-statuses`
- * collection, since the requirements raise the option: the statuses are an
- * internal workflow, not content. Nothing on the public site reads them, so
- * there is no frontend to "hard-code them throughout" — the concern the
- * requirement is guarding against. Against that, a select column is what makes
- * Payload's list-view filters and `where` clauses work directly on the status,
- * which is the single most useful thing HR does with this data ("show me
- * everyone shortlisted for this post"). A relationship would turn every such
- * filter into a join and every status change into a lookup. If the statuses ever
- * need to be editable by HR without a deploy, this list is what a seeded
- * collection would be populated from.
- */
+/** The recruitment pipeline. */
 
 export const APPLICATION_STATUSES = [
   {

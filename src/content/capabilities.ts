@@ -81,15 +81,7 @@ export const walletBenefits: WalletBenefit[] = [
   { id: "platforms", text: "Access to different platforms and services through the wallet" },
 ];
 
-/**
- * The wallet itself, held, at the centre of the capabilities section.
- *
- * Supplied at 2000x1842 with the device in the upper-left third and a forearm
- * sprawling to the far corner, so 60% of the frame was empty and any width that
- * left room for the annotations either side rendered the phone too small to
- * lead. Cropped to the device and the grip, with the arm running off the corner
- * it already ran off.
- */
+/** The wallet itself, held, at the centre of the capabilities section. */
 export const walletInHand = media(
   "/media/phone-in-hand.webp",
   "The Bhutan NDI wallet open on a phone, held in one hand",

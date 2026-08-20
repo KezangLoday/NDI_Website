@@ -35,8 +35,7 @@ export function Hero() {
             Your identity,{" "}
             <span className="relative block h-[1.14em] min-w-0 overflow-hidden">
               {PHRASES.map((phrase, index) => {
-                // Only the phrase just left exits upward; the rest park below,
-                // so wrapping from last back to first keeps the same motion.
+                // Only the phrase just left exits upward; the rest park below, so wrapping from last back to first keeps the same motion.
                 const state =
                   index === active
                     ? "in"

@@ -8,13 +8,7 @@ import { Icon } from "@/components/ui/icons";
 import { contactAudiences, type ContactAudienceId } from "@/content/services";
 import type { ServiceOption } from "@/content/types";
 
-/**
- * Presentational contact form.
- *
- * The prototype's submit handler is just `preventDefault`, so Phase 1 keeps it
- * local: required fields are validated and a confirmation is shown, but
- * nothing is sent. Wiring this to a real endpoint is Phase 2 work.
- */
+/** Presentational contact form. */
 export function ContactForm({ services }: { services: ServiceOption[] }) {
   const [audience, setAudience] = useState<ContactAudienceId>("citizen");
   const [service, setService] = useState("");
@@ -29,9 +23,7 @@ export function ContactForm({ services }: { services: ServiceOption[] }) {
     <form
       data-cta-form="1"
       onSubmit={onSubmit}
-      // Fill, blur and inner light come from the shared panel rule in
-      // ndi-effects.css, which the contact rows beside this also wear. They used
-      // to be declared inline here too and were overridden by it anyway.
+      // Fill, blur and inner light come from the shared panel rule in ndi-effects.css, which the contact rows beside this also wear.
       className="relative flex flex-col gap-[18px] rounded-[16px] border border-grid p-4 min-[561px]:p-6 min-[901px]:rounded-[20px] min-[901px]:p-[30px]"
     >
       <fieldset className="flex flex-col gap-2.5 border-0 p-0">

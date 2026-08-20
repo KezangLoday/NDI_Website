@@ -27,8 +27,7 @@ export default function ResourcesPage() {
         />
       </PageSection>
 
-      {/* An index rather than a tab strip: each section is its own page now, so
-          these are navigation, and a whole-card link is the honest control. */}
+      {/* An index rather than a tab strip: each section is its own page now, so these are navigation, and a whole-card link is the honest control. */}
       <PageSection className="pb-[104px] pt-6">
         <div data-ndi-3col="1" className="grid grid-cols-1 gap-4 min-[701px]:grid-cols-3">
           {resourceSections.map((section, index) => (

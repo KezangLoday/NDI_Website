@@ -1,11 +1,4 @@
-/**
- * Insights & Publications.
- *
- * The tabs on the index page used to be a hard-coded union of three values.
- * They are now derived from the categories that actually have something
- * published under them, which is what makes adding a fourth an editorial act
- * rather than a deployment.
- */
+/** Insights & Publications. */
 import type { Insight as PayloadInsight } from "@/payload-types";
 import type { CategoryFacet, Insight, InsightAuthor } from "@/content/types";
 import { getPayloadClient } from "@/payload/lib/client";
@@ -109,13 +102,7 @@ export async function queryInsightSlugs(): Promise<string[]> {
   return withSlug(docs).map((doc) => doc.slug);
 }
 
-/**
- * The filter tabs, counted from what is published.
- *
- * Derived from the insights already in hand rather than from a second query
- * against `categories`: an empty tab is a dead end for a reader, and the count
- * beside each label is something the page shows anyway.
- */
+/** The filter tabs, counted from what is published. */
 export function insightFacets(insights: Insight[]): CategoryFacet[] {
   const counts = new Map<string, CategoryFacet>();
 
