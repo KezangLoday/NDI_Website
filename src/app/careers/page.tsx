@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { PageSection } from "@/components/layout/PageHero";
 import { HeroCollage } from "@/components/pages/careers/HeroCollage";
-import { VacancyCard } from "@/components/pages/careers/VacancyCard";
+import { VacancyGrid } from "@/components/pages/careers/VacancyGrid";
 import { GradientButton } from "@/components/ui/GradientButton";
 import { Icon } from "@/components/ui/icons";
 import { Reveal } from "@/components/ui/Reveal";
@@ -16,7 +16,6 @@ export const metadata: Metadata = {
 
 export default async function CareersPage() {
   const [values, roles] = await Promise.all([getCareerValues(), getJobs()]);
-  const slots = roles.reduce((total, role) => total + role.slots, 0);
 
   return (
     <>
@@ -34,14 +33,11 @@ export default async function CareersPage() {
             everyone in the country. We hire engineers, designers and communicators who want that
             kind of proximity between what they make and who uses it.
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-8 flex justify-center">
             <GradientButton href="#openings">
               See open positions
               <Icon name="arrowRight" size={16} strokeWidth={2} />
             </GradientButton>
-            <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">
-              {roles.length} roles · {slots} positions
-            </span>
           </div>
         </div>
       </PageSection>
@@ -89,13 +85,8 @@ export default async function CareersPage() {
         </Reveal>
 
         {roles.length ? (
-          <Reveal
-            delay={0.05}
-            className="mt-9 grid grid-cols-1 gap-3.5 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-3"
-          >
-            {roles.map((role) => (
-              <VacancyCard key={role.id} job={role} />
-            ))}
+          <Reveal delay={0.05} className="mt-9">
+            <VacancyGrid jobs={roles} />
           </Reveal>
         ) : (
           <Reveal delay={0.05} className="mt-9 border-t border-grid pt-8">

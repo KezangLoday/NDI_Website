@@ -4,14 +4,26 @@ import { Icon } from "@/components/ui/icons";
 import type { Job } from "@/content/types";
 import { formatCalendarDate } from "@/lib/format";
 
+/** The frosted glass the use-case bento wears, so a vacancy is the same object. */
+const GLASS =
+  "linear-gradient(150deg, rgba(255,255,255,0.10), rgba(18,65,67,0.34) 46%, rgba(20,27,41,0.28))";
+
+const GLASS_SHADOW =
+  "inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px rgba(255,255,255,0.03), " +
+  "0 22px 52px rgba(0,0,0,0.38)";
+
 /**
- * One open position.
+ * One open position, built as a "What you can do today" card.
  *
- * The card previously carried department, title, summary and a location, and
- * linked nowhere. What an applicant actually decides on is missing from that
- * list: whether the job is permanent, how many are being hired, and how long
- * they have to apply. Those three now sit on the face of the card, and the
- * whole card is the link to the terms of reference.
+ * Same glass, same mint border, same proximity-tracked arc, same icon-above /
+ * copy-below split — a vacancy is a thing you can act on, so it should look
+ * like the other things on this site you can act on rather than like a panel
+ * of metadata.
+ *
+ * What the reference card does not have is facts to carry, so those take the
+ * two places the layout leaves free: the pills ride the icon's line, and the
+ * department, location and deadline collapse into one mono row above the call
+ * to action. No divider — the card is one object, not a header and a footer.
  *
  * The closing date turns amber inside a fortnight. A deadline that only ever
  * reads as grey metadata is the one piece of a listing people miss.
@@ -25,48 +37,68 @@ export function VacancyCard({ job }: { job: Job }) {
   return (
     <Link
       href={`/careers/${job.slug}`}
-      data-gov-card="1"
-      className="ndi-vacancy ndi-role-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-grid p-[26px]"
+      className="ndi-uc relative flex min-h-[248px] flex-col justify-between gap-7 rounded-[20px] border p-[26px]"
+      style={{
+        borderColor: "rgba(90,201,148,0.20)",
+        background: GLASS,
+        backdropFilter: "blur(26px) saturate(150%)",
+        WebkitBackdropFilter: "blur(26px) saturate(150%)",
+        boxShadow: GLASS_SHADOW,
+      }}
     >
-      <div className="relative flex flex-wrap items-center gap-2">
-        <span className="ndi-vacancy-pill" data-tone={job.employmentType === "Contract" ? "alt" : "mint"}>
-          {job.employmentType}
+      <div className="ndi-glow" />
+
+      <div className="relative flex items-start justify-between gap-3">
+        <span className="inline-flex flex-none items-center text-accent">
+          <Icon name={job.icon} size={24} />
         </span>
-        <span className="ndi-vacancy-pill" data-tone="plain">
-          {job.slots} {job.slots === 1 ? "position" : "positions"}
-        </span>
+        <div className="flex flex-wrap justify-end gap-2">
+          <span
+            className="ndi-vacancy-pill"
+            data-tone={job.employmentType === "Contract" ? "alt" : "mint"}
+          >
+            {job.employmentType}
+          </span>
+          <span className="ndi-vacancy-pill" data-tone="plain">
+            {job.slots} {job.slots === 1 ? "position" : "positions"}
+          </span>
+        </div>
       </div>
 
-      <div className="relative mt-5 flex flex-1 flex-col">
-        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
-          {job.department} · {job.level}
-        </span>
-        <h3 className="mt-2.5 font-display text-[19px] font-semibold leading-[1.22] tracking-[-0.02em] text-strong [text-wrap:pretty]">
+      <div className="relative">
+        <h3 className="font-display text-[21px] font-semibold leading-[1.2] tracking-[-0.03em] text-strong [text-wrap:balance]">
           {job.title}
         </h3>
-        <p className="mt-2 text-[13.5px] leading-[1.6] text-muted [text-wrap:pretty]">
+        <p className="mt-2.5 text-[14.5px] leading-[1.55] text-muted [text-wrap:pretty]">
           {job.summary}
         </p>
 
-        <span className="mt-4 inline-flex items-center gap-1.5 text-[13px] text-body">
-          <Icon name="mapPin" size={14} strokeWidth={1.8} className="flex-none text-faint" />
-          {job.location}
-        </span>
-      </div>
+        {/* Two fixed lines rather than one wrapping row: at card width the
+            deadline drops to a second line on some cards and not others, which
+            left a separator dangling at the end of a line and set the titles at
+            three different heights across the row. */}
+        <div className="mt-3.5 font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+          <div>
+            {job.department} <Dot /> {job.location}
+          </div>
+          <div className={`mt-1 ${closingSoon ? "text-[#f0b866]" : ""}`}>
+            {closed ? "Closed" : `Closes ${formatCalendarDate(job.closesAt)}`}
+          </div>
+        </div>
 
-      <div className="relative mt-6 flex items-center justify-between gap-3 border-t border-grid pt-4">
-        <span
-          className={`font-mono text-[10px] uppercase tracking-[0.14em] ${
-            closingSoon ? "text-[#f0b866]" : "text-faint"
-          }`}
-        >
-          {closed ? "Closed" : `Closes ${formatCalendarDate(job.closesAt)}`}
-        </span>
-        <span className="ndi-tut inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
+        <span className="ndi-tut mt-3.5 inline-flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
           View details
-          <Icon name="arrowRight" size={13} strokeWidth={2} />
+          <Icon name="arrowRight" size={14} strokeWidth={2} />
         </span>
       </div>
     </Link>
+  );
+}
+
+function Dot() {
+  return (
+    <span aria-hidden="true" className="opacity-50">
+      ·
+    </span>
   );
 }
