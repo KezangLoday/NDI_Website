@@ -2325,13 +2325,6 @@ select option { background: #101827; color: #e9eef6; }
   background: var(--ndi-mint-08);
   color: var(--text-accent);
 }
-/* Fixed-term work is a materially different offer from a permanent post, so it
-   is told apart at a glance rather than being one more mint pill. */
-.ndi-vacancy-pill[data-tone="alt"] {
-  border-color: rgba(240, 184, 102, 0.34);
-  background: rgba(240, 184, 102, 0.09);
-  color: #f0b866;
-}
 .ndi-vacancy-pill[data-tone="plain"] {
   border-color: var(--border-subtle);
   background: rgba(255, 255, 255, 0.03);

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { PageSection } from "@/components/layout/PageHero";
 import { HeroCollage } from "@/components/pages/careers/HeroCollage";
-import { VacancyGrid } from "@/components/pages/careers/VacancyGrid";
+import { VacancyCard } from "@/components/pages/careers/VacancyCard";
 import { GradientButton } from "@/components/ui/GradientButton";
 import { Icon } from "@/components/ui/icons";
 import { Reveal } from "@/components/ui/Reveal";
@@ -85,8 +85,13 @@ export default async function CareersPage() {
         </Reveal>
 
         {roles.length ? (
-          <Reveal delay={0.05} className="mt-9">
-            <VacancyGrid jobs={roles} />
+          <Reveal
+            delay={0.05}
+            className="mt-9 grid grid-cols-1 gap-3.5 min-[641px]:grid-cols-2 min-[1001px]:grid-cols-3"
+          >
+            {roles.map((role) => (
+              <VacancyCard key={role.id} job={role} />
+            ))}
           </Reveal>
         ) : (
           <Reveal delay={0.05} className="mt-9 border-t border-grid pt-8">

@@ -67,7 +67,7 @@ export default async function VacancyPage({ params }: Params) {
           </Link>
 
           <div className="mt-8 flex flex-wrap items-center gap-2">
-            <span className="ndi-vacancy-pill" data-tone={job.employmentType === "Contract" ? "alt" : "mint"}>
+            <span className="ndi-vacancy-pill" data-tone="mint">
               {job.employmentType}
             </span>
             <span className="ndi-vacancy-pill" data-tone="plain">

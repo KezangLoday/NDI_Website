@@ -386,8 +386,6 @@ export interface Job {
   title: string;
   summary: string;
   location: string;
-  /** Key into the local icon registry — a Payload `select`, not stored markup. */
-  icon: IconName;
   employmentType: EmploymentType;
   /** How many people are being hired into this role. */
   slots: number;
