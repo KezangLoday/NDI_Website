@@ -3,9 +3,8 @@
 import { useEffect } from "react";
 
 /**
- * Publishes the pointer position on :root in viewport coordinates: `--gx` /
- * `--gy` in pixels for the `.ndi-spot` capability cards, and `--gxp` / `--gyp`
- * as 0–1 fractions of the viewport for the glow cards' hue shift.
+ * Publishes the pointer position on :root as `--gx` / `--gy`, in viewport
+ * pixels, for the `.ndi-spot` cards.
  *
  * One shared listener rather than one per card. Every consumer of these values
  * anchors its gradient to the viewport, so the numbers are identical for all of
@@ -27,8 +26,6 @@ export function PointerSpotlightProvider() {
       const root = document.documentElement;
       root.style.setProperty("--gx", String(x));
       root.style.setProperty("--gy", String(y));
-      root.style.setProperty("--gxp", (x / window.innerWidth).toFixed(3));
-      root.style.setProperty("--gyp", (y / window.innerHeight).toFixed(3));
     };
 
     const onMove = (event: PointerEvent) => {

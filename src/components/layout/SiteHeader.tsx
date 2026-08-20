@@ -12,7 +12,7 @@ import { scrollToContact } from "@/lib/scroll";
 
 import { GridPattern } from "./GridPattern";
 import { Icon } from "../ui/icons";
-import { ShinyButton } from "../ui/shiny-button";
+import { ShinyButton } from "../ui/ShinyButton";
 
 const { nav, contact, mobileSocial } = siteSettings;
 

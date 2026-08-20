@@ -26,13 +26,6 @@
 @keyframes ndiOrgUp {
   to { transform: translateY(-50%); }
 }
-@keyframes ndiShAngle {
-  to { --sh-angle: 360deg; }
-}
-@keyframes ndiBreathe {
-  from, to { scale: 1; }
-  50% { scale: 1.2; }
-}
 @keyframes ndiVaShift {
   0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
@@ -234,7 +227,7 @@
 .ndi-sweepbtn:hover .ndi-store-sweep { transform: translateX(100%); }
 .ndi-sweepbtn:hover .ndi-store-glow { opacity: 1; }
 
-/* ---- ShinyButton — see components/ui/shiny-button.tsx --------
+/* ---- ShinyButton — see components/ui/ShinyButton.tsx --------
    The shadcn ShinyButton, themed to NDI mint.
 
    These rules are global rather than a <style jsx> block inside the
@@ -475,16 +468,7 @@
   opacity: 0.95;
 }
 .ndi-spot-halo::before { inset: -4px; border-width: 4px; border-radius: calc(var(--rad) + 4px); }
-/* .ndi-glow-rim is excluded because this rule outranks its own
-   `position: absolute` and would drop the rim into the content flow. */
-.ndi-spot > *:not(.ndi-spot-halo):not(.ndi-spot-fill):not(.ndi-glow-rim) { position: relative; }
-/* Cards wearing the glow rim drop this ring entirely — see SpotlightCard.
-   `data-static` does the same for cards that keep the glass fill but are meant
-   to sit still: no cursor ring, and no halo or fill rendered either. */
-.ndi-spot[data-glow]::before,
-.ndi-spot[data-glow]::after,
-.ndi-spot[data-static]::before,
-.ndi-spot[data-static]::after { content: none; }
+.ndi-spot > *:not(.ndi-spot-halo):not(.ndi-spot-fill) { position: relative; }
 
 /* ---- Glass + lens rim pass (Home's inline <style> block) ----
    These cards carry no fill of their own — just a blurred, lightly
@@ -947,7 +931,7 @@
    the value block's height, so the two move as one piece rather than the face
    sliding a fixed distance and hoping the value fits under it.
    Only transform and opacity animate. */
-/* Fallback only — bento-grid.tsx measures the value block and overwrites this
+/* Fallback only — BentoGrid.tsx measures the value block and overwrites this
    per card, so a value that wraps to three lines in a narrow column still
    clears the face. */
 .ndi-bento { --bento-lift: 92px; }
@@ -1024,20 +1008,6 @@
 
 .ndi-adv-card { transition: border-color var(--dur), background var(--dur); }
 .ndi-adv-card:hover { border-color: var(--border-strong); background: rgba(90, 201, 148, 0.04); }
-
-/* Resources: featured story lifts, side rows nudge right */
-.ndi-res-feat { transition: transform var(--dur), border-color var(--dur), box-shadow var(--dur); }
-.ndi-res-feat:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-strong);
-  box-shadow: var(--inset-top), var(--glow-sm), 0 24px 56px rgba(0, 0, 0, 0.34);
-}
-.ndi-res-row { transition: border-color var(--dur), background var(--dur), transform var(--dur); }
-.ndi-res-row:hover {
-  border-color: var(--border-strong);
-  background: rgba(90, 201, 148, 0.04);
-  transform: translateX(4px);
-}
 
 /* Bordered secondary link, e.g. the two chips under the Get started steps */
 .ndi-outline-link { transition: border-color var(--dur), color var(--dur); }
@@ -1316,70 +1286,6 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
   .ndi-glow::after { transition: none; }
 }
 
-/* ---- CTA buttons: cursor-tracked hover glow + click ripple ----
-   --bx/--by are element-local pointer coords set by useHoverGlow(). */
-.ndi-hglow { position: relative; overflow: hidden; isolation: isolate; --bx: 50%; --by: 50%; }
-.ndi-hglow::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  z-index: 0;
-  background: radial-gradient(120px 120px at var(--bx) var(--by), rgba(255, 255, 255, 0.95), rgba(214, 255, 236, 0.45) 34%, transparent 70%);
-  opacity: 0;
-  transform: scale(0.6);
-  transform-origin: var(--bx) var(--by);
-  transition: opacity 0.3s var(--ease-out), transform 0.4s var(--ease-out);
-}
-.ndi-hglow:hover::before { opacity: 1; transform: scale(1); }
-/* Idle sheen drifting across the button, fading out on hover */
-.ndi-hglow::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  z-index: 0;
-  background: linear-gradient(105deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.42) 48%, rgba(214, 255, 236, 0.2) 56%, rgba(255, 255, 255, 0) 74%);
-  background-size: 260% 100%;
-  animation: ndiSheen 5.6s var(--ease-out) infinite;
-  opacity: 1;
-  transition: opacity 0.28s var(--ease-out);
-}
-.ndi-hglow:hover::after { opacity: 0; }
-.ndi-hglow > * { position: relative; z-index: 2; }
-.ndi-hglow-ghost::before {
-  background: radial-gradient(130px 130px at var(--bx) var(--by), rgba(111, 224, 169, 0.26), rgba(90, 201, 148, 0.1) 40%, transparent 72%);
-}
-.ndi-hglow-ghost::after {
-  background: linear-gradient(105deg, rgba(111, 224, 169, 0) 32%, rgba(111, 224, 169, 0.16) 50%, rgba(90, 201, 148, 0.06) 58%, rgba(111, 224, 169, 0) 76%);
-  background-size: 260% 100%;
-}
-@keyframes ndiSheen {
-  0%, 12% { background-position: 130% 0; }
-  55%, 100% { background-position: -30% 0; }
-}
-.ndi-ripple {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  transform: translate(-50%, -50%) scale(0);
-  background: rgba(8, 19, 15, 0.22);
-  animation: ndiRippleOut 620ms var(--ease-out) forwards;
-}
-.ndi-hglow-ghost .ndi-ripple { background: rgba(111, 224, 169, 0.28); }
-@keyframes ndiRippleOut {
-  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ndi-hglow::before { transition: none; }
-  .ndi-hglow::after { animation: none; opacity: 0.35; }
-  .ndi-ripple { display: none; }
-}
-
 /* ---- FAQ accordion (native <details>) ---------------------- */
 .ndi-faq { transition: border-color var(--dur), background var(--dur); }
 .ndi-faq:hover { border-color: var(--border-strong) !important; }
@@ -1390,8 +1296,6 @@ footer.ndi-foot-in .ndi-foot-bar { transform: none; }
 .ndi-faq[open] .ndi-faq-mark { transform: rotate(45deg); }
 
 /* ---- Tabs (Resources) -------------------------------------- */
-[data-tabpanel] { display: none; }
-[data-tabpanel][data-active="true"] { display: block; }
 [data-tabbtn][data-active="true"] {
   background: rgba(90, 201, 148, 0.12) !important;
   border-color: rgba(90, 201, 148, 0.32) !important;
@@ -1737,14 +1641,6 @@ select option { background: #101827; color: #e9eef6; }
 .ndi-why-row { transition: background var(--dur); }
 .ndi-why-row:hover { background: rgba(90, 201, 148, 0.04); }
 
-/* Media coverage cards */
-.ndi-press-card { transition: transform var(--dur), border-color var(--dur), box-shadow var(--dur); }
-.ndi-press-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--border-strong);
-  box-shadow: var(--inset-top), var(--glow-sm);
-}
-
 /* ---- Mega-menu icons ---------------------------------------
    The design's nav icons are inline SVGs sitting in a text line box, so their
    wrapper is taller than the glyph — 30px around a 22px icon. Tailwind's
@@ -1754,128 +1650,6 @@ select option { background: #101827; color: #e9eef6; }
    upward again. */
 .ndi-navicon > svg { display: inline; vertical-align: baseline; }
 
-
-/* ---- Glow cards: spotlight that tracks the cursor -----------
-   Ported from the Aceternity glow card, keeping its numbers: a 200px
-   spotlight, a 3px rim, the coloured layer at brightness(2), a white core at
-   half the spotlight size, and a bloom blurred by 10x the border.
-
-   Coordinates are element-local (--glow-x/--glow-y, written by the shared
-   listener in spotlight-card.tsx) rather than the source's viewport-space
-   values with `background-attachment: fixed`. These cards carry a
-   backdrop-filter, which makes each one the containing block for a fixed
-   background, so viewport coordinates landed outside the card and nothing drew
-   at all. --gxp still comes from :root, and only shifts the hue. */
-.ndi-glow-card {
-  --glow-base: 138;
-  --glow-spread: 46;
-  --glow-sat: 100;
-  --glow-light: 50;
-  --glow-bright: 2;
-  /* Alpha of the white core inside the coloured spotlight. */
-  --glow-core: 1;
-  --glow-size: 200;
-  --glow-border: 2;
-  /* How far the rim's outer edge clears the card. Below --glow-border, the rim
-     straddles the card's own border instead of ringing it from outside. */
-  --glow-out: 1;
-  --glow-blur: 28;
-  --glow-bloom: 1;
-  /* The rim and its bloom sit outside the card box, so a host that clips its
-     own children erases them entirely. Nothing here needs the clip: the fill
-     is bounded by the border radius and the lens rim is an inset
-     pseudo-element. */
-  overflow: visible;
-}
-.ndi-glow-rim,
-.ndi-glow-bloom {
-  --border-size: calc(var(--glow-border) * 1px);
-  --spotlight-size: calc(var(--glow-size) * 1px);
-  --hue: calc(var(--glow-base) + (var(--gxp, 0) * var(--glow-spread)));
-  --spot-x: calc(var(--glow-x, -9999) * 1px);
-  --spot-y: calc(var(--glow-y, -9999) * 1px);
-}
-/* Wash over the card face. */
-.ndi-glow-rim {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background-image: radial-gradient(
-    var(--spotlight-size) var(--spotlight-size) at var(--spot-x) var(--spot-y),
-    hsl(var(--hue) calc(var(--glow-sat) * 1%) 70% / 0.12),
-    transparent
-  );
-}
-/* Above the card's own conic lens rim, which sits at z-index 3 and otherwise
-   veils the glow. Two classes so it outranks a host's own `> *` rule. */
-.ndi-glow-card > .ndi-glow-rim { z-index: 4; }
-/* The two border spotlights: a coloured one and a white core. The mask keeps
-   each to the border ring, so only the rim lights up. (The source's
-   `intersect` of a transparent padding-box layer with a white border-box one
-   is empty by definition — `exclude` is what leaves the ring.) */
-.ndi-glow-rim::before,
-.ndi-glow-rim::after,
-.ndi-glow-bloom::before {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  --ring-size: var(--border-size);
-  --ring-out: calc(var(--glow-out) * 1px);
-  inset: calc(var(--ring-out) * -1);
-  border: var(--ring-size) solid transparent;
-  border-radius: calc(var(--ring-out) + 16px);
-  background-repeat: no-repeat;
-  /* The lit ring is the border, which lies outside the default padding-box
-     positioning area — with `no-repeat` that strip received no paint at all,
-     which is why a flat background-color drew a clean ring here and every
-     gradient drew nothing. Moving the origin to the border box covers it; the
-     spotlight centre shifts by the same amount to stay element-local. */
-  background-origin: border-box;
-  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-.ndi-glow-rim::before,
-.ndi-glow-bloom::before {
-  background-image: radial-gradient(
-    calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
-      calc(var(--spot-x) + var(--ring-out)) calc(var(--spot-y) + var(--ring-out)),
-    hsl(var(--hue) calc(var(--glow-sat) * 1%) calc(var(--glow-light) * 1%)),
-    transparent 100%
-  );
-  filter: brightness(var(--glow-bright));
-}
-.ndi-glow-rim::after {
-  background-image: radial-gradient(
-    calc(var(--spotlight-size) * 0.5) calc(var(--spotlight-size) * 0.5) at
-      calc(var(--spot-x) + var(--ring-out)) calc(var(--spot-y) + var(--ring-out)),
-    hsl(0 0% 100% / var(--glow-core)),
-    transparent 100%
-  );
-}
-/* The same coloured rim again, blurred, for the bloom that spills outward. */
-.ndi-glow-bloom {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  opacity: var(--glow-bloom);
-  /* Pinned rather than derived from the rim: the bloom is the outward spill,
-     and thinning the rim should not shrink it. */
-  filter: blur(calc(var(--glow-blur) * 1px));
-  will-change: filter;
-  pointer-events: none;
-}
-.ndi-glow-bloom::before {
-  --ring-size: 10px;
-  --ring-out: 10px;
-}
-/* Content sits above the glow. */
-.ndi-glow-card > *:not(.ndi-glow-rim) { position: relative; z-index: 5; }
-@media (prefers-reduced-motion: reduce) {
-  .ndi-glow-bloom { display: none; }
-}
 
 /* ---- Organizations hero -----------------------------------
    A full-screen opening: the section is sized to the viewport less the nav, so

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Emphasis, PageSection, SubSectionHeader } from "@/components/layout/PageHero";
 import { IntegrationPipeline } from "@/components/pages/IntegrationPipeline";
 import { InquiryForm } from "@/components/pages/InquiryForm";
-import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
+import { BentoCard, BentoGrid } from "@/components/ui/BentoGrid";
 import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { GradientButton } from "@/components/ui/GradientButton";

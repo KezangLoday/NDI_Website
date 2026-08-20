@@ -28,6 +28,8 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
+  // Absolute base for OG/Twitter image URLs; without it Next falls back to localhost.
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bhutanndi.com"),
   title: "Bhutan NDI — Your identity, in your control",
   description:
     "Access services securely, verify your identity digitally, and manage your credentials — all from one trusted wallet built on the principle of self-sovereign identity technology.",

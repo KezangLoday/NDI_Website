@@ -21,10 +21,7 @@ export async function WhatYouCanDo() {
       <div className="mt-10 grid grid-cols-1 gap-[18px] min-[561px]:grid-cols-2 min-[901px]:grid-cols-4">
         {useCases.map((useCase, index) => (
           <Reveal key={useCase.id} delay={0.05 * (index + 1)} className="h-full">
-            {/* The same card as the Users page's benefits row: the cursor-tracked
-                hairline ring with its blurred halo and face wash, rather than the
-                heavier glow rim these carried. One colour, not a bracketed mint
-                and spring pair — the ring is the accent everywhere it appears. */}
+            {/* Same card as the Users page's benefits row — one cursor-tracked ring, the accent everywhere. */}
             <SpotlightCard className="h-full" gap={0}>
               <span className="inline-flex h-[26px] items-center text-accent">
                 <Icon name={useCase.icon} size={24} />
