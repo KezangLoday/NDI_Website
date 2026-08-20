@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { ProseBody } from "@/content/cms/richText";
 import { Eyebrow } from "@/components/ui/SectionHeader";
 import { Icon } from "@/components/ui/icons";
 import type { GlossaryTerm } from "@/content/types";
@@ -22,7 +23,9 @@ export function GlossaryBrowser({ terms }: { terms: GlossaryTerm[] }) {
     const q = query.trim().toLowerCase();
     if (!q) return terms;
     return terms.filter((term) =>
-      `${term.term} ${term.definition}`.toLowerCase().includes(q),
+      /* `searchText` is the definition flattened on the server; the
+         abbreviation is searched too, so "VC" finds "Verifiable Credential". */
+      `${term.term} ${term.abbreviation ?? ""} ${term.searchText}`.toLowerCase().includes(q),
     );
   }, [terms, query]);
 
@@ -126,9 +129,9 @@ export function GlossaryBrowser({ terms }: { terms: GlossaryTerm[] }) {
                   <div className="font-display text-[16px] font-semibold tracking-[-0.01em] text-strong">
                     {term.term}
                   </div>
-                  <p className="text-[13.5px] leading-[1.62] text-muted [text-wrap:pretty]">
-                    {term.definition}
-                  </p>
+                  <div className="text-[13.5px] leading-[1.62] text-muted [text-wrap:pretty]">
+                    <ProseBody content={term.definition} />
+                  </div>
                 </div>
               ))}
             </div>

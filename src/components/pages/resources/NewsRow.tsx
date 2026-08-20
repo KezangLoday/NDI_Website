@@ -24,18 +24,25 @@ import { mediaUrl } from "@/lib/media";
 export function NewsRow({ item, thumb = 96 }: { item: NewsItem; thumb?: number }) {
   return (
     <Link
-      href={`/resources/news/${item.slug}`}
+      href={item.href}
       className="ndi-news-row group grid gap-3.5 rounded-xl p-2.5"
       style={{ gridTemplateColumns: `${thumb}px minmax(0,1fr)` }}
     >
       <div className="ndi-news-shot relative h-full min-h-[60px] overflow-hidden rounded-lg border border-grid">
-        <Image
-          src={mediaUrl(item.image)}
-          alt=""
-          fill
-          sizes={`${thumb}px`}
-          className="object-cover"
-        />
+        {/* A row with no artwork keeps its frame and shows the plate tint. At
+            84px there is no room for a label, and an empty tinted box reads as
+            "no picture" without pretending otherwise. */}
+        {item.image ? (
+          <Image
+            src={mediaUrl(item.image)}
+            alt=""
+            fill
+            sizes={`${thumb}px`}
+            className="object-cover"
+          />
+        ) : (
+          <div className="ndi-news-plate absolute inset-0" />
+        )}
       </div>
       <div className="min-w-0">
         <h3 className="ndi-news-title font-display text-[14px] font-semibold leading-[1.35] tracking-[-0.01em] text-strong">

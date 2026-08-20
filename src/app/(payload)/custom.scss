@@ -1,0 +1,24 @@
+/**
+ * Admin panel styling.
+ *
+ * Kept to almost nothing on purpose. Payload's admin UI is a tool the CMS team
+ * uses all day, and theming it to match the public site would trade its
+ * familiarity — and its own accessibility work — for a cosmetic match nobody
+ * outside the organisation ever sees.
+ *
+ * What is worth setting is the accent, so the panel reads as this
+ * organisation's rather than as a stock install, and a little room for the
+ * wider tables in the recruitment views.
+ */
+:root {
+  --theme-success-500: #4fc091;
+}
+
+/* The applications list carries seven columns; the default max-width crams
+   them. Recruitment is the one place in this CMS with genuinely wide tables. */
+.collection-list--job-applications,
+.collection-list--audit-log {
+  .table {
+    overflow-x: auto;
+  }
+}

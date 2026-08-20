@@ -5,26 +5,23 @@ import { useMemo, useState } from "react";
 import { ArticleCard } from "@/components/pages/resources/ArticleCard";
 import { Icon } from "@/components/ui/icons";
 import type { IconName } from "@/components/ui/icons";
-import type { Insight, InsightCategory } from "@/content/types";
+import type { CategoryFacet, Insight } from "@/content/types";
 
-type Tab = "all" | InsightCategory;
-
-const TABS: { id: Tab; label: string; icon: IconName }[] = [
-  /* "All" rather than "All articles" or "All publications": the shelf holds
-     research papers, case studies and blog posts, and every collective noun
-     that fits one of those misdescribes the others. The page title already
-     says what the list is; the tab only has to say it is unfiltered. */
-  { id: "all", label: "All", icon: "book" },
-  { id: "research", label: "Research", icon: "fileText" },
-  { id: "case-studies", label: "Case studies", icon: "fileCheck" },
-  { id: "blogs", label: "Blogs", icon: "penLine" },
-];
-
-const CATEGORY_LABEL: Record<InsightCategory, string> = {
-  research: "Research",
-  "case-studies": "Case study",
-  blogs: "Blog",
+/**
+ * Icons for the tabs.
+ *
+ * Keyed by category slug, with a fallback — the categories are CMS data now, so
+ * a new one appears the moment an editor adds it, and it gets the generic mark
+ * rather than no tab. Adding a nicer icon for it later is a one-line change
+ * here; the page does not break in the meantime.
+ */
+const TAB_ICON: Record<string, IconName> = {
+  research: "fileText",
+  "case-studies": "fileCheck",
+  blogs: "penLine",
 };
+
+const DEFAULT_TAB_ICON: IconName = "book";
 
 /**
  * The insights index: category tabs, a search, and a grid that leads with two
@@ -40,19 +37,46 @@ const CATEGORY_LABEL: Record<InsightCategory, string> = {
  * Inside a category it names the specific form instead, since repeating the tab
  * you are already standing in tells you nothing.
  */
-export function InsightsIndex({ insights }: { insights: Insight[] }) {
-  const [tab, setTab] = useState<Tab>("all");
+export function InsightsIndex({
+  insights,
+  facets,
+}: {
+  insights: Insight[];
+  facets: CategoryFacet[];
+}) {
+  const [tab, setTab] = useState<string>("all");
   const [query, setQuery] = useState("");
 
   const searching = query.trim().length > 0;
 
+  /*
+   * "All" rather than "All articles" or "All publications": the shelf holds
+   * research papers, case studies and blog posts, and every collective noun
+   * that fits one of those misdescribes the others. The page title already says
+   * what the list is; the tab only has to say it is unfiltered.
+   *
+   * The rest come from the CMS, and only categories with something published
+   * under them appear — a tab that opens onto nothing is a dead end.
+   */
+  const tabs = useMemo(
+    () => [
+      { id: "all", label: "All", icon: DEFAULT_TAB_ICON },
+      ...facets.map((facet) => ({
+        id: facet.slug,
+        label: facet.label,
+        icon: TAB_ICON[facet.slug] ?? DEFAULT_TAB_ICON,
+      })),
+    ],
+    [facets],
+  );
+
   const visible = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return insights
-      .filter((item) => (tab === "all" ? true : item.category === tab))
+      .filter((item) => (tab === "all" ? true : item.categorySlug === tab))
       .filter((item) =>
         needle
-          ? `${item.title} ${item.description} ${item.type}`.toLowerCase().includes(needle)
+          ? `${item.title} ${item.description} ${item.kind}`.toLowerCase().includes(needle)
           : true,
       )
       .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
@@ -62,7 +86,10 @@ export function InsightsIndex({ insights }: { insights: Insight[] }) {
   const lead = visible.slice(0, featureCount);
   const rest = visible.slice(featureCount);
 
-  const chipFor = (item: Insight) => (tab === "all" ? CATEGORY_LABEL[item.category] : item.type);
+  /* Unfiltered, the chip names the category — the thing a reader cannot
+     otherwise tell at a glance. Inside a category it names the specific form
+     instead, since repeating the tab you are standing in tells you nothing. */
+  const chipFor = (item: Insight) => (tab === "all" ? item.category : item.kind);
 
   const count = visible.length;
   const countLabel = searching
@@ -95,7 +122,7 @@ export function InsightsIndex({ insights }: { insights: Insight[] }) {
           role="tablist"
           aria-label="Publication type"
         >
-          {TABS.map((entry) => (
+          {tabs.map((entry) => (
             <button
               key={entry.id}
               type="button"

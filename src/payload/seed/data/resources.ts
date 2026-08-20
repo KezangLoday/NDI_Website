@@ -1,0 +1,266 @@
+import { media } from "../media";
+import type { SeedInsight, SeedNotice, SeedWebinar } from "./types";
+
+/**
+ * Resources content.
+ *
+ * The requirement docs merged Publications and Blogs into a single "Insights
+ * and Publications" bucket because the categories overlap. That points at one
+ * `posts` collection in Phase 2 with a `category` (news | webinar | insight)
+ * and a `type` sub-field, rather than three separate collections — the three
+ * arrays here are shaped so they can collapse into that.
+ *
+ * The featured story and the three webinar thumbnails have no artwork: those
+ * image slots were left empty in the design and need supplying by the client.
+ */
+
+export const resourceNews: SeedNotice[] = [
+  {
+    id: "120-connected-services",
+    category: "Announcement",
+    title: "Bhutan NDI crosses 120 connected services",
+    excerpt:
+      "Banks, universities and government agencies now issue or verify credentials through the national wallet.",
+    publishedAt: "2026-07-14",
+    href: "#",
+    featured: true,
+  },
+  {
+    id: "bob-remote-onboarding",
+    category: "Integration",
+    title: "Bank of Bhutan enables remote account opening with NDI",
+    publishedAt: "2026-06-29",
+    href: "#",
+  },
+  {
+    id: "wallet-backup-recovery",
+    category: "Product",
+    title: "Wallet backup & recovery arrives for all users",
+    publishedAt: "2026-06-02",
+    href: "#",
+  },
+  {
+    id: "ssi-interop-working-group",
+    category: "Partnership",
+    title: "Bhutan NDI joins global SSI interoperability working group",
+    publishedAt: "2026-05-18",
+    href: "#",
+  },
+  {
+    id: "scheduled-maintenance",
+    category: "Public notice",
+    title: "Scheduled maintenance window — credential issuance",
+    publishedAt: "2026-04-30",
+    href: "#",
+  },
+];
+
+export const webinars: SeedWebinar[] = [
+  {
+    id: "credential-design",
+    status: "upcoming",
+    title: "Credential design for national ecosystems",
+    description:
+      "A working session on schema design, selective disclosure and revocation, with the Bhutan NDI engineering team.",
+    when: "2026-08-21 · 14:00 BTT",
+    ctaLabel: "Register to attend",
+    href: "#",
+  },
+  {
+    id: "ssi-first-national-identity",
+    status: "recorded",
+    title: "How Bhutan built an SSI-first national identity",
+    kind: "Recording · 48 min",
+    href: "#",
+  },
+  {
+    id: "ekyc-in-practice",
+    status: "recorded",
+    title: "eKYC in practice: lessons from Bhutanese banks",
+    kind: "Recording · 36 min",
+    href: "#",
+  },
+  {
+    id: "sovereign-identity-keynote",
+    status: "recorded",
+    title: "Sovereign identity as public infrastructure",
+    kind: "Conference · Keynote",
+    href: "#",
+  },
+];
+
+export const insights: SeedInsight[] = [
+  {
+    id: "measuring-trust",
+    slug: "measuring-trust-in-decentralized-identity",
+    category: "research",
+    type: "Research paper",
+    title: "Measuring trust in decentralized national identity",
+    description:
+      "A framework for evaluating whether citizens actually trust credential-based service delivery, and what moves the number.",
+    publishedAt: "2026-06-18",
+    image: media("/media/insights/measuring-trust.webp", "", 1200, 750),
+    readingMinutes: 14,
+    body: [
+      { kind: "paragraph", text: "Adoption figures tell you that a wallet was installed. They do not tell you whether the person holding it believes the system will behave as promised, and that belief is what decides whether a credential gets presented when it matters." },
+      { kind: "paragraph", text: "This paper sets out a way to measure trust as something separate from usage. It pulls apart three things adoption metrics routinely collapse together: whether a citizen understands what the wallet does, whether they expect it to work, and whether they expect it to be fair." },
+      { kind: "heading", text: "Why usage is a poor proxy" },
+      { kind: "paragraph", text: "A citizen with no alternative will use a mandatory system regardless of what they think of it. Where the digital route is the only route, usage measures the absence of a queue rather than the presence of confidence. An honest measure has to isolate the cases where the person had a real choice." },
+      { kind: "paragraph", text: "We propose instrumenting the points where a paper path still exists beside the digital one, and reading the split as a trust signal rather than a migration statistic." },
+      { kind: "heading", text: "What the framework measures" },
+      { kind: "paragraph", text: "Four indicators, each collected while the citizen is already interacting with the system rather than in a separate survey: comprehension at issuance, expectation before presentation, recovery confidence, and consent regret after the fact." },
+      { kind: "paragraph", text: "Consent regret is the one most often left out and the most informative. Some days after a credential was shared, it asks whether the person would make the same choice again." },
+      { kind: "heading", text: "Limits of this work" },
+      { kind: "paragraph", text: "The indicators are proposed, not validated. They have been piloted against a small sample in one jurisdiction, and the thresholds suggested here should be treated as a starting point for replication rather than as a benchmark." },
+    ],
+  },
+  {
+    id: "remote-account-opening",
+    slug: "remote-account-opening-at-a-national-bank",
+    category: "case-studies",
+    type: "Case study",
+    title: "Remote account opening at a national bank",
+    description:
+      "From branch queues to a five-minute digital flow, and what actually changed inside the bank.",
+    publishedAt: "2026-05-02",
+    image: media("/media/insights/remote-account-opening.webp", "", 1200, 750),
+    readingMinutes: 11,
+    body: [
+      { kind: "paragraph", text: "Before the integration, opening an account meant a branch visit, a photocopied identity document, a manual check against a national register, and a wait measured in days." },
+      { kind: "paragraph", text: "After the integration the same process runs on a presented credential and finishes in minutes. This study looks at what that changed inside the bank, which is a different question from what it changed for the customer." },
+      { kind: "heading", text: "What the integration replaced" },
+      { kind: "paragraph", text: "Three steps disappeared outright: the document photocopy, the manual register lookup, and the second-line review that existed to catch errors in the first two. Verification did not get faster so much as it stopped being a human task." },
+      { kind: "heading", text: "What it did not solve" },
+      { kind: "paragraph", text: "Exception handling. Customers whose records carry inconsistencies still need manual resolution, and those cases now stand out sharply against an otherwise automated flow. The bank found it needed a dedicated path for them rather than letting them fail back into the old process." },
+      { kind: "paragraph", text: "Staff redeployment also took longer than the technical work. The branch roles built around document handling did not map onto the roles the digital flow created, and retraining ran for two quarters after go-live." },
+      { kind: "heading", text: "On the numbers" },
+      { kind: "paragraph", text: "The figures the bank has published cover processing time and abandonment rate. Cost per account is commercially sensitive and is not reproduced here." },
+    ],
+  },
+  {
+    id: "why-ssi",
+    slug: "why-we-chose-self-sovereign-identity",
+    category: "blogs",
+    type: "Blog",
+    title: "Why we chose self-sovereign identity",
+    description:
+      "The architectural decision that shaped every service on the platform, and the alternative we turned down.",
+    publishedAt: "2026-04-11",
+    image: media("/media/insights/why-ssi.webp", "", 1200, 750),
+    readingMinutes: 8,
+    body: [
+      { kind: "paragraph", text: "The obvious way to build a national identity system is a central database that services query. It is well understood, it is cheaper to start, and it is what most of the systems we looked at had done. We did not build that." },
+      { kind: "paragraph", text: "The reason is practical rather than ideological. A central database that every service queries becomes a record of everywhere every citizen has been, held in one place, and a record like that is valuable enough that it will eventually be asked for." },
+      { kind: "heading", text: "What self-sovereign identity changes" },
+      { kind: "paragraph", text: "Credentials are issued to the citizen and presented by the citizen. The issuer signs a statement once and is not contacted again when that statement is used. There is no central log of presentations because there is no central party in the presentation." },
+      { kind: "paragraph", text: "That is a real constraint on what the system can do, not only a privacy improvement. We cannot answer questions about aggregate usage that a central system answers trivially, and we accepted it." },
+      { kind: "heading", text: "What it cost us" },
+      { kind: "paragraph", text: "Recovery is harder. If the citizen holds the keys, losing a device is a real problem rather than a password reset, and a large share of the engineering effort went into recovery paths that do not quietly reintroduce a central authority holding everything." },
+      { kind: "paragraph", text: "Integration is harder to explain, too. A service used to calling an API has to learn to verify a presentation, and the first few integrations took considerably longer than a database lookup would have." },
+    ],
+  },
+  {
+    id: "regional-forum",
+    slug: "notes-from-the-regional-digital-identity-forum",
+    category: "blogs",
+    type: "Field note",
+    title: "Notes from the regional digital identity forum",
+    description:
+      "Interoperability, cross-border credentials, and the questions nobody in the room could answer yet.",
+    publishedAt: "2026-03-24",
+    image: media("/media/insights/regional-forum.webp", "", 1200, 750),
+    readingMinutes: 6,
+    body: [
+      { kind: "paragraph", text: "Three days of sessions, and the recurring theme was not technology. Every delegation present had a working credential format. Almost none had an answer for what happens when a credential issued in one jurisdiction is presented in another." },
+      { kind: "heading", text: "Where the agreement was" },
+      { kind: "paragraph", text: "On standards, broadly. W3C verifiable credentials were assumed rather than debated, which is a change from the same forum two years ago." },
+      { kind: "heading", text: "Where it was not" },
+      { kind: "paragraph", text: "On trust registries. Knowing a credential is cryptographically valid is not the same as knowing its issuer is one you should believe, and each jurisdiction currently answers that with its own list. No proposal for reconciling those lists survived scrutiny in the room." },
+      { kind: "paragraph", text: "Liability came second. If a service accepts a foreign credential that turns out to have been issued in error, the question of who carries the loss was raised repeatedly and answered vaguely." },
+    ],
+  },
+  {
+    id: "credential-revocation",
+    slug: "revocation-without-calling-home",
+    category: "research",
+    type: "Technical note",
+    title: "Revocation without calling home",
+    description:
+      "How a credential can be withdrawn without the verifier telling the issuer who is presenting it.",
+    publishedAt: "2026-02-27",
+    image: media("/media/insights/credential-revocation.webp", "", 1200, 750),
+    readingMinutes: 10,
+    body: [
+      { kind: "paragraph", text: "Revocation is where privacy-preserving credential systems tend to leak. The simplest way for a verifier to learn whether a credential is still valid is to ask the issuer, and asking tells the issuer exactly who is presenting what, where, and when." },
+      { kind: "paragraph", text: "That single call undoes much of what holding your own credentials was meant to achieve. This note sets out the approach the platform uses instead." },
+      { kind: "heading", text: "Status lists" },
+      { kind: "paragraph", text: "The issuer publishes a compressed bitmap covering many credentials at once. The verifier fetches the whole list and checks one position in it. Because the list covers a large population, fetching it reveals nothing about which credential is being checked." },
+      { kind: "heading", text: "The trade" },
+      { kind: "paragraph", text: "List size against freshness. A list republished often is more current but more expensive to distribute; one republished rarely is cheap but leaves a window in which a withdrawn credential still verifies. The platform's interval is a policy choice, not a technical limit." },
+      { kind: "paragraph", text: "Offline verification widens that window further, since a verifier without connectivity works from whatever list it last held." },
+    ],
+  },
+  {
+    id: "telecom-sim",
+    slug: "sim-registration-without-a-branch-visit",
+    category: "case-studies",
+    type: "Case study",
+    title: "SIM registration without a branch visit",
+    description:
+      "What changed for a national telecom when subscriber verification moved into the wallet.",
+    publishedAt: "2026-01-30",
+    image: media("/media/insights/telecom-sim.webp", "", 1200, 750),
+    readingMinutes: 9,
+    body: [
+      { kind: "paragraph", text: "Regulation requires a verified identity behind every SIM. In practice that meant a counter, a document, and a photocopy, repeated across every retail point in the country and reconciled centrally afterwards." },
+      { kind: "paragraph", text: "Moving verification into the wallet removed the counter from the requirement, not the requirement itself. The regulatory obligation is unchanged; what changed is where it is discharged." },
+      { kind: "heading", text: "Fraud, before and after" },
+      { kind: "paragraph", text: "The operator's largest category of registration fraud involved documents that were genuine but did not belong to the person presenting them. A presented credential is bound to its holder, which closes that category rather than shrinking it." },
+      { kind: "paragraph", text: "A different category opened: social engineering aimed at getting a legitimate holder to present on someone else's behalf. It is smaller in volume and harder to spot, and the operator now watches for it specifically." },
+      { kind: "heading", text: "Retail impact" },
+      { kind: "paragraph", text: "Registration time per subscriber fell substantially. Retail footfall did not fall with it, because registration was rarely the only reason a customer came in." },
+    ],
+  },
+  {
+    id: "selective-disclosure",
+    slug: "proving-your-age-without-showing-your-birthday",
+    category: "research",
+    type: "Research paper",
+    title: "Proving your age without showing your birthday",
+    description:
+      "Selective disclosure and predicate proofs, and why most services ask for far more than they need.",
+    publishedAt: "2025-12-15",
+    image: media("/media/insights/selective-disclosure.webp", "", 1200, 750),
+    readingMinutes: 13,
+    body: [
+      { kind: "paragraph", text: "A service that needs to know whether someone is over eighteen almost always asks for a date of birth, and usually gets a full identity document alongside it. The question was a yes or no; the answer handed over a permanent identifier and everything attached to it." },
+      { kind: "paragraph", text: "Selective disclosure lets the holder answer the question that was actually asked. A predicate proof goes further and answers it without revealing the underlying value at all." },
+      { kind: "heading", text: "What is deployable now" },
+      { kind: "paragraph", text: "Field-level selective disclosure is production-ready and in use across the platform. A credential carrying twelve attributes can be presented as two of them, with the signature still verifying." },
+      { kind: "heading", text: "What is not" },
+      { kind: "paragraph", text: "General predicate proofs remain expensive on the hardware people actually carry. Age thresholds are tractable because the issuer can pre-compute a small set of common predicates at issuance; arbitrary range proofs over arbitrary attributes are not yet practical at national scale." },
+      { kind: "paragraph", text: "The paper sets out where that boundary currently sits and what would have to change to move it." },
+    ],
+  },
+  {
+    id: "wallet-recovery",
+    slug: "what-happens-when-you-lose-the-phone",
+    category: "blogs",
+    type: "Blog",
+    title: "What happens when you lose the phone",
+    description:
+      "Recovery is the hardest problem in self-sovereign identity, and the one users judge the system on.",
+    publishedAt: "2025-11-20",
+    image: media("/media/insights/wallet-recovery.webp", "", 1200, 750),
+    readingMinutes: 7,
+    body: [
+      { kind: "paragraph", text: "Every conversation about holding your own credentials reaches the same question within a minute. What happens when the phone goes in a river." },
+      { kind: "paragraph", text: "It is the right question. A system where losing a device means losing your legal identity is not one anybody should ship, and the honest answer is that recovery is where most of the design difficulty in this architecture actually lives." },
+      { kind: "heading", text: "Why it is hard" },
+      { kind: "paragraph", text: "The obvious fix is a central backup, and the obvious fix defeats the purpose. If one party can restore your credentials, that party can also present them, and the guarantee that only you hold your identity is gone." },
+      { kind: "heading", text: "What we do instead" },
+      { kind: "paragraph", text: "Recovery is split so no single party can complete it alone. Re-issuance from the original issuers is combined with a holder-controlled factor, so restoring a wallet needs both the institutions that made the statements and something only the citizen has." },
+      { kind: "paragraph", text: "This is slower than a password reset and we have stopped apologising for that. A process that restores a national identity in seconds is a process that can be abused in seconds." },
+    ],
+  },
+];

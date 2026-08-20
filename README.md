@@ -1,34 +1,64 @@
 # Bhutan NDI — website
 
-Next.js implementation of the Bhutan NDI website redesign.
+Next.js 16 website with **Payload CMS 3** as its content management system, on
+PostgreSQL, with local-disk uploads in development and Amazon S3 in production.
 
-**Phase 1 (current): the Home page**, built to match the design at full fidelity, using
-local media in `/public` and mock data in `src/content`. Payload CMS v3, PostgreSQL and
-S3 come in Phase 2 — the content layer is already built behind a seam so that is a swap,
-not a rewrite.
+The public site is statically prerendered; the CMS admin lives at `/admin`.
 
 ```bash
-npm install
-npm run dev     # http://localhost:3000
-npm run build
-npm run lint
+pnpm install
+pnpm dev                # http://localhost:3000, admin at /admin
+pnpm build
+pnpm lint
+pnpm typecheck
+```
+
+First-time setup, and the full architecture, are in **[docs/CMS.md](docs/CMS.md)**.
+The short version:
+
+```bash
+cp .env.example .env    # fill in PAYLOAD_SECRET and DATABASE_URI
+pnpm migrate            # create the schema
+pnpm seed               # categories, users, and the site's existing content
+pnpm dev
 ```
 
 ## Layout
 
 ```
-public/media/          hero phones, org and partner logos, news images
-src/app/               routes — / is the built Home page, the rest are stubs
+public/media/          static artwork the pages own (not CMS-managed)
+src/app/
+  (frontend)/          the public site — every URL unchanged
+  (payload)/           the admin panel and Payload's REST API
 src/components/
   layout/              Atmosphere (circuit background), SiteHeader, SiteFooter
   home/                the eight Home sections
+  pages/               per-page components, incl. the job application form
   ui/                  Reveal, cards, icons, form controls
-src/content/           mock data, shaped like Payload documents
+src/content/
+  index.ts             THE SEAM — every accessor the components read through
+  cms/                 Payload queries and the mappers onto the view types
+  *.ts                 content that is deliberately still static
+src/payload/
+  collections/         one file per collection
+  access/              every access rule, in one place
+  fields/              reusable field builders (slug, SEO, taxonomy, …)
+  optimize/            the image/PDF optimisation pipeline
+  storage/             local-disk vs S3
+  hooks/               revalidation
+  endpoints/           the public job-application endpoint
+  seed/                seed data and the seed script
+  migrations/          generated; committed
+src/payload.config.ts  wiring only
 src/hooks/             motion hooks (carousels, circuit glow, reduced motion)
 src/lib/               media URL resolution, date formatting, scroll helpers
 src/styles/            ndi-effects.css — the effects Tailwind can't express
 project/               the original Claude Design handoff bundle (reference only)
 ```
+
+Two route groups, which is what lets the admin panel have its own root layout
+without the site's fonts, header, footer and atmosphere layers wrapped around it.
+Route groups do not appear in URLs, so nothing the public sees changed.
 
 ## Styling
 
@@ -46,23 +76,35 @@ design-system token files name Space Grotesk and JetBrains Mono, but `ndi-site.c
 overrides both and the prototypes load the three above — those overrides are what
 actually rendered, so those are what the build uses.
 
-## The Phase 2 seam
+## The content seam
 
-Components never import mock data directly. They read through the async accessors in
-`src/content/index.ts`:
+Components never import content directly. They read through the async accessors
+in `src/content/index.ts`:
 
 ```ts
 const news = await getNews();
 ```
 
-In Phase 2 those function bodies become Payload Local API calls and no component
-changes. Mock records already carry `id`/`slug`, media uses Payload's upload shape
-(`{ url, alt, width, height }`) resolved through `src/lib/media.ts`, and dates are ISO
-strings formatted at render time.
+Those accessors were written as a seam before the CMS existed, and the migration
+was a change to their bodies rather than to any component. They now split two
+ways:
 
-Collections the content implies: `news`, `organizations`, `collaborators`,
-`capabilities`, `useCases`, `services`, plus a `siteSettings` global for nav, footer,
-contact details and social links.
+- **CMS-managed** — news, webinars, insights, glossary, FAQs, team members,
+  careers, media coverage — query Payload's Local API. That is an in-process
+  call to PostgreSQL, not HTTP, so it runs inside a Server Component being
+  prerendered at build time.
+- **Still static** — the home page, the users and organizations pages,
+  governance, site settings — return the modules in `src/content/`. Those pages
+  are marketing copy with bespoke layouts; modelling them as CMS documents would
+  buy an editor a form they should not be filling in and cost the site a
+  page-builder it does not need.
+
+Between Payload's documents and the components sits a mapper layer
+(`src/content/cms/`). Payload's generated types describe storage; the view types
+in `src/content/types.ts` describe a rendered page. Resolving a category
+relationship to a word on a chip, narrowing an ISO timestamp to the calendar day
+the date formatters expect, and applying the SEO fallbacks all happen once,
+there, rather than in every component.
 
 ---
 

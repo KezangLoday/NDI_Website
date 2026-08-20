@@ -56,14 +56,19 @@ export function NewsFeed({ items }: { items: NewsItem[] }) {
                 className="ndi-news-pane absolute inset-0"
                 data-active={i === index ? "true" : "false"}
               >
-                <Image
-                  src={mediaUrl(item.image)}
-                  alt={item.image.alt}
-                  fill
-                  sizes="(max-width: 900px) 100vw, 620px"
-                  className="object-cover"
-                  priority={i === 0}
-                />
+                {/* A story with no artwork keeps the pane's own gradient rather
+                    than showing an empty frame. The homepage only ever features
+                    stories, which have artwork, so this is a floor. */}
+                {item.image ? (
+                  <Image
+                    src={mediaUrl(item.image)}
+                    alt={item.image.alt}
+                    fill
+                    sizes="(max-width: 900px) 100vw, 620px"
+                    className="object-cover"
+                    priority={i === 0}
+                  />
+                ) : null}
               </div>
             ))}
           </div>
@@ -84,10 +89,15 @@ export function NewsFeed({ items }: { items: NewsItem[] }) {
                 <p className="text-[15px] leading-[1.6] text-muted">{item.excerpt}</p>
                 <a
                   href={item.href}
+                  {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   className="ndi-news-read mt-4 inline-flex items-center gap-[7px] font-display text-sm font-semibold text-accent"
                 >
-                  {item.ctaLabel}
-                  <Icon name={item.ctaIcon} size={15} strokeWidth={1.9} />
+                  Read more
+                  <Icon
+                    name={item.external ? "arrowUpRight" : "arrowRight"}
+                    size={15}
+                    strokeWidth={1.9}
+                  />
                 </a>
               </div>
             ))}

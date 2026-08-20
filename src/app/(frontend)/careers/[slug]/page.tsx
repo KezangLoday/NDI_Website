@@ -1,0 +1,278 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { PageSection } from "@/components/layout/PageHero";
+import { ApplicationForm } from "@/components/pages/careers/ApplicationForm";
+import { Icon } from "@/components/ui/icons";
+import { Reveal } from "@/components/ui/Reveal";
+import { getJobBySlug, getJobSlugs, getJobs } from "@/content";
+import { formatCalendarDate, formatFileSize } from "@/lib/format";
+
+/**
+ * One vacancy: the terms of reference, then the form.
+ *
+ * Both on one page and in that order, because they are one task. A listing
+ * that sends an applicant to a second page — or worse, to an email address —
+ * loses the people who were reading on a phone between two other things.
+ *
+ * The facts an applicant checks first (type, slots, closing date, location)
+ * are pulled out of the prose into a summary block at the top, and repeated
+ * nowhere. The prose is then free to be prose.
+ *
+ * Whether the form appears at all is decided by `job.applications.state`, which
+ * the server resolved from three separate conditions using the same function the
+ * submission endpoint enforces with. That sharing is the point: a page that
+ * decided for itself would eventually disagree with the endpoint, and the
+ * failure mode is somebody filling in eleven fields and then being refused.
+ */
+
+/**
+ * Revalidate hourly.
+ *
+ * Same reasoning as the listing: a deadline lapses on its own, with no editor
+ * action to trigger an on-demand revalidation, and this page has to stop
+ * offering the form when it does.
+ */
+export const revalidate = 3600;
+
+type Params = { params: Promise<{ slug: string }> };
+
+export async function generateStaticParams() {
+  /* Every published vacancy, including closed ones: the notice stays readable
+     at its own URL long after applications shut, which is what people who were
+     sent the link expect. */
+  const slugs = await getJobSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { slug } = await params;
+  const job = await getJobBySlug(slug);
+  if (!job) return { title: "Vacancy not found — Bhutan NDI" };
+  return {
+    title: `${job.seo.title} — Careers at Bhutan NDI`,
+    description: job.seo.description,
+    ...(job.seo.noIndex ? { robots: { index: false, follow: true } } : {}),
+  };
+}
+
+export default async function VacancyPage({ params }: Params) {
+  const { slug } = await params;
+  const [job, all] = await Promise.all([getJobBySlug(slug), getJobs()]);
+  if (!job) notFound();
+
+  const others = all.filter((entry) => entry.slug !== job.slug).slice(0, 3);
+  const open = job.applications.state !== "closed";
+
+  const facts: [string, string][] = [
+    ["Employment", job.employmentType],
+    ["Positions", String(job.slots)],
+    ["Location", job.location],
+    ["Level", job.level],
+    ["Posted", formatCalendarDate(job.postedAt)],
+    ["Closes", formatCalendarDate(job.closesAt)],
+  ];
+
+  return (
+    <>
+      <PageSection className="pb-4 pt-36">
+        <Reveal>
+          <Link
+            href="/careers#openings"
+            className="ndi-backlink inline-flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted"
+          >
+            <Icon name="arrowRight" size={13} strokeWidth={2} className="rotate-180" />
+            All vacancies
+          </Link>
+
+          <div className="mt-8 flex flex-wrap items-center gap-2">
+            <span className="ndi-vacancy-pill" data-tone="mint">
+              {job.employmentType}
+            </span>
+            <span className="ndi-vacancy-pill" data-tone="plain">
+              {job.slots} {job.slots === 1 ? "position" : "positions"}
+            </span>
+            <span className="ndi-vacancy-pill" data-tone="plain">
+              {job.department}
+            </span>
+          </div>
+
+          <h1 className="mt-5 max-w-[18ch] font-display text-[clamp(32px,4.4vw,52px)] font-semibold leading-[1.06] tracking-[-0.03em] text-strong [text-wrap:balance]">
+            {job.title}
+          </h1>
+          <p className="mt-6 max-w-[64ch] text-[17px] leading-[1.62] text-muted [text-wrap:pretty]">
+            {job.about}
+          </p>
+
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            {open ? (
+              <a
+                href="#apply"
+                data-dir="forward"
+                className="ndi-backbtn inline-flex h-[46px] items-center gap-2.5 rounded-full border border-grid px-[22px] font-display text-[14.5px] font-semibold text-body"
+              >
+                Apply for this role
+                <Icon name="arrowRight" size={15} strokeWidth={2} />
+              </a>
+            ) : (
+              <span className="ndi-vacancy-pill" data-tone="plain">
+                {job.applications.closedReason}
+              </span>
+            )}
+
+            {/* The signed notice, where HR has uploaded one. An applicant
+                gathering documents wants the document of record, not a web
+                page. */}
+            {job.torDocument ? (
+              <a
+                href={job.torDocument.url}
+                className="ndi-backbtn inline-flex h-[46px] items-center gap-2.5 rounded-full border border-grid px-[22px] font-display text-[14.5px] font-semibold text-body"
+              >
+                <Icon name="download" size={15} strokeWidth={2} />
+                Terms of reference
+                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+                  {formatFileSize(job.torDocument.filesize)}
+                </span>
+              </a>
+            ) : null}
+          </div>
+
+          {/* A closing date only warrants a warning when it is near. Saying
+              "closing soon" for two months trains people to ignore it. */}
+          {job.applications.state === "closing-soon" ? (
+            <p className="mt-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-accent">
+              {job.applications.daysRemaining === 0
+                ? "Closes today"
+                : `Closes in ${job.applications.daysRemaining} day${job.applications.daysRemaining === 1 ? "" : "s"}`}
+            </p>
+          ) : null}
+        </Reveal>
+      </PageSection>
+
+      <PageSection className="pb-[104px] pt-12">
+        <div className="grid grid-cols-1 gap-12 min-[1001px]:grid-cols-[minmax(0,3fr)_minmax(0,1fr)] min-[1001px]:gap-16">
+          <div>
+            <Reveal>
+              <h2 className="font-display text-[13px] font-semibold uppercase tracking-[0.16em] text-faint">
+                Terms of reference
+              </h2>
+              {job.sections.map((section) => (
+                <section key={section.heading} className="mt-10 first:mt-7">
+                  <h3 className="font-display text-[21px] font-semibold leading-[1.25] tracking-[-0.02em] text-strong">
+                    {section.heading}
+                  </h3>
+                  <ul className="mt-4 flex max-w-[68ch] flex-col gap-3">
+                    {section.items.map((item) => (
+                      <li key={item} className="ndi-tor-item text-[15px] leading-[1.7] text-body [text-wrap:pretty]">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </Reveal>
+
+            <Reveal delay={0.05} id="apply" className="mt-16 scroll-mt-28">
+              <div className="border-t border-subtle pt-12">
+                <h2 className="font-display text-[clamp(26px,3vw,34px)] font-semibold leading-[1.12] tracking-[-0.03em] text-strong">
+                  Apply for this role
+                </h2>
+                {open ? (
+                  <>
+                    <p className="mt-3 max-w-[62ch] text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
+                      One form, about five minutes. Everything marked required is a criterion in the
+                      terms of reference above.
+                    </p>
+                    {job.applications.instructions ? (
+                      <p className="mt-3 max-w-[62ch] text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
+                        {job.applications.instructions}
+                      </p>
+                    ) : null}
+                    <div className="mt-9">
+                      <ApplicationForm job={job} />
+                    </div>
+                  </>
+                ) : (
+                  /* Closed. The notice stays, the form goes — and the backend
+                     refuses a submission regardless, so this is the courtesy
+                     rather than the control. */
+                  <div className="mt-3 max-w-[62ch]">
+                    <p className="text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
+                      {job.applications.closedReason} The notice above remains here for reference.
+                    </p>
+                    <Link
+                      href="/careers#openings"
+                      className="ndi-backbtn mt-6 inline-flex h-[46px] items-center gap-2.5 rounded-full border border-grid px-[22px] font-display text-[14.5px] font-semibold text-body"
+                    >
+                      See what is open
+                      <Icon name="arrowRight" size={15} strokeWidth={2} />
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.05}>
+            <aside className="min-[1001px]:sticky min-[1001px]:top-[110px]">
+              <div data-gov-card="1" className="rounded-2xl border border-grid p-[22px]">
+                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+                  At a glance
+                </span>
+                <dl className="mt-4 flex flex-col">
+                  {facts.map(([term, value], index) => (
+                    <div
+                      key={term}
+                      className={`flex items-baseline justify-between gap-4 py-2.5 ${
+                        index < facts.length - 1 ? "border-b border-subtle" : ""
+                      }`}
+                    >
+                      <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+                        {term}
+                      </dt>
+                      <dd className="text-right text-[13.5px] text-body">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                {open ? (
+                  <a
+                    href="#apply"
+                    className="ndi-tut mt-5 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-accent"
+                  >
+                    Go to the form
+                    <Icon name="arrowRight" size={13} strokeWidth={2} />
+                  </a>
+                ) : null}
+              </div>
+
+              {others.length ? (
+                <div className="mt-10">
+                  <h2 className="font-display text-[16.5px] font-semibold tracking-[-0.02em] text-strong">
+                    Other openings
+                  </h2>
+                  <div className="mt-4 flex flex-col">
+                    {others.map((entry) => (
+                      <Link
+                        key={entry.id}
+                        href={`/careers/${entry.slug}`}
+                        className="ndi-otherjob group flex flex-col gap-1.5 border-t border-subtle py-4"
+                      >
+                        <span className="font-display text-[14.5px] font-semibold leading-[1.3] tracking-[-0.01em] text-strong">
+                          {entry.title}
+                        </span>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+                          {entry.employmentType} · {entry.location}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </aside>
+          </Reveal>
+        </div>
+      </PageSection>
+    </>
+  );
+}

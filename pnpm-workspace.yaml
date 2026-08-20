@@ -1,2 +1,6 @@
 allowBuilds:
+  # sass ships a native file watcher we never use — nothing runs `sass --watch`.
+  '@parcel/watcher': false
+  esbuild: true
+  sharp: true
   unrs-resolver: false

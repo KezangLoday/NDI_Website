@@ -2,16 +2,23 @@
 
 import { useMemo, useState } from "react";
 
+import { ProseBody } from "@/content/cms/richText";
 import { Icon } from "@/components/ui/icons";
-import { faqAudiences } from "@/content/faqs";
-import type { FaqItem } from "@/content/types";
+import type { FaqAudience, FaqItem } from "@/content/types";
 
-type Audience = FaqItem["audience"];
-
-const TAB_ICON: Record<Audience, "user" | "building2"> = {
-  users: "user",
-  orgs: "building2",
+/**
+ * Icons for the audience tabs, keyed by category slug.
+ *
+ * The two the site needs are seeded records rather than a union in the code, so
+ * a third added in the admin panel gets the generic mark and still works. The
+ * page does not break waiting for a developer to pick an icon.
+ */
+const TAB_ICON: Record<string, "user" | "building2"> = {
+  "for-users": "user",
+  "for-organizations": "building2",
 };
+
+const DEFAULT_TAB_ICON = "building2" as const;
 
 /**
  * Tabs plus live search over the FAQ list.
@@ -21,8 +28,16 @@ const TAB_ICON: Record<Audience, "user" | "building2"> = {
  * still finds the answer filed under organizations. Clearing happens by
  * picking a tab, which matches the prototype.
  */
-export function FaqBrowser({ items }: { items: FaqItem[] }) {
-  const [audience, setAudience] = useState<Audience>("users");
+export function FaqBrowser({
+  items,
+  audiences,
+}: {
+  items: FaqItem[];
+  audiences: FaqAudience[];
+}) {
+  /* The first CMS audience is the default tab, so reordering the categories in
+     the admin panel changes which one opens first. */
+  const [audience, setAudience] = useState<string>(audiences[0]?.slug ?? "");
   const [query, setQuery] = useState("");
 
   const searching = query.trim().length > 0;
@@ -33,7 +48,10 @@ export function FaqBrowser({ items }: { items: FaqItem[] }) {
       const inTab = q ? true : item.audience === audience;
       if (!inTab) return false;
       if (!q) return true;
-      return `${item.question} ${item.answer}`.toLowerCase().includes(q);
+      /* `searchText` is the answer flattened to plain text on the server —
+         a Lexical tree cannot be searched with `includes`, and flattening it
+         per keystroke in the browser would be wasteful. */
+      return `${item.question} ${item.searchText}`.toLowerCase().includes(q);
     });
   }, [items, audience, query]);
 
@@ -51,21 +69,21 @@ export function FaqBrowser({ items }: { items: FaqItem[] }) {
           role="tablist"
           aria-label="Audience"
         >
-          {faqAudiences.map((tab) => (
+          {audiences.map((tab) => (
             <button
-              key={tab.id}
+              key={tab.slug}
               type="button"
               role="tab"
-              aria-selected={audience === tab.id}
-              data-active={audience === tab.id ? "true" : "false"}
+              aria-selected={audience === tab.slug}
+              data-active={audience === tab.slug ? "true" : "false"}
               data-tabbtn=""
               onClick={() => {
-                setAudience(tab.id);
+                setAudience(tab.slug);
                 setQuery("");
               }}
               className="inline-flex h-full cursor-pointer items-center gap-2 rounded-[9px] border border-transparent bg-transparent px-5 font-display text-[14.5px] font-semibold text-muted transition-[background,color,border-color] duration-[220ms]"
             >
-              <Icon name={TAB_ICON[tab.id]} size={15} />
+              <Icon name={TAB_ICON[tab.slug] ?? DEFAULT_TAB_ICON} size={15} />
               {tab.label}
             </button>
           ))}
@@ -102,9 +120,9 @@ export function FaqBrowser({ items }: { items: FaqItem[] }) {
                 <Icon name="plus" size={18} strokeWidth={2} />
               </span>
             </summary>
-            <p className="pb-5 pr-9 text-[14.5px] leading-[1.65] text-muted [text-wrap:pretty]">
-              {item.answer}
-            </p>
+            <div className="pb-5 pr-9 text-[14.5px] leading-[1.65] text-muted [text-wrap:pretty]">
+              <ProseBody content={item.answer} />
+            </div>
           </details>
         ))}
       </div>

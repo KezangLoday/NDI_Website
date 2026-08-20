@@ -8,7 +8,7 @@ import { Icon } from "@/components/ui/icons";
 import { ArticleCard } from "@/components/pages/resources/ArticleCard";
 import { NewsRow } from "@/components/pages/resources/NewsRow";
 import { Reveal } from "@/components/ui/Reveal";
-import type { NewsItem, ResourceNews } from "@/content/types";
+import type { NewsItem } from "@/content/types";
 import { formatNewsDate } from "@/lib/format";
 import { mediaUrl } from "@/lib/media";
 
@@ -27,29 +27,41 @@ const PER_PAGE = 6;
  * Announcements sit in the same archive as the stories. They carry no artwork —
  * they never did — so their card leads with the category set large instead of a
  * grey box apologising for a missing photograph.
+ *
+ * Both shapes are now one collection with a `format` field, so the union this
+ * file used to carry is gone: the card reads `item.href` and `item.external`,
+ * which the mapper has already resolved. That is a real simplification — the
+ * decision about where a notice links belongs with the data, not in a ternary
+ * inside a card.
  */
-
-type Entry =
-  | { kind: "story"; item: NewsItem }
-  | { kind: "notice"; item: ResourceNews };
 
 /** The lead: newest story, given the room to open the page. */
 function LeadStory({ item }: { item: NewsItem }) {
   return (
     <article>
-      <Link href={`/resources/news/${item.slug}`} className="ndi-news-lead group block">
-        <div className="ndi-news-shot relative aspect-[16/10] overflow-hidden rounded-2xl border border-grid">
-          <Image
-            src={mediaUrl(item.image)}
-            /* The headline beside this is the link's name; a described
-               photograph inside the same link would only read it out twice. */
-            alt=""
-            fill
-            priority
-            sizes="(max-width: 900px) 92vw, 700px"
-            className="object-cover"
-          />
-        </div>
+      <Link href={item.href} className="ndi-news-lead group block">
+        {/* A lead story with no artwork falls back to the category plate the
+            archive cards use, rather than an empty framed box. */}
+        {item.image ? (
+          <div className="ndi-news-shot relative aspect-[16/10] overflow-hidden rounded-2xl border border-grid">
+            <Image
+              src={mediaUrl(item.image)}
+              /* The headline beside this is the link's name; a described
+                 photograph inside the same link would only read it out twice. */
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 900px) 92vw, 700px"
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <div className="ndi-news-plate relative flex aspect-[16/10] items-end rounded-2xl border border-grid p-6">
+            <span className="font-display text-[30px] font-semibold leading-[1.1] tracking-[-0.03em] text-strong/70">
+              {item.category}
+            </span>
+          </div>
+        )}
 
         <div className="mt-5 flex items-center gap-3">
           <span className="ndi-news-chip">{item.category}</span>
@@ -73,23 +85,17 @@ function LeadStory({ item }: { item: NewsItem }) {
   );
 }
 
-/**
- * An archive entry as the shared newsroom card.
- *
- * Both shapes carry a category and a date; only the story has artwork and a
- * slug, which is the only place the union needs narrowing.
- */
-function ArchiveCard({ entry }: { entry: Entry }) {
-  const { item } = entry;
+/** An archive entry as the shared newsroom card. */
+function ArchiveCard({ item }: { item: NewsItem }) {
   return (
     <ArticleCard
-      href={entry.kind === "story" ? `/resources/news/${entry.item.slug}` : entry.item.href}
-      external={entry.kind !== "story"}
+      href={item.href}
+      external={item.external}
       category={item.category}
       title={item.title}
       publishedAt={item.publishedAt}
       excerpt={item.excerpt}
-      image={entry.kind === "story" ? entry.item.image : undefined}
+      image={item.image}
     />
   );
 }
@@ -182,25 +188,31 @@ function Pagination({
   );
 }
 
-export function NewsIndex({ stories, notices }: { stories: NewsItem[]; notices: ResourceNews[] }) {
+export function NewsIndex({ items }: { items: NewsItem[] }) {
   const [page, setPage] = useState(1);
 
-  const byDate = <T extends { publishedAt: string }>(list: T[]) =>
+  const byDate = (list: NewsItem[]) =>
     [...list].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 
-  const ranked = byDate(stories);
-  const [lead, ...restStories] = ranked;
-  const topReads = ranked
+  const dated = byDate(items);
+
+  /*
+   * The lead: whichever story an editor flagged, or the newest one.
+   *
+   * Only a story can lead — a notice has no artwork and no standfirst, and the
+   * lead slot is a 16:10 picture with three lines of copy under it.
+   */
+  const stories = dated.filter((item) => item.format === "story");
+  const lead = stories.find((item) => item.featured) ?? stories[0];
+
+  const topReads = dated
     .filter((item) => item.popularRank !== undefined)
-    .sort((a, b) => a.popularRank! - b.popularRank!)
+    .sort((a, b) => (a.popularRank ?? 0) - (b.popularRank ?? 0))
     .slice(0, 3);
 
   /* Everything except the lead, newest first. The top reads stay in the archive
      too — leaving them out would put holes in a chronology. */
-  const archive: Entry[] = byDate([
-    ...restStories.map((item) => ({ kind: "story" as const, item, publishedAt: item.publishedAt })),
-    ...notices.map((item) => ({ kind: "notice" as const, item, publishedAt: item.publishedAt })),
-  ]).map(({ kind, item }) => ({ kind, item }) as Entry);
+  const archive = dated.filter((item) => item.id !== lead?.id);
 
   const pages = Math.max(1, Math.ceil(archive.length / PER_PAGE));
   const current = Math.min(page, pages);
@@ -247,8 +259,8 @@ export function NewsIndex({ stories, notices }: { stories: NewsItem[]; notices: 
         </div>
 
         <div className="mt-7 grid grid-cols-1 gap-5 min-[701px]:grid-cols-2 min-[1101px]:grid-cols-3">
-          {shown.map((entry) => (
-            <ArchiveCard key={entry.item.id} entry={entry} />
+          {shown.map((item) => (
+            <ArchiveCard key={item.id} item={item} />
           ))}
         </div>
 

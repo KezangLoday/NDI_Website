@@ -43,3 +43,10 @@ next-env.d.ts
 
 # Claude Design handoff bundle (reference only, not built)
 /project/.next
+
+# CMS uploads written by the local storage adapter. Never committed: they are
+# per-environment data, and the applicant documents under .uploads/ are private
+# recruitment records that must not enter version control under any circumstance.
+/media
+/.uploads
+
