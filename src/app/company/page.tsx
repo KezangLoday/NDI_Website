@@ -105,14 +105,10 @@ export default async function CompanyPage() {
         className="relative pb-[72px] pt-[168px]"
       >
         <Reveal className="relative text-center">
-          <span className="inline-flex h-8 items-center gap-2.5 rounded-full border border-grid bg-white/[0.03] px-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted">
-            <span
-              aria-hidden="true"
-              className="h-[5px] w-[5px] rounded-full bg-accent"
-              style={{ boxShadow: "var(--glow-sm)" }}
-            />
-            About Bhutan NDI
-          </span>
+          {/* The shared eyebrow, not a dotted pill: every other section on the
+              site labels itself with the dash form, and one page wearing a
+              different badge reads as a different site. */}
+          <Eyebrow>— About Bhutan NDI</Eyebrow>
 
           {/* Two lines, the second in the accent — the move all three
               references share, and what gives the headline its shape. */}

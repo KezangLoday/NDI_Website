@@ -109,7 +109,13 @@ export default async function UsersPage() {
         >
           {stats.map((stat) => (
             <div key={stat.id}>
-              <div className="font-display text-[clamp(19px,5.4vw,30px)] font-semibold tracking-[-0.02em] text-strong min-[901px]:text-[34px]">
+              {/* Two of the three values are two words ("1 wallet",
+                  "0 passwords") and cannot hold one line in a third of a phone.
+                  Rather than shrink the number until they do, the box reserves
+                  the second line so every label starts at the same height. Left
+                  to wrap freely, the third column pushed its label down and the
+                  row read as broken. */}
+              <div className="min-h-[2.25em] font-display text-[clamp(19px,5.2vw,30px)] font-semibold leading-[1.12] tracking-[-0.02em] text-strong min-[901px]:min-h-0 min-[901px]:text-[34px] min-[901px]:leading-normal">
                 {stat.value}
               </div>
               <div className="mt-1.5 font-mono text-[9px] uppercase leading-[1.35] tracking-[0.1em] text-faint min-[641px]:text-[10.5px] min-[901px]:mt-2 min-[901px]:text-[11.5px] min-[901px]:tracking-[0.16em]">

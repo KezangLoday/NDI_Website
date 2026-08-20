@@ -334,10 +334,10 @@ export function SiteHeader() {
           opacity: mobileOpen ? 1 : 0,
           visibility: mobileOpen ? "visible" : "hidden",
           pointerEvents: mobileOpen ? "auto" : "none",
-          transform: `translateX(-50%) translateY(${mobileOpen ? "0" : "-10px"})`,
+          transform: `translateY(${mobileOpen ? "0" : "-8px"})`,
         }}
       >
-        <nav className="flex flex-col px-[18px] pb-7 pt-2" aria-label="Mobile">
+        <nav className="flex flex-col px-5 pb-12 pt-1" aria-label="Mobile">
           {mobilePrimary.map((link) => {
             const isActive = link.navKey
               ? activeKey === link.navKey

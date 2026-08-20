@@ -626,13 +626,12 @@
    a hole beside them. As a grid the row divides the space it actually has. */
 @media (max-width: 700px) {
   .ndi-lc-group { flex: 1 1 100%; width: 100%; }
-  /* Three across, and a remainder that centres. A grid would leave the fourth
-     logo hugging the left edge with two empty cells beside it, which reads as a
-     missing row rather than as the end of the set. */
+  /* Three across, left aligned. Each group divides the row it has, and with
+     three slots per group there is no remainder to strand. */
   .ndi-lc-grid {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px 12px;
   }
   .ndi-lc-col { width: calc((100% - 24px) / 3); height: 84px; }
@@ -1115,40 +1114,32 @@
   transition: opacity 0.28s var(--ease-out), visibility 0s linear 0s;
 }
 .ndi-menu-panel {
-  /* Matches the header's own box so the two read as one object. */
+  /* Full bleed under the bar, not a card.
+     The rows are the design's own format: a large label, a hairline under it,
+     edge to edge. Wrapped in a rounded bordered panel they became a floating
+     sheet and the rules stopped reading as rules. Derived from the header's box
+     (16px inset, 64px tall) so the two never drift apart. */
   --ndi-header-inset: 16px;
   --ndi-header-height: 64px;
   position: fixed;
-  left: 50%;
-  top: calc(var(--ndi-header-inset) + var(--ndi-header-height) + 10px);
+  left: 0;
+  right: 0;
+  top: calc(var(--ndi-header-inset) + var(--ndi-header-height) + 8px);
+  bottom: 0;
   z-index: 56;
-  width: calc(100% - 28px);
-  /* Full width of the header's box on a phone. On a tablet the bar is wide
-     enough that a full-width sheet would leave the 26px items floating in
-     empty space, so the panel keeps a readable measure and centres. */
-  max-width: 480px;
-  max-height: calc(100dvh - var(--ndi-header-inset) - var(--ndi-header-height) - 28px);
   overflow-y: auto;
   overscroll-behavior: contain;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.008)),
-    rgba(15, 20, 31, 0.94);
-  backdrop-filter: blur(22px) saturate(150%);
-  -webkit-backdrop-filter: blur(22px) saturate(150%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 26px 64px -12px rgba(0, 0, 0, 0.75);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0)),
+    rgba(11, 15, 24, 0.97);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
   transition:
     opacity 0.26s var(--ease-out),
     transform 0.26s var(--ease-out),
     visibility 0s linear 0s;
 }
 
-
-/* The row's own colour. Active rows take the same gradient the desktop links
-   use, so "where am I" reads the same on both. */
 .ndi-menu-label {
   color: var(--text-strong);
   transition: color 0.2s var(--ease-out);
