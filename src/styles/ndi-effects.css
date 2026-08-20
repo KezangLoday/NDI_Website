@@ -618,6 +618,26 @@
      on screen exactly while the incoming one is arriving. */
   transition: opacity 0.3s var(--ease-out), filter 0.3s var(--ease-out), transform 0.3s var(--ease-out);
 }
+.ndi-lc-col { width: var(--slot-w); height: var(--slot-h); }
+
+/* Phones: each group takes the full width and its logos sit three across.
+   At a fixed 92px slot plus a 20px gap, three needed 316px inside a 311px
+   column, so the fourth logo wrapped and the set read as two ragged rows with
+   a hole beside them. As a grid the row divides the space it actually has. */
+@media (max-width: 700px) {
+  .ndi-lc-group { flex: 1 1 100%; width: 100%; }
+  /* Three across, and a remainder that centres. A grid would leave the fourth
+     logo hugging the left edge with two empty cells beside it, which reads as a
+     missing row rather than as the end of the set. */
+  .ndi-lc-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 12px;
+  }
+  .ndi-lc-col { width: calc((100% - 24px) / 3); height: 84px; }
+}
+
 .ndi-lc-item img { filter: brightness(0) invert(1); opacity: 0.82; transition: opacity 0.35s var(--ease-out); }
 .ndi-lc-col:hover .ndi-lc-item img { opacity: 1; }
 /* Marks whose owners do not permit recolouring. Set from `preserveColor` in
@@ -1062,40 +1082,133 @@
 }
 
 /* Mobile sheet */
-.ndi-sheet-overlay {
+/* Swipeable journey strip. The bar is hidden because the picture itself is the
+   affordance, and momentum makes the pan feel native. */
+.ndi-journey-swipe {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+.ndi-journey-swipe::-webkit-scrollbar { display: none; }
+
+/* ---- Circuit field: pointer devices only -------------------
+   The field exists to react to the cursor. Without one it is a static texture
+   behind the copy, paid for with a document-tall stack of masked SVG, so it is
+   dropped rather than left running. The depth gradient and ambient pools remain. */
+@media (hover: none), (pointer: coarse) {
+  .ndi-circuit { display: none !important; }
+}
+
+/* ---- Mobile menu ------------------------------------------
+   Opens under the header instead of sliding in as its own surface. The header
+   keeps the logo and the control that opened the menu, so the panel only has to
+   carry the navigation. Top and height are derived from the header's own box
+   (24px inset, 64px tall) so the two never drift apart. */
+.ndi-menu-scrim {
   position: fixed;
   inset: 0;
-  z-index: 70;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  transition: opacity 0.3s var(--ease-out);
+  z-index: 55;
+  background: rgba(6, 10, 16, 0.62);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: opacity 0.28s var(--ease-out), visibility 0s linear 0s;
 }
-.ndi-sheet {
+.ndi-menu-panel {
+  /* Matches the header's own box so the two read as one object. */
+  --ndi-header-inset: 16px;
+  --ndi-header-height: 64px;
   position: fixed;
-  top: 0;
-  right: 0;
-  height: 100%;
-  width: min(430px, 100vw);
-  z-index: 71;
-  display: flex;
-  flex-direction: column;
-  background: rgba(18, 24, 37, 0.98);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: -20px 0 60px -20px rgba(0, 0, 0, 0.8);
-  transition: transform 0.4s var(--ease-out);
+  left: 50%;
+  top: calc(var(--ndi-header-inset) + var(--ndi-header-height) + 10px);
+  z-index: 56;
+  width: calc(100% - 28px);
+  /* Full width of the header's box on a phone. On a tablet the bar is wide
+     enough that a full-width sheet would leave the 26px items floating in
+     empty space, so the panel keeps a readable measure and centres. */
+  max-width: 480px;
+  max-height: calc(100dvh - var(--ndi-header-inset) - var(--ndi-header-height) - 28px);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.008)),
+    rgba(15, 20, 31, 0.94);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 26px 64px -12px rgba(0, 0, 0, 0.75);
+  transition:
+    opacity 0.26s var(--ease-out),
+    transform 0.26s var(--ease-out),
+    visibility 0s linear 0s;
 }
-.ndi-sheet a,
-.ndi-sheet button { flex: none; }
-.ndi-acc-panel { flex: none; min-height: 0; overflow: hidden; transition: height 0.28s var(--ease-out); }
+
+
+/* The row's own colour. Active rows take the same gradient the desktop links
+   use, so "where am I" reads the same on both. */
+.ndi-menu-label {
+  color: var(--text-strong);
+  transition: color 0.2s var(--ease-out);
+}
+.ndi-menu-row[data-active="1"] .ndi-menu-label {
+  background: linear-gradient(100deg, #8cf0c0 0%, #6fe0a9 34%, #4fc091 68%, #2fa189 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.ndi-menu-row[data-active="1"] > svg { color: #4fc091; opacity: 1; }
+@media (hover: hover) {
+  .ndi-menu-row:hover .ndi-menu-label { color: var(--accent); }
+}
+
+/* Sub-items. Not fine print: one step below the section heading, not four. */
+.ndi-menu-sub {
+  color: var(--text-body);
+  transition: color 0.2s var(--ease-out), background 0.2s var(--ease-out);
+}
+.ndi-menu-sub-dot {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+}
+.ndi-menu-sub[data-active="1"] {
+  color: var(--accent);
+  background: var(--ndi-mint-08);
+}
+.ndi-menu-sub[data-active="1"] .ndi-menu-sub-dot { opacity: 1; }
+@media (hover: hover) {
+  .ndi-menu-sub:hover { color: var(--text-strong); background: rgba(255, 255, 255, 0.04); }
+}
+
+/* Native disclosure. The marker is replaced by the chevron in the summary. */
+.ndi-menu-details > summary { list-style: none; }
+.ndi-menu-details > summary::-webkit-details-marker { display: none; }
+.ndi-menu-caret { transition: transform 0.26s var(--ease-out); }
+.ndi-menu-details[open] > summary .ndi-menu-caret { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) {
+  .ndi-menu-panel, .ndi-menu-scrim, .ndi-menu-caret { transition: none; }
+}
 .ndi-sheet-social:hover {
   background: linear-gradient(150deg, #5ac994, #124143);
   color: var(--ndi-000);
   border-color: transparent;
   box-shadow: var(--glow-sm);
+}
+
+/* Touch targets in the footer.
+   The links are a single 14.5px line, so their box was 23px tall against a
+   44px guideline. Padding rather than a taller font: the type scale is the
+   design's, the reachable area is not. Applied only where the pointer is
+   coarse, so the desktop footer keeps its tighter rhythm. */
+@media (pointer: coarse) {
+  .ndi-fl { padding-block: 7px; }
 }
 
 /* ---- Footer ------------------------------------------------ */
@@ -1625,6 +1738,24 @@ select option { background: #101827; color: #e9eef6; }
   transform: rotate(var(--card-rotate)) translateX(var(--card-shift));
   transition: transform 0.4s var(--ease-out);
 }
+.ndi-credential-img { width: var(--card-w); }
+
+/* The fan on a phone.
+   Three cards at their desktop width do not fit, and as flex children they were
+   silently shrunk to 118px, which put the hero's picture below its own caption
+   in the visual order. They keep a usable size and overlap into a deck instead. */
+@media (max-width: 640px) {
+  /* The width is overridden here, not the variable behind it: `--card-w` is an
+     inline style from the component, and no stylesheet rule can outrank that.
+     Overriding the `width` property itself sidesteps it.
+
+     Overlap is a share of the card rather than a percentage margin, which would
+     resolve against the container and drift as the viewport changes. */
+  .ndi-credential { flex: none; --card-w-m: clamp(126px, 38vw, 168px); }
+  .ndi-credential-img { width: var(--card-w-m); }
+  .ndi-credential + .ndi-credential { margin-left: calc(var(--card-w-m) * -0.42); }
+}
+
 .ndi-credential:hover {
   transform: rotate(var(--card-rotate)) translateX(var(--card-shift))
     translateY(calc(-1 * var(--card-lift)));

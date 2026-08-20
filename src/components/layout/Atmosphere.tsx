@@ -22,6 +22,11 @@ const CIRCUIT_FIELD = new Set(["/", "/company"]);
  *
  * The two trace layers span the whole document rather than the viewport, which
  * is why the glow spotlight tracks page coordinates — see useCircuitGlow.
+ *
+ * Both trace layers are dropped where there is no cursor to reveal them. The
+ * whole point of the field is what happens under the pointer, and on a phone it
+ * is a static texture behind the copy that costs a tall stack of masked SVG to
+ * draw. The depth gradient and the ambient pools stay: those are the ground.
  */
 export function Atmosphere() {
   const baseRef = useRef<HTMLDivElement>(null);
@@ -50,7 +55,7 @@ export function Atmosphere() {
       {/* Dim base traces */}
       <div
         ref={baseRef}
-        className="pointer-events-none absolute left-0 top-0 z-0 w-full overflow-hidden"
+        className="ndi-circuit pointer-events-none absolute left-0 top-0 z-0 w-full overflow-hidden"
         style={{ height: layerHeight, color: "rgba(90,201,148,0.36)" }}
       >
         {bands.map((band) => (
@@ -74,7 +79,7 @@ export function Atmosphere() {
       {/* Bright traces, revealed only under the cursor */}
       <div
         ref={glowRef}
-        className="pointer-events-none absolute left-0 top-0 z-0 w-full overflow-hidden opacity-0 transition-opacity duration-[450ms] ease-ndi"
+        className="ndi-circuit pointer-events-none absolute left-0 top-0 z-0 w-full overflow-hidden opacity-0 transition-opacity duration-[450ms] ease-ndi"
         style={{ height: layerHeight, color: "#7fe6b3" }}
       >
         {bands.map((band) => (

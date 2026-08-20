@@ -88,10 +88,13 @@ export function SiteHeader() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [reroll, setReroll] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const activeKey = activeNavKey(pathname);
+
+  /* Home is reachable from the logo, which is not obvious on a phone where the
+     logo reads as branding. The mobile list says so explicitly. */
+  const mobilePrimary = [{ label: "Home", href: "/", navKey: undefined as string | undefined }, ...nav.primary];
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
 
@@ -139,7 +142,6 @@ export function SiteHeader() {
 
   const closeMobile = () => {
     setMobileOpen(false);
-    setOpenAccordion(null);
   };
 
   const panelStyle = (key: string): CSSProperties => {
@@ -214,7 +216,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="fixed left-1/2 top-6 z-[60] flex h-16 w-[calc(100%-64px)] max-w-[1136px] -translate-x-1/2 items-center py-2.5 pl-[26px] pr-3">
+      <header className="fixed left-1/2 top-4 z-[60] flex h-16 w-[calc(100%-28px)] max-w-[1136px] -translate-x-1/2 items-center py-2.5 pl-[18px] pr-3 min-[901px]:top-6 min-[901px]:w-[calc(100%-64px)] min-[901px]:pl-[26px]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-0 rounded-2xl border border-white/[0.08]"
@@ -286,9 +288,10 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setMobileOpen((o) => !o)}
-          aria-label="Menu"
+          aria-label={mobileOpen ? "Close menu" : "Menu"}
           aria-expanded={mobileOpen}
-          className="ndi-nav-in relative z-[1] ml-auto inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-strong min-[901px]:hidden"
+          aria-controls="ndi-mobile-menu"
+          className="ndi-nav-in relative z-[1] ml-auto inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-strong transition-colors duration-[220ms] min-[901px]:hidden"
           style={entrance(nav.primary.length + nav.menus.length + 2)}
         >
           <svg
@@ -307,99 +310,106 @@ export function SiteHeader() {
         </button>
       </header>
 
-      {/* Mobile sheet */}
+      {/* Mobile menu.
+          Anchored under the header rather than sliding in as its own surface:
+          the header already carries the logo and the control that opened this,
+          so a sheet with a second logo and a second close button restated both
+          and moved them while it did. The bar stays where it was and the menu
+          opens beneath it. */}
       <div
-        className="ndi-sheet-overlay"
+        className="ndi-menu-scrim min-[901px]:hidden"
         onClick={closeMobile}
+        aria-hidden="true"
         style={{
           opacity: mobileOpen ? 1 : 0,
           visibility: mobileOpen ? "visible" : "hidden",
           pointerEvents: mobileOpen ? "auto" : "none",
         }}
       />
-      <aside
-        className="ndi-sheet"
+      <div
+        id="ndi-mobile-menu"
+        className="ndi-menu-panel min-[901px]:hidden"
         aria-hidden={!mobileOpen}
-        style={{ transform: `translateX(${mobileOpen ? "0" : "100%"})` }}
+        style={{
+          opacity: mobileOpen ? 1 : 0,
+          visibility: mobileOpen ? "visible" : "hidden",
+          pointerEvents: mobileOpen ? "auto" : "none",
+          transform: `translateX(-50%) translateY(${mobileOpen ? "0" : "-10px"})`,
+        }}
       >
-        <div
-          className="mx-3.5 mt-3.5 flex flex-none items-center justify-between gap-4 rounded-2xl border border-grid py-3 pl-4 pr-3"
-          style={{
-            background:
-              "radial-gradient(115% 78% at 26% -6%, rgba(111,224,169,0.20) 0%, rgba(90,201,148,0.06) 42%, rgba(90,201,148,0) 68%), linear-gradient(162deg, #103440 0%, #101827 64%)",
-          }}
-        >
-          <Image
-            src="/media/logos/ndi-horizontal-white.png"
-            alt="Bhutan NDI"
-            width={1680}
-            height={371}
-            sizes="150px"
-            className="h-[26px] w-auto"
-          />
-          <button
-            type="button"
-            onClick={closeMobile}
-            aria-label="Close"
-            className="inline-flex h-11 w-11 flex-none cursor-pointer items-center justify-center rounded-xl border border-grid bg-transparent text-strong transition-colors hover:border-[color:var(--border-strong)] hover:text-accent"
-          >
-            <Icon name="close" size={20} strokeWidth={2} />
-          </button>
-        </div>
-
-        <div className="flex flex-1 flex-col overflow-y-auto px-[22px] pb-8 pt-[26px]">
-          {nav.primary.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={closeMobile}
-              className="flex items-center justify-between gap-4 border-b border-subtle px-1 py-[22px] font-display text-[30px] font-semibold tracking-[-0.02em] text-strong hover:text-accent"
-            >
-              {link.label}
-              <Icon name="arrowUpRight" size={20} className="flex-none opacity-55" />
-            </Link>
-          ))}
+        <nav className="flex flex-col px-[18px] pb-7 pt-2" aria-label="Mobile">
+          {mobilePrimary.map((link) => {
+            const isActive = link.navKey
+              ? activeKey === link.navKey
+              : pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={closeMobile}
+                data-active={isActive ? "1" : "0"}
+                aria-current={isActive ? "page" : undefined}
+                className="ndi-menu-row flex items-center justify-between gap-4 border-b border-subtle px-1 py-[18px]"
+              >
+                <span className="ndi-menu-label font-display text-[26px] font-semibold tracking-[-0.02em]">
+                  {link.label}
+                </span>
+                <Icon name="arrowUpRight" size={19} className="flex-none opacity-50" />
+              </Link>
+            );
+          })}
 
           {nav.menus.map((menu) => {
-            const isOpen = openAccordion === menu.key;
+            const groupActive = activeKey === menu.key;
             return (
-              <div key={menu.key} className="contents">
-                <button
-                  type="button"
-                  onClick={() => setOpenAccordion(isOpen ? null : menu.key)}
-                  aria-expanded={isOpen}
-                  // leading-[normal] matches the design, where this trigger is a
-                  // <button> and so keeps the UA's normal leading rather than
-                  // inheriting the body's 1.62 the way the sibling links do.
-                  className="flex w-full cursor-pointer items-center justify-between gap-4 border-b border-subtle bg-transparent px-1 py-[22px] text-left font-display text-[30px] font-semibold leading-[normal] tracking-[-0.02em] text-strong"
+              /* Native disclosure rather than a measured height. `name` makes the
+                 set exclusive in the browsers that support it, and the element
+                 sizes itself, which a grid row set to 1fr does not do inside an
+                 auto-height container. */
+              <details
+                key={menu.key}
+                name="ndi-mobile-menu-section"
+                className="ndi-menu-details"
+                open={groupActive}
+              >
+                <summary
+                  data-active={groupActive ? "1" : "0"}
+                  className="ndi-menu-row flex cursor-pointer items-center justify-between gap-4 border-b border-subtle px-1 py-[18px]"
                 >
-                  {menu.label}
+                  <span className="ndi-menu-label font-display text-[26px] font-semibold leading-[normal] tracking-[-0.02em]">
+                    {menu.label}
+                  </span>
                   <Icon
                     name="chevronDown"
-                    size={20}
-                    className="flex-none opacity-55 transition-transform duration-[280ms] ease-ndi"
-                    style={{ transform: `rotate(${isOpen ? 180 : 0}deg)` }}
+                    size={19}
+                    className="ndi-menu-caret flex-none opacity-50"
                   />
-                </button>
-                <div className="ndi-acc-panel" style={{ height: isOpen ? 272 : 0 }}>
-                  <div className="flex flex-col py-1.5 pb-3.5">
-                    {[...menu.cards, ...menu.links].map((item) => (
+                </summary>
+                {/* Sub-items sat at 15px under a 30px heading, which read as
+                    fine print rather than as the section's contents. */}
+                <div className="flex flex-col gap-0.5 py-2 pb-4 pl-1">
+                  {[...menu.cards, ...menu.links].map((item) => {
+                    const itemActive = pathname === item.href.split("#")[0];
+                    return (
                       <Link
                         key={item.href + item.label}
                         href={item.href}
                         {...externalLinkProps(item.href)}
                         onClick={closeMobile}
-                        className="px-1 py-3 text-[15px] text-body hover:text-accent"
+                        data-active={itemActive ? "1" : "0"}
+                        className="ndi-menu-sub flex items-center gap-2.5 rounded-lg px-2 py-2.5 font-display text-[18px] font-medium"
                       >
+                        <span className="ndi-menu-sub-dot" aria-hidden="true" />
                         {item.label}
                       </Link>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
-              </div>
+              </details>
             );
           })}
 
+          {/* White, not mint: in the accent colour it read as the active page. */}
           <Link
             href="/#contact"
             onClick={(event) => {
@@ -411,16 +421,19 @@ export function SiteHeader() {
                 closeMobile();
               }
             }}
-            className="flex items-center justify-between gap-4 border-b border-subtle px-1 py-[22px] font-display text-[30px] font-semibold tracking-[-0.02em] text-accent hover:text-accent-hover"
+            data-active="0"
+            className="ndi-menu-row flex items-center justify-between gap-4 border-b border-subtle px-1 py-[18px]"
           >
-            Contact Us
-            <Icon name="arrowUpRight" size={20} className="flex-none" />
+            <span className="ndi-menu-label font-display text-[26px] font-semibold tracking-[-0.02em]">
+              Contact Us
+            </span>
+            <Icon name="arrowUpRight" size={19} className="flex-none opacity-50" />
           </Link>
 
-          <div className="mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+          <div className="mt-8 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted">
             Bhutan NDI · {contact.location}
           </div>
-          <div className="mt-4 flex gap-2.5">
+          <div className="mt-3.5 flex gap-2.5">
             {mobileSocial.map((item) => (
               <a
                 key={item.label}
@@ -433,8 +446,8 @@ export function SiteHeader() {
               </a>
             ))}
           </div>
-        </div>
-      </aside>
+        </nav>
+      </div>
     </>
   );
 }

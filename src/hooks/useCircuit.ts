@@ -199,6 +199,11 @@ export function useCircuitGlow(
   const reduced = useReducedMotion();
 
   useEffect(() => {
+    /* The layers are hidden on touch devices (see .ndi-circuit), so none of the
+       measuring, the pointer tracking or the roaming loop below has anything to
+       act on. Bail before installing any of it. */
+    if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
+
     if (variant === "subpage") {
       const base = baseRef.current;
       if (base) {

@@ -64,6 +64,11 @@ export default async function UsersPage() {
                   "--card-shift": card.translateX,
                   "--card-opacity": card.opacity,
                   "--card-z": card.z,
+                  // Width lives on the wrapper as a property rather than on the
+                  // image as an inline style: the fan needs to narrow the cards
+                  // and overlap them on a phone, and an inline width cannot be
+                  // overridden by a media query.
+                  "--card-w": card.width,
                 } as React.CSSProperties
               }
             >
@@ -85,26 +90,29 @@ export default async function UsersPage() {
                 // No border-radius here: the artwork carries its own rounded
                 // corners in its alpha channel, and they are a squircle, which
                 // no CSS radius reproduces.
-                className="block h-auto"
-                style={{
-                  width: card.width,
-                  boxShadow: "0 26px 54px -22px rgba(0,0,0,0.85)",
-                }}
+                className="ndi-credential-img block h-auto"
+                style={{ boxShadow: "0 26px 54px -22px rgba(0,0,0,0.85)" }}
               />
             </div>
           ))}
         </Reveal>
 
+        {/* Three across on every width. At a 150px column gap each stat took a
+            row of its own on a phone, so the trio ran 325px tall and the eye
+            read three unrelated facts instead of one set. */}
         <Reveal
           delay={0.1}
-          className="mt-[100px] flex flex-wrap justify-center gap-x-[150px] gap-y-10 text-left"
+          /* The desktop row needs about 825px for three stats at a 150px gap, so
+             it wraps to two lines on a tablet. Three across holds until the
+             desktop layout actually fits. */
+          className="mt-14 grid grid-cols-3 items-start gap-x-4 text-center min-[901px]:mt-[100px] min-[901px]:flex min-[901px]:flex-wrap min-[901px]:justify-center min-[901px]:gap-x-[150px] min-[901px]:gap-y-10 min-[901px]:text-left"
         >
           {stats.map((stat) => (
             <div key={stat.id}>
-              <div className="font-display text-[34px] font-semibold tracking-[-0.02em] text-strong">
+              <div className="font-display text-[clamp(19px,5.4vw,30px)] font-semibold tracking-[-0.02em] text-strong min-[901px]:text-[34px]">
                 {stat.value}
               </div>
-              <div className="mt-2 font-mono text-[11.5px] uppercase tracking-[0.16em] text-faint">
+              <div className="mt-1.5 font-mono text-[9px] uppercase leading-[1.35] tracking-[0.1em] text-faint min-[641px]:text-[10.5px] min-[901px]:mt-2 min-[901px]:text-[11.5px] min-[901px]:tracking-[0.16em]">
                 {stat.label}
               </div>
             </div>

@@ -52,6 +52,11 @@ export function DechenJourney({ chapters, strip }: DechenJourneyProps) {
   );
 
   useEffect(() => {
+    /* The pinned version only exists above 900px. Below that the section is a
+       swipeable strip with the chapters listed under it, so none of the
+       measuring or the scroll listener below has anything to drive. */
+    if (!window.matchMedia("(min-width: 901px)").matches) return;
+
     const outer = outerRef.current;
     const stripEl = stripRef.current;
     if (!outer || !stripEl) return;
@@ -143,11 +148,72 @@ export function DechenJourney({ chapters, strip }: DechenJourneyProps) {
     <section
       ref={outerRef}
       id="in-action"
-      className="relative scroll-mt-[110px]"
-      style={{ height: "560vh" }}
+      /* The 560vh of scroll distance is what drives the pinned strip, and it
+         only applies where the strip is pinned. On a phone the section is its
+         own height and the picture is swiped by hand. */
+      className="relative h-auto scroll-mt-[110px] min-[901px]:h-[560vh]"
       aria-label="Bhutan NDI in action — Dechen's journey"
     >
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+      {/* ---- Phones and small tablets: swipe the strip ---- */}
+      <div className="px-5 py-16 min-[641px]:px-8 min-[901px]:hidden">
+        <div className="flex items-center gap-[9px] font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+          <span aria-hidden="true" className="block h-px w-4 bg-current" />
+          Dechen&apos;s journey
+        </div>
+        <h2 className="mt-3 font-display text-[clamp(26px,7vw,34px)] font-bold leading-[1.06] tracking-[-0.03em] text-strong">
+          Bhutan NDI in action
+        </h2>
+        <p className="mt-3.5 max-w-[46ch] text-[15px] leading-[1.62] text-muted [text-wrap:pretty]">
+          Swipe the strip to follow Dechen from paperwork to a wallet, or read the stages below.
+        </p>
+
+        {/* A real scroll container: the picture is 17:1, so it is panned by
+            hand rather than by hijacking the page's own scroll. */}
+        <div
+          className="ndi-journey-swipe mt-6 overflow-x-auto rounded-[14px] border p-2"
+          style={{
+            borderColor: "rgba(90,201,148,0.22)",
+            background: "linear-gradient(168deg, #1a2333 0%, #0d1320 60%, #0a0f1a 100%)",
+          }}
+        >
+          {/* `w-max`, and no clipping here: the strip is 17:1, so the element has
+              to be as wide as the picture for the scroll container above to have
+              anything to scroll. */}
+          <div className="w-max rounded-lg" style={{ background: "#f4f8f6" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={mediaUrl(strip)}
+              alt={strip.alt}
+              className="block h-[168px] w-auto max-w-none"
+              draggable={false}
+            />
+          </div>
+        </div>
+
+        <ol className="mt-7 flex flex-col">
+          {chapters.map((chapter) => (
+            <li
+              key={chapter.id}
+              className="grid grid-cols-[30px_1fr] items-start gap-3 border-t border-subtle py-4"
+            >
+              <span className="mt-0.5 font-mono text-[10.5px] tracking-[0.14em] text-accent">
+                {chapter.step}
+              </span>
+              <span>
+                <span className="block font-display text-[16px] font-semibold tracking-[-0.01em] text-strong">
+                  {chapter.title}
+                </span>
+                <span className="mt-1 block text-[14px] leading-[1.6] text-muted [text-wrap:pretty]">
+                  {chapter.caption}
+                </span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* ---- Pinned scrollytelling, 901px and up ---- */}
+      <div className="sticky top-0 hidden h-screen items-center overflow-hidden min-[901px]:flex">
         <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 items-center gap-[clamp(28px,3.2vw,48px)] px-5 min-[641px]:px-8 min-[901px]:grid-cols-[minmax(0,1.24fr)_minmax(0,0.76fr)]">
           {/* The journey plays inside a screen; scroll drives the picture. */}
           <div className="relative flex flex-col items-center">

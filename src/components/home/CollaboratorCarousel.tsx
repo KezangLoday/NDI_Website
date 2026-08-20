@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { Eyebrow } from "@/components/ui/SectionHeader";
@@ -63,7 +64,7 @@ export function CollaboratorCarousel({ groups, collaborators }: CollaboratorCaro
               .filter((slot) => slot.items[0]?.group === group.id);
 
             return (
-              <div key={group.id} className="flex flex-[0_1_auto] flex-col gap-[22px]">
+              <div key={group.id} className="ndi-lc-group flex flex-[0_1_auto] flex-col gap-[22px]">
                 <div className="flex items-center gap-3.5">
                   <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
                     {group.label}
@@ -84,17 +85,22 @@ export function CollaboratorCarousel({ groups, collaborators }: CollaboratorCaro
                   />
                 </div>
 
-                <div className="flex flex-wrap items-center gap-[clamp(20px,3vw,48px)]">
+                <div className="ndi-lc-grid flex flex-wrap items-center gap-[clamp(20px,3vw,48px)]">
                   {groupSlots.map((slot) => {
                     const state = slotState[slot.index];
                     return (
                       <div
                         key={slot.id}
                         className="ndi-lc-col relative flex-none overflow-hidden"
-                        style={{
-                          width: "clamp(92px, 9.5vw, 150px)",
-                          height: "clamp(80px, 8vw, 118px)",
-                        }}
+                        /* Dimensions as properties, not inline width/height: the
+                           set becomes a three-column grid on a phone and an
+                           inline style cannot be overridden by a media query. */
+                        style={
+                          {
+                            "--slot-w": "clamp(92px, 9.5vw, 150px)",
+                            "--slot-h": "clamp(80px, 8vw, 118px)",
+                          } as CSSProperties
+                        }
                         onPointerEnter={() => hold(slot.index, true)}
                         onPointerLeave={() => hold(slot.index, false)}
                       >
