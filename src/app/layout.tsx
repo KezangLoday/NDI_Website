@@ -39,6 +39,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      // Next 16 no longer overrides `scroll-behavior` on navigation; without this,
+      // route changes glide to the top rather than jumping. Anchors stay smooth.
+      data-scroll-behavior="smooth"
       className={`${hostGrotesk.variable} ${inter.variable} ${dmMono.variable}`}
     >
       <body>
