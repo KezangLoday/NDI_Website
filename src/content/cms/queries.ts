@@ -1,14 +1,23 @@
 /** The shared query vocabulary. */
 import type { Where } from "payload";
 
-/** Published only. */
-export const PUBLISHED: Where = { _status: { equals: "published" } };
-
-/** Combines the published constraint with a caller's own filter. */
+/**
+ * Combines a caller's filters into one `where`.
+ *
+ * This used to add a published-only constraint. Drafts existed then, and the
+ * Local API runs with access control overridden — so the collection's `read`
+ * rule could not be relied on to hide them and this was the guard that did.
+ *
+ * `versions` is now disabled on every collection, so there is no unpublished
+ * state left to filter: a save is live. The helper stays because every query
+ * calls it, and it is the one place a visibility rule would go if one is ever
+ * reintroduced.
+ */
 export function published(...clauses: (Where | undefined)[]): Where {
-  const extra = clauses.filter((clause): clause is Where => clause !== undefined);
-  if (extra.length === 0) return PUBLISHED;
-  return { and: [PUBLISHED, ...extra] };
+  const filters = clauses.filter((clause): clause is Where => clause !== undefined);
+  if (filters.length === 0) return {};
+  if (filters.length === 1) return filters[0];
+  return { and: filters };
 }
 
 /** A page's worth of records. */

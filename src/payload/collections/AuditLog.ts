@@ -1,7 +1,7 @@
 /** The recruitment audit log. */
 import type { CollectionConfig } from "payload";
 
-import { noOne, recruitmentAccess, superadminOnly } from "../access";
+import { isHR, noOne, recruitmentAccess, superadminOnly, visibleTo } from "../access";
 import { AUDIT_ACTIONS } from "./recruitment/history";
 
 export const AuditLog: CollectionConfig = {
@@ -13,6 +13,8 @@ export const AuditLog: CollectionConfig = {
     group: "Recruitment",
     description: "What was done to which application, when, and by whom.",
     listSearchableFields: ["summary", "reference"],
+    /** Recruitment record; HR and superadmin only. */
+    hidden: visibleTo(isHR),
   },
   defaultSort: "-occurredAt",
   access: {

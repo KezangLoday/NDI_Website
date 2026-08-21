@@ -2,6 +2,15 @@ import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /**
+   * Move the dev-mode route indicator off Payload's logout button.
+   *
+   * Both default to the bottom-left corner, and the indicator sits on top —
+   * which is why the admin panel appeared to have no way to sign out. It only
+   * renders in development, so this is a development-only collision, but it is
+   * the first thing anyone notices when they try to switch accounts.
+   */
+  devIndicators: { position: "bottom-right" },
   images: {
     // Next 16 only honours a `quality` prop whose value is listed here; anything else silently falls back to 75.
     qualities: [75, 95],

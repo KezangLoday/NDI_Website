@@ -1,8 +1,8 @@
 /** The people on the Company page. */
 import type { CollectionConfig } from "payload";
 
-import { hrEditable, publishedOrSignedIn, superadminOnly } from "../access";
-import { draftPublish } from "../fields/publishing";
+import { anyone, hrEditable, isHR, superadminOnly, visibleTo } from "../access";
+
 import { TEAM_ROUTES, revalidateAfterChange, revalidateAfterDelete } from "../hooks/revalidate";
 
 export const TeamMembers: CollectionConfig = {
@@ -10,15 +10,16 @@ export const TeamMembers: CollectionConfig = {
   labels: { singular: "Team member", plural: "Team members" },
   admin: {
     useAsTitle: "name",
-    defaultColumns: ["name", "role", "tier", "order", "_status"],
+    defaultColumns: ["name", "role", "tier", "order"],
     group: "Company",
     description: "Who appears in the team section of the Company page.",
     listSearchableFields: ["name", "role"],
+    /** Nav clutter only — `access.read`/`create`/`update` are the enforcement. */
+    hidden: visibleTo(isHR),
   },
   defaultSort: ["tier", "order", "name"],
-  versions: draftPublish,
   access: {
-    read: publishedOrSignedIn,
+    read: anyone,
     /** People are HR's record to keep. */
     create: hrEditable,
     update: hrEditable,

@@ -1,9 +1,9 @@
 /** News & Updates. */
 import type { CollectionConfig } from "payload";
 
-import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
+import { anyone, isPR, prEditable, superadminOnly, visibleTo } from "../access";
 import { categoryField } from "../fields/taxonomy";
-import { NEWEST_FIRST, draftPublish, publishedAtField } from "../fields/publishing";
+import { NEWEST_FIRST, publishedAtField } from "../fields/publishing";
 import { bodyField } from "../fields/richText";
 import { seoFields } from "../fields/seo";
 import { slugField } from "../fields/slug";
@@ -16,18 +16,19 @@ export const News: CollectionConfig = {
   labels: { singular: "News entry", plural: "News & Updates" },
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "format", "category", "publishedAt", "_status"],
+    defaultColumns: ["title", "format", "category", "publishedAt"],
     group: "Resources",
     description:
       "Announcements, launches and press releases. Stories get their own page; notices are a dated line in the archive.",
     listSearchableFields: ["title", "headline", "excerpt", "slug"],
     /** Stories are what an editor is usually looking for. */
     preview: (doc) => (typeof doc.slug === "string" ? `/resources/news/${doc.slug}` : null),
+    /** Nav clutter only — `access.read`/`create`/`update` are the enforcement. */
+    hidden: visibleTo(isPR),
   },
   defaultSort: NEWEST_FIRST,
-  versions: draftPublish,
   access: {
-    read: publishedOrSignedIn,
+    read: anyone,
     create: prEditable,
     update: prEditable,
     delete: superadminOnly,

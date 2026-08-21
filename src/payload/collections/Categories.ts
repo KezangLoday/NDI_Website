@@ -1,7 +1,7 @@
 /** The shared taxonomy for every section that needs configurable categories. */
 import type { CollectionConfig, Where } from "payload";
 
-import { anyone, hrOrPrEditable, superadminOnly } from "../access";
+import { anyone, isPR, prEditable, superadminOnly, visibleTo } from "../access";
 import { slugField, slugify } from "../fields/slug";
 import { CATEGORY_ROUTES, revalidateAfterChange, revalidateAfterDelete } from "../hooks/revalidate";
 import { TAXONOMY_OPTIONS } from "../fields/taxonomy";
@@ -16,6 +16,8 @@ export const Categories: CollectionConfig = {
     description:
       "The labels that group content across the site. Each one belongs to a single section.",
     listSearchableFields: ["name", "slug"],
+    /** Only PR files content under categories; HR has no use for them. */
+    hidden: visibleTo(isPR),
   },
   /** Grouped by section, then by the editor's chosen order within it. */
   defaultSort: ["taxonomy", "order", "name"],
@@ -24,8 +26,8 @@ export const Categories: CollectionConfig = {
   access: {
     /** Category names are printed on public pages, so they are public data. */
     read: anyone,
-    create: hrOrPrEditable,
-    update: hrOrPrEditable,
+    create: prEditable,
+    update: prEditable,
     /** Deleting is superadmin-only. */
     delete: superadminOnly,
   },

@@ -329,7 +329,6 @@ async function seedNews(
                 kind: item.ctaIcon === "playCircle" ? "video" : "article",
               }
             : undefined,
-        _status: "published",
       },
       overrideAccess: true,
     });
@@ -356,7 +355,6 @@ async function seedNews(
         category: categoryId(categories, "news", item.category, tally),
         /* `#` in the fixtures means "no destination supplied", which becomes a notice with its own page rather than a link to nowhere. */
         externalUrl: item.href && item.href !== "#" ? item.href : null,
-        _status: "published",
       },
       overrideAccess: true,
     });
@@ -402,7 +400,6 @@ async function seedWebinars(
               ? { durationMinutes: parseMinutes(item.kind) }
               : undefined,
         thumbnail: item.thumbnail ? (mediaIds.get(item.thumbnail.url) ?? null) : null,
-        _status: "published",
       },
       overrideAccess: true,
     });
@@ -452,7 +449,6 @@ async function seedInsights(
         readingMinutes: item.readingMinutes,
         body: blocksToLexical(item.body),
         canonicalUrl: item.href && item.href !== "#" ? item.href : null,
-        _status: "published",
       },
       overrideAccess: true,
     });
@@ -473,7 +469,6 @@ async function seedGlossary(payload: Payload, tally: Tally): Promise<void> {
         term: term.term,
         slug: term.id,
         definition: plainToLexical(term.definition),
-        _status: "published",
       },
       overrideAccess: true,
     });
@@ -507,7 +502,6 @@ async function seedFaqs(payload: Payload, tally: Tally, categories: CategoryInde
         answer: plainToLexical(faq.answer),
         category: categoryId(categories, "faq", label, tally),
         order,
-        _status: "published",
       },
       overrideAccess: true,
     });
@@ -540,7 +534,6 @@ async function seedTeam(payload: Payload, tally: Tally, mediaIds: MediaIndex): P
         photo: member.photo ? (mediaIds.get(member.photo.url) ?? null) : null,
         photoPosition: member.photoPosition ?? null,
         order,
-        _status: "published",
       },
       overrideAccess: true,
     });
@@ -585,7 +578,6 @@ async function seedJobs(payload: Payload, tally: Tally): Promise<void> {
         optionalDocuments: ["cover-letter", "experience"],
         allowResubmission: true,
         featured: false,
-        _status: "published",
       },
       overrideAccess: true,
     });
@@ -623,7 +615,6 @@ async function seedMediaCoverage(
         category: categoryId(categories, "media-coverage", item.category, tally),
         publishedAt: item.publishedAt,
         image: mediaIds.get(item.image.url) ?? null,
-        _status: "published",
       },
       overrideAccess: true,
     });

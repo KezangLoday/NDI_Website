@@ -1,9 +1,9 @@
 /** Job postings, and the configuration that governs applying for them. */
 import type { CollectionConfig } from "payload";
 
-import { hrEditable, publishedOrSignedIn, superadminOnly } from "../access";
+import { anyone, hrEditable, isHR, superadminOnly, visibleTo } from "../access";
 import { attachmentsField } from "../fields/attachments";
-import { draftPublish } from "../fields/publishing";
+
 import { seoFields } from "../fields/seo";
 import { slugField } from "../fields/slug";
 import { JOB_ROUTES, revalidateAfterChange, revalidateAfterDelete } from "../hooks/revalidate";
@@ -22,17 +22,18 @@ export const Jobs: CollectionConfig = {
   labels: { singular: "Job posting", plural: "Careers" },
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "department", "recruitmentStatus", "closesAt", "_status"],
+    defaultColumns: ["title", "department", "recruitmentStatus", "closesAt"],
     group: "Recruitment",
     description:
       "Vacancies, their terms of reference, and what each one asks applicants to submit.",
     listSearchableFields: ["title", "department", "summary", "slug"],
     preview: (doc) => (typeof doc.slug === "string" ? `/careers/${doc.slug}` : null),
+    /** Nav clutter only — `access.read`/`create`/`update` are the enforcement. */
+    hidden: visibleTo(isHR),
   },
   defaultSort: "-postedAt",
-  versions: draftPublish,
   access: {
-    read: publishedOrSignedIn,
+    read: anyone,
     create: hrEditable,
     update: hrEditable,
     delete: superadminOnly,
@@ -206,7 +207,7 @@ export const Jobs: CollectionConfig = {
               ],
               admin: {
                 description:
-                  "Independent of publishing. A closed vacancy can stay published so the notice remains readable, but submissions are refused.",
+                  "A closed vacancy keeps its page so the notice stays readable, but it is dropped from the careers listing and submissions are refused. Use Closed while you are still drafting a notice.",
               },
             },
             {
@@ -297,17 +298,15 @@ export const Jobs: CollectionConfig = {
 
 /** Whether a job may accept an application right now. */
 export interface ApplicabilityInput {
-  readonly status: string | null | undefined;
   readonly recruitmentStatus: string | null | undefined;
   readonly closesAt: string | null | undefined;
 }
 
 export type Applicability =
   | { readonly open: true }
-  | { readonly open: false; readonly reason: "unpublished" | "closed" | "expired" | "no-deadline" };
+  | { readonly open: false; readonly reason: "closed" | "expired" | "no-deadline" };
 
 export function applicability(job: ApplicabilityInput, now: Date = new Date()): Applicability {
-  if (job.status !== "published") return { open: false, reason: "unpublished" };
   if (job.recruitmentStatus !== "open") return { open: false, reason: "closed" };
   if (!job.closesAt) return { open: false, reason: "no-deadline" };
 

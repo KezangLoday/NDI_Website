@@ -1,8 +1,8 @@
 /** FAQs. */
 import type { CollectionConfig } from "payload";
 
-import { hrOrPrEditable, publishedOrSignedIn, superadminOnly } from "../access";
-import { draftPublish } from "../fields/publishing";
+import { anyone, isPR, prEditable, superadminOnly, visibleTo } from "../access";
+
 import { proseEditor } from "../fields/richText";
 import { categoryField } from "../fields/taxonomy";
 import { FAQ_ROUTES, revalidateAfterChange, revalidateAfterDelete } from "../hooks/revalidate";
@@ -12,18 +12,19 @@ export const Faqs: CollectionConfig = {
   labels: { singular: "FAQ", plural: "FAQs" },
   admin: {
     useAsTitle: "question",
-    defaultColumns: ["question", "category", "order", "_status"],
+    defaultColumns: ["question", "category", "order"],
     group: "Company",
     description: "Questions and answers, grouped by who is asking.",
     listSearchableFields: ["question"],
+    /** Nav clutter only — `access.read`/`create`/`update` are the enforcement. */
+    hidden: visibleTo(isPR),
   },
   defaultSort: ["category", "order"],
-  versions: draftPublish,
   access: {
-    read: publishedOrSignedIn,
+    read: anyone,
     /** Both editorial roles. */
-    create: hrOrPrEditable,
-    update: hrOrPrEditable,
+    create: prEditable,
+    update: prEditable,
     delete: superadminOnly,
   },
   hooks: {

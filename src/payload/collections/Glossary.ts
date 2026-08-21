@@ -1,8 +1,8 @@
 /** The glossary. */
 import type { CollectionConfig } from "payload";
 
-import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
-import { draftPublish } from "../fields/publishing";
+import { anyone, isPR, prEditable, superadminOnly, visibleTo } from "../access";
+
 import { proseEditor } from "../fields/richText";
 import { slugField } from "../fields/slug";
 import { categoryField } from "../fields/taxonomy";
@@ -17,12 +17,13 @@ export const Glossary: CollectionConfig = {
     group: "Resources",
     description: "Definitions for the vocabulary of decentralised identity.",
     listSearchableFields: ["term", "slug"],
+    /** Nav clutter only — `access.read`/`create`/`update` are the enforcement. */
+    hidden: visibleTo(isPR),
   },
 /** Alphabetical, because that is how the page presents it. */
   defaultSort: "term",
-  versions: draftPublish,
   access: {
-    read: publishedOrSignedIn,
+    read: anyone,
     create: prEditable,
     update: prEditable,
     delete: superadminOnly,

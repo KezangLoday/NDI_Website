@@ -1,8 +1,8 @@
 /** CMS accounts. */
 import type { CollectionConfig, FieldAccess } from "payload";
 
-import { readUsers, ROLE_LABELS, ROLES, superadminOnly, updateUsers } from "../access";
-import { isSuperadmin, type Role } from "../access/roles";
+import { ROLES, ROLE_LABELS, isSuperadmin, readUsers, superadminOnly, updateUsers, visibleTo } from "../access";
+import type { Role } from "../access/roles";
 
 /** Only a superadmin may read or write the roles array. */
 const superadminField: FieldAccess = ({ req }) => {
@@ -26,6 +26,8 @@ export const Users: CollectionConfig = {
     defaultColumns: ["name", "email", "roles", "updatedAt"],
     group: "Administration",
     description: "Who can sign in to the CMS, and what each of them may do.",
+    /** Account management. Every role still reaches its own profile via /admin/account. */
+    hidden: visibleTo(isSuperadmin),
   },
   access: {
     /** Accounts are created by a superadmin, never by self-registration. */

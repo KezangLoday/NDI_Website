@@ -1,10 +1,10 @@
 /** Webinars: sessions to come, and recordings of the ones that have been. */
 import type { CollectionConfig } from "payload";
 
-import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
+import { anyone, isPR, prEditable, superadminOnly, visibleTo } from "../access";
 import { attachmentsField, galleryField } from "../fields/attachments";
 import { validateOptionalExternalUrl } from "../fields/externalUrl";
-import { draftPublish } from "../fields/publishing";
+
 import { bodyField } from "../fields/richText";
 import { seoFields } from "../fields/seo";
 import { slugField } from "../fields/slug";
@@ -16,16 +16,17 @@ export const Webinars: CollectionConfig = {
   labels: { singular: "Webinar", plural: "Webinars" },
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "sessionStatus", "startsAt", "category", "_status"],
+    defaultColumns: ["title", "sessionStatus", "startsAt", "category"],
     group: "Resources",
     description:
       "Walkthroughs, integration sessions and recorded talks. Set the upcoming session under Globals → Upcoming events.",
     listSearchableFields: ["title", "description", "slug"],
+    /** Nav clutter only — `access.read`/`create`/`update` are the enforcement. */
+    hidden: visibleTo(isPR),
   },
   defaultSort: "-startsAt",
-  versions: draftPublish,
   access: {
-    read: publishedOrSignedIn,
+    read: anyone,
     create: prEditable,
     update: prEditable,
     delete: superadminOnly,

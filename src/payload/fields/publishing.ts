@@ -1,17 +1,13 @@
-/** The publication-date field, and the versions setting that gives a collection its draft/published pair. */
-import type { CollectionConfig, Field } from "payload";
+/**
+ * The publication-date field, and the default sort for editorial collections.
+ *
+ * There is no draft/publish workflow: `versions` is disabled everywhere, so a
+ * save is immediately live. `publishedAt` is therefore editorial metadata — the
+ * date printed on the page and ordered by — not a gate on visibility.
+ */
+import type { Field } from "payload";
 
 /** Two versions per document: the published one and the draft on top of it. */
-export const draftPublish: CollectionConfig["versions"] = {
-  drafts: {
-    autosave: false,
-    /** No scheduled publishing: there is no job runner to action it. */
-    schedulePublish: false,
-    /** Drafts skip validation; publishing enforces it. */
-    validate: false,
-  },
-  maxPerDoc: 2,
-};
 
 /** The date the content is published under. */
 export function publishedAtField(label = "Publication date"): Field {

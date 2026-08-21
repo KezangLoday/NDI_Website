@@ -1,10 +1,10 @@
 /** Insights & Publications: research papers, case studies, reports and writing from the team. */
 import type { CollectionConfig } from "payload";
 
-import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
+import { anyone, isPR, prEditable, superadminOnly, visibleTo } from "../access";
 import { attachmentsField } from "../fields/attachments";
 import { validateOptionalExternalUrl } from "../fields/externalUrl";
-import { NEWEST_FIRST, draftPublish, publishedAtField } from "../fields/publishing";
+import { NEWEST_FIRST, publishedAtField } from "../fields/publishing";
 import { bodyField } from "../fields/richText";
 import { seoFields } from "../fields/seo";
 import { slugField } from "../fields/slug";
@@ -16,16 +16,17 @@ export const Insights = {
   labels: { singular: "Publication", plural: "Insights & Publications" },
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "kind", "category", "publishedAt", "_status"],
+    defaultColumns: ["title", "kind", "category", "publishedAt"],
     group: "Resources",
     description: "Research, case studies, reports and blogs.",
     listSearchableFields: ["title", "description", "slug"],
     preview: (doc) => (typeof doc.slug === "string" ? `/resources/insights/${doc.slug}` : null),
+    /** Nav clutter only — `access.read`/`create`/`update` are the enforcement. */
+    hidden: visibleTo(isPR),
   },
   defaultSort: NEWEST_FIRST,
-  versions: draftPublish,
   access: {
-    read: publishedOrSignedIn,
+    read: anyone,
     create: prEditable,
     update: prEditable,
     delete: superadminOnly,

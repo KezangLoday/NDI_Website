@@ -105,11 +105,7 @@ async function handleSubmission(req: PayloadRequest): Promise<SubmissionReceipt>
 
   const job = await loadJob(req, jobId);
   const openness = applicability(
-    {
-      status: job._status ?? null,
-      recruitmentStatus: job.recruitmentStatus,
-      closesAt: job.closesAt,
-    },
+    { recruitmentStatus: job.recruitmentStatus, closesAt: job.closesAt },
     new Date(),
   );
 
@@ -207,8 +203,7 @@ async function handleSubmission(req: PayloadRequest): Promise<SubmissionReceipt>
   }
 }
 
-const REFUSAL_MESSAGES: Record<"unpublished" | "closed" | "expired" | "no-deadline", string> = {
-  unpublished: "That vacancy is not open for applications.",
+const REFUSAL_MESSAGES: Record<"closed" | "expired" | "no-deadline", string> = {
   closed: "Applications for this vacancy have closed.",
   expired: "The deadline for this vacancy has passed, so applications are no longer accepted.",
   "no-deadline":

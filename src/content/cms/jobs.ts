@@ -88,11 +88,7 @@ export function toApplicationWindow(doc: JobDoc, now: Date = new Date()): Applic
   const instructions = nonEmpty(doc.applicationInstructions);
 
   const openness = applicability(
-    {
-      status: doc._status ?? null,
-      recruitmentStatus: doc.recruitmentStatus,
-      closesAt: doc.closesAt,
-    },
+    { recruitmentStatus: doc.recruitmentStatus, closesAt: doc.closesAt },
     now,
   );
 
@@ -118,8 +114,7 @@ export function toApplicationWindow(doc: JobDoc, now: Date = new Date()): Applic
   };
 }
 
-const CLOSED_REASONS: Record<"unpublished" | "closed" | "expired" | "no-deadline", string> = {
-  unpublished: "This vacancy is not currently open for applications.",
+const CLOSED_REASONS: Record<"closed" | "expired" | "no-deadline", string> = {
   closed: "Applications for this vacancy are closed.",
   expired: "The deadline for this vacancy has passed.",
   "no-deadline": "This vacancy is not yet accepting applications.",
@@ -183,8 +178,6 @@ export async function queryJobs(): Promise<Job[]> {
       optionalDocuments: true,
       applicationInstructions: true,
       meta: true,
-      /* `_status` is read by `toApplicationWindow`, which decides whether the vacancy is accepting applications. */
-      _status: true,
     },
   });
 

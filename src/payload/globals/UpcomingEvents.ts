@@ -1,7 +1,7 @@
 /** The upcoming-event card. */
 import type { GlobalConfig } from "payload";
 
-import { anyone, prEditable } from "../access";
+import { anyone, isPR, prEditable, visibleTo } from "../access";
 import { revalidateGlobalAfterChange, UPCOMING_EVENT_ROUTES } from "../hooks/revalidate";
 
 export const UpcomingEvents: GlobalConfig = {
@@ -11,6 +11,8 @@ export const UpcomingEvents: GlobalConfig = {
     group: "Resources",
     description:
       "What the “Upcoming session” card promotes. Leave it empty and the card disappears rather than showing something stale.",
+    /** Nav clutter only — `access.update` below is the enforcement. */
+    hidden: visibleTo(isPR),
   },
   access: {
     read: anyone,

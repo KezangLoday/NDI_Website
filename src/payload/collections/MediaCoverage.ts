@@ -1,9 +1,9 @@
 /** Media Coverage: reporting about Bhutan NDI, published by other people. */
 import type { CollectionConfig } from "payload";
 
-import { prEditable, publishedOrSignedIn, superadminOnly } from "../access";
+import { anyone, isPR, prEditable, superadminOnly, visibleTo } from "../access";
 import { validateExternalUrl } from "../fields/externalUrl";
-import { NEWEST_FIRST, draftPublish, publishedAtField } from "../fields/publishing";
+import { NEWEST_FIRST, publishedAtField } from "../fields/publishing";
 import { slugField } from "../fields/slug";
 import { categoryField } from "../fields/taxonomy";
 import {
@@ -17,16 +17,17 @@ export const MediaCoverage: CollectionConfig = {
   labels: { singular: "Media coverage entry", plural: "Media Coverage" },
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "outlet", "category", "publishedAt", "_status"],
+    defaultColumns: ["title", "outlet", "category", "publishedAt"],
     group: "Company",
     description:
       "Articles, interviews and features published elsewhere. Each entry links straight out to the outlet.",
     listSearchableFields: ["title", "outlet", "excerpt"],
+    /** Nav clutter only — `access.read`/`create`/`update` are the enforcement. */
+    hidden: visibleTo(isPR),
   },
   defaultSort: NEWEST_FIRST,
-  versions: draftPublish,
   access: {
-    read: publishedOrSignedIn,
+    read: anyone,
     create: prEditable,
     update: prEditable,
     delete: superadminOnly,

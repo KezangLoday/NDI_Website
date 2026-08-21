@@ -30,19 +30,6 @@ function invalidate(targets: readonly RevalidationTarget[], label: string): void
   }
 }
 
-/** True when a change could alter what the public site shows. */
-function affectsPublicSite(doc: unknown, previousDoc: unknown): boolean {
-  const status = statusOf(doc);
-  if (status === undefined) return true;
-  return status === "published" || statusOf(previousDoc) === "published";
-}
-
-function statusOf(doc: unknown): string | undefined {
-  if (typeof doc !== "object" || doc === null) return undefined;
-  const status = (doc as { _status?: unknown })._status;
-  return typeof status === "string" ? status : undefined;
-}
-
 export interface RevalidateOptions {
   /** Routes that always change when a document in this collection changes. */
   readonly paths: readonly RevalidationTarget[];
@@ -52,10 +39,9 @@ export interface RevalidateOptions {
 
 /** `afterChange`, for a collection whose documents appear on the public site. */
 export function revalidateAfterChange(options: RevalidateOptions): CollectionAfterChangeHook {
-  return ({ collection, doc, previousDoc }) => {
-    if (affectsPublicSite(doc, previousDoc)) {
-      invalidate(targetsFor(options), collection.slug);
-    }
+  return ({ collection, doc }) => {
+    /* Every save is live — there is no draft state to skip. */
+    invalidate(targetsFor(options), collection.slug);
     return doc;
   };
 }

@@ -204,19 +204,58 @@ select rather than a hierarchy — a small communications team may well have one
 person who is both HR and PR, and a fourth combined role would be needed the
 moment another pair overlaps.
 
+Each collection is protected at **two levels**: `access` functions that the
+server enforces on every API, and `admin.hidden` so nobody is shown a door they
+cannot open.
+
 | | Superadmin | HR | PR | Signed out |
 | --- | :---: | :---: | :---: | :---: |
-| News, Webinars, Insights, Glossary, Media Coverage | ✅ | — | ✅ | read published |
-| Careers (jobs) | ✅ | ✅ | — | read published |
-| Team members | ✅ | ✅ | — | read published |
-| FAQs | ✅ | ✅ | ✅ | read published |
-| Categories, Media | ✅ | ✅ | ✅ | read |
-| **Job applications** | ✅ | ✅ | ❌ | ❌ |
+| Media | ✅ | ✅ | ✅ | read |
+| Categories | ✅ | — | ✅ | read |
+| News & Updates | ✅ | — | ✅ | read |
+| Webinars | ✅ | — | ✅ | read |
+| Insights & Publications | ✅ | — | ✅ | read |
+| Glossary | ✅ | — | ✅ | read |
+| Media Coverage | ✅ | — | ✅ | read |
+| FAQs | ✅ | — | ✅ | read |
+| Upcoming events (global) | ✅ | — | ✅ | read |
+| Careers (jobs) | ✅ | ✅ | — | read |
+| Team members | ✅ | ✅ | — | read |
+| **Applications** | ✅ | ✅ | ❌ | ❌ |
 | **Applicant documents** | ✅ | ✅ | ❌ | ❌ |
 | **Audit log** | read | read | ❌ | ❌ |
+| Users | ✅ | own only | own only | ❌ |
 | Delete content | ✅ | — | — | — |
 | Delete an application | ✅ | ❌ | ❌ | ❌ |
-| Users | ✅ | own only | own only | ❌ |
+
+`—` means hidden from the nav *and* refused by the server. Read access to public
+content is open because it is the public website's content; the private
+collections are refused outright.
+
+Verified over HTTP with a real session per role, not just read off the config:
+
+```
+                      superadmin    HR            PR            anonymous
+media                 Y Y           Y Y           Y Y           Y ·
+categories            Y Y           Y ·           Y Y           Y ·
+news / webinars /
+insights / glossary /
+faqs / media-coverage Y Y           Y ·           Y Y           Y ·
+team-members          Y Y           Y Y           Y ·           Y ·
+jobs                  Y Y           Y Y           Y ·           Y ·
+job-applications      Y ·           Y ·           · ·           · ·
+applicant-documents   Y ·           Y ·           · ·           · ·
+audit-log             Y ·           Y ·           · ·           · ·
+users                 Y Y           Y ·           Y ·           · ·
+
+each cell = "read create"    Y allowed    · refused
+```
+
+`job-applications` refuses `create` even to superadmin: applications are only
+ever created by the vetted submission endpoint, which overrides access after
+running its own checks.
+
+Four things about how this is enforced:
 
 Four things about how this is enforced:
 
@@ -246,29 +285,29 @@ category off forty published articles by accident.
 
 ---
 
-## Draft and publish
+## No draft state
 
-Two states, nothing more. Payload implements drafts on top of its versions table,
-so versions are enabled but capped at **two per document** — the published one and
-the draft on top of it. That is the minimum for "edit a published page without the
-edits going live"; anything above two would be version history by another name.
+`versions` is disabled on every collection, so **a save is immediately live**.
+There is no Versions tab, no "Save Draft" button, and no draft-versus-published
+distinction anywhere.
 
-Drafts **skip validation**; publishing enforces it in full. The commonest thing an
-editor does is save a headline and come back to the body, and validating drafts
-would make "save what I have so far" impossible for exactly the documents that
-most need it.
+That is a deliberate simplification for a non-technical team, and it has one
+consequence worth stating plainly: an editor who saves a half-finished article
+has published a half-finished article. The safety net is gone, and the way to
+work is to prepare content elsewhere and paste it in once.
 
-Draft content is guarded twice, independently:
+Careers are the exception, because an unfinished vacancy going live has a worse
+failure mode than an unfinished article: it would accept applications. A job's
+`recruitmentStatus` (`open` / `closed`) does that job instead — a closed vacancy
+keeps its page so the notice stays readable, but it is dropped from the careers
+listing and the submission endpoint refuses it. HR sets a new vacancy to
+**Closed** while drafting it, then opens it.
 
-1. **The collection's `read` rule** returns a published-only constraint for
-   anonymous callers. This covers the REST API, and any future code that forgets
-   to filter.
-2. **Every frontend query asks for published documents explicitly.** This is the
-   guard that actually protects the public pages, because the Local API runs with
-   access control *overridden* by default — which is what makes it usable at build
-   time, and why the collection rule alone would not be enough.
-
----
+The migration that removed versions dropped 22 version tables, 8 `_status`
+columns and 26 enum types, and backfilled the one incomplete draft that existed
+rather than deleting it — see `20260821_064952_remove_versions.ts`, which also
+closes any draft vacancy so removing the draft state cannot turn an unfinished
+notice into a live one.
 
 ## Storage: local and S3
 
@@ -554,9 +593,6 @@ also carries a `revalidate` floor — a day for editorial content, an hour for
 careers, where a deadline lapses on its own with no editor action to trigger
 anything.
 
-Draft saves do not revalidate. A draft cannot appear publicly, and an editor
-working through a long article saves many times.
-
 Queries set `select` and `depth` per call rather than taking the defaults: a
 listing that fetched whole article bodies to render a card would be pulling tens
 of kilobytes of Lexical JSON per row.
@@ -636,6 +672,15 @@ pnpm generate:importmap   # after adding a custom admin component
 `pnpm migrate:create <name>`. Development uses schema push, so a missing migration
 will not be noticed locally and will fail in production.
 
+`pnpm migrate` **prompts** on a database that dev-mode push has touched — *"data
+loss will occur. Would you like to proceed?"* — and waits on stdin, which looks
+exactly like a hang if you have piped the output somewhere. Answer it, or run
+`echo y | DATABASE_PUSH=false pnpm migrate`. Back the database up first:
+
+```bash
+pg_dump -h localhost -p 5433 -U admin -d ndi-website > backup.sql
+```
+
 If a build serves stale content after a code change, clear Turbopack's build
 cache: `rm -rf .next && pnpm build`.
 
@@ -661,9 +706,16 @@ cache: `rm -rf .next && pnpm build`.
    URL, and `url` is required and validated. Inventing one would put a broken or
    misattributed link on a public page. The page's empty state handles it; the real
    URLs need supplying.
-6. **Applicant data retention is stated but not automated.** The consent text says
+6. **There is no draft workflow.** Every save is live — see
+   [No draft state](#no-draft-state). Careers use `recruitmentStatus` instead,
+   which is the one place an unfinished record must not go public.
+7. **The Next.js dev indicator is pinned bottom-right.** It defaults to
+   bottom-left, where it sits on top of Payload's logout button and makes the
+   admin panel look as though it has no way to sign out. Development only, but
+   it is the first thing anyone hits when switching accounts.
+8. **Applicant data retention is stated but not automated.** The consent text says
    six months after the post is filled; nothing deletes it on that schedule yet.
-7. **No email is configured.** Payload logs mail to the console. The application
+9. **No email is configured.** Payload logs mail to the console. The application
    flow is built so a confirmation email is an addition rather than a restructure —
    the receipt data already exists at the point one would be sent.
 

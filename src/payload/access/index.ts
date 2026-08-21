@@ -46,16 +46,49 @@ export const hrOrPrEditable: Access = (args) => {
   return isHR(user) || isPR(user);
 };
 
-/* ---- Draft isolation -------------------------------------------- */
+/* ---- Nav visibility ---------------------------------------------- */
 
-/** Only published documents are visible to the public. */
-export const publishedOrSignedIn: Access = (args) => {
-  if (userOf(args) !== null) return true;
-  return PUBLISHED_ONLY;
-};
+/**
+ * `admin.hidden` for a collection only one role should see.
+ *
+ * This is the *second* of the two layers every collection gets, and it is the
+ * cosmetic one: it keeps a collection out of the sidebar (and out of the admin
+ * routes) for people who cannot use it. The `access` rules beside it are what
+ * actually enforce anything — a hidden collection is still reachable over the
+ * REST API, so hiding alone would be security theatre.
+ *
+ * Both layers read the same predicates from `roles.ts`, so a role can never be
+ * shown a collection it cannot open, or denied one it can see.
+ */
+export function visibleTo(
+  predicate: (user: RoleBearer | null) => boolean,
+): (args: { user: AdminUser }) => boolean {
+  return ({ user }) => !predicate(narrow(user));
+}
 
-/** The constraint form, reused by the frontend query helpers. */
-export const PUBLISHED_ONLY: Where = { _status: { equals: "published" } };
+/**
+ * The user as `admin.hidden` receives it.
+ *
+ * Deliberately structural rather than Payload's `ClientUser` or the generated
+ * `User`, because collections and globals type this callback differently —
+ * `{ user: ClientUser }` versus `{ user: User | null }`. A parameter wide enough
+ * to accept either is assignable to both, which is what lets one helper serve
+ * every collection and the global.
+ */
+type AdminUser = { id?: unknown; roles?: unknown } | null;
+
+/**
+ * Narrows the admin panel's user to the role shape.
+ *
+ * The sanitised user Payload ships to the browser carries `roles`, but is typed
+ * loosely enough that reading it needs the same care as `req.user`.
+ */
+function narrow(user: AdminUser | undefined): RoleBearer | null {
+  if (!user || typeof user !== "object") return null;
+  const { id, roles } = user;
+  if (typeof id !== "number" && typeof id !== "string") return null;
+  return { id, roles: Array.isArray(roles) ? (roles as Role[]) : null };
+}
 
 /* ---- Recruitment ------------------------------------------------ */
 

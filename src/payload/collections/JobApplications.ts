@@ -1,7 +1,7 @@
 /** Job applications — the internal recruitment record. */
 import type { CollectionConfig } from "payload";
 
-import { noOne, recruitmentAccess, recruitmentDelete } from "../access";
+import { isHR, noOne, recruitmentAccess, recruitmentDelete, visibleTo } from "../access";
 import { isSuperadmin, type Role } from "../access/roles";
 import { DOCUMENT_KINDS } from "./ApplicantDocuments";
 import {
@@ -27,6 +27,8 @@ export const JobApplications: CollectionConfig = {
     listSearchableFields: ["reference", "applicantName", "applicantEmail"],
     /** Applications are read one at a time; a bulk-create button is meaningless. */
     hideAPIURL: true,
+    /** Recruitment data. PR must never see this in the nav or the routes. */
+    hidden: visibleTo(isHR),
   },
   defaultSort: "-createdAt",
   access: {

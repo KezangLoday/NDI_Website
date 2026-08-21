@@ -388,7 +388,6 @@ export interface News {
   };
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * Walkthroughs, integration sessions and recorded talks. Set the upcoming session under Globals → Upcoming events.
@@ -536,7 +535,6 @@ export interface Webinar {
   };
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * Research, case studies, reports and blogs.
@@ -650,7 +648,6 @@ export interface Insight {
   };
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * Definitions for the vocabulary of decentralised identity.
@@ -700,7 +697,6 @@ export interface Glossary {
   relatedTerms?: (number | Glossary)[] | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * Who appears in the team section of the Company page.
@@ -752,7 +748,6 @@ export interface TeamMember {
     | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * Questions and answers, grouped by who is asking.
@@ -794,7 +789,6 @@ export interface Faq {
   order: number;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * Articles, interviews and features published elsewhere. Each entry links straight out to the outlet.
@@ -846,7 +840,6 @@ export interface MediaCoverage {
   language?: string | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * Vacancies, their terms of reference, and what each one asks applicants to submit.
@@ -919,7 +912,7 @@ export interface Job {
       }[]
     | null;
   /**
-   * Independent of publishing. A closed vacancy can stay published so the notice remains readable, but submissions are refused.
+   * A closed vacancy keeps its page so the notice stays readable, but it is dropped from the careers listing and submissions are refused. Use Closed while you are still drafting a notice.
    */
   recruitmentStatus: 'open' | 'closed';
   /**
@@ -990,7 +983,6 @@ export interface Job {
   featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * Everything submitted through the site. Private to HR and superadmin — never visible on the public site.
@@ -1548,7 +1540,6 @@ export interface NewsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1610,7 +1601,6 @@ export interface WebinarsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1652,7 +1642,6 @@ export interface InsightsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1667,7 +1656,6 @@ export interface GlossarySelect<T extends boolean = true> {
   relatedTerms?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1692,7 +1680,6 @@ export interface TeamMembersSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1705,7 +1692,6 @@ export interface FaqsSelect<T extends boolean = true> {
   order?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1724,7 +1710,6 @@ export interface MediaCoverageSelect<T extends boolean = true> {
   language?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1779,7 +1764,6 @@ export interface JobsSelect<T extends boolean = true> {
   featured?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
